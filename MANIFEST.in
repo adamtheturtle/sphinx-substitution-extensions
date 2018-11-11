@@ -1,0 +1,2 @@
+include versioneer.py
+include src/sphinx_substitution_extensions/_version.py
