@@ -37,12 +37,12 @@ PACKAGING_REQUIRES = _get_dependencies(
 LONG_DESCRIPTION = Path('README.rst').read_text()
 
 setup(
-    name='DCOS E2E',
+    name='Sphinx Substitution Extensions',
     version=versioneer.get_version(),  # type: ignore
     cmdclass=versioneer.get_cmdclass(),  # type: ignore
     author='Adam Dangoor',
     author_email='adamdangoor@gmail.com',
-    description='XXX.',
+    description='Extensions for Sphinx which allow for substitutions.',
     long_description=LONG_DESCRIPTION,
     packages=find_packages(where='src'),
     zip_safe=False,
