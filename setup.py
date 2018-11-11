@@ -3,9 +3,10 @@ Setup script.
 """
 
 from pathlib import Path
+from typing import List
+
 import versioneer
 from setuptools import find_packages, setup
-from typing import List
 
 
 def _get_dependencies(requirements_file: Path) -> List[str]:
