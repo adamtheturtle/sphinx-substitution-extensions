@@ -54,7 +54,7 @@ Credits
 ``sphinx-prompt`` authors
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Thanks to @sbrunner and other contributors for `sphinx-prompt`_.
+Thanks to `@sbrunner`_ and other contributors for `sphinx-prompt`_.
 ``substitution-prompt`` is based on `sphinx-prompt`_.
 
 ClusterHQ
@@ -65,3 +65,4 @@ This package is largely inspired by code written for Flocker by ClusterHQ.
 .. |Build Status| image:: https://travis-ci.com/adamtheturtle/sphinx-substitution-extensions.svg?branch=master
     :target: https://travis-ci.com/adamtheturtle/sphinx-substitution-extensions
 .. _sphinx-prompt: https://github.com/sbrunner/sphinx-prompt
+.. _@sbrunner: https://github.com/sbrunner
