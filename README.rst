@@ -1,10 +1,4 @@
-|Build Status|
-
-|codecov|
-
-|requirements|
-
-|PyPI|
+|Build Status| |codecov| |requirements| |PyPI|
 
 Sphinx Substitution Extensions
 ==============================
