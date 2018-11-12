@@ -4,8 +4,10 @@
 
 |requirements|
 
-Sphinx Substitutions Extensions
-===============================
+|PyPI|
+
+Sphinx Substitution Extensions
+==============================
 
 Extensions for Sphinx which allow substitutions.
 
@@ -84,3 +86,5 @@ See `CONTRIBUTING.rst <./CONTRIBUTING.rst>`_.
 .. |requirements| image:: https://requires.io/github/adamtheturtle/sphinx-substitution-extensions/requirements.svg?branch=master
      :target: https://requires.io/github/adamtheturtle/sphinx-substitution-extensions/requirements/?branch=master
      :alt: Requirements Status
+.. |PyPI| image:: https://badge.fury.io/py/Sphinx-Substitution-Extensions.svg
+    :target: https://badge.fury.io/py/Sphinx-Substitution-Extensions
