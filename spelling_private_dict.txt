@@ -1,4 +1,5 @@
 admin
+changelog
 conf
 linters
 py
