@@ -4,4 +4,4 @@ extensions = [
 ]
 
 _substitution_pair = ('|author|', 'Eleanor')
-substitutions = (_substitution_pair, )
+substitutions = [_substitution_pair]
