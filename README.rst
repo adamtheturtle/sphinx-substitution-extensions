@@ -13,7 +13,7 @@ Installation
 Setup
 ~~~~~
 
-* Add the following to ``conf.py``: ``extensions += ['sphinx_substitution_extensions']``
+* Add the following to ``conf.py``:
 
 .. code:: python
 
