@@ -61,10 +61,11 @@ Credits
 Thanks to `@sbrunner`_ and other contributors for `sphinx-prompt`_.
 ``substitution-prompt`` is based on `sphinx-prompt`_.
 
-ClusterHQ
-~~~~~~~~~
+ClusterHQ Developers
+~~~~~~~~~~~~~~~~~~~~
 
 This package is largely inspired by code written for Flocker by ClusterHQ.
+Developers of the relevant code include, at least, Jon Giddy and Tom Prince.
 
 Contributing
 ------------
