@@ -29,3 +29,8 @@ fix-lint:
 	$(MAKE) autoflake
 	isort --recursive --apply
 	$(MAKE) fix-yapf
+
+.PHONY: sample
+sample:
+	sphinx-build -b html sample/source sample/build
+	python -c 'import os, webbrowser; webbrowser.open("file://" + os.path.abspath("sample/build/contents.html"))'
