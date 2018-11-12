@@ -32,6 +32,7 @@ fix-lint:
 
 .PHONY: build-sample
 build-sample:
+	rm -rf sample/build
 	sphinx-build -W -b html sample/source sample/build
 
 .PHONY: open-sample
