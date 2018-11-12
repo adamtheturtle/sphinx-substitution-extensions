@@ -41,7 +41,7 @@ def test_smart_prompt(tmpdir: local) -> None:
         'sphinx-build',
         '-b',
         'html',
-        # Directory containing source and config files.
+        # Directory containing source and configuration files.
         str(source_directory),
         # Directory containing build files.
         str(destination_directory),
