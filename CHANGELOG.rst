@@ -6,6 +6,9 @@ Changelog
 Next
 ----
 
+2018.11.12.2
+------------
+
 - Add ``substitution-code-block`` directive.
 
 2018.11.12.0
