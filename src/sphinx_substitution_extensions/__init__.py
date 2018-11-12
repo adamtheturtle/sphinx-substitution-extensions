@@ -23,9 +23,7 @@ class SubstitutionCodeBlock(CodeBlock):  # type: ignore
         """
         app = self.state.document.settings.env.app
         new_content = []
-        self.content = (  # pylint: disable=attribute-defined-outside-init
-            self.content
-        )  # type: List[str]
+        self.content = self.content  # type: List[str]
         existing_content = self.content
         for item in existing_content:
             for pair in app.config.substitutions:
@@ -33,9 +31,7 @@ class SubstitutionCodeBlock(CodeBlock):  # type: ignore
                 item = item.replace(original, replacement)
             new_content.append(item)
 
-        self.content = (  # pylint: disable=attribute-defined-outside-init
-            new_content
-        )
+        self.content = new_content
         return list(CodeBlock.run(self))
 
 
