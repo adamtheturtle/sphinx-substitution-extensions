@@ -4,3 +4,4 @@ linters
 py
 rst
 str
+tuple
