@@ -37,10 +37,19 @@ This will replace ``|release|`` in the new directives with ``0.1``, and ``|autho
 Directives
 ----------
 
+``substitution-code-block``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code:: rst
+
+   .. substitution-code-block:: bash
+
+      echo "|author| released version |release|"
+
+This is an extension of Sphinx's built-in `code-block`_ directive, and adds replacement functionality.
+
 ``substitution-prompt``
 ~~~~~~~~~~~~~~~~~~~~~~~
-
-Then use the following:
 
 .. code:: rst
 
@@ -75,6 +84,7 @@ See `CONTRIBUTING.rst <./CONTRIBUTING.rst>`_.
 .. |Build Status| image:: https://travis-ci.com/adamtheturtle/sphinx-substitution-extensions.svg?branch=master
     :target: https://travis-ci.com/adamtheturtle/sphinx-substitution-extensions
 .. _sphinx-prompt: https://github.com/sbrunner/sphinx-prompt
+.. _code-block: http://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-code-block
 .. _@sbrunner: https://github.com/sbrunner
 .. |codecov| image:: https://codecov.io/gh/adamtheturtle/sphinx-substitution-extensions/branch/master/graph/badge.svg
   :target: https://codecov.io/gh/adamtheturtle/sphinx-substitution-extensions

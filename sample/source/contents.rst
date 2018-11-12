@@ -29,3 +29,26 @@ Configuration
 .. substitution-prompt:: bash
 
    echo "The author is |author|"
+
+``code-block``
+--------------
+
+.. code-block:: rst
+
+    .. code-block:: bash
+
+       echo "The author is |author|"
+
+    .. substitution-code-block:: bash
+
+       echo "The author is |author|"
+
+=>
+
+.. code-block:: bash
+
+   echo "The author is |author|"
+
+.. substitution-code-block:: bash
+
+   echo "The author is |author|"
