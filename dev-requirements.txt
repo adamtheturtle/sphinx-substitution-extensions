@@ -15,4 +15,5 @@ pylint==2.1.1
 pyroma==2.4
 pytest==3.10.1
 pytest-cov==2.6.0  # Measure code coverage
+vulture==1.0
 yapf==0.24.0

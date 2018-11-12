@@ -11,16 +11,16 @@ from sphinx.application import Sphinx
 _SPHINX_PROMPT = __import__('sphinx-prompt')
 
 
-class SmartPrompt(_SPHINX_PROMPT.PromptDirective):  # type: ignore
+class SubstitutionPrompt(_SPHINX_PROMPT.PromptDirective):  # type: ignore
     """
     Similar to PromptDirective but replaces placeholders with variables.
 
-    Set the ``conf.py`` variable ``smart_prompt_placeholder_replace_pairs`` to
-    a tuple of pairs, such as:
+    Set the ``conf.py`` variable ``substitutions`` to a tuple of pairs, such
+    as:
 
     .. code:: python
 
-       smart_prompt_placeholder_replace_pairs = (
+       substitutions = (
            ('|release|', release),
            ('|author|', 'Eleanor'),
        )
@@ -29,7 +29,7 @@ class SmartPrompt(_SPHINX_PROMPT.PromptDirective):  # type: ignore
 
     .. code:: rst
 
-       .. smart-prompt:: bash
+       .. substitution-prompt:: bash
 
           echo "|author| released version |release|"
     """
@@ -45,7 +45,7 @@ class SmartPrompt(_SPHINX_PROMPT.PromptDirective):  # type: ignore
         )  # type: List[str]
         existing_content = self.content
         for item in existing_content:
-            for pair in app.config.smart_prompt_placeholder_replace_pairs:
+            for pair in app.config.substitutions:
                 original, replacement = pair
                 item = item.replace(original, replacement)
             new_content.append(item)
@@ -60,5 +60,5 @@ def setup(app: Sphinx) -> None:
     """
     Add the custom directives to Sphinx.
     """
-    app.add_config_value('smart_prompt_placeholder_replace_pairs', (), 'html')
-    app.add_directive('smart-prompt', SmartPrompt)
+    app.add_config_value('substitutions', (), 'html')
+    app.add_directive('substitution-prompt', SubstitutionPrompt)
