@@ -6,7 +6,7 @@ Changelog
 Next
 ----
 
-- Make ``substitution``
+- Make ``substitution`` a list, not a tuple.
 
 2018.11.12.2
 ------------
