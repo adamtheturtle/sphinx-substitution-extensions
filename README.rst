@@ -69,7 +69,7 @@ This package is largely inspired by code written for Flocker by ClusterHQ.
 Contributing
 ------------
 
-See ``./CONTRIBUTING.rst``.
+See `CONTRIBUTING.rst <./CONTRIBUTING.rst>`_.
 
 .. |Build Status| image:: https://travis-ci.com/adamtheturtle/sphinx-substitution-extensions.svg?branch=master
     :target: https://travis-ci.com/adamtheturtle/sphinx-substitution-extensions
