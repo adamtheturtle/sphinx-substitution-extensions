@@ -11,9 +11,9 @@ from textwrap import dedent
 from py.path import local  # pylint: disable=no-name-in-module, import-error
 
 
-def test_smart_prompt(tmpdir: local) -> None:
+def test_substitution_prompt(tmpdir: local) -> None:
     """
-    The ``smart-prompt`` directive replaces the placeholders defined in
+    The ``substitution-prompt`` directive replaces the placeholders defined in
     ``conf.py`` as specified.
     """
     source_directory = tmpdir.mkdir('source')
