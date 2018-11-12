@@ -1,0 +1,6 @@
+admin
+conf
+linters
+py
+rst
+str
