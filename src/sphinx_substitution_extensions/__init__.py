@@ -12,7 +12,7 @@ from sphinx.directives.code import CodeBlock
 _SPHINX_PROMPT = __import__('sphinx-prompt')
 
 
-class SubstitutionCodeBlock(CodeBlock):
+class SubstitutionCodeBlock(CodeBlock):  # type: ignore
     """
     Similar to CodeBlock but replaces placeholders with variables.
     """
