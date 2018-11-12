@@ -3,6 +3,5 @@ extensions = [
     'sphinx-prompt',
 ]
 
-substitutions = (
-    ('|example_original|', 'example_substitution'),
-)
+_substitution_pair = ('|author|', 'Eleanor')
+substitutions = (_substitution_pair, )

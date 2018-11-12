@@ -14,18 +14,18 @@ Configuration
 
     .. prompt:: bash
 
-       echo "|example_original|"
+       echo "The author is |author|"
 
     .. substitution-prompt:: bash
 
-       echo "|example_original|"
+       echo "The author is |author|"
 
 =>
 
 .. prompt:: bash
 
-   echo "|example_original|"
+   echo "The author is |author|"
 
 .. substitution-prompt:: bash
 
-   echo "|example_original|"
+   echo "The author is |author|"
