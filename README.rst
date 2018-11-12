@@ -84,7 +84,7 @@ See `CONTRIBUTING.rst <./CONTRIBUTING.rst>`_.
 .. |Build Status| image:: https://travis-ci.com/adamtheturtle/sphinx-substitution-extensions.svg?branch=master
     :target: https://travis-ci.com/adamtheturtle/sphinx-substitution-extensions
 .. _sphinx-prompt: https://github.com/sbrunner/sphinx-prompt
-.. _code_block: http://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-code-block
+.. _code-block: http://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-code-block
 .. _@sbrunner: https://github.com/sbrunner
 .. |codecov| image:: https://codecov.io/gh/adamtheturtle/sphinx-substitution-extensions/branch/master/graph/badge.svg
   :target: https://codecov.io/gh/adamtheturtle/sphinx-substitution-extensions
