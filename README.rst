@@ -6,7 +6,7 @@ Extensions for Sphinx which allow substitutions.
 
 ## Usage
 
-* Add to ``conf.py``:
+* Add the following to ``conf.py``: ``extensions += ['sphinx_substitution_extensions']``
 
 * Set the following
 
