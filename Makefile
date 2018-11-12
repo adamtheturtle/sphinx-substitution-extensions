@@ -30,7 +30,13 @@ fix-lint:
 	isort --recursive --apply
 	$(MAKE) fix-yapf
 
-.PHONY: sample
-sample:
+.PHONY: build-sample
+build-sample:
 	sphinx-build -W -b html sample/source sample/build
+
+.PHONY: open-sample
+open-sample:
 	python -c 'import os, webbrowser; webbrowser.open("file://" + os.path.abspath("sample/build/contents.html"))'
+
+.PHONY: sample
+sample: build-sample open-sample
