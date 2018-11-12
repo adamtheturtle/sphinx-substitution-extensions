@@ -43,7 +43,7 @@ isort:
 
 .PHONY: pip-extra-reqs
 pip-extra-reqs:
-	pip-extra-reqs src/
+	pip-extra-reqs --ignore-requirement sphinx-prompt src/
 
 .PHONY: pip-missing-reqs
 pip-missing-reqs:
