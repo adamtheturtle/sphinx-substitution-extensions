@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/adamtheturtle/sphinx-substitution-extensions.svg?branch=master)](https://travis-ci.com/adamtheturtle/sphinx-substitution-extensions)
+|Build Status|
 
 # Sphinx Substitutions Extensions
 
@@ -40,3 +40,6 @@ Thanks to @sbrunner and other contributors for `sphinx-prompt <https://github.co
 ### ClusterHQ
 
 This package is largely inspired by code written for Flocker by ClusterHQ.
+
+.. |Build Status| image:: https://travis-ci.com/adamtheturtle/sphinx-substitution-extensions.svg?branch=master
+    :target: https://travis-ci.com/adamtheturtle/sphinx-substitution-extensions
