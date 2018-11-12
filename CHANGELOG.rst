@@ -6,10 +6,9 @@ Changelog
 Next
 ----
 
-2018.11.12.1
-------------
+- Add ``substitution-code-block`` directive.
 
 2018.11.12.0
 ------------
 
-- Initial release.
+- Initial release with ``substitution-prompt``.
