@@ -14,6 +14,8 @@ Installation
 
    $ pip install Sphinx-Substitution-Extensions
 
+This supports Python 3.5+.
+
 Setup
 ~~~~~
 
