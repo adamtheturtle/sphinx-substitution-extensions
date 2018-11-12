@@ -14,6 +14,10 @@ Extensions for Sphinx which allow substitutions.
 Installation
 ------------
 
+.. code:: console
+
+   $ pip install Sphinx-Substitution-Extensions
+
 Setup
 ~~~~~
 
