@@ -22,9 +22,9 @@ def test_substitution_prompt(tmpdir: local) -> None:
     conf_py_content = dedent(
         """\
         extensions = ['sphinx_substitution_extensions']
-        substitutions = (
+        substitutions = [
             ('|a|', 'example_substitution'),
-        )
+        ]
         """,
     )
     conf_py.write(conf_py_content)
@@ -66,9 +66,9 @@ def test_substitution_code_block(tmpdir: local) -> None:
     conf_py_content = dedent(
         """\
         extensions = ['sphinx_substitution_extensions']
-        substitutions = (
+        substitutions = [
             ('|a|', 'example_substitution'),
-        )
+        ]
         """,
     )
     conf_py.write(conf_py_content)

@@ -29,10 +29,10 @@ Setup
 
 .. code:: python
 
-   substitutions = (
+   substitutions = [
        ('|release|', '0.1'),
        ('|author|', 'Eleanor'),
-   )
+   ]
 
 This will replace ``|release|`` in the new directives with ``0.1``, and ``|author|`` with ``Eleanor``.
 
