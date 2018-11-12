@@ -32,5 +32,5 @@ fix-lint:
 
 .PHONY: sample
 sample:
-	sphinx-build -b html sample/source sample/build
+	sphinx-build -W -b html sample/source sample/build
 	python -c 'import os, webbrowser; webbrowser.open("file://" + os.path.abspath("sample/build/contents.html"))'
