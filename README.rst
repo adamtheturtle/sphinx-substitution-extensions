@@ -66,3 +66,5 @@ This package is largely inspired by code written for Flocker by ClusterHQ.
     :target: https://travis-ci.com/adamtheturtle/sphinx-substitution-extensions
 .. _sphinx-prompt: https://github.com/sbrunner/sphinx-prompt
 .. _@sbrunner: https://github.com/sbrunner
+.. |codecov| image:: https://codecov.io/gh/adamtheturtle/sphinx-substitution-extensions/branch/master/graph/badge.svg
+  :target: https://codecov.io/gh/adamtheturtle/sphinx-substitution-extensions
