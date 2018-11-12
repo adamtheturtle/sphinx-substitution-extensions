@@ -2,6 +2,8 @@
 
 |codecov|
 
+|requirements|
+
 Sphinx Substitutions Extensions
 ===============================
 
@@ -68,3 +70,6 @@ This package is largely inspired by code written for Flocker by ClusterHQ.
 .. _@sbrunner: https://github.com/sbrunner
 .. |codecov| image:: https://codecov.io/gh/adamtheturtle/sphinx-substitution-extensions/branch/master/graph/badge.svg
   :target: https://codecov.io/gh/adamtheturtle/sphinx-substitution-extensions
+.. |requirements| image:: https://requires.io/github/adamtheturtle/sphinx-substitution-extensions/requirements.svg?branch=master
+     :target: https://requires.io/github/adamtheturtle/sphinx-substitution-extensions/requirements/?branch=master
+     :alt: Requirements Status
