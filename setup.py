@@ -49,10 +49,10 @@ setup(
     zip_safe=False,
     package_dir={'': 'src'},
     install_requires=INSTALL_REQUIRES,
-    keywords='sphinx',
+    keywords='sphinx rst documentation',
     include_package_data=True,
     license='MIT License',
-    url='hhttps://github.com/adamtheturtle/sphinx-substitution-extensions',
+    url='https://github.com/adamtheturtle/sphinx-substitution-extensions',
     extras_require={
         'dev': DEV_REQUIRES,
     },
