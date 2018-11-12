@@ -1,14 +1,23 @@
 |Build Status|
 
-# Sphinx Substitutions Extensions
+|codecov|
+
+Sphinx Substitutions Extensions
+===============================
 
 Extensions for Sphinx which allow substitutions.
 
-## Installation
+Installation
+------------
 
-## Setup
+Setup
+~~~~~
 
 * Add the following to ``conf.py``: ``extensions += ['sphinx_substitution_extensions']``
+
+.. code:: python
+
+   extensions += ['sphinx_substitution_extensions']
 
 * Set the following variable in ``conf.py``:
 
@@ -21,7 +30,8 @@ Extensions for Sphinx which allow substitutions.
 
 This will replace ``|release|`` in the new directives
 
-## Directives
+Directives
+----------
 
 Then use the following:
 
@@ -31,13 +41,16 @@ Then use the following:
 
       echo "|author| released version |release|"
 
-## Credits
+Credits
+-------
 
-### ``sphinx-prompt`` authors
+``sphinx-prompt`` authors
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Thanks to @sbrunner and other contributors for `sphinx-prompt <https://github.com/sbrunner/sphinx-prompt>`_.
 
-### ClusterHQ
+ClusterHQ
+~~~~~~~~~
 
 This package is largely inspired by code written for Flocker by ClusterHQ.
 
