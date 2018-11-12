@@ -51,7 +51,7 @@ setup(
     install_requires=INSTALL_REQUIRES,
     keywords='sphinx rst documentation',
     include_package_data=True,
-    license='MIT License',
+    license='Apache License, Version 2.0',
     url='https://github.com/adamtheturtle/sphinx-substitution-extensions',
     extras_require={
         'dev': DEV_REQUIRES,
@@ -60,7 +60,7 @@ setup(
         'Operating System :: POSIX',
         'Environment :: Web Environment',
         'Programming Language :: Python :: 3.5',
-        'License :: OSI Approved :: MIT License',
+        'License :: OSI Approved :: Apache Software License',
     ],
     # Avoid dependency links because they are not supported by Read The Docs.
     #
