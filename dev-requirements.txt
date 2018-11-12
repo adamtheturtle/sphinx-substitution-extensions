@@ -13,7 +13,8 @@ pyenchant==2.0.0
 pygithub==1.43.3
 pylint==2.1.1
 pyroma==2.4
-pytest==3.10.1
 pytest-cov==2.6.0  # Measure code coverage
+pytest==3.10.1
+twine==1.12.1
 vulture==1.0
 yapf==0.24.0
