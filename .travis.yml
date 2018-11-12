@@ -12,7 +12,7 @@ install:
 cache: pip
 script:
 - make lint
-- make sample
+- make build-sample
 - pytest -s -vvv --cov=src/ --cov=tests tests/
 after_success:
 - codecov
