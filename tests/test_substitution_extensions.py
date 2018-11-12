@@ -22,7 +22,7 @@ def test_smart_prompt(tmpdir: local) -> None:
     conf_py_content = dedent(
         """\
         extensions = ['sphinx_substitution_extensions']
-        smart_prompt_placeholder_replace_pairs = (
+        substitutions = (
             ('|a|', 'example_substitution'),
         )
         """,
@@ -30,7 +30,7 @@ def test_smart_prompt(tmpdir: local) -> None:
     conf_py.write(conf_py_content)
     source_file_content = dedent(
         """\
-        .. smart-prompt:: bash $
+        .. substitution-prompt:: bash $
 
            $ PRE-|a|-POST
         """,
