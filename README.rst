@@ -23,7 +23,7 @@ Setup
 
 .. code:: python
 
-   extensions += ['sphinx_substitution_extensions']
+   extensions += ['sphinx-prompt', 'sphinx_substitution_extensions']
 
 * Set the following variable in ``conf.py``:
 
