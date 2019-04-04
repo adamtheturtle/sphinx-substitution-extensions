@@ -6,19 +6,18 @@ import subprocess
 from pathlib import Path
 from textwrap import dedent
 
-# See https://github.com/PyCQA/pylint/issues/1536 for details on why the errors
-# are disabled.
-from py.path import local  # pylint: disable=no-name-in-module, import-error
 
-
-def test_substitution_prompt(tmpdir: local) -> None:
+def test_substitution_prompt(tmp_path: Path) -> None:
     """
     The ``substitution-prompt`` directive replaces the placeholders defined in
     ``conf.py`` as specified.
     """
-    source_directory = tmpdir.mkdir('source')
-    source_file = source_directory.join('index.rst')
-    conf_py = source_directory.join('conf.py')
+    source_directory = tmp_path / 'source'
+    source_directory.mkdir()
+    source_file = source_directory / 'index.rst'
+    conf_py = source_directory / 'conf.py'
+    conf_py.touch()
+    source_file.touch()
     conf_py_content = dedent(
         """\
         extensions = ['sphinx_substitution_extensions']
@@ -27,7 +26,7 @@ def test_substitution_prompt(tmpdir: local) -> None:
         ]
         """,
     )
-    conf_py.write(conf_py_content)
+    conf_py.write_text(conf_py_content)
     source_file_content = dedent(
         """\
         .. substitution-prompt:: bash $
@@ -35,8 +34,8 @@ def test_substitution_prompt(tmpdir: local) -> None:
            $ PRE-|a|-POST
         """,
     )
-    source_file.write(source_file_content)
-    destination_directory = tmpdir.mkdir('destination')
+    source_file.write_text(source_file_content)
+    destination_directory = tmp_path / 'destination'
     args = [
         'sphinx-build',
         '-b',
@@ -55,14 +54,17 @@ def test_substitution_prompt(tmpdir: local) -> None:
     assert expected in content_html.read_text()
 
 
-def test_substitution_code_block(tmpdir: local) -> None:
+def test_substitution_code_block(tmp_path: Path) -> None:
     """
     The ``substitution-code-block`` directive replaces the placeholders
     defined in ``conf.py`` as specified.
     """
-    source_directory = tmpdir.mkdir('source')
-    source_file = source_directory.join('index.rst')
-    conf_py = source_directory.join('conf.py')
+    source_directory = tmp_path / 'source'
+    source_directory.mkdir()
+    source_file = source_directory / 'index.rst'
+    conf_py = source_directory / 'conf.py'
+    conf_py.touch()
+    source_file.touch()
     conf_py_content = dedent(
         """\
         extensions = ['sphinx_substitution_extensions']
@@ -71,7 +73,7 @@ def test_substitution_code_block(tmpdir: local) -> None:
         ]
         """,
     )
-    conf_py.write(conf_py_content)
+    conf_py.write_text(conf_py_content)
     source_file_content = dedent(
         """\
         .. substitution-code-block:: bash
@@ -79,8 +81,8 @@ def test_substitution_code_block(tmpdir: local) -> None:
            $ PRE-|a|-POST
         """,
     )
-    source_file.write(source_file_content)
-    destination_directory = tmpdir.mkdir('destination')
+    source_file.write_text(source_file_content)
+    destination_directory = tmp_path / 'destination'
     args = [
         'sphinx-build',
         '-b',
