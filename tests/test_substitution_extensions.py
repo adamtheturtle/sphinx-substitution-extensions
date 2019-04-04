@@ -17,7 +17,7 @@ def test_substitution_prompt(tmpdir: local) -> None:
     ``conf.py`` as specified.
     """
     source_directory = tmpdir.mkdir('source')
-    source_file = source_directory.join('contents.rst')
+    source_file = source_directory.join('index.rst')
     conf_py = source_directory.join('conf.py')
     conf_py_content = dedent(
         """\
@@ -51,7 +51,7 @@ def test_substitution_prompt(tmpdir: local) -> None:
     ]
     subprocess.check_output(args=args)
     expected = 'PRE-example_substitution-POST'
-    content_html = Path(str(destination_directory)) / 'contents.html'
+    content_html = Path(str(destination_directory)) / 'index.html'
     assert expected in content_html.read_text()
 
 
@@ -61,7 +61,7 @@ def test_substitution_code_block(tmpdir: local) -> None:
     defined in ``conf.py`` as specified.
     """
     source_directory = tmpdir.mkdir('source')
-    source_file = source_directory.join('contents.rst')
+    source_file = source_directory.join('index.rst')
     conf_py = source_directory.join('conf.py')
     conf_py_content = dedent(
         """\
@@ -95,5 +95,5 @@ def test_substitution_code_block(tmpdir: local) -> None:
     ]
     subprocess.check_output(args=args)
     expected = 'PRE-example_substitution-POST'
-    content_html = Path(str(destination_directory)) / 'contents.html'
+    content_html = Path(str(destination_directory)) / 'index.html'
     assert expected in content_html.read_text()
