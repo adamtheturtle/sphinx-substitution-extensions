@@ -37,7 +37,7 @@ build-sample:
 
 .PHONY: open-sample
 open-sample:
-	python -c 'import os, webbrowser; webbrowser.open("file://" + os.path.abspath("sample/build/contents.html"))'
+	python -c 'import os, webbrowser; webbrowser.open("file://" + os.path.abspath("sample/build/index.html"))'
 
 .PHONY: sample
 sample: build-sample open-sample
