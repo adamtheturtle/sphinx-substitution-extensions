@@ -1,5 +1,5 @@
 autoflake==1.3
-check-manifest==0.37
+check-manifest==0.38
 doc8==0.8.0
 dulwich==0.19.11
 flake8-commas==2.0.0
