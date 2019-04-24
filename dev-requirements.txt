@@ -3,7 +3,7 @@ check-manifest==0.38
 doc8==0.8.0
 dulwich==0.19.11
 flake8-commas==2.0.0
-flake8-quotes==2.0.0
+flake8-quotes==2.0.1
 flake8==3.7.7
 isort==4.3.17
 mypy==0.701
