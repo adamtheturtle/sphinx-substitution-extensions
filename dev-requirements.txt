@@ -6,8 +6,9 @@ flake8-commas==2.0.0
 flake8-quotes==2.0.1
 flake8==3.7.7
 isort==4.3.20
-mypy==0.701
-mypy-mypyc==0.670
+# Ideally we'd have `mypy-mypyc` but at the time of writing this is behind the
+# main mypy.
+mypy==0.710
 pip_check_reqs==2.0.3
 pydocstyle==3.0.0
 pyenchant==2.0.0
