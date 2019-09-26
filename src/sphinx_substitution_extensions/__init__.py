@@ -11,10 +11,10 @@ from sphinx.directives.code import CodeBlock
 # Due to the dash in the name, we cannot import sphinx-prompt using a normal
 # import.
 _SPHINX_PROMPT = importlib.import_module('sphinx-prompt')
-_PROMPT_DIRECTIVE = _SPHINX_PROMPT.PromptDirective  # type: ignore[attr-defined]
+_PROMPT_DIRECTIVE = _SPHINX_PROMPT.PromptDirective  # type: ignore
 
 
-class SubstitutionCodeBlock(CodeBlock):  # type: ignore[misc]
+class SubstitutionCodeBlock(CodeBlock):  # type: ignore
     """
     Similar to CodeBlock but replaces placeholders with variables.
     """
@@ -37,7 +37,7 @@ class SubstitutionCodeBlock(CodeBlock):  # type: ignore[misc]
         return list(CodeBlock.run(self))
 
 
-class SubstitutionPrompt(_PROMPT_DIRECTIVE):  # type: ignore[misc,valid-type]
+class SubstitutionPrompt(_PROMPT_DIRECTIVE):  # type: ignore
     """
     Similar to PromptDirective but replaces placeholders with variables.
     """
