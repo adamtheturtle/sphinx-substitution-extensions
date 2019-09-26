@@ -2,6 +2,7 @@
 Custom Sphinx extensions.
 """
 
+import importlib
 from typing import List
 
 from sphinx.application import Sphinx
@@ -9,10 +10,9 @@ from sphinx.directives.code import CodeBlock
 
 # Due to the dash in the name, we cannot import sphinx-prompt using a normal
 # import.
-import importlib
-
-_SPHINX_PROMPT = __import__('sphinx-prompt')
+_SPHINX_PROMPT = importlib.import_module('sphinx-prompt')
 _PROMPT_DIRECTIVE = _SPHINX_PROMPT.PromptDirective  # type: ignore[attr-defined]
+
 
 class SubstitutionCodeBlock(CodeBlock):  # type: ignore[misc]
     """
