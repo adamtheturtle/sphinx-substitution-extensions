@@ -19,4 +19,4 @@ pytest-cov==2.8.1  # Measure code coverage
 pytest==5.3.1
 twine==3.1.1
 vulture==1.2
-yapf==0.28.0
+yapf==0.29.0
