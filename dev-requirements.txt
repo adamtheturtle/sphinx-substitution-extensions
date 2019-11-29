@@ -8,7 +8,7 @@ flake8==3.7.9
 isort==4.3.21
 # Ideally we'd have `mypy-mypyc` but at the time of writing this is behind the
 # main mypy.
-mypy==0.740
+mypy==0.750
 pip_check_reqs==2.0.3
 pydocstyle==4.0.1
 pyenchant==2.0.0
