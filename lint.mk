@@ -7,9 +7,8 @@ yapf:
 	yapf \
 	    --diff \
 	    --recursive \
-	    --exclude 'src/*/_version.py' \
-	    --exclude release/ \
-	    --exclude versioneer.py \
+	    --exclude versioneer.py  \
+	    --exclude src/*/_version.py \
 	    .
 
 .PHONY: fix-yapf
@@ -17,13 +16,13 @@ fix-yapf:
 	yapf \
 	    --in-place \
 	    --recursive \
-	    --exclude 'src/*/_version.py' \
-	    --exclude versioneer.py \
+	    --exclude versioneer.py  \
+	    --exclude src/*/_version.py \
 	    .
 
 .PHONY: mypy
 mypy:
-	mypy *.py src/ tests/ admin/
+	mypy *.py src/ tests/
 
 .PHONY: check-manifest
 check-manifest:
@@ -68,10 +67,17 @@ pyroma:
 vulture:
 	vulture --min-confidence 100 --exclude _vendor .
 
-.PHONY: custom-linters
-custom-linters:
-	pytest -vvv -x admin/custom_linters.py
+.PHONY: linkcheck
+linkcheck:
+	$(MAKE) -C docs/ linkcheck SPHINXOPTS=$(SPHINXOPTS)
 
+.PHONY: spelling
+spelling:
+	$(MAKE) -C docs/ spelling SPHINXOPTS=$(SPHINXOPTS)
+
+.PHONY: shellcheck
+shellcheck:
+	shellcheck --exclude SC2164,SC1091 */*.sh
 
 .PHONY: autoflake
 autoflake:
@@ -83,3 +89,7 @@ autoflake:
 	    --expand-star-imports \
 	    --exclude _vendor,src/*/_version.py,versioneer.py,release \
 	    .
+
+.PHONY: pydocstyle
+pydocstyle:
+	pydocstyle
