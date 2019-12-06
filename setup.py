@@ -38,8 +38,6 @@ PACKAGING_REQUIRES = _get_dependencies(
 setup(
     version=versioneer.get_version(),  # type: ignore
     cmdclass=versioneer.get_cmdclass(),  # type: ignore
-    packages=find_packages(where='src'),
-    package_dir={'': 'src'},
     install_requires=INSTALL_REQUIRES,
     extras_require={'dev': DEV_REQUIRES},
 )
