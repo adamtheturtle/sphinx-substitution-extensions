@@ -1,2 +1,3 @@
 include versioneer.py
 include src/sphinx_substitution_extensions/_version.py
+include src/sphinx_substitution_extensions/py.typed
