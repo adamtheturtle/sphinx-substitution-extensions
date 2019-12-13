@@ -13,6 +13,6 @@ cache: pip
 script:
 - make lint
 - make build-sample
-- pytest -s -vvv --cov=src/ --cov=tests tests/
+- pytest -s -vvv --cov-fail-under 100 --cov=src/ --cov=tests tests/
 after_success:
 - codecov
