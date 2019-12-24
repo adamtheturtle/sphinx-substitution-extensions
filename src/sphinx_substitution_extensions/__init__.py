@@ -14,7 +14,7 @@ _SPHINX_PROMPT = importlib.import_module('sphinx-prompt')
 _PROMPT_DIRECTIVE = _SPHINX_PROMPT.PromptDirective  # type: ignore
 
 
-class SubstitutionCodeBlock(CodeBlock):  # type: ignore
+class SubstitutionCodeBlock(CodeBlock):
     """
     Similar to CodeBlock but replaces placeholders with variables.
     """
