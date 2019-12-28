@@ -69,6 +69,7 @@ def create_github_release(
         object=github_repository.get_commits()[0].sha,
     )
 
+
 def get_repo(github_token: str, github_owner: str) -> Repository:
     """
     Get a GitHub repository.
