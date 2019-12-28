@@ -22,7 +22,7 @@ fix-yapf:
 
 .PHONY: mypy
 mypy:
-	mypy *.py src/ tests/
+	mypy *.py src/ tests/ admin/
 
 .PHONY: check-manifest
 check-manifest:

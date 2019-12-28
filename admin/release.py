@@ -12,7 +12,7 @@ from dulwich.repo import Repo
 from github import Github, Repository, UnknownObjectException
 
 
-def get_version() -> str:
+def get_version(github_repository: Repository) -> str:
     """
     Return the next version.
     This is today’s date in the format ``YYYY.MM.DD.MICRO``.
@@ -22,14 +22,13 @@ def get_version() -> str:
     utc_now = datetime.datetime.utcnow()
     date_format = '%Y.%m.%d'
     date_str = utc_now.strftime(date_format)
-    local_repository = Repo('.')
-    tag_labels = tag_list(repo=local_repository)
-    tag_labels = [item.decode() for item in tag_labels]
+    tag_labels = [tag.name for tag in github_repository.get_tags()]
     today_tag_labels = [
         item for item in tag_labels if item.startswith(date_str)
     ]
     micro = int(len(today_tag_labels))
-    return '{date}.{micro}'.format(date=date_str, micro=micro)
+    new_version = f'{date_str}.{micro}'
+    return new_version
 
 
 def update_changelog(version: str) -> None:
