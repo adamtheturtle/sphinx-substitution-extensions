@@ -58,7 +58,7 @@ def build_and_upload_to_pypi() -> None:
     Build source and binary distributions.
     """
     for args in (
-        ['git', 'fetch'],
+        ['git', 'fetch', '--tags'],
         ['rm', '-rf', 'build'],
         ['python', 'setup.py', 'sdist', 'bdist_wheel'],
         ['twine', 'upload', '-r', 'pypi', 'dist/*'],
