@@ -10,4 +10,4 @@ cd "${GITHUB_REPOSITORY_NAME}"
 virtualenv -p python3 release
 source release/bin/activate
 pip install --editable .[dev]
-python admin/release.py "${GITHUB_TOKEN}" "${GITHUB_OWNER}"
+python admin/release.py
