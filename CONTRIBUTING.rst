@@ -64,9 +64,10 @@ Store your PyPI password:
 
        export GITHUB_TOKEN=75c72ad718d9c346c13d30ce762f121647b502414
        export GITHUB_OWNER=adamtheturtle
+       export GITHUB_REPOSITORY_NAME=sphinx-substituion-extensions
 
 #. Perform a release:
 
     .. code:: sh
 
-       curl https://raw.githubusercontent.com/"$GITHUB_OWNER"/sphinx-substitution-extensions/master/admin/release.sh | bash
+       curl https://raw.githubusercontent.com/"$GITHUB_OWNER"/"$GITHUB_REPOSITORY_NAME"/master/admin/release.sh | bash

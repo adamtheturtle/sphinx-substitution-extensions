@@ -7,7 +7,7 @@ import os
 import subprocess
 from pathlib import Path
 
-from github import Github, Repository, UnknownObjectException
+from github import Github, Repository
 
 
 def get_version(github_repository: Repository) -> str:
@@ -53,38 +53,7 @@ def update_changelog(version: str, github_repository: Repository) -> None:
     )
 
 
-def create_github_release(
-    github_repository: Repository,
-    version: str,
-) -> None:
-    """
-    Create a tag and release on GitHub.
-    """
-    github_repository.create_git_tag_and_release(
-        tag=version,
-        tag_message='Release ' + version,
-        release_name='Release ' + version,
-        release_message='See CHANGELOG.rst',
-        type='commit',
-        object=github_repository.get_commits()[0].sha,
-    )
-
-
-def get_repo(github_token: str, github_owner: str) -> Repository:
-    """
-    Get a GitHub repository.
-    """
-    github_client = Github(github_token)
-    try:
-        github_user_or_org = github_client.get_organization(github_owner)
-    except UnknownObjectException:
-        github_user_or_org = github_client.get_user(github_owner)
-
-    repository_name = 'sphinx-substitution-extensions'
-    return github_user_or_org.get_repo(repository_name)
-
-
-def build() -> None:
+def build_and_upload_to_pypi() -> None:
     """
     Build source and binary distributions.
     """
@@ -103,14 +72,22 @@ def main() -> None:
     """
     github_token = os.environ['GITHUB_TOKEN']
     github_owner = os.environ['GITHUB_OWNER']
-    repository = get_repo(github_token=github_token, github_owner=github_owner)
-    version_str = get_version(github_repository=repository)
-    update_changelog(version=version_str, github_repository=repository)
-    create_github_release(
-        github_repository=repository,
-        version=version_str,
+    github_repository_name = os.environ['GITHUB_REPOSITORY_NAME']
+    github_client = Github(github_token)
+    github_repository = github_client.get_repo(
+        full_name_or_id=f'{github_owner}/{github_repository_name}',
     )
-    build()
+    version_str = get_version(github_repository=github_repository)
+    update_changelog(version=version_str, github_repository=github_repository)
+    github_repository.create_git_tag_and_release(
+        tag=version_str,
+        tag_message='Release ' + version_str,
+        release_name='Release ' + version_str,
+        release_message='See CHANGELOG.rst',
+        type='commit',
+        object=github_repository.get_commits()[0].sha,
+    )
+    build_and_upload_to_pypi()
 
 
 if __name__ == '__main__':
