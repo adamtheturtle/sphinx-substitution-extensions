@@ -7,8 +7,7 @@ yapf:
 	yapf \
 	    --diff \
 	    --recursive \
-	    --exclude versioneer.py  \
-	    --exclude src/*/_version.py \
+	    --exclude .eggs \
 	    .
 
 .PHONY: fix-yapf
@@ -16,13 +15,12 @@ fix-yapf:
 	yapf \
 	    --in-place \
 	    --recursive \
-	    --exclude versioneer.py  \
-	    --exclude src/*/_version.py \
+	    --exclude .eggs \
 	    .
 
 .PHONY: mypy
 mypy:
-	mypy *.py src/ tests/ admin/
+	mypy *.py src/ tests/ docs/source/ admin
 
 .PHONY: check-manifest
 check-manifest:
@@ -42,14 +40,7 @@ isort:
 
 .PHONY: pip-extra-reqs
 pip-extra-reqs:
-	# We do nothing here.
-	#
-	# We want to ignore the sphinx-prompt because we cannot directly import
-	# sphinx-prompt because it has a hyphen.
-	# However, --ignore-requirement does not work:
-	# https://github.com/r1chardj0n3s/pip-check-reqs/issues/6
-	#
-	# pip-extra-reqs --ignore-requirement sphinx-prompt src/
+	pip-extra-reqs src/
 
 .PHONY: pip-missing-reqs
 pip-missing-reqs:
@@ -57,7 +48,7 @@ pip-missing-reqs:
 
 .PHONY: pylint
 pylint:
-	pylint *.py src/ tests/ admin/
+	pylint *.py src/ tests/ admin/ docs/
 
 .PHONY: pyroma
 pyroma:
@@ -65,7 +56,7 @@ pyroma:
 
 .PHONY: vulture
 vulture:
-	vulture --min-confidence 100 --exclude _vendor .
+	vulture --min-confidence 100 --exclude _vendor --exclude .eggs .
 
 .PHONY: linkcheck
 linkcheck:
@@ -87,7 +78,7 @@ autoflake:
 	    --remove-all-unused-imports \
 	    --remove-unused-variables \
 	    --expand-star-imports \
-	    --exclude _vendor,src/*/_version.py,versioneer.py,release \
+	    --exclude _vendor,release \
 	    .
 
 .PHONY: pydocstyle

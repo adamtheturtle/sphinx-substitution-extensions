@@ -5,7 +5,6 @@ Setup script.
 from pathlib import Path
 from typing import List
 
-import versioneer
 from setuptools import setup
 
 
@@ -36,8 +35,11 @@ PACKAGING_REQUIRES = _get_dependencies(
 )
 
 setup(
-    version=versioneer.get_version(),  # type: ignore
-    cmdclass=versioneer.get_cmdclass(),  # type: ignore
+    use_scm_version={
+        'write_to':
+        ('src/sphinx_substitution_extensions/_setuptools_scm_version.txt'),
+    },
+    setup_requires=['setuptools_scm', 'setuptools_scm_git_archive'],
     install_requires=INSTALL_REQUIRES,
     extras_require={'dev': DEV_REQUIRES},
 )
