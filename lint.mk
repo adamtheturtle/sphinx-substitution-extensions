@@ -20,7 +20,7 @@ fix-yapf:
 
 .PHONY: mypy
 mypy:
-	mypy *.py src/ tests/ docs/source/ admin
+	mypy *.py src/ tests/ admin
 
 .PHONY: check-manifest
 check-manifest:
@@ -40,7 +40,14 @@ isort:
 
 .PHONY: pip-extra-reqs
 pip-extra-reqs:
-	pip-extra-reqs src/
+	# We do nothing here.
+	#
+	# We want to ignore the sphinx-prompt because we cannot directly import
+	# sphinx-prompt because it has a hyphen.
+	# However, --ignore-requirement does not work:
+	# https://github.com/r1chardj0n3s/pip-check-reqs/issues/6
+	#
+	# pip-extra-reqs --ignore-requirement sphinx-prompt src/
 
 .PHONY: pip-missing-reqs
 pip-missing-reqs:
@@ -48,7 +55,7 @@ pip-missing-reqs:
 
 .PHONY: pylint
 pylint:
-	pylint *.py src/ tests/ admin/ docs/
+	pylint *.py src/ tests/ admin/
 
 .PHONY: pyroma
 pyroma:
