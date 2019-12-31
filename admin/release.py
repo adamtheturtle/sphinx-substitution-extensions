@@ -64,7 +64,6 @@ def build_and_upload_to_pypi() -> None:
         ['git', 'status'],
         ['python', 'setup.py', 'sdist', 'bdist_wheel'],
         ['twine', 'upload', '-r', 'pypi', 'dist/*'],
-
     ):
         subprocess.run(args=args, check=True)
 
