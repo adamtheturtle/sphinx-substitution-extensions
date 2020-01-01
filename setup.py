@@ -35,10 +35,7 @@ PACKAGING_REQUIRES = _get_dependencies(
 )
 
 setup(
-    use_scm_version={
-        'write_to':
-        ('src/sphinx_substitution_extensions/_setuptools_scm_version.txt'),
-    },
+    use_scm_version=True,
     setup_requires=['setuptools_scm', 'setuptools_scm_git_archive'],
     install_requires=INSTALL_REQUIRES,
     extras_require={'dev': DEV_REQUIRES},
