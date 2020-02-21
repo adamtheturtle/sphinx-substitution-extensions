@@ -63,6 +63,13 @@ This is an extension of `sphinx-prompt`_.
 
 ``substitution-prompt`` acts similarly to `sphinx-prompt`_, and adds replacement functionality.
 
+Inline ``:substitution-code:``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code:: rst
+
+   :substitution-code:`echo "|author| released version |release|"`
+
 Credits
 -------
 
