@@ -52,3 +52,18 @@ Configuration
 .. substitution-code-block:: bash
 
    echo "The author is |author|"
+
+Inline ``:code:``
+-----------------
+
+.. code-block:: rst
+
+    :code:`echo "The author is |author|"`
+
+    :substitution-code:`echo "The author is |author|"`
+
+=>
+
+:code:`echo "The author is |author|"`
+
+:substitution-code:`echo "The author is |author|"`
