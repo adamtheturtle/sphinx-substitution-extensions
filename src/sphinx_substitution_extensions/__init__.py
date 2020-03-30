@@ -28,11 +28,16 @@ class SubstitutionCodeBlock(CodeBlock):
         Replace placeholders with given variables.
         """
         app = self.state.document.settings.env.app
+
+        all_substitutions = set(app.config.substitutions)
+        for name in self.state.document.substitution_names:
+        all_substitutions.update([("|{}|".format(name), self.state.document.substitution_defs[name].astext())])
+
         new_content = []
         self.content = self.content  # type: List[str]
         existing_content = self.content
         for item in existing_content:
-            for pair in app.config.substitutions:
+            for pair in all_substitutions:
                 original, replacement = pair
                 item = item.replace(original, replacement)
             new_content.append(item)
