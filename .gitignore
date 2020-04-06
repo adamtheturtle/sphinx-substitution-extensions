@@ -90,6 +90,12 @@ ENV/
 env.bak/
 venv.bak/
 
+# direnv file
+.envrc
+
+# IDEA ide
+.idea/
+
 # Spyder project settings
 .spyderproject
 .spyproject
