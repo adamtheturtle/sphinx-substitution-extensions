@@ -7,7 +7,9 @@ import os
 import subprocess
 from pathlib import Path
 
-from github import Github, Repository
+from github import Github
+from github.ContentFile import ContentFile
+from github.Repository import Repository
 
 
 def get_version(github_repository: Repository) -> str:
@@ -39,6 +41,9 @@ def update_changelog(version: str, github_repository: Repository) -> None:
         path=str(changelog_path),
         ref=branch,
     )
+    # ``get_contents`` can return a ``ContentFile`` or a list of
+    # ``ContentFile``s.
+    assert isinstance(changelog_content_file, ContentFile)
     changelog_bytes = changelog_content_file.decoded_content
     changelog_contents = changelog_bytes.decode('utf-8')
     new_changelog_contents = changelog_contents.replace(
