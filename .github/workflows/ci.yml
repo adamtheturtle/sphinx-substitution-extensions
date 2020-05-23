@@ -37,7 +37,7 @@ jobs:
 
       - name: "Run tests"
         run: |
-          pytest -s -vvv --cov-fail-under 100 --cov=src/ --cov=tests tests/
+          pytest -s -vvv --cov-fail-under 100 --cov=src/ --cov=tests tests/ --cov-report=xml
 
       - name: "Upload coverage to Codecov"
         uses: "codecov/codecov-action@v1"
