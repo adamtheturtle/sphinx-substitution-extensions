@@ -90,8 +90,8 @@ Contributing
 
 See `CONTRIBUTING.rst <./CONTRIBUTING.rst>`_.
 
-.. |Build Status| image:: https://travis-ci.com/adamtheturtle/sphinx-substitution-extensions.svg?branch=master
-   :target: https://travis-ci.com/adamtheturtle/sphinx-substitution-extensions
+.. |Build Status| image:: https://github.com/adamtheturtle/sphinx-substitution-extensions/workflows/CI/badge.svg
+   :target: https://github.com/adamtheturtle/sphinx-substitution-extensions/actions
 .. _sphinx-prompt: https://github.com/sbrunner/sphinx-prompt
 .. _code-block: http://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-code-block
 .. _@sbrunner: https://github.com/sbrunner
