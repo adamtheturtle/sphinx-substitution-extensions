@@ -1,6 +1,6 @@
 ---
 
-name: Lint files
+name: CI
 
 on:
   push:
