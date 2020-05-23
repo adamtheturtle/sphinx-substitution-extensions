@@ -29,10 +29,10 @@ Setup
 
 .. code:: python
 
-   substitutions = [
-       ('|release|', '0.1'),
-       ('|author|', 'Eleanor'),
-   ]
+   rst_prolog = """
+   .. |release| replace:: 0.1
+   .. |author| replace:: Eleanor
+   """
 
 This will replace ``|release|`` in the new directives with ``0.1``, and ``|author|`` with ``Eleanor``.
 

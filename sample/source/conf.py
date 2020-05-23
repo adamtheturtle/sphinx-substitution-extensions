@@ -7,5 +7,6 @@ extensions = [
     'sphinx-prompt',
 ]
 
-_substitution_pair = ('|author|', 'Eleanor')
-substitutions = [_substitution_pair]
+rst_prolog = """
+.. |author| replace:: Eleanor
+"""

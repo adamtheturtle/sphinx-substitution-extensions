@@ -6,6 +6,10 @@ Changelog
 Next
 ----
 
+- Breaking change: Use the default Sphinx replacements, rather than a custom variable.
+  Thanks go to @sbaudoin for the original code for this change.
+  Please make a GitHub issue if you have a use case which this does not suit.
+
 2020.04.05.0
 ------------
 

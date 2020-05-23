@@ -27,14 +27,17 @@ class SubstitutionCodeBlock(CodeBlock):
         """
         Replace placeholders with given variables.
         """
-        app = self.state.document.settings.env.app
         new_content = []
         self.content = self.content  # type: List[str]
         existing_content = self.content
         for item in existing_content:
-            for pair in app.config.substitutions:
-                original, replacement = pair
-                item = item.replace(original, replacement)
+            for name in self.state.document.substitution_names:
+                replacement = self.state.document.substitution_defs[name
+                                                                    ].astext()
+                item = item.replace(
+                    '|{original}|'.format(original=name),
+                    replacement,
+                )
             new_content.append(item)
 
         self.content = new_content
@@ -50,16 +53,19 @@ class SubstitutionPrompt(_PROMPT_DIRECTIVE):  # type: ignore
         """
         Replace placeholders with given variables.
         """
-        app = self.state.document.settings.env.app
         new_content = []
         self.content = (  # pylint: disable=attribute-defined-outside-init
             self.content
         )  # type: List[str]
         existing_content = self.content
         for item in existing_content:
-            for pair in app.config.substitutions:
-                original, replacement = pair
-                item = item.replace(original, replacement)
+            for name in self.state.document.substitution_names:
+                replacement = self.state.document.substitution_defs[name
+                                                                    ].astext()
+                item = item.replace(
+                    '|{original}|'.format(original=name),
+                    replacement,
+                )
             new_content.append(item)
 
         self.content = (  # pylint: disable=attribute-defined-outside-init
@@ -68,7 +74,7 @@ class SubstitutionPrompt(_PROMPT_DIRECTIVE):  # type: ignore
         return list(_PROMPT_DIRECTIVE.run(self))
 
 
-def create_substitution_code_role(app: Sphinx) -> Callable:
+def create_substitution_code_role() -> Callable:
     """
     Create a role which allows substitution in `:substitution-code:` inline
     blocks.
@@ -86,12 +92,18 @@ def create_substitution_code_role(app: Sphinx) -> Callable:
         """
         Replace placeholders with given variables.
         """
-        app_config = app.config  # type: ignore
-        substitutions: Tuple[str, str] = app_config.substitutions
-        for pair in substitutions:
-            original, replacement = pair
-            text = text.replace(original, replacement)
-            rawtext = rawtext.replace(original, replacement)
+        document = inliner.document  # type: ignore
+        for name in document.substitution_names:
+            replacement = document.substitution_defs[name].astext()
+            text = text.replace(
+                '|{original}|'.format(original=name),
+                replacement,
+            )
+            rawtext = text.replace(
+                '|{original}|'.format(original=name),
+                replacement,
+            )
+            rawtext = rawtext.replace(name, replacement)
 
         result_nodes, system_messages = code_role(
             role=typ,
@@ -120,4 +132,4 @@ def setup(app: Sphinx) -> None:
     app.add_config_value('substitutions', [], 'html')
     app.add_directive('substitution-prompt', SubstitutionPrompt)
     app.add_directive('substitution-code-block', SubstitutionCodeBlock)
-    app.add_role('substitution-code', create_substitution_code_role(app=app))
+    app.add_role('substitution-code', create_substitution_code_role())

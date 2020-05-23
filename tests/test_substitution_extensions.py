@@ -21,9 +21,9 @@ def test_substitution_prompt(tmp_path: Path) -> None:
     conf_py_content = dedent(
         """\
         extensions = ['sphinx_substitution_extensions']
-        substitutions = [
-            ('|a|', 'example_substitution'),
-        ]
+        rst_prolog = '''
+        .. |a| replace:: example_substitution
+        '''
         """,
     )
     conf_py.write_text(conf_py_content)
@@ -68,9 +68,9 @@ def test_substitution_code_block(tmp_path: Path) -> None:
     conf_py_content = dedent(
         """\
         extensions = ['sphinx_substitution_extensions']
-        substitutions = [
-            ('|a|', 'example_substitution'),
-        ]
+        rst_prolog = '''
+        .. |a| replace:: example_substitution
+        '''
         """,
     )
     conf_py.write_text(conf_py_content)
@@ -115,9 +115,9 @@ def test_substitution_inline(tmp_path: Path) -> None:
     conf_py_content = dedent(
         """\
         extensions = ['sphinx_substitution_extensions']
-        substitutions = [
-            ('|a|', 'example_substitution'),
-        ]
+        rst_prolog = '''
+        .. |a| replace:: example_substitution
+        '''
         """,
     )
     conf_py.write_text(conf_py_content)
