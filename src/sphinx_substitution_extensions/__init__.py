@@ -3,7 +3,7 @@ Custom Sphinx extensions.
 """
 
 import importlib
-from typing import Callable, Dict, List, Tuple
+from typing import Dict, List, Tuple
 
 from docutils.nodes import Node, system_message
 from docutils.parsers.rst import directives
@@ -74,55 +74,48 @@ class SubstitutionPrompt(_PROMPT_DIRECTIVE):  # type: ignore
         return list(_PROMPT_DIRECTIVE.run(self))
 
 
-def create_substitution_code_role() -> Callable:
+def substitution_code_role(  # pylint: disable=dangerous-default-value
+    typ: str,
+    rawtext: str,
+    text: str,
+    lineno: int,
+    inliner: Inliner,
+    options: Dict = {},
+    content: List[str] = [],
+) -> Tuple[List[Node], List[system_message]]:
     """
-    Create a role which allows substitution in `:substitution-code:` inline
-    blocks.
+    Replace placeholders with given variables.
     """
-
-    def substitution_code_role(  # pylint: disable=dangerous-default-value
-        typ: str,
-        rawtext: str,
-        text: str,
-        lineno: int,
-        inliner: Inliner,
-        options: Dict = {},
-        content: List[str] = [],
-    ) -> Tuple[List[Node], List[system_message]]:
-        """
-        Replace placeholders with given variables.
-        """
-        document = inliner.document  # type: ignore
-        for name in document.substitution_names:
-            replacement = document.substitution_defs[name].astext()
-            text = text.replace(
-                '|{original}|'.format(original=name),
-                replacement,
-            )
-            rawtext = text.replace(
-                '|{original}|'.format(original=name),
-                replacement,
-            )
-            rawtext = rawtext.replace(name, replacement)
-
-        result_nodes, system_messages = code_role(
-            role=typ,
-            rawtext=rawtext,
-            text=text,
-            lineno=lineno,
-            inliner=inliner,
-            options=options,
-            content=content,
+    document = inliner.document  # type: ignore
+    for name in document.substitution_names:
+        replacement = document.substitution_defs[name].astext()
+        text = text.replace(
+            '|{original}|'.format(original=name),
+            replacement,
         )
+        rawtext = text.replace(
+            '|{original}|'.format(original=name),
+            replacement,
+        )
+        rawtext = rawtext.replace(name, replacement)
 
-        return result_nodes, system_messages
+    result_nodes, system_messages = code_role(
+        role=typ,
+        rawtext=rawtext,
+        text=text,
+        lineno=lineno,
+        inliner=inliner,
+        options=options,
+        content=content,
+    )
 
-    substitution_code_role.options = {  # type: ignore
-        'class': directives.class_option,
-        'language': directives.unchanged,
-    }
+    return result_nodes, system_messages
 
-    return substitution_code_role
+
+substitution_code_role.options = {  # type: ignore
+    'class': directives.class_option,
+    'language': directives.unchanged,
+}
 
 
 def setup(app: Sphinx) -> None:
@@ -132,4 +125,4 @@ def setup(app: Sphinx) -> None:
     app.add_config_value('substitutions', [], 'html')
     app.add_directive('substitution-prompt', SubstitutionPrompt)
     app.add_directive('substitution-code-block', SubstitutionCodeBlock)
-    app.add_role('substitution-code', create_substitution_code_role())
+    app.add_role('substitution-code', substitution_code_role)
