@@ -16,7 +16,6 @@ jobs:
     strategy:
       matrix:
         python-version: [3.8]
-        sphinx-version: ['==2.0', '==2.1', '==2.2', '==2.3', '==2.4', '']
 
     steps:
       - uses: actions/checkout@v2
@@ -30,7 +29,6 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install --upgrade codecov
           python -m pip install --upgrade --editable .[dev]
-          python -m pip install Sphinx{{$ matrix.sphinx-version }}
           sudo apt-get install -y enchant
 
       - name: "Lint"
