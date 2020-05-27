@@ -3,8 +3,8 @@ Sample ``conf.py``.
 """
 
 extensions = [
-    'sphinx_substitution_extensions',
     'sphinx-prompt',
+    'sphinx_substitution_extensions',
 ]
 
 rst_prolog = """

@@ -23,6 +23,7 @@ Setup
 
 .. code:: python
 
+   # sphinx-prompt must be the first of these two.
    extensions += ['sphinx-prompt', 'sphinx_substitution_extensions']
 
 * Set the following variable in ``conf.py``:
@@ -39,29 +40,31 @@ This will replace ``|release|`` in the new directives with ``0.1``, and ``|autho
 Directives
 ----------
 
-``substitution-code-block``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``code-block``
+~~~~~~~~~~~~~~
+
+This adds a ``:substitutions:`` option to Sphinx's built-in `code-block`_ directive.
 
 .. code:: rst
 
-   .. substitution-code-block:: bash
+   .. code-block:: bash
+      :substitutions:
 
       echo "|author| released version |release|"
 
-This is an extension of Sphinx's built-in `code-block`_ directive, and adds replacement functionality.
 
-``substitution-prompt``
-~~~~~~~~~~~~~~~~~~~~~~~
+``prompt``
+~~~~~~~~~~
+
+This adds a ``:substitutions:`` option to `sphinx-prompt`_.
 
 .. code:: rst
 
-   .. substitution-prompt:: bash
+   .. prompt:: bash
+      :substitutions:
 
       echo "|author| released version |release|"
 
-This is an extension of `sphinx-prompt`_.
-
-``substitution-prompt`` acts similarly to `sphinx-prompt`_, and adds replacement functionality.
 
 Inline ``:substitution-code:``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
