@@ -17,8 +17,10 @@ from sphinx.directives.code import CodeBlock
 _SPHINX_PROMPT = importlib.import_module('sphinx-prompt')
 _PROMPT_DIRECTIVE = _SPHINX_PROMPT.PromptDirective  # type: ignore
 
+_EXISTING_CODE_BLOCK_DIRECTIVE = directives._directives['code-block']
 
-class SubstitutionCodeBlock(CodeBlock):
+
+class SubstitutionCodeBlock(_EXISTING_CODE_BLOCK_DIRECTIVE):
     """
     Similar to CodeBlock but replaces placeholders with variables.
     """
@@ -27,17 +29,20 @@ class SubstitutionCodeBlock(CodeBlock):
         """
         Replace placeholders with given variables.
         """
+        self.option_spec['substitutions'] = directives.flag
+
         new_content = []
         self.content = self.content  # type: List[str]
         existing_content = self.content
+        substitution_defs = self.state.document.substitution_defs
         for item in existing_content:
             for name in self.state.document.substitution_names:
-                replacement = self.state.document.substitution_defs[name
-                                                                    ].astext()
-                item = item.replace(
-                    '|{original}|'.format(original=name),
-                    replacement,
-                )
+                if 'substitutions' in self.options:
+                    replacement = substitution_defs[name].astext()
+                    item = item.replace(
+                        '|{original}|'.format(original=name),
+                        replacement,
+                    )
             new_content.append(item)
 
         self.content = new_content
@@ -124,5 +129,5 @@ def setup(app: Sphinx) -> None:
     """
     app.add_config_value('substitutions', [], 'html')
     app.add_directive('substitution-prompt', SubstitutionPrompt)
-    app.add_directive('substitution-code-block', SubstitutionCodeBlock)
+    directives.register_directive('code-block', SubstitutionCodeBlock)
     app.add_role('substitution-code', substitution_code_role)
