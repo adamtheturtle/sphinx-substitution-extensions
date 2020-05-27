@@ -9,8 +9,8 @@ from textwrap import dedent
 
 def test_substitution_prompt(tmp_path: Path) -> None:
     """
-    The ``substitution-prompt`` directive replaces the placeholders defined in
-    ``conf.py`` as specified.
+    The ``prompt`` directive replaces the placeholders defined in ``conf.py``
+    when requested.
     """
     source_directory = tmp_path / 'source'
     source_directory.mkdir()
@@ -20,7 +20,7 @@ def test_substitution_prompt(tmp_path: Path) -> None:
     source_file.touch()
     conf_py_content = dedent(
         """\
-        extensions = ['sphinx_substitution_extensions']
+        extensions = ['sphinx-prompt', 'sphinx_substitution_extensions']
         rst_prolog = '''
         .. |a| replace:: example_substitution
         '''
@@ -29,7 +29,8 @@ def test_substitution_prompt(tmp_path: Path) -> None:
     conf_py.write_text(conf_py_content)
     source_file_content = dedent(
         """\
-        .. substitution-prompt:: bash $
+        .. prompt:: bash $
+           :substitutions:
 
            $ PRE-|a|-POST
         """,
@@ -67,7 +68,7 @@ def test_substitution_code_block(tmp_path: Path) -> None:
     source_file.touch()
     conf_py_content = dedent(
         """\
-        extensions = ['sphinx_substitution_extensions']
+        extensions = ['sphinx-prompt', 'sphinx_substitution_extensions']
         rst_prolog = '''
         .. |a| replace:: example_substitution
         '''
@@ -76,7 +77,8 @@ def test_substitution_code_block(tmp_path: Path) -> None:
     conf_py.write_text(conf_py_content)
     source_file_content = dedent(
         """\
-        .. substitution-code-block:: bash
+        .. code-block:: bash
+           :substitutions:
 
            $ PRE-|a|-POST
         """,
@@ -114,7 +116,7 @@ def test_substitution_inline(tmp_path: Path) -> None:
     source_file.touch()
     conf_py_content = dedent(
         """\
-        extensions = ['sphinx_substitution_extensions']
+        extensions = ['sphinx-prompt', 'sphinx_substitution_extensions']
         rst_prolog = '''
         .. |a| replace:: example_substitution
         '''
