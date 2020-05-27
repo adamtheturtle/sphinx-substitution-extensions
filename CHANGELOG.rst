@@ -6,6 +6,9 @@ Changelog
 Next
 ----
 
+2020.05.27.0
+------------
+
 - Breaking change: Use ``:substitutions:`` option on ``code-block`` or ``prompt`` rather than new directives.
 
 2020.05.23.0
