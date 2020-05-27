@@ -10,7 +10,6 @@ from docutils.parsers.rst import Directive, directives
 from docutils.parsers.rst.roles import code_role
 from docutils.parsers.rst.states import Inliner
 from sphinx.application import Sphinx
-from sphinx.directives.code import CodeBlock
 
 LOGGER = logging.getLogger(__name__)
 
@@ -61,7 +60,7 @@ class SubstitutionCodeBlock(_EXISTING_CODE_BLOCK_DIRECTIVE):  # type: ignore
         self.content = (  # pylint: disable=attribute-defined-outside-init
             new_content
         )
-        return list(CodeBlock.run(self))
+        return list(super().run())
 
 
 class SubstitutionPrompt(_EXISTING_PROMPT_DIRECTIVE):  # type: ignore
