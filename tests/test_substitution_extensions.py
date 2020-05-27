@@ -24,9 +24,6 @@ def test_prompt_specified_late(tmp_path: Path) -> None:
         """,
     )
     conf_py.write_text(conf_py_content)
-    source_file_content = dedent("""\
-        """, )
-    source_file.write_text(source_file_content)
     destination_directory = tmp_path / 'destination'
     args = [
         'sphinx-build',
