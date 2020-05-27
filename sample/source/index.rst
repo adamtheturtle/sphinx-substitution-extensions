@@ -16,7 +16,8 @@ Configuration
 
        echo "The author is |author|"
 
-    .. substitution-prompt:: bash
+    .. prompt:: bash
+       :substitutions:
 
        echo "The author is |author|"
 
@@ -26,7 +27,8 @@ Configuration
 
    echo "The author is |author|"
 
-.. substitution-prompt:: bash
+.. prompt:: bash
+   :substitutions:
 
    echo "The author is |author|"
 
@@ -39,7 +41,8 @@ Configuration
 
        echo "The author is |author|"
 
-    .. substitution-code-block:: bash
+    .. code-block:: bash
+       :substitutions:
 
        echo "The author is |author|"
 
@@ -49,7 +52,8 @@ Configuration
 
    echo "The author is |author|"
 
-.. substitution-code-block:: bash
+.. code-block:: bash
+   :substitutions:
 
    echo "The author is |author|"
 
