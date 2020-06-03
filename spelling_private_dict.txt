@@ -1,9 +1,10 @@
 admin
 changelog
 conf
+hardcoded
+inline
 linters
 py
 rst
 str
 tuple
-inline

@@ -5,6 +5,7 @@ include lint.mk
 .PHONY: lint
 lint: \
     check-manifest \
+    doc8 \
     flake8 \
     isort \
     mypy \
