@@ -40,14 +40,9 @@ isort:
 
 .PHONY: pip-extra-reqs
 pip-extra-reqs:
-	# We do nothing here.
-	#
-	# We want to ignore the sphinx-prompt because we cannot directly import
-	# sphinx-prompt because it has a hyphen.
-	# However, --ignore-requirement does not work:
-	# https://github.com/r1chardj0n3s/pip-check-reqs/issues/6
-	#
-	# pip-extra-reqs --ignore-requirement sphinx-prompt src/
+	# We ignore the sphinx-prompt because we do not import it but we require it
+	# so that users can set it before our extension.
+	pip-extra-reqs --ignore-requirement sphinx-prompt src/
 
 .PHONY: pip-missing-reqs
 pip-missing-reqs:
