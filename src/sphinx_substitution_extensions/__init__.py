@@ -53,9 +53,9 @@ class SubstitutionCodeBlock(_EXISTING_CODE_BLOCK_DIRECTIVE):  # type: ignore
         existing_content = self.content
         substitution_defs = self.state.document.substitution_defs
         for item in existing_content:
-            for name in self.state.document.substitution_names:
+            for name, value in substitution_defs.items():
                 if _SUBSTITUTION_OPTION_NAME in self.options:
-                    replacement = substitution_defs[name].astext()
+                    replacement = value.astext()
                     item = item.replace(
                         '|{original}|'.format(original=name),
                         replacement,
@@ -87,9 +87,9 @@ class SubstitutionPrompt(_EXISTING_PROMPT_DIRECTIVE):  # type: ignore
         existing_content = self.content
         substitution_defs = self.state.document.substitution_defs
         for item in existing_content:
-            for name in self.state.document.substitution_names:
+            for name, value in substitution_defs.items():
                 if _SUBSTITUTION_OPTION_NAME in self.options:
-                    replacement = substitution_defs[name].astext()
+                    replacement = value.astext()
                     item = item.replace(
                         '|{original}|'.format(original=name),
                         replacement,
