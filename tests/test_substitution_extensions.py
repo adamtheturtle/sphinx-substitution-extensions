@@ -3,6 +3,7 @@ Tests for Sphinx extensions.
 """
 
 import subprocess
+import sys
 from pathlib import Path
 from textwrap import dedent
 
@@ -26,7 +27,7 @@ def test_prompt_specified_late(tmp_path: Path) -> None:
     conf_py.write_text(conf_py_content)
     destination_directory = tmp_path / 'destination'
     args = [
-        'sphinx-build',
+        sys.executable, "-m", "sphinx",
         '-b',
         'html',
         '-W',
@@ -83,7 +84,7 @@ def test_substitution_prompt(tmp_path: Path) -> None:
     source_file.write_text(source_file_content)
     destination_directory = tmp_path / 'destination'
     args = [
-        'sphinx-build',
+        sys.executable, "-m", "sphinx",
         '-b',
         'html',
         '-W',
@@ -130,7 +131,7 @@ def test_no_substitution_prompt(tmp_path: Path) -> None:
     source_file.write_text(source_file_content)
     destination_directory = tmp_path / 'destination'
     args = [
-        'sphinx-build',
+        sys.executable, "-m", "sphinx",
         '-b',
         'html',
         '-W',
@@ -177,7 +178,7 @@ def test_no_substitution_code_block(tmp_path: Path) -> None:
     source_file.write_text(source_file_content)
     destination_directory = tmp_path / 'destination'
     args = [
-        'sphinx-build',
+        sys.executable, "-m", "sphinx",
         '-b',
         'html',
         '-W',
@@ -225,7 +226,7 @@ def test_substitution_code_block(tmp_path: Path) -> None:
     source_file.write_text(source_file_content)
     destination_directory = tmp_path / 'destination'
     args = [
-        'sphinx-build',
+        sys.executable, "-m", "sphinx",
         '-b',
         'html',
         '-W',
@@ -270,7 +271,7 @@ def test_substitution_inline(tmp_path: Path) -> None:
     source_file.write_text(source_file_content)
     destination_directory = tmp_path / 'destination'
     args = [
-        'sphinx-build',
+        sys.executable, "-m", "sphinx",
         '-b',
         'html',
         '-W',
