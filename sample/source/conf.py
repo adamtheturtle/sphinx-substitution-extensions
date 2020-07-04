@@ -9,5 +9,5 @@ extensions = [
 
 rst_prolog = """
 .. |author| replace:: Eleanor
-.. |FOO| replace:: fooreplace
+.. |MixedCaseReplacement| replace:: UnusedReplacement
 """
