@@ -30,7 +30,7 @@ Configuration
 .. prompt:: bash
    :substitutions:
 
-   echo "The author is |author|"
+   echo "The author is |FOO|"
 
 ``code-block``
 --------------

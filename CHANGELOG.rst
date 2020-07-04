@@ -6,6 +6,9 @@ Changelog
 Next
 ----
 
+- Ensure non-lower-case replacements can also be substituted.
+  Thanks go to @Julian for this change.
+
 2020.05.30.0
 ------------
 
