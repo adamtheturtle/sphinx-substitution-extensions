@@ -6,6 +6,9 @@ Changelog
 Next
 ----
 
+2020.07.04.1
+------------
+
 - Ensure non-lower-case replacements can also be substituted in the inline substitution code role.
 
 2020.07.04.0
