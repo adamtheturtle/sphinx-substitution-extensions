@@ -15,5 +15,5 @@ pyroma==2.6
 pytest-cov==2.10.0  # Measure code coverage
 pytest==6.0.1
 twine==3.2.0
-vulture==1.6
+vulture==2.0
 yapf==0.30.0
