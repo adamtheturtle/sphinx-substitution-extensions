@@ -36,7 +36,11 @@ flake8:
 
 .PHONY: isort
 isort:
-	isort --recursive --check-only
+	isort --check-only .
+
+.PHONY: fix-isort
+fix-isort:
+	isort .
 
 .PHONY: pip-extra-reqs
 pip-extra-reqs:
@@ -59,14 +63,6 @@ pyroma:
 .PHONY: vulture
 vulture:
 	vulture --min-confidence 100 --exclude _vendor --exclude .eggs .
-
-.PHONY: linkcheck
-linkcheck:
-	$(MAKE) -C docs/ linkcheck SPHINXOPTS=$(SPHINXOPTS)
-
-.PHONY: spelling
-spelling:
-	$(MAKE) -C docs/ spelling SPHINXOPTS=$(SPHINXOPTS)
 
 .PHONY: shellcheck
 shellcheck:
