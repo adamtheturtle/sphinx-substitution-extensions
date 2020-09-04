@@ -2,21 +2,13 @@
 
 SHELL := /bin/bash -euxo pipefail
 
-.PHONY: yapf
-yapf:
-	yapf \
-	    --diff \
-	    --recursive \
-	    --exclude .eggs \
-	    .
+.PHONY: black
+black:
+	black --check .
 
-.PHONY: fix-yapf
-fix-yapf:
-	yapf \
-	    --in-place \
-	    --recursive \
-	    --exclude .eggs \
-	    .
+.PHONY: fix-black
+fix-black:
+	black .
 
 .PHONY: mypy
 mypy:
