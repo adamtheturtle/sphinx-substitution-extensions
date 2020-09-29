@@ -45,6 +45,10 @@ jobs:
         run: |
           make build-sample
 
+      - name: "Build sample parallel"
+        run: |
+          make build-sample-parallel
+
       - name: "Run tests"
         run: |
           pytest -s -vvv --cov-fail-under 100 --cov=src/ --cov=tests tests/ --cov-report=xml
