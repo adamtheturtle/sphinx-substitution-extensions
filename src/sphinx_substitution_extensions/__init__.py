@@ -146,7 +146,7 @@ substitution_code_role.options = {  # type: ignore
 }
 
 
-def setup(app: Sphinx) -> None:
+def setup(app: Sphinx) -> dict:
     """
     Add the custom directives to Sphinx.
     """
@@ -154,3 +154,4 @@ def setup(app: Sphinx) -> None:
     directives.register_directive('prompt', SubstitutionPrompt)
     directives.register_directive('code-block', SubstitutionCodeBlock)
     app.add_role('substitution-code', substitution_code_role)
+    return {'parallel_read_safe': True}
