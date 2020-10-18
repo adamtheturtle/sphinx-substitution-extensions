@@ -90,3 +90,58 @@
 
 line-length = 79
 skip-string-normalization = true
+
+[tool.isort]
+
+  multi_line_output = 3
+ include_trailing_comma = true
+
+[tool.coverage.run]
+
+branch = true
+
+[tool.pytest.ini_options]
+
+xfail_strict = true
+log_cli = true
+
+[tool.check-manifest]
+
+ignore = [
+	"*.enc",
+	".appveyor.yml",
+	".coveragerc",
+	".isort.cfg",
+	".markdownlint.json",
+	".pydocstyle",
+	".remarkrc",
+	".readthedocs.yml",
+	"readthedocs.yaml",
+	".style.yapf",
+	".travis.yml",
+	"admin",
+	"admin/**",
+	"CHANGELOG.rst",
+	"CODE_OF_CONDUCT.rst",
+	"CONTRIBUTING.rst",
+	"LICENSE",
+	"Makefile",
+	"ci",
+	"ci/**",
+	"codecov.yaml",
+	"doc8.ini",
+	"docs",
+	"docs/**",
+	".git_archival.txt",
+	"mypy.ini",
+	"pylintrc",
+	"pytest.ini",
+  "sample",
+  "sample/**",
+	"spelling_private_dict.txt",
+	"tests",
+	"tests-pylintrc",
+	"tests/**",
+	"vuforia_secrets.env.example",
+	"lint.mk",
+]
