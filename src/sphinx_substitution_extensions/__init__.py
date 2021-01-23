@@ -42,7 +42,7 @@ class SubstitutionCodeBlock(_EXISTING_CODE_BLOCK_DIRECTIVE):  # type: ignore
     option_spec = _EXISTING_CODE_BLOCK_DIRECTIVE.option_spec
     option_spec['substitutions'] = directives.flag
 
-    def run(self) -> List:
+    def run(self) -> list:
         """
         Replace placeholders with given variables.
         """
@@ -78,7 +78,7 @@ class SubstitutionPrompt(_EXISTING_PROMPT_DIRECTIVE):  # type: ignore
     option_spec = _EXISTING_PROMPT_DIRECTIVE.option_spec or {}
     option_spec['substitutions'] = directives.flag
 
-    def run(self) -> List:
+    def run(self) -> list:
         """
         Replace placeholders with given variables.
         """
