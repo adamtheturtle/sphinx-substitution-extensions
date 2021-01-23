@@ -2,8 +2,10 @@
 Custom Sphinx extensions.
 """
 
+from __future__ import annotations
+
 import logging
-from typing import Dict, List, Tuple
+from typing import Dict, Tuple
 
 from docutils.nodes import Node, system_message
 from docutils.parsers.rst import Directive, directives
@@ -49,7 +51,7 @@ class SubstitutionCodeBlock(_EXISTING_CODE_BLOCK_DIRECTIVE):  # type: ignore
         new_content = []
         self.content = (  # pylint: disable=attribute-defined-outside-init
             self.content
-        )  # type: List[str]
+        )  # type: list[str]
         existing_content = self.content
         substitution_defs = self.state.document.substitution_defs
         for item in existing_content:
@@ -83,7 +85,7 @@ class SubstitutionPrompt(_EXISTING_PROMPT_DIRECTIVE):  # type: ignore
         new_content = []
         self.content = (  # pylint: disable=attribute-defined-outside-init
             self.content
-        )  # type: List[str]
+        )  # type: list[str]
         existing_content = self.content
         substitution_defs = self.state.document.substitution_defs
         for item in existing_content:
@@ -109,8 +111,8 @@ def substitution_code_role(  # pylint: disable=dangerous-default-value
     lineno: int,
     inliner: Inliner,
     options: Dict = {},
-    content: List[str] = [],
-) -> Tuple[List[Node], List[system_message]]:
+    content: list[str] = [],
+) -> Tuple[list[Node], list[system_message]]:
     """
     Replace placeholders with given variables.
     """
