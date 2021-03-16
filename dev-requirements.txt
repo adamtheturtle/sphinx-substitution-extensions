@@ -15,5 +15,5 @@ pylint==2.7.2
 pyroma==3.1
 pytest-cov==2.11.1  # Measure code coverage
 pytest==6.2.2
-twine==3.3.0
+twine==3.4.0
 vulture==2.3
