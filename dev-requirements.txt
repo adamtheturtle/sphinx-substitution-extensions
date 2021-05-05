@@ -14,6 +14,6 @@ pygithub==1.55
 pylint==2.8.2
 pyroma==3.1
 pytest-cov==2.11.1  # Measure code coverage
-pytest==6.2.3
+pytest==6.2.4
 twine==3.4.1
 vulture==2.3
