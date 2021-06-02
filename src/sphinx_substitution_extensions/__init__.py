@@ -33,6 +33,7 @@ if 'prompt' not in _EXISTING_DIRECTIVES:
 
 _EXISTING_PROMPT_DIRECTIVE: Directive = _EXISTING_DIRECTIVES['prompt']
 
+mySphinx: Sphinx = None
 
 class SubstitutionCodeBlock(_EXISTING_CODE_BLOCK_DIRECTIVE):  # type: ignore
     """
@@ -54,13 +55,25 @@ class SubstitutionCodeBlock(_EXISTING_CODE_BLOCK_DIRECTIVE):  # type: ignore
         )  # type: list[str]
         existing_content = self.content
         substitution_defs = self.state.document.substitution_defs
+
+        # Optional support for MyST substitution plugin
+        # See https://myst-parser.readthedocs.io/en/latest/using/syntax-optional.html#substitutions-with-jinja2
+        mystSubstitutions = {}
+        if 'myst_substitutions' in mySphinx.config:
+            mystSubstitutions = mySphinx.config['myst_substitutions']
+
         for item in existing_content:
-            for name, value in substitution_defs.items():
-                if _SUBSTITUTION_OPTION_NAME in self.options:
+            if _SUBSTITUTION_OPTION_NAME in self.options:
+                for name, value in substitution_defs.items():
                     replacement = value.astext()
                     item = item.replace(
                         '|{original}|'.format(original=name),
                         replacement,
+                    )
+                for name, value in mystSubstitutions.items():
+                    item = item.replace(
+                        '|{original}|'.format(original=name),
+                        value
                     )
             new_content.append(item)
 
@@ -152,6 +165,8 @@ def setup(app: Sphinx) -> dict:
     """
     Add the custom directives to Sphinx.
     """
+    global mySphinx
+    mySphinx = app
     app.add_config_value('substitutions', [], 'html')
     directives.register_directive('prompt', SubstitutionPrompt)
     directives.register_directive('code-block', SubstitutionCodeBlock)
