@@ -8,7 +8,10 @@ import logging
 from typing import Dict, Tuple
 
 from docutils.nodes import Node, system_message
-from docutils.parsers.rst import Directive, directives
+
+# See https://github.com/python/typeshed/issues/5755
+from docutils.parsers.rst import directives  # type: ignore
+from docutils.parsers.rst import Directive
 from docutils.parsers.rst.roles import code_role
 from docutils.parsers.rst.states import Inliner
 from sphinx.application import Sphinx
