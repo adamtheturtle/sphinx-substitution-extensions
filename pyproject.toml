@@ -114,14 +114,10 @@ ignore = [
 	"*.enc",
 	".appveyor.yml",
 	".coveragerc",
-	".isort.cfg",
 	".markdownlint.json",
-	".pydocstyle",
 	".remarkrc",
 	".readthedocs.yml",
 	"readthedocs.yaml",
-	".style.yapf",
-	".travis.yml",
 	"admin",
 	"admin/**",
 	"CHANGELOG.rst",
@@ -132,19 +128,51 @@ ignore = [
 	"ci",
 	"ci/**",
 	"codecov.yaml",
-	"doc8.ini",
 	"docs",
 	"docs/**",
 	".git_archival.txt",
-	"mypy.ini",
 	"pylintrc",
-	"pytest.ini",
   "sample",
   "sample/**",
 	"spelling_private_dict.txt",
 	"tests",
 	"tests-pylintrc",
 	"tests/**",
-	"vuforia_secrets.env.example",
 	"lint.mk",
 ]
+
+[tool.pydocstyle]
+# We do not have summary lines, care about "mood", or need sections with
+# dash underlined titles.
+ignore = [
+  'D200',
+  'D205',
+  'D400',
+  'D415',
+  'D202',
+  'D203',
+  'D212',
+  'D401',
+  'D406',
+  'D407',
+  'D413',
+]
+
+[tool.mypy]
+
+check_untyped_defs = true
+disallow_incomplete_defs = true
+disallow_subclassing_any = true
+disallow_untyped_calls = true
+disallow_untyped_decorators = true
+disallow_untyped_defs = true
+follow_imports = "normal"
+ignore_missing_imports = true
+no_implicit_optional = true
+strict_equality = true
+strict_optional = true
+warn_no_return = true
+warn_redundant_casts = true
+warn_return_any = true
+warn_unused_configs = true
+warn_unused_ignores = true
