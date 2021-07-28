@@ -1,20 +1,20 @@
 autoflake==1.4
 black==21.5b0
 check-manifest==0.46
-doc8==0.8.1
+doc8==0.9.0
 flake8-commas==2.0.0
 flake8-quotes==3.2.0
 flake8==3.9.2
 isort==5.9.2
 mypy==0.910
-pip_check_reqs==2.2.2
+pip_check_reqs==2.3.0
 pydocstyle==6.1.1
 pyenchant==3.2.1
 pygithub==1.55
-pylint==2.9.3
+pylint==2.9.5
 pyroma==3.2
 pytest-cov==2.12.1  # Measure code coverage
 pytest==6.2.4
-twine==3.4.1
+twine==3.4.2
 types-docutils==0.1.7
 vulture==2.3
