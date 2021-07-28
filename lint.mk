@@ -38,11 +38,11 @@ fix-isort:
 pip-extra-reqs:
 	# We ignore the sphinx-prompt because we do not import it but we require it
 	# so that users can set it before our extension.
-	pip-extra-reqs --ignore-requirement sphinx-prompt src/
+	pip-extra-reqs --requirements-file=requirements/requirements.txt --ignore-requirement sphinx-prompt src/
 
 .PHONY: pip-missing-reqs
 pip-missing-reqs:
-	pip-missing-reqs src/
+	pip-missing-reqs --requirements-file=requirements/requirements.txt src/
 
 .PHONY: pylint
 pylint:
