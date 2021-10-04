@@ -13,7 +13,7 @@ pyenchant==3.2.1
 pygithub==1.55
 pylint==2.10.2
 pyroma==3.2
-pytest-cov==2.12.1  # Measure code coverage
+pytest-cov==3.0.0  # Measure code coverage
 pytest==6.2.5
 twine==3.4.2
 types-docutils==0.17.0
