@@ -4,7 +4,7 @@ check-manifest==0.47
 doc8==0.9.1
 flake8-commas==2.0.0
 flake8-quotes==3.3.0
-flake8==3.9.2
+flake8==4.0.1
 isort==5.9.3
 mypy==0.910
 pip_check_reqs==2.3.0
