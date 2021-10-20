@@ -61,10 +61,7 @@ class SubstitutionCodeBlock(_EXISTING_CODE_BLOCK_DIRECTIVE):  # type: ignore
             for name, value in substitution_defs.items():
                 if _SUBSTITUTION_OPTION_NAME in self.options:
                     replacement = value.astext()
-                    item = item.replace(
-                        '|{original}|'.format(original=name),
-                        replacement,
-                    )
+                    item = item.replace(f'|{name}|', replacement)
             new_content.append(item)
 
         self.content = (  # pylint: disable=attribute-defined-outside-init
@@ -95,10 +92,8 @@ class SubstitutionPrompt(_EXISTING_PROMPT_DIRECTIVE):  # type: ignore
             for name, value in substitution_defs.items():
                 if _SUBSTITUTION_OPTION_NAME in self.options:
                     replacement = value.astext()
-                    item = item.replace(
-                        '|{original}|'.format(original=name),
-                        replacement,
-                    )
+                    item = item.replace(f'|{name}|', replacement)
+
             new_content.append(item)
 
         self.content = (  # pylint: disable=attribute-defined-outside-init
@@ -122,14 +117,8 @@ def substitution_code_role(  # pylint: disable=dangerous-default-value
     document = inliner.document  # type: ignore
     for name, value in document.substitution_defs.items():
         replacement = value.astext()
-        text = text.replace(
-            '|{original}|'.format(original=name),
-            replacement,
-        )
-        rawtext = text.replace(
-            '|{original}|'.format(original=name),
-            replacement,
-        )
+        text = text.replace(f'|{name}|', replacement)
+        rawtext = text.replace(f'|{name}|', replacement)
         rawtext = rawtext.replace(name, replacement)
 
     result_nodes, system_messages = code_role(
