@@ -5,7 +5,7 @@ doc8==0.9.1
 flake8-commas==2.1.0
 flake8-quotes==3.3.1
 flake8==4.0.1
-isort==5.9.3
+isort==5.10.0
 mypy==0.910
 pip_check_reqs==2.3.2
 pydocstyle==6.1.1
