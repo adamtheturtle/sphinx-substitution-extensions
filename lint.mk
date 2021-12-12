@@ -56,10 +56,6 @@ pyroma:
 vulture:
 	vulture --min-confidence 100 --exclude _vendor --exclude .eggs .
 
-.PHONY: shellcheck
-shellcheck:
-	shellcheck --exclude SC2164,SC1091 */*.sh
-
 .PHONY: autoflake
 autoflake:
 	autoflake \
