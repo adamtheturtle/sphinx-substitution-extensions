@@ -62,11 +62,10 @@ def main() -> None:
     Perform a release.
     """
     github_token = os.environ['GITHUB_TOKEN']
-    github_owner = os.environ['GITHUB_OWNER']
-    github_repository_name = os.environ['GITHUB_REPOSITORY_NAME']
+    github_repository_name = os.environ['GITHUB_REPOSITORY']
     github_client = Github(github_token)
     github_repository = github_client.get_repo(
-        full_name_or_id=f'{github_owner}/{github_repository_name}',
+        full_name_or_id=github_repository_name,
     )
     version_str = get_version(github_repository=github_repository)
     update_changelog(version=version_str, github_repository=github_repository)
