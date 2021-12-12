@@ -21,39 +21,6 @@ Prerequisites
 Perform a Release
 ~~~~~~~~~~~~~~~~~
 
-#. Install keyring
-
-   Make sure that `keyring <https://pypi.org/project/keyring/>`__ is available on your path.
-
-   E.g.:
-
-   .. code:: sh
-
-      python3 -m pip install --user pipx
-      python3 -m pipx ensurepath
-      pipx install keyring
-
-#. Set up PyPI credentials
-
-Register at `PyPI <https://pypi.org>`__.
-
-Add the following information to `~/.pypirc`.
-
-.. code:: ini
-
-   [distutils]
-    index-servers=
-        pypi
-
-    [pypi]
-    username = <Your PyPI username>
-
-Store your PyPI password:
-
-.. code:: sh
-
-   keyring set https://upload.pypi.org/legacy/ <Your PyPI username>
-
 #. Get a GitHub access token:
 
    Follow the `GitHub instructions <https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/>`__ for getting an access token.
