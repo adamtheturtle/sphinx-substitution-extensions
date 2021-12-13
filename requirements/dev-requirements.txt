@@ -10,7 +10,6 @@ mypy==0.910
 pip_check_reqs==2.3.2
 pydocstyle==6.1.1
 pyenchant==3.2.2
-pygithub==1.55
 pylint==2.12.2
 pyroma==3.2
 pytest-cov==3.0.0  # Measure code coverage
