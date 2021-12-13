@@ -21,35 +21,52 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - uses: actions/cache@v2
+      - name: "Calver calculate version"
+        uses: StephaneBour/actions-calver@master
+        id: calver
         with:
-          path: ~/.cache/pip
-          # This is like the example but we use ``*requirements.txt`` rather
-          # than ``requirements.txt`` because we have multiple requirements
-          # files.
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/*requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-
-      - name: "Install dependencies"
-        run: |
-          python -m pip install --upgrade pip setuptools wheel
-          # We use '--ignore-installed' to avoid GitHub's cache which can cause
-          # issues - we have seen packages from this cache cause trouble with
-          # pip-extra-reqs.
-          python -m pip install --ignore-installed --upgrade --editable .[dev]
-
-      - name: "Publish a release"
+          date_format: "%Y.%m.%d"
+          release: false
         env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-        run: |
-          python admin/release.py
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: "Update changelog"
+        uses: jacobtomlinson/gha-find-replace@v2
+        env:
+          NEXT_VERSION: ${{ steps.calver.outputs.release }}
+        with:
+          find: "Next\n----"
+          replace: "Next\n----\n\n${{ env.NEXT_VERSION }}\n------------"
+          include: "CHANGELOG.rst"
+          regex: false
+
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        id: commit
+        with:
+          commit_message: Bump CHANGELOG
+
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          custom_tag: ${{ steps.calver.outputs.release }}
+          tag_prefix: ""
+          commit_sha: ${{ steps.commit.outputs.commit_hash }}
+
+      - name: Create a GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          body: ${{ steps.tag_version.outputs.changelog }}
 
       - name: Build a binary wheel and a source tarball
         run: |
           # Checkout the latest tag - the one we just created.
           git fetch --tags
           git checkout $(git describe --tags $(git rev-list --tags --max-count=1))
+          python -m pip install build
           python -m build --sdist --wheel --outdir dist/ .
 
       - name: Publish distribution 📦 to PyPI

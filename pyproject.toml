@@ -116,8 +116,6 @@ ignore = [
 	".remarkrc",
 	".readthedocs.yml",
 	"readthedocs.yaml",
-	"admin",
-	"admin/**",
 	"CHANGELOG.rst",
 	"CODE_OF_CONDUCT.rst",
 	"CONTRIBUTING.rst",
