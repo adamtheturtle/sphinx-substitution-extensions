@@ -25,8 +25,8 @@ Perform a Release
 
 #. Perform a release:
 
-   .. prompt:: bash
+   .. code:: bash
 
-      $ gh workflow run release.yml
+      $ gh workflow run release.yml --repo adamtheturtle/sphinx-substitution-extensions
 
 .. _Install GitHub CLI: https://cli.github.com/manual/installation
