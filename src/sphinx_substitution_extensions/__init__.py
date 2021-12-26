@@ -31,14 +31,15 @@ _EXISTING_CODE_BLOCK_DIRECTIVE = _EXISTING_DIRECTIVES['code-block']
 _SUBSTITUTION_OPTION_NAME = 'substitutions'
 
 _EXISTING_PROMPT_DIRECTIVE = Directive
-if exists_dependency('sphinx-prompt') and 'prompt' not in _EXISTING_DIRECTIVES:
-    MESSAGE = (
-        'sphinx-prompt must be in the conf.py extensions list before '
-        'sphinx_substitution_extensions'
-    )
-    LOGGER.error(MESSAGE)
-else:
-    _EXISTING_PROMPT_DIRECTIVE: Directive = _EXISTING_DIRECTIVES['prompt']
+if exists_dependency('sphinx-prompt'):
+    if 'prompt' not in _EXISTING_DIRECTIVES:
+        MESSAGE = (
+            'sphinx-prompt must be in the conf.py extensions list before '
+            'sphinx_substitution_extensions'
+        )
+        LOGGER.error(MESSAGE)
+    else:
+        _EXISTING_PROMPT_DIRECTIVE: Directive = _EXISTING_DIRECTIVES['prompt']
 
 class SubstitutionCodeBlock(_EXISTING_CODE_BLOCK_DIRECTIVE):  # type: ignore
     """
