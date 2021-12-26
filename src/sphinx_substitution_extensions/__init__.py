@@ -16,19 +16,29 @@ from docutils.parsers.rst.roles import code_role
 from docutils.parsers.rst.states import Inliner
 from sphinx.application import Sphinx
 
+from sphinx_substitution_extensions.utils import exists_dependency
+
+
 LOGGER = logging.getLogger(__name__)
 
 _EXISTING_DIRS = directives._directives  # pylint: disable=protected-access
 _EXISTING_DIRECTIVES: Dict[str, Directive] = _EXISTING_DIRS
 _EXISTING_CODE_BLOCK_DIRECTIVE = _EXISTING_DIRECTIVES['code-block']
-_EXISTING_PROMPT_DIRECTIVE = Directive
-if 'prompt' in _EXISTING_DIRECTIVES:
-    _EXISTING_PROMPT_DIRECTIVE: Directive = _EXISTING_DIRECTIVES['prompt']
 
 # This is hardcoded in doc8 as a valid option so be wary that changing this
 # may break doc8 linting.
 # See https://github.com/PyCQA/doc8/pull/34.
 _SUBSTITUTION_OPTION_NAME = 'substitutions'
+
+_EXISTING_PROMPT_DIRECTIVE = Directive
+if exists_dependency('sphinx-prompt') and 'prompt' not in _EXISTING_DIRECTIVES:
+    MESSAGE = (
+        'sphinx-prompt must be in the conf.py extensions list before '
+        'sphinx_substitution_extensions'
+    )
+    LOGGER.error(MESSAGE)
+else:
+    _EXISTING_PROMPT_DIRECTIVE: Directive = _EXISTING_DIRECTIVES['prompt']
 
 class SubstitutionCodeBlock(_EXISTING_CODE_BLOCK_DIRECTIVE):  # type: ignore
     """
