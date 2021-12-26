@@ -21,21 +21,14 @@ LOGGER = logging.getLogger(__name__)
 _EXISTING_DIRS = directives._directives  # pylint: disable=protected-access
 _EXISTING_DIRECTIVES: Dict[str, Directive] = _EXISTING_DIRS
 _EXISTING_CODE_BLOCK_DIRECTIVE = _EXISTING_DIRECTIVES['code-block']
+_EXISTING_PROMPT_DIRECTIVE = Directive
+if 'prompt' in _EXISTING_DIRECTIVES:
+    _EXISTING_PROMPT_DIRECTIVE: Directive = _EXISTING_DIRECTIVES['prompt']
 
 # This is hardcoded in doc8 as a valid option so be wary that changing this
 # may break doc8 linting.
 # See https://github.com/PyCQA/doc8/pull/34.
 _SUBSTITUTION_OPTION_NAME = 'substitutions'
-
-if 'prompt' not in _EXISTING_DIRECTIVES:
-    MESSAGE = (
-        'sphinx-prompt must be in the conf.py extensions list before '
-        'sphinx_substitution_extensions'
-    )
-    LOGGER.error(MESSAGE)
-
-_EXISTING_PROMPT_DIRECTIVE: Directive = _EXISTING_DIRECTIVES['prompt']
-
 
 class SubstitutionCodeBlock(_EXISTING_CODE_BLOCK_DIRECTIVE):  # type: ignore
     """
@@ -145,7 +138,8 @@ def setup(app: Sphinx) -> dict:
     Add the custom directives to Sphinx.
     """
     app.add_config_value('substitutions', [], 'html')
-    directives.register_directive('prompt', SubstitutionPrompt)
     directives.register_directive('code-block', SubstitutionCodeBlock)
+    if 'prompt' in _EXISTING_DIRECTIVES:
+        directives.register_directive('prompt', SubstitutionPrompt)
     app.add_role('substitution-code', substitution_code_role)
     return {'parallel_read_safe': True}
