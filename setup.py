@@ -27,6 +27,10 @@ DEV_REQUIRES = _get_dependencies(
     requirements_file=Path('requirements/dev-requirements.txt'),
 )
 
+PROMPT_REQUIRES = _get_dependencies(
+    requirements_file=Path('requirements/prompt-requirements.txt'),
+)
+
 SETUP_REQUIRES = _get_dependencies(
     requirements_file=Path('requirements/setup-requirements.txt'),
 )
@@ -35,5 +39,5 @@ setup(
     use_scm_version=True,
     setup_requires=SETUP_REQUIRES,
     install_requires=INSTALL_REQUIRES,
-    extras_require={'dev': DEV_REQUIRES},
+    extras_require={'prompt': PROMPT_REQUIRES, 'dev': DEV_REQUIRES},
 )

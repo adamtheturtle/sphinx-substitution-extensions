@@ -6,7 +6,7 @@ Changelog
 Next
 ----
 
-- ``sphinx-prompt`` is now an optional dependency.
+- Breaking change: ``sphinx-prompt`` is now an optional dependency.
   Thanks go to @dgarcia360 for this change.
 
 2020.09.30.0

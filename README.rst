@@ -19,13 +19,13 @@ This supports Python 3.8+.
 Setup
 ~~~~~
 
-* Add the following to ``conf.py``:
+1. Add the following to ``conf.py``:
 
 .. code:: python
 
    extensions += ['sphinx_substitution_extensions']
 
-* Set the following variable in ``conf.py``:
+2. Set the following variable in ``conf.py``:
 
 .. code:: python
 
@@ -41,8 +41,15 @@ Optional: sphinx-prompt
 
 Sphinx Substitution Extensions supports the third-party extension `sphinx-prompt`_.
 
-If you have ``sphinx-prompt`` installed, make sure ``sphinx-prompt`` dependency is loaded before ``sphinx_substitution_extensions``.
-For example, ``conf.py`` should look like:
+1. If you don't have ``sphinx-prompt`` installed, you can include the extension with the extra dependency ``prompt``:
+
+.. code:: console
+
+   $ pip install Sphinx-Substitution-Extensions[prompt]
+
+
+2. Make sure ``sphinx-prompt`` dependency is loaded before ``sphinx_substitution_extensions``.
+For example, your ``conf.py`` should look like:
 
 .. code:: python
 
