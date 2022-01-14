@@ -9,7 +9,7 @@ from sphinx.directives.code import CodeBlock
 
 EXISTING_DIRS = directives._directives  # pylint: disable=protected-access
 EXISTING_DIRECTIVES: Dict[str, Directive] = EXISTING_DIRS
-EXISTING_CODE_BLOCK_DIRECTIVE = CodeBlock
+EXISTING_CODE_BLOCK_DIRECTIVE = CodeBlock  # pylint: disable=invalid-name
 
 # This is hardcoded in doc8 as a valid option so be wary that changing this
 # may break doc8 linting.

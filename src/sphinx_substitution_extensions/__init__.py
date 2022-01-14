@@ -39,9 +39,7 @@ class SubstitutionCodeBlock(EXISTING_CODE_BLOCK_DIRECTIVE):
         self.option_spec['substitutions'] = directives.flag
 
         new_content = []
-        self.content = (  # pylint: disable=attribute-defined-outside-init
-            self.content
-        )  # type: list[str]
+        self.content = self.content  # type: list[str]
         existing_content = self.content
         substitution_defs = self.state.document.substitution_defs
         for item in existing_content:
@@ -51,9 +49,7 @@ class SubstitutionCodeBlock(EXISTING_CODE_BLOCK_DIRECTIVE):
                     item = item.replace(f'|{name}|', replacement)
             new_content.append(item)
 
-        self.content = (  # pylint: disable=attribute-defined-outside-init
-            new_content
-        )
+        self.content = new_content
         return list(super().run())
 
 
@@ -119,9 +115,11 @@ def setup(app: Sphinx) -> dict:
     """
     Add the custom directives to Sphinx.
     """
+    # pylint: disable=import-outside-toplevel
     app.add_config_value('substitutions', [], 'html')
     directives.register_directive('code-block', SubstitutionCodeBlock)
     if 'prompt' in EXISTING_DIRECTIVES:
+
         from sphinx_substitution_extensions.extras import SubstitutionPrompt
 
         directives.register_directive('prompt', SubstitutionPrompt)
