@@ -1,12 +1,16 @@
+"""
+sphinx-prompt support for Sphinx Substitution Extensions.
+"""
+
 from docutils.parsers.rst import directives  # type: ignore
 from docutils.parsers.rst import Directive
 
 from sphinx_substitution_extensions.shared import (
-    _EXISTING_DIRECTIVES,
-    _SUBSTITUTION_OPTION_NAME,
+    EXISTING_DIRECTIVES,
+    SUBSTITUTION_OPTION_NAME,
 )
 
-_EXISTING_PROMPT_DIRECTIVE: Directive = _EXISTING_DIRECTIVES['prompt']
+_EXISTING_PROMPT_DIRECTIVE: Directive = EXISTING_DIRECTIVES['prompt']
 
 
 class SubstitutionPrompt(_EXISTING_PROMPT_DIRECTIVE):  # type: ignore
@@ -29,7 +33,7 @@ class SubstitutionPrompt(_EXISTING_PROMPT_DIRECTIVE):  # type: ignore
         substitution_defs = self.state.document.substitution_defs
         for item in existing_content:
             for name, value in substitution_defs.items():
-                if _SUBSTITUTION_OPTION_NAME in self.options:
+                if SUBSTITUTION_OPTION_NAME in self.options:
                     replacement = value.astext()
                     item = item.replace(f'|{name}|', replacement)
 

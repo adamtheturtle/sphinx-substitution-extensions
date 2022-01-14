@@ -16,20 +16,20 @@ from docutils.parsers.rst.states import Inliner
 from sphinx.application import Sphinx
 
 from sphinx_substitution_extensions.shared import (
-    _EXISTING_CODE_BLOCK_DIRECTIVE,
-    _EXISTING_DIRECTIVES,
-    _SUBSTITUTION_OPTION_NAME,
+    EXISTING_CODE_BLOCK_DIRECTIVE,
+    EXISTING_DIRECTIVES,
+    SUBSTITUTION_OPTION_NAME,
 )
 
 LOGGER = logging.getLogger(__name__)
 
 
-class SubstitutionCodeBlock(_EXISTING_CODE_BLOCK_DIRECTIVE):
+class SubstitutionCodeBlock(EXISTING_CODE_BLOCK_DIRECTIVE):
     """
     Similar to CodeBlock but replaces placeholders with variables.
     """
 
-    option_spec = _EXISTING_CODE_BLOCK_DIRECTIVE.option_spec
+    option_spec = EXISTING_CODE_BLOCK_DIRECTIVE.option_spec
     option_spec['substitutions'] = directives.flag
 
     def run(self) -> list:
@@ -46,7 +46,7 @@ class SubstitutionCodeBlock(_EXISTING_CODE_BLOCK_DIRECTIVE):
         substitution_defs = self.state.document.substitution_defs
         for item in existing_content:
             for name, value in substitution_defs.items():
-                if _SUBSTITUTION_OPTION_NAME in self.options:
+                if SUBSTITUTION_OPTION_NAME in self.options:
                     replacement = value.astext()
                     item = item.replace(f'|{name}|', replacement)
             new_content.append(item)
@@ -107,10 +107,7 @@ substitution_code_role.options = {  # type: ignore
     'language': directives.unchanged,
 }
 
-if (
-    _exists_dependency('sphinx-prompt')
-    and 'prompt' not in _EXISTING_DIRECTIVES
-):
+if _exists_dependency('sphinx-prompt') and 'prompt' not in EXISTING_DIRECTIVES:
     MESSAGE = (
         'sphinx-prompt must be in the conf.py extensions list before '
         'sphinx_substitution_extensions'
@@ -124,7 +121,7 @@ def setup(app: Sphinx) -> dict:
     """
     app.add_config_value('substitutions', [], 'html')
     directives.register_directive('code-block', SubstitutionCodeBlock)
-    if 'prompt' in _EXISTING_DIRECTIVES:
+    if 'prompt' in EXISTING_DIRECTIVES:
         from sphinx_substitution_extensions.extras import SubstitutionPrompt
 
         directives.register_directive('prompt', SubstitutionPrompt)

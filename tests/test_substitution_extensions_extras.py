@@ -1,3 +1,7 @@
+"""
+Tests for extra modules.
+"""
+
 import subprocess
 import sys
 from pathlib import Path
@@ -10,11 +14,9 @@ from sphinx_substitution_extensions import _exists_dependency
 _EXISTS_PROMPT_EXTENSION = _exists_dependency('sphinx-prompt')
 _REASON = 'requires sphinx-prompt to be installed'
 
+pytestmark = [pytest.mark.skipif(not _EXISTS_PROMPT_EXTENSION, reason=_REASON)]
 
-@pytest.mark.skipif(
-    not _EXISTS_PROMPT_EXTENSION,
-    reason=_REASON,
-)
+
 def test_prompt_specified_late(tmp_path: Path) -> None:
     """
     If sphinx-prompt is not specified in extensions before Sphinx substitution
@@ -62,10 +64,6 @@ def test_prompt_specified_late(tmp_path: Path) -> None:
     assert expected_message in result.stderr.decode()
 
 
-@pytest.mark.skipif(
-    not _EXISTS_PROMPT_EXTENSION,
-    reason=_REASON,
-)
 def test_prompt_not_specified(tmp_path: Path) -> None:
     """
     If sphinx-prompt is not specified in extensions but is installed,
@@ -113,10 +111,6 @@ def test_prompt_not_specified(tmp_path: Path) -> None:
     assert expected_message in result.stderr.decode()
 
 
-@pytest.mark.skipif(
-    not _EXISTS_PROMPT_EXTENSION,
-    reason=_REASON,
-)
 def test_substitution_prompt(tmp_path: Path) -> None:
     """
     The ``prompt`` directive replaces the placeholders defined in ``conf.py``
@@ -167,10 +161,6 @@ def test_substitution_prompt(tmp_path: Path) -> None:
     assert expected in content_html.read_text()
 
 
-@pytest.mark.skipif(
-    not _EXISTS_PROMPT_EXTENSION,
-    reason=_REASON,
-)
 def test_substitution_prompt_is_case_preserving(tmp_path: Path) -> None:
     """
     The ``prompt`` directive respects the original case of replacements.
@@ -220,10 +210,6 @@ def test_substitution_prompt_is_case_preserving(tmp_path: Path) -> None:
     assert expected in content_html.read_text()
 
 
-@pytest.mark.skipif(
-    not _EXISTS_PROMPT_EXTENSION,
-    reason=_REASON,
-)
 def test_no_substitution_prompt(tmp_path: Path) -> None:
     """
     The ``prompt`` directive does not replace the placeholders defined in
