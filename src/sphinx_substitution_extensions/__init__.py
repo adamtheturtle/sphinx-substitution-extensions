@@ -14,9 +14,9 @@ from docutils.parsers.rst import directives  # type: ignore
 from docutils.parsers.rst.roles import code_role
 from docutils.parsers.rst.states import Inliner
 from sphinx.application import Sphinx
+from sphinx.directives.code import CodeBlock
 
 from sphinx_substitution_extensions.shared import (
-    EXISTING_CODE_BLOCK_DIRECTIVE,
     EXISTING_DIRECTIVES,
     SUBSTITUTION_OPTION_NAME,
 )
@@ -24,12 +24,12 @@ from sphinx_substitution_extensions.shared import (
 LOGGER = logging.getLogger(__name__)
 
 
-class SubstitutionCodeBlock(EXISTING_CODE_BLOCK_DIRECTIVE):
+class SubstitutionCodeBlock(CodeBlock):
     """
     Similar to CodeBlock but replaces placeholders with variables.
     """
 
-    option_spec = EXISTING_CODE_BLOCK_DIRECTIVE.option_spec
+    option_spec = CodeBlock.option_spec
     option_spec['substitutions'] = directives.flag
 
     def run(self) -> list:
