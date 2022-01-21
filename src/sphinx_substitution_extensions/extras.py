@@ -1,6 +1,7 @@
 """
 sphinx-prompt support for Sphinx Substitution Extensions.
 """
+from __future__ import annotations
 
 from docutils.parsers.rst import directives  # type: ignore
 from docutils.parsers.rst import Directive
