@@ -3,30 +3,29 @@
 Sphinx Substitution Extensions
 ==============================
 
-Extensions for Sphinx which allow substitutions.
+Extensions for Sphinx which allow substitutions within code blocks.
 
 .. contents::
 
 Installation
 ------------
 
+Sphinx Substitution Extensions is compatible with Sphinx 4.0+ using Python 3.8+.
+
 .. code:: console
 
    $ pip install Sphinx-Substitution-Extensions
 
-This supports Python 3.8+.
-
 Setup
 ~~~~~
 
-* Add the following to ``conf.py``:
+1. Add the following to ``conf.py``:
 
 .. code:: python
 
-   # sphinx-prompt must be the first of these two.
-   extensions += ['sphinx-prompt', 'sphinx_substitution_extensions']
+   extensions += ['sphinx_substitution_extensions']
 
-* Set the following variable in ``conf.py``:
+2. Set the following variable in ``conf.py``:
 
 .. code:: python
 
@@ -36,6 +35,26 @@ Setup
    """
 
 This will replace ``|release|`` in the new directives with ``0.1``, and ``|author|`` with ``Eleanor``.
+
+Optional: sphinx-prompt
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Sphinx Substitution Extensions supports the third-party extension `sphinx-prompt`_.
+
+1. If you don't have ``sphinx-prompt`` installed, you can include the extension with the extra dependency ``prompt``:
+
+.. code:: console
+
+   $ pip install Sphinx-Substitution-Extensions[prompt]
+
+
+2. Make sure ``sphinx-prompt`` dependency is loaded before ``sphinx_substitution_extensions``.
+For example, your ``conf.py`` should look like:
+
+.. code:: python
+
+   # sphinx-prompt must be the first of these two.
+   extensions += ['sphinx-prompt', 'sphinx_substitution_extensions']
 
 Directives
 ----------
@@ -57,6 +76,8 @@ This adds a ``:substitutions:`` option to Sphinx's built-in `code-block`_ direct
 ~~~~~~~~~~
 
 This adds a ``:substitutions:`` option to `sphinx-prompt`_.
+
+.. note:: Requires the extension `sphinx-prompt`_.
 
 .. code:: rst
 

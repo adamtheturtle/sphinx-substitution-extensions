@@ -11,38 +11,25 @@ from docutils.nodes import Node, system_message
 
 # See https://github.com/python/typeshed/issues/5755
 from docutils.parsers.rst import directives  # type: ignore
-from docutils.parsers.rst import Directive
 from docutils.parsers.rst.roles import code_role
 from docutils.parsers.rst.states import Inliner
 from sphinx.application import Sphinx
+from sphinx.directives.code import CodeBlock
+
+from sphinx_substitution_extensions.shared import (
+    EXISTING_DIRECTIVES,
+    SUBSTITUTION_OPTION_NAME,
+)
 
 LOGGER = logging.getLogger(__name__)
 
-_EXISTING_DIRS = directives._directives  # pylint: disable=protected-access
-_EXISTING_DIRECTIVES: Dict[str, Directive] = _EXISTING_DIRS
-_EXISTING_CODE_BLOCK_DIRECTIVE = _EXISTING_DIRECTIVES['code-block']
 
-# This is hardcoded in doc8 as a valid option so be wary that changing this
-# may break doc8 linting.
-# See https://github.com/PyCQA/doc8/pull/34.
-_SUBSTITUTION_OPTION_NAME = 'substitutions'
-
-if 'prompt' not in _EXISTING_DIRECTIVES:
-    MESSAGE = (
-        'sphinx-prompt must be in the conf.py extensions list before '
-        'sphinx_substitution_extensions'
-    )
-    LOGGER.error(MESSAGE)
-
-_EXISTING_PROMPT_DIRECTIVE: Directive = _EXISTING_DIRECTIVES['prompt']
-
-
-class SubstitutionCodeBlock(_EXISTING_CODE_BLOCK_DIRECTIVE):  # type: ignore
+class SubstitutionCodeBlock(CodeBlock):
     """
     Similar to CodeBlock but replaces placeholders with variables.
     """
 
-    option_spec = _EXISTING_CODE_BLOCK_DIRECTIVE.option_spec
+    option_spec = CodeBlock.option_spec
     option_spec['substitutions'] = directives.flag
 
     def run(self) -> list:
@@ -52,54 +39,31 @@ class SubstitutionCodeBlock(_EXISTING_CODE_BLOCK_DIRECTIVE):  # type: ignore
         self.option_spec['substitutions'] = directives.flag
 
         new_content = []
-        self.content = (  # pylint: disable=attribute-defined-outside-init
-            self.content
-        )  # type: list[str]
+        self.content = self.content  # type: list[str]
         existing_content = self.content
         substitution_defs = self.state.document.substitution_defs
         for item in existing_content:
             for name, value in substitution_defs.items():
-                if _SUBSTITUTION_OPTION_NAME in self.options:
+                if SUBSTITUTION_OPTION_NAME in self.options:
                     replacement = value.astext()
                     item = item.replace(f'|{name}|', replacement)
             new_content.append(item)
 
-        self.content = (  # pylint: disable=attribute-defined-outside-init
-            new_content
-        )
+        self.content = new_content
         return list(super().run())
 
 
-class SubstitutionPrompt(_EXISTING_PROMPT_DIRECTIVE):  # type: ignore
+def _exists_dependency(
+    name: str,
+) -> bool:
     """
-    Similar to PromptDirective but replaces placeholders with variables.
+    Returns true if the dependency is installed.
     """
-
-    option_spec = _EXISTING_PROMPT_DIRECTIVE.option_spec or {}
-    option_spec['substitutions'] = directives.flag
-
-    def run(self) -> list:
-        """
-        Replace placeholders with given variables.
-        """
-        new_content = []
-        self.content = (  # pylint: disable=attribute-defined-outside-init
-            self.content
-        )  # type: list[str]
-        existing_content = self.content
-        substitution_defs = self.state.document.substitution_defs
-        for item in existing_content:
-            for name, value in substitution_defs.items():
-                if _SUBSTITUTION_OPTION_NAME in self.options:
-                    replacement = value.astext()
-                    item = item.replace(f'|{name}|', replacement)
-
-            new_content.append(item)
-
-        self.content = (  # pylint: disable=attribute-defined-outside-init
-            new_content
-        )
-        return list(super().run())
+    try:
+        __import__(name)
+    except ImportError:
+        return False
+    return True
 
 
 def substitution_code_role(  # pylint: disable=dangerous-default-value
@@ -139,13 +103,25 @@ substitution_code_role.options = {  # type: ignore
     'language': directives.unchanged,
 }
 
+if _exists_dependency('sphinx-prompt') and 'prompt' not in EXISTING_DIRECTIVES:
+    MESSAGE = (
+        'sphinx-prompt must be in the conf.py extensions list before '
+        'sphinx_substitution_extensions'
+    )
+    LOGGER.warning(MESSAGE)
+
 
 def setup(app: Sphinx) -> dict:
     """
     Add the custom directives to Sphinx.
     """
+    # pylint: disable=import-outside-toplevel
     app.add_config_value('substitutions', [], 'html')
-    directives.register_directive('prompt', SubstitutionPrompt)
     directives.register_directive('code-block', SubstitutionCodeBlock)
+    if 'prompt' in EXISTING_DIRECTIVES:
+
+        from sphinx_substitution_extensions.extras import SubstitutionPrompt
+
+        directives.register_directive('prompt', SubstitutionPrompt)
     app.add_role('substitution-code', substitution_code_role)
     return {'parallel_read_safe': True}

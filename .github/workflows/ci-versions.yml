@@ -48,9 +48,9 @@ jobs:
           # We use '--ignore-installed' to avoid GitHub's cache which can cause
           # issues - we have seen packages from this cache be cause trouble with
           # pip-extra-reqs.
-          python -m pip install --ignore-installed --upgrade --editable .[dev]
+          python -m pip install --ignore-installed --upgrade --editable .[dev,prompt]
           # Oldest versions from requirements.
-          pip install Sphinx==2.0.0
+          pip install Sphinx==4.0.0
           pip install sphinx-prompt==0.1
           pip install docutils==0.15
           sudo apt-get install -y enchant
