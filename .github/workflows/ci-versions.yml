@@ -50,7 +50,7 @@ jobs:
           # pip-extra-reqs.
           python -m pip install --ignore-installed --upgrade --editable .[dev,prompt]
           # Oldest versions from requirements.
-          pip install Sphinx==3.0.0
+          pip install Sphinx==4.0.0
           pip install sphinx-prompt==0.1
           pip install docutils==0.15
           sudo apt-get install -y enchant
