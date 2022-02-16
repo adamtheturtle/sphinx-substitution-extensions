@@ -6,6 +6,9 @@ Changelog
 Next
 ----
 
+2022.02.16
+------------
+
 - Breaking change: The required Sphinx version is at least 4.0.
 - ``sphinx-prompt`` is now an optional dependency.
   Thanks go to @dgarcia360 for this change.
