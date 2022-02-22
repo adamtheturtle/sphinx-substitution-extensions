@@ -3,8 +3,7 @@ Constants and functions shared between modules.
 """
 from typing import Dict
 
-from docutils.parsers.rst import directives  # type: ignore
-from docutils.parsers.rst import Directive
+from docutils.parsers.rst import Directive, directives
 
 EXISTING_DIRS = directives._directives  # pylint: disable=protected-access
 EXISTING_DIRECTIVES: Dict[str, Directive] = EXISTING_DIRS
