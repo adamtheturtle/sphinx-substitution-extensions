@@ -13,6 +13,6 @@ pyenchant==3.2.2
 pylint==2.12.2
 pyroma==3.2
 pytest-cov==3.0.0  # Measure code coverage
-pytest==7.0.1
+pytest==7.1.1
 types-docutils==0.18.0
 vulture==2.3
