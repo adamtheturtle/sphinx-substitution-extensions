@@ -1,6 +1,6 @@
 autoflake==1.4
 black==22.1.0
-check-manifest==0.47
+check-manifest==0.48
 doc8==0.10.1
 flake8-commas==2.1.0
 flake8-quotes==3.3.1
