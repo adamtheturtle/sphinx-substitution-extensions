@@ -6,7 +6,7 @@ flake8-commas==2.1.0
 flake8-quotes==3.3.1
 flake8==4.0.1
 isort==5.10.1
-mypy==0.942
+mypy==0.950
 pip_check_reqs==2.3.2
 pydocstyle==6.1.1
 pyenchant==3.2.2
