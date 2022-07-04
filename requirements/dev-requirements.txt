@@ -15,4 +15,4 @@ pyroma==4.0
 pytest-cov==3.0.0  # Measure code coverage
 pytest==7.1.2
 types-docutils==0.18.3
-vulture==2.4
+vulture==2.5
