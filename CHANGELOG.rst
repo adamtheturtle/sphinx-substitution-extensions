@@ -6,6 +6,7 @@ Changelog
 Next
 ----
 
+- Bump the minimum supported version of Sphinx to 5.1.1.
 - Bump the minimum supported version of docutils to 0.19.
 
 2022.02.16
