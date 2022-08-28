@@ -6,6 +6,8 @@ Changelog
 Next
 ----
 
+- Bump the minimum supported version of docutils to 0.19.
+
 2022.02.16
 ------------
 
