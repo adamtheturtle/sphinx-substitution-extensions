@@ -1,3 +1,3 @@
-# The lowest versions of these are matched in the ``ci-versions.yml`` workflow.
-docutils>=0.15
-sphinx>=4.0.0
+# The lowest versions of these are matched in the ``.github/workflows/ci-versions.yml`` workflow.
+docutils>=0.19
+sphinx>=5.1.1
