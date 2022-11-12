@@ -5,7 +5,7 @@ Custom Sphinx extensions.
 from __future__ import annotations
 
 import logging
-from typing import Any, Dict, Tuple
+from typing import Any
 
 from docutils.nodes import Node, literal_block, system_message
 from docutils.parsers.rst import directives
@@ -71,9 +71,9 @@ def substitution_code_role(  # pylint: disable=dangerous-default-value
     text: str,
     lineno: int,
     inliner: Inliner,
-    options: Dict[Any, Any] = {},
+    options: dict[Any, Any] = {},
     content: list[str] = [],
-) -> Tuple[list[Node], list[system_message]]:
+) -> tuple[list[Node], list[system_message]]:
     """
     Replace placeholders with given variables.
     """
