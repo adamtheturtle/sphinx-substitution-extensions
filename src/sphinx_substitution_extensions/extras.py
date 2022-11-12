@@ -3,6 +3,7 @@ sphinx-prompt support for Sphinx Substitution Extensions.
 """
 from __future__ import annotations
 
+from docutils.nodes import raw
 from docutils.parsers.rst import Directive, directives
 
 from sphinx_substitution_extensions.shared import (
@@ -21,7 +22,7 @@ class SubstitutionPrompt(_EXISTING_PROMPT_DIRECTIVE):  # type: ignore
     option_spec = _EXISTING_PROMPT_DIRECTIVE.option_spec or {}
     option_spec['substitutions'] = directives.flag
 
-    def run(self) -> list:
+    def run(self) -> list[raw]:
         """
         Replace placeholders with given variables.
         """
@@ -42,4 +43,5 @@ class SubstitutionPrompt(_EXISTING_PROMPT_DIRECTIVE):  # type: ignore
         self.content = (  # pylint: disable=attribute-defined-outside-init
             new_content
         )
-        return list(super().run())
+        result = list(super().run())
+        return result

@@ -5,9 +5,9 @@ Custom Sphinx extensions.
 from __future__ import annotations
 
 import logging
-from typing import Dict, Tuple
+from typing import Any, Dict, Tuple
 
-from docutils.nodes import Node, system_message
+from docutils.nodes import Node, literal_block, system_message
 from docutils.parsers.rst import directives
 from docutils.parsers.rst.roles import code_role
 from docutils.parsers.rst.states import Inliner
@@ -30,7 +30,7 @@ class SubstitutionCodeBlock(CodeBlock):
     option_spec = CodeBlock.option_spec
     option_spec['substitutions'] = directives.flag
 
-    def run(self) -> list:
+    def run(self) -> list[literal_block]:
         """
         Replace placeholders with given variables.
         """
@@ -48,7 +48,8 @@ class SubstitutionCodeBlock(CodeBlock):
             new_content.append(item)
 
         self.content = new_content
-        return list(super().run())
+        result = list(super().run())
+        return result
 
 
 def _exists_dependency(
@@ -70,7 +71,7 @@ def substitution_code_role(  # pylint: disable=dangerous-default-value
     text: str,
     lineno: int,
     inliner: Inliner,
-    options: Dict = {},
+    options: Dict[Any, Any] = {},
     content: list[str] = [],
 ) -> Tuple[list[Node], list[system_message]]:
     """
@@ -109,7 +110,7 @@ if _exists_dependency('sphinx-prompt') and 'prompt' not in EXISTING_DIRECTIVES:
     LOGGER.warning(MESSAGE)
 
 
-def setup(app: Sphinx) -> dict:
+def setup(app: Sphinx) -> dict[str, Any]:
     """
     Add the custom directives to Sphinx.
     """
