@@ -53,7 +53,6 @@ jobs:
           pip install Sphinx==5.1.1
           pip install sphinx-prompt==0.1
           pip install docutils==0.19
-          sudo apt-get install -y enchant
 
       - name: "Lint"
         run: |
