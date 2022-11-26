@@ -11,7 +11,7 @@ from sphinx_substitution_extensions.shared import (
     SUBSTITUTION_OPTION_NAME,
 )
 
-_EXISTING_PROMPT_DIRECTIVE: Directive = EXISTING_DIRECTIVES['prompt']
+_EXISTING_PROMPT_DIRECTIVE: Directive = EXISTING_DIRECTIVES["prompt"]
 
 
 class SubstitutionPrompt(_EXISTING_PROMPT_DIRECTIVE):  # type: ignore
@@ -20,7 +20,7 @@ class SubstitutionPrompt(_EXISTING_PROMPT_DIRECTIVE):  # type: ignore
     """
 
     option_spec = _EXISTING_PROMPT_DIRECTIVE.option_spec or {}
-    option_spec['substitutions'] = directives.flag
+    option_spec["substitutions"] = directives.flag
 
     def run(self) -> list[raw]:
         """
@@ -36,7 +36,7 @@ class SubstitutionPrompt(_EXISTING_PROMPT_DIRECTIVE):  # type: ignore
             for name, value in substitution_defs.items():
                 if SUBSTITUTION_OPTION_NAME in self.options:
                     replacement = value.astext()
-                    item = item.replace(f'|{name}|', replacement)
+                    item = item.replace(f"|{name}|", replacement)
 
             new_content.append(item)
 

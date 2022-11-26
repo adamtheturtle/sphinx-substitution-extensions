@@ -15,10 +15,10 @@ def test_no_substitution_code_block(tmp_path: Path) -> None:
     The ``code-block`` directive does not replace the placeholders defined in
     ``conf.py`` when not specified.
     """
-    source_directory = tmp_path / 'source'
+    source_directory = tmp_path / "source"
     source_directory.mkdir()
-    source_file = source_directory / 'index.rst'
-    conf_py = source_directory / 'conf.py'
+    source_file = source_directory / "index.rst"
+    conf_py = source_directory / "conf.py"
     conf_py.touch()
     source_file.touch()
     conf_py_content = dedent(
@@ -38,14 +38,14 @@ def test_no_substitution_code_block(tmp_path: Path) -> None:
         """,
     )
     source_file.write_text(source_file_content)
-    destination_directory = tmp_path / 'destination'
+    destination_directory = tmp_path / "destination"
     args = [
         sys.executable,
-        '-m',
-        'sphinx',
-        '-b',
-        'html',
-        '-W',
+        "-m",
+        "sphinx",
+        "-b",
+        "html",
+        "-W",
         # Directory containing source and configuration files.
         str(source_directory),
         # Directory containing build files.
@@ -54,8 +54,8 @@ def test_no_substitution_code_block(tmp_path: Path) -> None:
         str(source_file),
     ]
     subprocess.check_output(args=args)
-    expected = 'PRE-example_substitution-POST'
-    content_html = Path(str(destination_directory)) / 'index.html'
+    expected = "PRE-example_substitution-POST"
+    content_html = Path(str(destination_directory)) / "index.html"
     assert expected not in content_html.read_text()
 
 
@@ -64,10 +64,10 @@ def test_substitution_code_block(tmp_path: Path) -> None:
     The ``code-block`` directive replaces the placeholders defined in
     ``conf.py`` as specified.
     """
-    source_directory = tmp_path / 'source'
+    source_directory = tmp_path / "source"
     source_directory.mkdir()
-    source_file = source_directory / 'index.rst'
-    conf_py = source_directory / 'conf.py'
+    source_file = source_directory / "index.rst"
+    conf_py = source_directory / "conf.py"
     conf_py.touch()
     source_file.touch()
     conf_py_content = dedent(
@@ -88,14 +88,14 @@ def test_substitution_code_block(tmp_path: Path) -> None:
         """,
     )
     source_file.write_text(source_file_content)
-    destination_directory = tmp_path / 'destination'
+    destination_directory = tmp_path / "destination"
     args = [
         sys.executable,
-        '-m',
-        'sphinx',
-        '-b',
-        'html',
-        '-W',
+        "-m",
+        "sphinx",
+        "-b",
+        "html",
+        "-W",
         # Directory containing source and configuration files.
         str(source_directory),
         # Directory containing build files.
@@ -104,8 +104,8 @@ def test_substitution_code_block(tmp_path: Path) -> None:
         str(source_file),
     ]
     subprocess.check_output(args=args)
-    expected = 'PRE-example_substitution-POST'
-    content_html = Path(str(destination_directory)) / 'index.html'
+    expected = "PRE-example_substitution-POST"
+    content_html = Path(str(destination_directory)) / "index.html"
     assert expected in content_html.read_text()
 
 
@@ -113,10 +113,10 @@ def test_substitution_code_block_case_preserving(tmp_path: Path) -> None:
     """
     The ``code-block`` directive respects the original case of replacements.
     """
-    source_directory = tmp_path / 'source'
+    source_directory = tmp_path / "source"
     source_directory.mkdir()
-    source_file = source_directory / 'index.rst'
-    conf_py = source_directory / 'conf.py'
+    source_file = source_directory / "index.rst"
+    conf_py = source_directory / "conf.py"
     conf_py.touch()
     source_file.touch()
     conf_py_content = dedent(
@@ -137,14 +137,14 @@ def test_substitution_code_block_case_preserving(tmp_path: Path) -> None:
         """,
     )
     source_file.write_text(source_file_content)
-    destination_directory = tmp_path / 'destination'
+    destination_directory = tmp_path / "destination"
     args = [
         sys.executable,
-        '-m',
-        'sphinx',
-        '-b',
-        'html',
-        '-W',
+        "-m",
+        "sphinx",
+        "-b",
+        "html",
+        "-W",
         # Directory containing source and configuration files.
         str(source_directory),
         # Directory containing build files.
@@ -153,8 +153,8 @@ def test_substitution_code_block_case_preserving(tmp_path: Path) -> None:
         str(source_file),
     ]
     subprocess.check_output(args=args)
-    expected = 'PRE-example_substitution-POST'
-    content_html = Path(str(destination_directory)) / 'index.html'
+    expected = "PRE-example_substitution-POST"
+    content_html = Path(str(destination_directory)) / "index.html"
     assert expected in content_html.read_text()
 
 
@@ -163,10 +163,10 @@ def test_substitution_inline(tmp_path: Path) -> None:
     The ``substitution-code`` role replaces the placeholders defined in
     ``conf.py`` as specified.
     """
-    source_directory = tmp_path / 'source'
+    source_directory = tmp_path / "source"
     source_directory.mkdir()
-    source_file = source_directory / 'index.rst'
-    conf_py = source_directory / 'conf.py'
+    source_file = source_directory / "index.rst"
+    conf_py = source_directory / "conf.py"
     conf_py.touch()
     source_file.touch()
     conf_py_content = dedent(
@@ -184,14 +184,14 @@ def test_substitution_inline(tmp_path: Path) -> None:
         """,
     )
     source_file.write_text(source_file_content)
-    destination_directory = tmp_path / 'destination'
+    destination_directory = tmp_path / "destination"
     args = [
         sys.executable,
-        '-m',
-        'sphinx',
-        '-b',
-        'html',
-        '-W',
+        "-m",
+        "sphinx",
+        "-b",
+        "html",
+        "-W",
         # Directory containing source and configuration files.
         str(source_directory),
         # Directory containing build files.
@@ -200,8 +200,8 @@ def test_substitution_inline(tmp_path: Path) -> None:
         str(source_file),
     ]
     subprocess.check_output(args=args)
-    expected = 'PRE-example_substitution-POST'
-    content_html = Path(str(destination_directory)) / 'index.html'
+    expected = "PRE-example_substitution-POST"
+    content_html = Path(str(destination_directory)) / "index.html"
     assert expected in content_html.read_text()
 
 
@@ -209,10 +209,10 @@ def test_substitution_inline_case_preserving(tmp_path: Path) -> None:
     """
     The ``substitution-code`` role respects the original case of replacements.
     """
-    source_directory = tmp_path / 'source'
+    source_directory = tmp_path / "source"
     source_directory.mkdir()
-    source_file = source_directory / 'index.rst'
-    conf_py = source_directory / 'conf.py'
+    source_file = source_directory / "index.rst"
+    conf_py = source_directory / "conf.py"
     conf_py.touch()
     source_file.touch()
     conf_py_content = dedent(
@@ -230,14 +230,14 @@ def test_substitution_inline_case_preserving(tmp_path: Path) -> None:
         """,
     )
     source_file.write_text(source_file_content)
-    destination_directory = tmp_path / 'destination'
+    destination_directory = tmp_path / "destination"
     args = [
         sys.executable,
-        '-m',
-        'sphinx',
-        '-b',
-        'html',
-        '-W',
+        "-m",
+        "sphinx",
+        "-b",
+        "html",
+        "-W",
         # Directory containing source and configuration files.
         str(source_directory),
         # Directory containing build files.
@@ -246,8 +246,8 @@ def test_substitution_inline_case_preserving(tmp_path: Path) -> None:
         str(source_file),
     ]
     subprocess.check_output(args=args)
-    expected = 'PRE-example_substitution-POST'
-    content_html = Path(str(destination_directory)) / 'index.html'
+    expected = "PRE-example_substitution-POST"
+    content_html = Path(str(destination_directory)) / "index.html"
     assert expected in content_html.read_text()
 
 
@@ -255,7 +255,7 @@ def test_exists_dependency() -> None:
     """
     Test exist_dependency function.
     """
-    dependency = 'sphinx_substitution_extensions'
+    dependency = "sphinx_substitution_extensions"
     assert _exists_dependency(dependency) is True
 
 
@@ -263,5 +263,5 @@ def test_does_not_exists_dependency() -> None:
     """
     Test exist_dependency function.
     """
-    dependency = 'fake_sphinx_substitution_extensions'
+    dependency = "fake_sphinx_substitution_extensions"
     assert _exists_dependency(dependency) is False
