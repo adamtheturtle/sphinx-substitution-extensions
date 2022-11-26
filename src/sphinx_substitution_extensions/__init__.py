@@ -28,13 +28,13 @@ class SubstitutionCodeBlock(CodeBlock):
     """
 
     option_spec = CodeBlock.option_spec
-    option_spec['substitutions'] = directives.flag
+    option_spec["substitutions"] = directives.flag
 
     def run(self) -> list[literal_block]:
         """
         Replace placeholders with given variables.
         """
-        self.option_spec['substitutions'] = directives.flag
+        self.option_spec["substitutions"] = directives.flag
 
         new_content = []
         self.content = self.content  # type: list[str]
@@ -44,7 +44,7 @@ class SubstitutionCodeBlock(CodeBlock):
             for name, value in substitution_defs.items():
                 if SUBSTITUTION_OPTION_NAME in self.options:
                     replacement = value.astext()
-                    item = item.replace(f'|{name}|', replacement)
+                    item = item.replace(f"|{name}|", replacement)
             new_content.append(item)
 
         self.content = new_content
@@ -80,8 +80,8 @@ def substitution_code_role(  # pylint: disable=dangerous-default-value
     document = inliner.document  # type: ignore
     for name, value in document.substitution_defs.items():
         replacement = value.astext()
-        text = text.replace(f'|{name}|', replacement)
-        rawtext = text.replace(f'|{name}|', replacement)
+        text = text.replace(f"|{name}|", replacement)
+        rawtext = text.replace(f"|{name}|", replacement)
         rawtext = rawtext.replace(name, replacement)
 
     result_nodes, system_messages = code_role(
@@ -98,14 +98,14 @@ def substitution_code_role(  # pylint: disable=dangerous-default-value
 
 
 substitution_code_role.options = {  # type: ignore
-    'class': directives.class_option,
-    'language': directives.unchanged,
+    "class": directives.class_option,
+    "language": directives.unchanged,
 }
 
-if _exists_dependency('sphinx-prompt') and 'prompt' not in EXISTING_DIRECTIVES:
+if _exists_dependency("sphinx-prompt") and "prompt" not in EXISTING_DIRECTIVES:
     MESSAGE = (
-        'sphinx-prompt must be in the conf.py extensions list before '
-        'sphinx_substitution_extensions'
+        "sphinx-prompt must be in the conf.py extensions list before "
+        "sphinx_substitution_extensions"
     )
     LOGGER.warning(MESSAGE)
 
@@ -115,12 +115,12 @@ def setup(app: Sphinx) -> dict[str, Any]:
     Add the custom directives to Sphinx.
     """
     # pylint: disable=import-outside-toplevel
-    app.add_config_value('substitutions', [], 'html')
-    directives.register_directive('code-block', SubstitutionCodeBlock)
-    if 'prompt' in EXISTING_DIRECTIVES:
+    app.add_config_value("substitutions", [], "html")
+    directives.register_directive("code-block", SubstitutionCodeBlock)
+    if "prompt" in EXISTING_DIRECTIVES:
 
         from sphinx_substitution_extensions.extras import SubstitutionPrompt
 
-        directives.register_directive('prompt', SubstitutionPrompt)
-    app.add_role('substitution-code', substitution_code_role)
-    return {'parallel_read_safe': True}
+        directives.register_directive("prompt", SubstitutionPrompt)
+    app.add_role("substitution-code", substitution_code_role)
+    return {"parallel_read_safe": True}
