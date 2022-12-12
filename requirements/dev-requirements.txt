@@ -1,6 +1,6 @@
 add-trailing-comma==2.3.0
 autoflake==2.0.0
-black==22.10.0
+black==22.12.0
 check-manifest==0.49
 doc8==1.0.0
 flake8==6.0.0
