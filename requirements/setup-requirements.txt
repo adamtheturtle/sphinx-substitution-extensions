@@ -1,2 +1,2 @@
-setuptools_scm==7.0.5
+setuptools_scm==7.1.0
 setuptools-scm-git-archive==1.4
