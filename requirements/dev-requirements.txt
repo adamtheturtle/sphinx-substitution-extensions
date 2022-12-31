@@ -2,7 +2,7 @@ add-trailing-comma==2.4.0
 autoflake==2.0.0
 black==22.12.0
 check-manifest==0.49
-doc8==1.0.0
+doc8==1.1.1
 flake8==6.0.0
 isort==5.11.4
 mypy==0.991
