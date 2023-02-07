@@ -5,7 +5,7 @@ check-manifest==0.49
 doc8==1.1.1
 flake8==6.0.0
 isort==5.11.4
-mypy==0.991
+mypy==1.0.0
 pip_check_reqs==2.4.3
 pydocstyle==6.2.1
 pyenchant==3.2.2
