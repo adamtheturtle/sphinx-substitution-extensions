@@ -118,7 +118,6 @@ def setup(app: Sphinx) -> dict[str, Any]:
     app.add_config_value("substitutions", [], "html")
     directives.register_directive("code-block", SubstitutionCodeBlock)
     if "prompt" in EXISTING_DIRECTIVES:
-
         from sphinx_substitution_extensions.extras import SubstitutionPrompt
 
         directives.register_directive("prompt", SubstitutionPrompt)
