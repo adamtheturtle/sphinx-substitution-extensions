@@ -48,8 +48,7 @@ class SubstitutionCodeBlock(CodeBlock):
             new_content.append(item)
 
         self.content = new_content
-        result = list(super().run())
-        return result
+        return list(super().run())
 
 
 def _exists_dependency(
@@ -71,13 +70,14 @@ def substitution_code_role(  # pylint: disable=dangerous-default-value
     text: str,
     lineno: int,
     inliner: Inliner,
-    options: dict[Any, Any] = {},
-    content: list[str] = [],
+    # We allow mutable defaults as the Sphinx implementation requires it.
+    options: dict[Any, Any] = {},  # noqa: B006
+    content: list[str] = [],  # noqa: B006
 ) -> tuple[list[Node], list[system_message]]:
     """
     Replace placeholders with given variables.
     """
-    document = inliner.document  # type: ignore
+    document = inliner.document  # type: ignore[attr-defined]
     for name, value in document.substitution_defs.items():
         replacement = value.astext()
         text = text.replace(f"|{name}|", replacement)
@@ -97,7 +97,7 @@ def substitution_code_role(  # pylint: disable=dangerous-default-value
     return result_nodes, system_messages
 
 
-substitution_code_role.options = {  # type: ignore
+substitution_code_role.options = {  # type: ignore[attr-defined]
     "class": directives.class_option,
     "language": directives.unchanged,
 }

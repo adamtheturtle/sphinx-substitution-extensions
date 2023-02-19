@@ -1,12 +1,11 @@
 """
 Constants and functions shared between modules.
 """
-from typing import Dict
 
 from docutils.parsers.rst import Directive, directives
 
-EXISTING_DIRS = directives._directives  # pylint: disable=protected-access
-EXISTING_DIRECTIVES: Dict[str, Directive] = EXISTING_DIRS
+EXISTING_DIRS = directives._directives  # noqa: SLF001
+EXISTING_DIRECTIVES: dict[str, Directive] = EXISTING_DIRS
 
 # This is hardcoded in doc8 as a valid option so be wary that changing this
 # may break doc8 linting.
