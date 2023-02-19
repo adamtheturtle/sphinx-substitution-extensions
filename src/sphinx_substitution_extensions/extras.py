@@ -14,7 +14,7 @@ from sphinx_substitution_extensions.shared import (
 _EXISTING_PROMPT_DIRECTIVE: Directive = EXISTING_DIRECTIVES["prompt"]
 
 
-class SubstitutionPrompt(_EXISTING_PROMPT_DIRECTIVE):  # type: ignore
+class SubstitutionPrompt(_EXISTING_PROMPT_DIRECTIVE):  # type: ignore[misc, valid-type]
     """
     Similar to PromptDirective but replaces placeholders with variables.
     """
@@ -43,5 +43,4 @@ class SubstitutionPrompt(_EXISTING_PROMPT_DIRECTIVE):  # type: ignore
         self.content = (  # pylint: disable=attribute-defined-outside-init
             new_content
         )
-        result = list(super().run())
-        return result
+        return list(super().run())

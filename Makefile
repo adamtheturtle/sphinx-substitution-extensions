@@ -7,22 +7,18 @@ lint: \
     black \
     check-manifest \
     doc8 \
-    flake8 \
-    isort \
     mypy \
     pip-extra-reqs \
     pip-missing-reqs \
     pyroma \
+    ruff \
     vulture \
-    pylint \
-    pydocstyle
+    pylint
 
 .PHONY: fix-lint
 fix-lint: \
-    add-trailing-comma \
-    autoflake \
     fix-black \
-    fix-isort
+    fix-ruff
 
 .PHONY: build-sample
 build-sample:

@@ -8,7 +8,6 @@ from pathlib import Path
 from textwrap import dedent
 
 import pytest
-
 from sphinx_substitution_extensions import _exists_dependency
 
 _EXISTS_PROMPT_EXTENSION = _exists_dependency("sphinx-prompt")
