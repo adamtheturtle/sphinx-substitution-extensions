@@ -10,5 +10,5 @@ pytest-cov==4.0.0  # Measure code coverage
 pytest==7.2.1
 ruff==0.0.249
 types-docutils==0.19.1.6
-types-setuptools==67.3.0.2
+types-setuptools==67.4.0.1
 vulture==2.7
