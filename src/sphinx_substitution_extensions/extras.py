@@ -33,12 +33,13 @@ class SubstitutionPrompt(_EXISTING_PROMPT_DIRECTIVE):  # type: ignore[misc, vali
         existing_content = self.content
         substitution_defs = self.state.document.substitution_defs
         for item in existing_content:
+            new_item = item
             for name, value in substitution_defs.items():
                 if SUBSTITUTION_OPTION_NAME in self.options:
                     replacement = value.astext()
-                    item = item.replace(f"|{name}|", replacement)
+                    new_item = new_item.replace(f"|{name}|", replacement)
 
-            new_content.append(item)
+            new_content.append(new_item)
 
         self.content = (  # pylint: disable=attribute-defined-outside-init
             new_content
