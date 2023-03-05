@@ -179,3 +179,37 @@ ignore = [
     "TCH002",
     "TCH003",
 ]
+
+[tool.distutils.bdist_wheel]
+universal = true
+
+[project]
+authors = [ { name = "Adam Dangoor", email = "adamdangoor@gmail.com"} ]
+classifiers = [
+    "Operating System :: POSIX",
+    "Environment :: Web Environment",
+    "Programming Language :: Python :: 3.11",
+    "License :: OSI Approved :: MIT License",
+    "Development Status :: 5 - Production/Stable",
+    "Framework :: Pytest",
+]
+description = "Extensions for Sphinx which allow for substitutions."
+dynamic = ["version"]
+keywords = ["sphinx", "rst", "documentation"]
+license = { file = "LICENSE" }
+name = "sphinx-substitution-extensions"
+readme = { file = "README.rst", content-type = "text/x-rst"}
+requires-python = ">=3.9"
+
+[project.urls]
+Source = "https://github.com/adamtheturtle/sphinx-substitution-extensions"
+
+[tool.setuptools]
+zip-safe = false
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+sphinx_substitution_extensions = ["py.typed"]
+
