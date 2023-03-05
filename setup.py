@@ -2,8 +2,6 @@
 Setup script.
 """
 
-from __future__ import annotations
-
 from pathlib import Path
 
 from setuptools import setup
@@ -36,7 +34,6 @@ SETUP_REQUIRES = _get_dependencies(
 )
 
 setup(
-    use_scm_version=True,
     setup_requires=SETUP_REQUIRES,
     install_requires=INSTALL_REQUIRES,
     extras_require={"prompt": PROMPT_REQUIRES, "dev": DEV_REQUIRES},
