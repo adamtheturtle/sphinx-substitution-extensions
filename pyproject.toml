@@ -213,3 +213,4 @@ where = ["src"]
 [tool.setuptools.package-data]
 sphinx_substitution_extensions = ["py.typed"]
 
+[tool.setuptools_scm]
