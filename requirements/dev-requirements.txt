@@ -8,7 +8,7 @@ pylint==2.16.3
 pyroma==4.2
 pytest-cov==4.0.0  # Measure code coverage
 pytest==7.2.1
-ruff==0.0.253
+ruff==0.0.254
 types-docutils==0.19.1.6
 types-setuptools==67.4.0.3
 vulture==2.7
