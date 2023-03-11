@@ -31,10 +31,7 @@ jobs:
       - uses: actions/cache@v3
         with:
           path: ~/.cache/pip
-          # This is like the example but we use ``*requirements.txt`` rather
-          # than ``requirements.txt`` because we have multiple requirements
-          # files.
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/*requirements.txt') }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('pyproject.toml') }}
           restore-keys: |
             ${{ runner.os }}-pip-
 
