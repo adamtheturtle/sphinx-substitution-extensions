@@ -5,19 +5,21 @@ Custom Sphinx extensions.
 from __future__ import annotations
 
 import logging
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from docutils.nodes import Node, literal_block, system_message
 from docutils.parsers.rst import directives
 from docutils.parsers.rst.roles import code_role
-from docutils.parsers.rst.states import Inliner
-from sphinx.application import Sphinx
 from sphinx.directives.code import CodeBlock
 
 from sphinx_substitution_extensions.shared import (
     EXISTING_DIRECTIVES,
     SUBSTITUTION_OPTION_NAME,
 )
+
+if TYPE_CHECKING:
+    from docutils.nodes import Node, literal_block, system_message
+    from docutils.parsers.rst.states import Inliner
+    from sphinx.application import Sphinx
 
 LOGGER = logging.getLogger(__name__)
 

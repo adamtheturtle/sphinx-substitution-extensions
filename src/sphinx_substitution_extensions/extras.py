@@ -3,13 +3,17 @@ sphinx-prompt support for Sphinx Substitution Extensions.
 """
 from __future__ import annotations
 
-from docutils.nodes import raw
+from typing import TYPE_CHECKING
+
 from docutils.parsers.rst import Directive, directives
 
 from sphinx_substitution_extensions.shared import (
     EXISTING_DIRECTIVES,
     SUBSTITUTION_OPTION_NAME,
 )
+
+if TYPE_CHECKING:
+    from docutils.nodes import raw
 
 _EXISTING_PROMPT_DIRECTIVE: Directive = EXISTING_DIRECTIVES["prompt"]
 
