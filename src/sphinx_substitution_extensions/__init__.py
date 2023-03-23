@@ -39,7 +39,7 @@ class SubstitutionCodeBlock(CodeBlock):
         self.option_spec["substitutions"] = directives.flag
 
         new_content = []
-        self.content = self.content  # type: list[str]
+        self.content: list[str] = self.content
         existing_content = self.content
         substitution_defs = self.state.document.substitution_defs
         for item in existing_content:

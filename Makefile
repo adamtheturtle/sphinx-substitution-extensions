@@ -10,6 +10,7 @@ lint: \
     mypy \
     pip-extra-reqs \
     pip-missing-reqs \
+    pyright \
     pyroma \
     ruff \
     vulture \
