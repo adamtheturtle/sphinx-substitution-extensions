@@ -31,9 +31,9 @@ class SubstitutionPrompt(_EXISTING_PROMPT_DIRECTIVE):  # type: ignore[misc, vali
         Replace placeholders with given variables.
         """
         new_content = []
-        self.content = (  # pylint: disable=attribute-defined-outside-init
-            self.content
-        )  # type: list[str]
+        self.content: list[  # pylint: disable=attribute-defined-outside-init
+            str
+        ] = self.content
         existing_content = self.content
         substitution_defs = self.state.document.substitution_defs
         for item in existing_content:
