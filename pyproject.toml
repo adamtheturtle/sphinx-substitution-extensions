@@ -179,6 +179,11 @@ ignore = [
     "S101",
 ]
 
+# Do not automatically remove commented out code.
+# We comment out code during development, and with VSCode auto-save, this code
+# is sometimes annoyingly removed.
+unfixable = ["ERA001"]
+
 [tool.distutils.bdist_wheel]
 universal = true
 
