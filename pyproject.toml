@@ -225,7 +225,7 @@ dev = [
     "pytest-cov==4.0.0",
     "pytest==7.3.1",
     "ruff==0.0.262",
-    "types-docutils==0.19.1.7",
+    "types-docutils==0.19.1.8",
     "vulture==2.7",
 ]
 prompt = ["sphinx-prompt>=0.1"]
