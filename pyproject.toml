@@ -219,7 +219,7 @@ dev = [
     "pdm==2.5.3",
     "pip_check_reqs==2.4.4",
     "pyenchant==3.2.2",
-    "pylint==2.17.2",
+    "pylint==2.17.3",
     "pyright==1.1.306",
     "pyroma==4.2",
     "pytest-cov==4.0.0",
