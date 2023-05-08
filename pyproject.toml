@@ -216,7 +216,7 @@ dev = [
     "check-manifest==0.49",
     "doc8==1.1.1",
     "mypy==1.2.0",
-    "pdm==2.5.5",
+    "pdm==2.5.6",
     "pip_check_reqs==2.4.4",
     "pyenchant==3.2.2",
     "pylint==2.17.3",
