@@ -80,7 +80,9 @@ def substitution_code_role(  # pylint: disable=dangerous-default-value
     """
     Replace placeholders with given variables.
     """
-    document = inliner.document
+    # We ignore this type error as "document" is not defined in the ``Inliner``
+    # constructor but it is set by the time we get here.
+    document = inliner.document  # type: ignore[attr-defined]
     for name, value in document.substitution_defs.items():
         replacement = value.astext()
         text = text.replace(f"|{name}|", replacement)
