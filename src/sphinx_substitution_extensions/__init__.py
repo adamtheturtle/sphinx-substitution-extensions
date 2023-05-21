@@ -80,7 +80,7 @@ def substitution_code_role(  # pylint: disable=dangerous-default-value
     """
     Replace placeholders with given variables.
     """
-    document = inliner.document 
+    document = inliner.document
     for name, value in document.substitution_defs.items():
         replacement = value.astext()
         text = text.replace(f"|{name}|", replacement)
