@@ -223,7 +223,7 @@ dev = [
     "pyright==1.1.314",
     "pyroma==4.2",
     "pytest-cov==4.1.0",
-    "pytest==7.3.2",
+    "pytest==7.4.0",
     "ruff==0.0.274",
     "types-docutils==0.20.0.1",
     "vulture==2.7",
