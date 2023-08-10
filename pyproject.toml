@@ -224,7 +224,7 @@ dev = [
     "pyroma==4.2",
     "pytest-cov==4.1.0",
     "pytest==7.4.0",
-    "ruff==0.0.283",
+    "ruff==0.0.284",
     "types-docutils==0.20.0.1",
     "vulture==2.7",
 ]
