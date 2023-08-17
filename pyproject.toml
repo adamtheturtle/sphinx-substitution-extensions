@@ -215,7 +215,7 @@ dev = [
     "black==23.7.0",
     "check-manifest==0.49",
     "doc8==1.1.1",
-    "mypy==1.5.0",
+    "mypy==1.5.1",
     "pdm==2.8.2",
     "pip_check_reqs==2.4.4",
     "pyenchant==3.2.2",
