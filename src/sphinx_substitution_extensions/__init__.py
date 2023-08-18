@@ -22,7 +22,7 @@ if TYPE_CHECKING:
     from sphinx.application import Sphinx
 
 LOGGER = logging.getLogger(__name__)
-
+LOGGER.propagate=True
 
 class SubstitutionCodeBlock(CodeBlock):
     """
@@ -107,18 +107,18 @@ substitution_code_role.options = {  # type: ignore[attr-defined]
     "language": directives.unchanged,
 }
 
-if _exists_dependency("sphinx-prompt") and "prompt" not in EXISTING_DIRECTIVES:
-    MESSAGE = (
-        "sphinx-prompt must be in the conf.py extensions list before "
-        "sphinx_substitution_extensions"
-    )
-    LOGGER.warning(MESSAGE)
-
 
 def setup(app: Sphinx) -> dict[str, Any]:
     """
     Add the custom directives to Sphinx.
     """
+    if _exists_dependency("sphinx-prompt") and "prompt" not in EXISTING_DIRECTIVES:
+        message = (
+            "sphinx-prompt must be in the conf.py extensions list before "
+            "sphinx_substitution_extensions"
+        )
+        LOGGER.warning(message)
+
     # pylint: disable=import-outside-toplevel
     app.add_config_value("substitutions", [], "html")
     directives.register_directive("code-block", SubstitutionCodeBlock)
