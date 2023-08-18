@@ -44,9 +44,8 @@ def test_no_substitution_code_block(
     tmp_path / "destination"
     app = make_app(srcdir=source_directory)
     app.build()
-    build_directory = source_directory / "_build"
     expected = "PRE-example_substitution-POST"
-    content_html = build_directory / "html" / "index.html"
+    content_html = app.outdir / "index.html"
     assert expected not in content_html.read_text()
 
 
@@ -84,9 +83,8 @@ def test_substitution_code_block(
     source_file.write_text(source_file_content)
     app = make_app(srcdir=source_directory)
     app.build()
-    build_directory = source_directory / "_build"
     expected = "PRE-example_substitution-POST"
-    content_html = build_directory / "html" / "index.html"
+    content_html = app.outdir / "index.html"
     assert expected in content_html.read_text()
 
 
@@ -124,8 +122,7 @@ def test_substitution_code_block_case_preserving(
 
     app = make_app(srcdir=source_directory)
     app.build()
-    build_directory = source_directory / "_build"
-    content_html = build_directory / "html" / "index.html"
+    content_html = app.outdir / "index.html"
     expected = "PRE-example_substitution-POST"
     assert expected in content_html.read_text()
 
@@ -161,8 +158,7 @@ def test_substitution_inline(
     source_file.write_text(source_file_content)
     app = make_app(srcdir=source_directory)
     app.build()
-    build_directory = source_directory / "_build"
-    content_html = build_directory / "html" / "index.html"
+    content_html = app.outdir / "index.html"
     expected = "PRE-example_substitution-POST"
     assert expected in content_html.read_text()
 
@@ -198,8 +194,7 @@ def test_substitution_inline_case_preserving(
     expected = "PRE-example_substitution-POST"
     app = make_app(srcdir=source_directory)
     app.build()
-    build_directory = source_directory / "_build"
-    content_html = build_directory / "html" / "index.html"
+    content_html = app.outdir / "index.html"
     expected = "PRE-example_substitution-POST"
     assert expected in content_html.read_text()
 
