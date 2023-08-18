@@ -38,7 +38,7 @@ def test_prompt_specified_late(
         """,
     )
     conf_py.write_text(conf_py_content)
-    app = make_app(srcdir=source_directory, freshenv=True)
+    app = make_app(srcdir=source_directory)
     app.build()
     assert app.statuscode == 0  # Do not raise an error
 
