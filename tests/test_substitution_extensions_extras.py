@@ -3,8 +3,6 @@ Tests for extra modules.
 """
 
 import logging
-import subprocess
-import sys
 from pathlib import Path
 from textwrap import dedent
 from typing import Callable
@@ -22,6 +20,7 @@ pytestmark = [pytest.mark.skipif(not _EXISTS_PROMPT_EXTENSION, reason=_REASON)]
 def test_prompt_specified_late(
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
+    caplog,
 ) -> None:
     """
     If sphinx-prompt is not specified in extensions before Sphinx substitution
@@ -39,34 +38,18 @@ def test_prompt_specified_late(
         """,
     )
     conf_py.write_text(conf_py_content)
-    destination_directory = tmp_path / "destination"
-    args = [
-        sys.executable,
-        "-m",
-        "sphinx",
-        "-b",
-        "html",
-        "-W",
-        # Directory containing source and configuration files.
-        str(source_directory),
-        # Directory containing build files.
-        str(destination_directory),
-        # Source file to process.
-        str(source_file),
-    ]
-    result = subprocess.run(
-        args=args,
-        check=False,
-        stderr=subprocess.PIPE,
-    )
+    app = make_app(srcdir=source_directory, freshenv=True)
+    app.build()
+    assert app.statuscode == 0  # Do not raise an error
 
     expected_message = (
         "sphinx-prompt must be in the conf.py extensions list before "
         "sphinx_substitution_extensions"
     )
 
-    assert result.returncode == 0  # Do not raise an error
-    assert expected_message in result.stderr.decode()
+    assert caplog.record_tuples == [
+        ("sphinx_substitution_extensions", logging.WARNING, expected_message),
+    ]
 
 
 def test_prompt_not_specified(
@@ -104,8 +87,6 @@ def test_prompt_not_specified(
     ]
 
 
-
-
 def test_substitution_prompt(
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
@@ -140,9 +121,8 @@ def test_substitution_prompt(
     source_file.write_text(source_file_content)
     app = make_app(srcdir=source_directory)
     app.build()
-    source_directory / "_build"
     expected = "PRE-example_substitution-POST"
-    content_html = Path(str(destination_directory)) / "index.html"
+    content_html = app.outdir / "index.html"
     assert expected in content_html.read_text()
 
 
@@ -179,9 +159,8 @@ def test_substitution_prompt_is_case_preserving(
     source_file.write_text(source_file_content)
     app = make_app(srcdir=source_directory)
     app.build()
-    build_directory = source_directory / "_build"
     expected = "PRE-example_substitution-POST"
-    content_html = build_directory / "html" / "index.html"
+    content_html = app.outdir / "index.html"
     assert expected in content_html.read_text()
 
 
@@ -218,7 +197,6 @@ def test_no_substitution_prompt(
     source_file.write_text(source_file_content)
     app = make_app(srcdir=source_directory)
     app.build()
-    build_directory = source_directory / "_build"
-    content_html = build_directory / "html" / "index.html"
+    content_html = app.outdir / "index.html"
     expected = "PRE-example_substitution-POST"
     assert expected not in content_html.read_text()

@@ -22,7 +22,7 @@ if TYPE_CHECKING:
     from sphinx.application import Sphinx
 
 LOGGER = logging.getLogger(__name__)
-LOGGER.propagate=True
+
 
 class SubstitutionCodeBlock(CodeBlock):
     """
@@ -112,7 +112,10 @@ def setup(app: Sphinx) -> dict[str, Any]:
     """
     Add the custom directives to Sphinx.
     """
-    if _exists_dependency("sphinx-prompt") and "prompt" not in EXISTING_DIRECTIVES:
+    if (
+        _exists_dependency("sphinx-prompt")
+        and "prompt" not in EXISTING_DIRECTIVES
+    ):
         message = (
             "sphinx-prompt must be in the conf.py extensions list before "
             "sphinx_substitution_extensions"
