@@ -12,7 +12,6 @@ from docutils.parsers.rst.roles import code_role
 from sphinx.directives.code import CodeBlock
 
 from sphinx_substitution_extensions.shared import (
-    EXISTING_DIRECTIVES,
     SUBSTITUTION_OPTION_NAME,
 )
 
@@ -107,13 +106,6 @@ substitution_code_role.options = {  # type: ignore[attr-defined]
     "language": directives.unchanged,
 }
 
-if _exists_dependency("sphinx-prompt") and "prompt" not in EXISTING_DIRECTIVES:
-    MESSAGE = (
-        "sphinx-prompt must be in the conf.py extensions list before "
-        "sphinx_substitution_extensions"
-    )
-    LOGGER.warning(MESSAGE)
-
 
 def setup(app: Sphinx) -> dict[str, Any]:
     """
@@ -122,7 +114,8 @@ def setup(app: Sphinx) -> dict[str, Any]:
     # pylint: disable=import-outside-toplevel
     app.add_config_value("substitutions", [], "html")
     directives.register_directive("code-block", SubstitutionCodeBlock)
-    if "prompt" in EXISTING_DIRECTIVES:
+    if _exists_dependency("sphinx-prompt"):
+        app.setup_extension("sphinx-prompt")
         from sphinx_substitution_extensions.extras import SubstitutionPrompt
 
         directives.register_directive("prompt", SubstitutionPrompt)
