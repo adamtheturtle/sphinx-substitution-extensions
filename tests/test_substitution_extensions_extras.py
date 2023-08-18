@@ -6,8 +6,10 @@ import subprocess
 import sys
 from pathlib import Path
 from textwrap import dedent
+from typing import Callable
 
 import pytest
+from sphinx.testing.util import SphinxTestApp
 from sphinx_substitution_extensions import _exists_dependency
 
 _EXISTS_PROMPT_EXTENSION = _exists_dependency("sphinx-prompt")
@@ -209,7 +211,10 @@ def test_substitution_prompt_is_case_preserving(tmp_path: Path) -> None:
     assert expected in content_html.read_text()
 
 
-def test_no_substitution_prompt(tmp_path: Path) -> None:
+def test_no_substitution_prompt(
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
     """
     The ``prompt`` directive does not replace the placeholders defined in
     ``conf.py`` when that is not requested.
@@ -237,22 +242,9 @@ def test_no_substitution_prompt(tmp_path: Path) -> None:
         """,
     )
     source_file.write_text(source_file_content)
-    destination_directory = tmp_path / "destination"
-    args = [
-        sys.executable,
-        "-m",
-        "sphinx",
-        "-b",
-        "html",
-        "-W",
-        # Directory containing source and configuration files.
-        str(source_directory),
-        # Directory containing build files.
-        str(destination_directory),
-        # Source file to process.
-        str(source_file),
-    ]
-    subprocess.check_output(args=args)
+    app = make_app(srcdir=source_directory)
+    app.build()
+    build_directory = source_directory / "_build"
+    content_html = build_directory / "html" / "index.html"
     expected = "PRE-example_substitution-POST"
-    content_html = Path(str(destination_directory)) / "index.html"
     assert expected not in content_html.read_text()
