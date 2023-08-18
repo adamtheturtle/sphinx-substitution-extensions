@@ -6,11 +6,16 @@ import subprocess
 import sys
 from pathlib import Path
 from textwrap import dedent
+from typing import Callable
 
+from sphinx.testing.util import SphinxTestApp
 from sphinx_substitution_extensions import _exists_dependency
 
 
-def test_no_substitution_code_block(tmp_path: Path) -> None:
+def test_no_substitution_code_block(
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
     """
     The ``code-block`` directive does not replace the placeholders defined in
     ``conf.py`` when not specified.
@@ -38,28 +43,19 @@ def test_no_substitution_code_block(tmp_path: Path) -> None:
         """,
     )
     source_file.write_text(source_file_content)
-    destination_directory = tmp_path / "destination"
-    args = [
-        sys.executable,
-        "-m",
-        "sphinx",
-        "-b",
-        "html",
-        "-W",
-        # Directory containing source and configuration files.
-        str(source_directory),
-        # Directory containing build files.
-        str(destination_directory),
-        # Source file to process.
-        str(source_file),
-    ]
-    subprocess.check_output(args=args)
+    tmp_path / "destination"
+    app = make_app(srcdir=source_directory)
+    app.build()
+    build_directory = source_directory / "_build"
     expected = "PRE-example_substitution-POST"
-    content_html = Path(str(destination_directory)) / "index.html"
+    content_html = build_directory / "html" / "index.html"
     assert expected not in content_html.read_text()
 
 
-def test_substitution_code_block(tmp_path: Path) -> None:
+def test_substitution_code_block(
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
     """
     The ``code-block`` directive replaces the placeholders defined in
     ``conf.py`` as specified.
@@ -88,24 +84,12 @@ def test_substitution_code_block(tmp_path: Path) -> None:
         """,
     )
     source_file.write_text(source_file_content)
-    destination_directory = tmp_path / "destination"
-    args = [
-        sys.executable,
-        "-m",
-        "sphinx",
-        "-b",
-        "html",
-        "-W",
-        # Directory containing source and configuration files.
-        str(source_directory),
-        # Directory containing build files.
-        str(destination_directory),
-        # Source file to process.
-        str(source_file),
-    ]
-    subprocess.check_output(args=args)
+    tmp_path / "destination"
+    app = make_app(srcdir=source_directory)
+    app.build()
+    build_directory = source_directory / "_build"
     expected = "PRE-example_substitution-POST"
-    content_html = Path(str(destination_directory)) / "index.html"
+    content_html = build_directory / "html" / "index.html"
     assert expected in content_html.read_text()
 
 
