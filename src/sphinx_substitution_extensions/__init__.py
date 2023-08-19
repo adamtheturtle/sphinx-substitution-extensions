@@ -11,7 +11,6 @@ from docutils.parsers.rst import directives
 from docutils.parsers.rst.roles import code_role
 from sphinx.directives.code import CodeBlock
 
-from sphinx_substitution_extensions.extras import SubstitutionPrompt
 from sphinx_substitution_extensions.shared import (
     SUBSTITUTION_OPTION_NAME,
 )
@@ -102,6 +101,13 @@ def setup(app: Sphinx) -> dict[str, Any]:
     app.add_config_value("substitutions", [], "html")
     directives.register_directive("code-block", SubstitutionCodeBlock)
     app.setup_extension("sphinx-prompt")
+    # We delay the import of `SubstitutionPrompt` until after we have set up
+    # the "sphinx-prompt" extension, else the `SubstitutionPrompt` may be
+    # depending on something which does not yet exist.
+    # pylint: disable=import-outside-toplevel
+    from sphinx_substitution_extensions.extras import SubstitutionPrompt
+
     directives.register_directive("prompt", SubstitutionPrompt)
+
     app.add_role("substitution-code", substitution_code_role)
     return {"parallel_read_safe": True}
