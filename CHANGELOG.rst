@@ -6,8 +6,9 @@ Changelog
 Next
 ----
 
-- Bump the minimum supported version of Sphinx to 5.1.1.
+- Bump the minimum supported version of Sphinx to 7.2.0.
 - Bump the minimum supported version of docutils to 0.19.
+- ``sphinx-prompt`` is no longer an optional dependency, meaning you can remove the ``[prompt]`` extras dependency specification.
 - Remove the need to specify the ``sphinx-prompt`` extension in ``conf.py`` in order to use the ``prompt`` directive.
 
 2022.02.16
