@@ -40,7 +40,6 @@ def test_no_substitution_code_block(
         """,
     )
     source_file.write_text(source_file_content)
-    tmp_path / "destination"
     app = make_app(srcdir=source_directory)
     app.build()
     expected = "PRE-example_substitution-POST"
