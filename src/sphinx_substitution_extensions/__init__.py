@@ -11,8 +11,8 @@ from docutils.parsers.rst import directives
 from docutils.parsers.rst.roles import code_role
 from sphinx.directives.code import CodeBlock
 
+from sphinx_substitution_extensions.extras import SubstitutionPrompt
 from sphinx_substitution_extensions.shared import (
-    EXISTING_DIRECTIVES,
     SUBSTITUTION_OPTION_NAME,
 )
 
@@ -52,19 +52,6 @@ class SubstitutionCodeBlock(CodeBlock):
 
         self.content = new_content
         return list(super().run())
-
-
-def _exists_dependency(
-    name: str,
-) -> bool:
-    """
-    Returns true if the dependency is installed.
-    """
-    try:
-        __import__(name)
-    except ImportError:
-        return False
-    return True
 
 
 def substitution_code_role(  # pylint: disable=dangerous-default-value
@@ -107,31 +94,14 @@ substitution_code_role.options = {  # type: ignore[attr-defined]
     "language": directives.unchanged,
 }
 
-if (
-    _exists_dependency("sphinx-prompt")
-    and "prompt" not in EXISTING_DIRECTIVES
-):
-    SPHINX_PROMPT_INSTALLED_BUT_NOT_SPECIFIED_YET = True
-else:
-    SPHINX_PROMPT_INSTALLED_BUT_NOT_SPECIFIED_YET = False
 
 def setup(app: Sphinx) -> dict[str, Any]:
     """
     Add the custom directives to Sphinx.
     """
-    if SPHINX_PROMPT_INSTALLED_BUT_NOT_SPECIFIED_YET:
-        message = (
-            "sphinx-prompt must be in the conf.py extensions list before "
-            "sphinx_substitution_extensions"
-        )
-        LOGGER.warning(message)
-
-    # pylint: disable=import-outside-toplevel
     app.add_config_value("substitutions", [], "html")
     directives.register_directive("code-block", SubstitutionCodeBlock)
-    if "prompt" in EXISTING_DIRECTIVES:
-        from sphinx_substitution_extensions.extras import SubstitutionPrompt
-
-        directives.register_directive("prompt", SubstitutionPrompt)
+    app.setup_extension("sphinx-prompt")
+    directives.register_directive("prompt", SubstitutionPrompt)
     app.add_role("substitution-code", substitution_code_role)
     return {"parallel_read_safe": True}

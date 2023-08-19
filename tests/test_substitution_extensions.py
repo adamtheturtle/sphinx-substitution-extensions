@@ -7,7 +7,6 @@ from textwrap import dedent
 from typing import Callable
 
 from sphinx.testing.util import SphinxTestApp
-from sphinx_substitution_extensions import _exists_dependency
 
 
 def test_no_substitution_code_block(
@@ -197,19 +196,3 @@ def test_substitution_inline_case_preserving(
     content_html = app.outdir / "index.html"
     expected = "PRE-example_substitution-POST"
     assert expected in content_html.read_text()
-
-
-def test_exists_dependency() -> None:
-    """
-    Test exist_dependency function.
-    """
-    dependency = "sphinx_substitution_extensions"
-    assert _exists_dependency(dependency) is True
-
-
-def test_does_not_exists_dependency() -> None:
-    """
-    Test exist_dependency function.
-    """
-    dependency = "fake_sphinx_substitution_extensions"
-    assert _exists_dependency(dependency) is False

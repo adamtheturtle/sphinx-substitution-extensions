@@ -8,6 +8,7 @@ Next
 
 - Bump the minimum supported version of Sphinx to 5.1.1.
 - Bump the minimum supported version of docutils to 0.19.
+- Remove the need to specify the ``sphinx-prompt`` extension in ``conf.py`` in order to use the ``prompt`` directive.
 
 2022.02.16
 ------------
