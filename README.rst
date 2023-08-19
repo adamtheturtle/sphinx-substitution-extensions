@@ -41,20 +41,11 @@ Optional: sphinx-prompt
 
 Sphinx Substitution Extensions supports the third-party extension `sphinx-prompt`_.
 
-1. If you don't have ``sphinx-prompt`` installed, you can include the extension with the extra dependency ``prompt``:
+If you don't have ``sphinx-prompt`` installed, you can include the extension with the extra dependency ``prompt``:
 
 .. code:: console
 
    $ pip install Sphinx-Substitution-Extensions[prompt]
-
-
-2. Make sure ``sphinx-prompt`` dependency is loaded before ``sphinx_substitution_extensions``.
-For example, your ``conf.py`` should look like:
-
-.. code:: python
-
-   # sphinx-prompt must be the first of these two.
-   extensions += ['sphinx-prompt', 'sphinx_substitution_extensions']
 
 Directives
 ----------
