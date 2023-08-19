@@ -7,14 +7,6 @@ import sys
 from pathlib import Path
 from textwrap import dedent
 
-import pytest
-from sphinx_substitution_extensions import _exists_dependency
-
-_EXISTS_PROMPT_EXTENSION = _exists_dependency("sphinx-prompt")
-_REASON = "requires sphinx-prompt to be installed"
-
-pytestmark = [pytest.mark.skipif(not _EXISTS_PROMPT_EXTENSION, reason=_REASON)]
-
 
 def test_substitution_prompt(tmp_path: Path) -> None:
     """

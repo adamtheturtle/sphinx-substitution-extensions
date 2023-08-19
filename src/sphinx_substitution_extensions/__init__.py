@@ -11,6 +11,7 @@ from docutils.parsers.rst import directives
 from docutils.parsers.rst.roles import code_role
 from sphinx.directives.code import CodeBlock
 
+from sphinx_substitution_extensions.extras import SubstitutionPrompt
 from sphinx_substitution_extensions.shared import (
     SUBSTITUTION_OPTION_NAME,
 )
@@ -51,19 +52,6 @@ class SubstitutionCodeBlock(CodeBlock):
 
         self.content = new_content
         return list(super().run())
-
-
-def _exists_dependency(
-    name: str,
-) -> bool:
-    """
-    Returns true if the dependency is installed.
-    """
-    try:
-        __import__(name)
-    except ImportError:
-        return False
-    return True
 
 
 def substitution_code_role(  # pylint: disable=dangerous-default-value
@@ -113,10 +101,7 @@ def setup(app: Sphinx) -> dict[str, Any]:
     """
     app.add_config_value("substitutions", [], "html")
     directives.register_directive("code-block", SubstitutionCodeBlock)
-    if _exists_dependency("sphinx-prompt"):
-        app.setup_extension("sphinx-prompt")
-        from sphinx_substitution_extensions.extras import SubstitutionPrompt
-
-        directives.register_directive("prompt", SubstitutionPrompt)
+    app.setup_extension("sphinx-prompt")
+    directives.register_directive("prompt", SubstitutionPrompt)
     app.add_role("substitution-code", substitution_code_role)
     return {"parallel_read_safe": True}

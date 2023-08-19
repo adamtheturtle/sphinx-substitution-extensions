@@ -7,8 +7,6 @@ import sys
 from pathlib import Path
 from textwrap import dedent
 
-from sphinx_substitution_extensions import _exists_dependency
-
 
 def test_no_substitution_code_block(tmp_path: Path) -> None:
     """
@@ -249,19 +247,3 @@ def test_substitution_inline_case_preserving(tmp_path: Path) -> None:
     expected = "PRE-example_substitution-POST"
     content_html = Path(str(destination_directory)) / "index.html"
     assert expected in content_html.read_text()
-
-
-def test_exists_dependency() -> None:
-    """
-    Test exist_dependency function.
-    """
-    dependency = "sphinx_substitution_extensions"
-    assert _exists_dependency(dependency) is True
-
-
-def test_does_not_exists_dependency() -> None:
-    """
-    Test exist_dependency function.
-    """
-    dependency = "fake_sphinx_substitution_extensions"
-    assert _exists_dependency(dependency) is False
