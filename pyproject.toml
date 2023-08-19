@@ -207,7 +207,7 @@ requires-python = ">=3.9"
 dependencies = [
     # The lowest versions of these are matched in the ``.github/workflows/ci-versions.yml`` workflow.
     "docutils>=0.19",
-    "sphinx>=5.1.1",
+    "sphinx>=7.2.0",
 	"sphinx-prompt>=0.1",
 ]
 
