@@ -208,6 +208,7 @@ dependencies = [
     # The lowest versions of these are matched in the ``.github/workflows/ci-versions.yml`` workflow.
     "docutils>=0.19",
     "sphinx>=5.1.1",
+	"sphinx-prompt>=0.1",
 ]
 
 [project.optional-dependencies]
@@ -228,7 +229,10 @@ dev = [
     "types-docutils==0.20.0.3",
     "vulture==2.8",
 ]
-prompt = ["sphinx-prompt>=0.1"]
+# We used to have "sphinx-prompt" as an optional extra.
+# We keep this optional-dependencies block here so as not to break anyone who
+# used that extra.
+prompt = []
 
 [project.urls]
 Source = "https://github.com/adamtheturtle/sphinx-substitution-extensions"

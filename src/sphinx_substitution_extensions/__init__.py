@@ -111,7 +111,6 @@ def setup(app: Sphinx) -> dict[str, Any]:
     """
     Add the custom directives to Sphinx.
     """
-    # pylint: disable=import-outside-toplevel
     app.add_config_value("substitutions", [], "html")
     directives.register_directive("code-block", SubstitutionCodeBlock)
     if _exists_dependency("sphinx-prompt"):
