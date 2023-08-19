@@ -8,14 +8,15 @@ from typing import TYPE_CHECKING
 from docutils.parsers.rst import Directive, directives
 
 from sphinx_substitution_extensions.shared import (
-    EXISTING_DIRECTIVES,
     SUBSTITUTION_OPTION_NAME,
 )
 
 if TYPE_CHECKING:
     from docutils.nodes import raw
 
-_EXISTING_PROMPT_DIRECTIVE: Directive = EXISTING_DIRECTIVES["prompt"]
+_EXISTING_DIRS = directives._directives  # noqa: SLF001
+_EXISTING_DIRECTIVES: dict[str, Directive] = _EXISTING_DIRS
+_EXISTING_PROMPT_DIRECTIVE: Directive = _EXISTING_DIRECTIVES["prompt"]
 
 
 class SubstitutionPrompt(_EXISTING_PROMPT_DIRECTIVE):  # type: ignore[misc, valid-type]
