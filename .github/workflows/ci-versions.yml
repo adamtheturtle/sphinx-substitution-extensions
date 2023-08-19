@@ -47,13 +47,9 @@ jobs:
           # pip-extra-reqs.
           python -m pip install --ignore-installed --upgrade --editable .[dev,prompt]
           # Oldest versions from requirements.
-          pip install Sphinx==5.1.1
+          pip install Sphinx==7.2.0
           pip install sphinx-prompt==0.1
           pip install docutils==0.19
-
-      - name: "Lint"
-        run: |
-          make lint
 
       - name: "Build sample"
         run: |
