@@ -5,6 +5,7 @@ hardcoded
 inline
 linters
 py
+pytest
 rst
 str
 tuple
