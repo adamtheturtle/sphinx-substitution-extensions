@@ -5,7 +5,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from docutils.parsers.rst import Directive, directives
+from docutils.parsers.rst import directives
 
 from sphinx_substitution_extensions.shared import (
     SUBSTITUTION_OPTION_NAME,
@@ -14,17 +14,17 @@ from sphinx_substitution_extensions.shared import (
 if TYPE_CHECKING:
     from docutils.nodes import raw
 
-_EXISTING_DIRS = directives._directives  # noqa: SLF001
-_EXISTING_DIRECTIVES: dict[str, Directive] = _EXISTING_DIRS
-_EXISTING_PROMPT_DIRECTIVE: Directive = _EXISTING_DIRECTIVES["prompt"]
+
+sphinx_prompt = __import__("sphinx-prompt")
+PromptDirective = sphinx_prompt.PromptDirective
 
 
-class SubstitutionPrompt(_EXISTING_PROMPT_DIRECTIVE):  # type: ignore[misc, valid-type]
+class SubstitutionPrompt(PromptDirective):  # type: ignore[misc, valid-type]
     """
     Similar to PromptDirective but replaces placeholders with variables.
     """
 
-    option_spec = _EXISTING_PROMPT_DIRECTIVE.option_spec or {}
+    option_spec = PromptDirective.option_spec or {}
     option_spec["substitutions"] = directives.flag
 
     def run(self) -> list[raw]:
