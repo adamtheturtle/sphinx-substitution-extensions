@@ -48,7 +48,7 @@ jobs:
           python -m pip install --ignore-installed --upgrade --editable .[dev,prompt]
           # Oldest versions from requirements.
           pip install Sphinx==7.2.0
-          pip install sphinx-prompt==0.1
+          pip install sphinx-prompt==1.8.0
           pip install docutils==0.19
 
       - name: "Build sample"
