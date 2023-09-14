@@ -5,7 +5,7 @@ Custom Sphinx extensions.
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, ClassVar
 
 from docutils.parsers.rst import directives
 from docutils.parsers.rst.roles import code_role
@@ -54,45 +54,46 @@ class SubstitutionCodeBlock(CodeBlock):
         return list(super().run())
 
 
-def substitution_code_role(  # pylint: disable=dangerous-default-value
-    typ: str,
-    rawtext: str,
-    text: str,
-    lineno: int,
-    inliner: Inliner,
-    # We allow mutable defaults as the Sphinx implementation requires it.
-    options: dict[Any, Any] = {},  # noqa: B006
-    content: list[str] = [],  # noqa: B006
-) -> tuple[list[Node], list[system_message]]:
-    """
-    Replace placeholders with given variables.
-    """
-    # We ignore this type error as "document" is not defined in the ``Inliner``
-    # constructor but it is set by the time we get here.
-    document = inliner.document  # type: ignore[attr-defined]
-    for name, value in document.substitution_defs.items():
-        replacement = value.astext()
-        text = text.replace(f"|{name}|", replacement)
-        rawtext = text.replace(f"|{name}|", replacement)
-        rawtext = rawtext.replace(name, replacement)
+class SubtitutionCodeRole:
+    options: ClassVar[dict[str, Any]] = {
+        "class": directives.class_option,
+        "language": directives.unchanged,
+    }
 
-    result_nodes, system_messages = code_role(
-        role=typ,
-        rawtext=rawtext,
-        text=text,
-        lineno=lineno,
-        inliner=inliner,
-        options=options,
-        content=content,
-    )
+    def __call__(  # pylint: disable=dangerous-default-value
+        self,
+        typ: str,
+        rawtext: str,
+        text: str,
+        lineno: int,
+        inliner: Inliner,
+        # We allow mutable defaults as the Sphinx implementation requires it.
+        options: dict[Any, Any] = {},  # noqa: B006
+        content: list[str] = [],  # noqa: B006
+    ) -> tuple[list[Node], list[system_message]]:
+        """
+        Replace placeholders with given variables.
+        """
+        # We ignore this type error as "document" is not defined in the ``Inliner``
+        # constructor but it is set by the time we get here.
+        document = inliner.document  # type: ignore[attr-defined]
+        for name, value in document.substitution_defs.items():
+            replacement = value.astext()
+            text = text.replace(f"|{name}|", replacement)
+            rawtext = text.replace(f"|{name}|", replacement)
+            rawtext = rawtext.replace(name, replacement)
 
-    return result_nodes, system_messages
+        result_nodes, system_messages = code_role(
+            role=typ,
+            rawtext=rawtext,
+            text=text,
+            lineno=lineno,
+            inliner=inliner,
+            options=options,
+            content=content,
+        )
 
-
-substitution_code_role.options = {  # type: ignore[attr-defined]
-    "class": directives.class_option,
-    "language": directives.unchanged,
-}
+        return result_nodes, system_messages
 
 
 def setup(app: Sphinx) -> dict[str, Any]:
@@ -103,5 +104,5 @@ def setup(app: Sphinx) -> dict[str, Any]:
     directives.register_directive("code-block", SubstitutionCodeBlock)
     app.setup_extension("sphinx-prompt")
     directives.register_directive("prompt", SubstitutionPrompt)
-    app.add_role("substitution-code", substitution_code_role)
+    app.add_role("substitution-code", SubtitutionCodeRole())
     return {"parallel_read_safe": True}
