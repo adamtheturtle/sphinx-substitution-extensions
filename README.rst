@@ -68,7 +68,7 @@ This adds a ``:substitutions:`` option to Sphinx's built-in `code-block`_ direct
 
 This adds a ``:substitutions:`` option to `sphinx-prompt`_.
 
-.. note:: Requires the extension `sphinx-prompt`_.
+.. note:: Requires the extension `sphinx-prompt`_ >= 1.8.0.
 
 .. code:: rst
 

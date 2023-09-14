@@ -5,6 +5,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+import sphinx_prompt
 from docutils.parsers.rst import directives
 
 from sphinx_substitution_extensions.shared import (
@@ -15,26 +16,20 @@ if TYPE_CHECKING:
     from docutils.nodes import raw
 
 
-sphinx_prompt = __import__("sphinx-prompt")
-PromptDirective = sphinx_prompt.PromptDirective
-
-
-class SubstitutionPrompt(PromptDirective):  # type: ignore[misc, valid-type]
+class SubstitutionPrompt(sphinx_prompt.PromptDirective):
     """
     Similar to PromptDirective but replaces placeholders with variables.
     """
 
-    option_spec = PromptDirective.option_spec or {}
+    option_spec = sphinx_prompt.PromptDirective.option_spec or {}
     option_spec["substitutions"] = directives.flag
 
     def run(self) -> list[raw]:
         """
         Replace placeholders with given variables.
         """
-        new_content = []
-        self.content: list[  # pylint: disable=attribute-defined-outside-init
-            str
-        ] = self.content
+        new_content: list[str] = []
+        self.content: list[str] = self.content
         existing_content = self.content
         substitution_defs = self.state.document.substitution_defs
         for item in existing_content:
@@ -46,7 +41,5 @@ class SubstitutionPrompt(PromptDirective):  # type: ignore[misc, valid-type]
 
             new_content.append(new_item)
 
-        self.content = (  # pylint: disable=attribute-defined-outside-init
-            new_content
-        )
-        return list(super().run())
+        self.content = new_content
+        return super().run()
