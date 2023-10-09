@@ -226,7 +226,7 @@ dev = [
     "pytest==7.4.2",
     "ruff==0.0.292",
     "types-docutils==0.20.0.3",
-    "vulture==2.9.1",
+    "vulture==2.10",
 ]
 # We used to have "sphinx-prompt" as an optional extra.
 # We keep this optional-dependencies block here so as not to break anyone who
