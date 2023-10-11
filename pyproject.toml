@@ -220,7 +220,7 @@ dev = [
     "pip_check_reqs==2.5.3",
     "pyenchant==3.2.2",
     "pylint==3.0.1",
-    "pyright==1.1.329",
+    "pyright==1.1.331",
     "pyroma==4.2",
     "pytest-cov==4.1.0",
     "pytest==7.4.2",
