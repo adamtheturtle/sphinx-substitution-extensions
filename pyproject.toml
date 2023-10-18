@@ -212,7 +212,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    "black==23.9.1",
+    "black==23.10.0",
     "check-manifest==0.49",
     "doc8==1.1.1",
     "mypy==1.6.0",
