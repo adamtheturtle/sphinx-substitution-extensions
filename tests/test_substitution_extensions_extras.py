@@ -2,9 +2,9 @@
 Tests for extra modules.
 """
 
+from collections.abc import Callable
 from pathlib import Path
 from textwrap import dedent
-from typing import Callable
 
 from sphinx.testing.util import SphinxTestApp
 

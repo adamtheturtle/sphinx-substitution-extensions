@@ -10,6 +10,8 @@ Next
 - Bump the minimum supported version of docutils to 0.19.
 - ``sphinx-prompt`` is no longer an optional dependency, meaning you can remove the ``[prompt]`` extras dependency specification.
 - Remove the need to specify the ``sphinx-prompt`` extension in ``conf.py`` in order to use the ``prompt`` directive.
+- Support Python 3.12
+- Drop support for Python 3.9
 
 2022.02.16
 ------------
