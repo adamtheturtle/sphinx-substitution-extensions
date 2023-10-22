@@ -191,7 +191,9 @@ authors = [ { name = "Adam Dangoor", email = "adamdangoor@gmail.com"} ]
 classifiers = [
     "Operating System :: POSIX",
     "Environment :: Web Environment",
+    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "License :: OSI Approved :: MIT License",
     "Development Status :: 5 - Production/Stable",
     "Framework :: Pytest",
@@ -202,7 +204,7 @@ keywords = ["sphinx", "rst", "documentation"]
 license = { file = "LICENSE" }
 name = "sphinx-substitution-extensions"
 readme = { file = "README.rst", content-type = "text/x-rst"}
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = [
     # The lowest versions of these are matched in the ``.github/workflows/ci-versions.yml`` workflow.
     "docutils>=0.19",
