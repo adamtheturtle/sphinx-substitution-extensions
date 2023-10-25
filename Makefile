@@ -9,6 +9,7 @@ lint: \
     mypy \
     pip-extra-reqs \
     pip-missing-reqs \
+    pyproject-fmt \
     pyright \
     pyroma \
     ruff \
@@ -17,6 +18,7 @@ lint: \
 
 .PHONY: fix-lint
 fix-lint: \
+    fix-pyproject-fmt \
     fix-ruff
 
 .PHONY: build-sample
