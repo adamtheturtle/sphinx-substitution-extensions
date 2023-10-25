@@ -4,7 +4,6 @@ include lint.mk
 
 .PHONY: lint
 lint: \
-    black \
     check-manifest \
     doc8 \
     mypy \
@@ -18,7 +17,6 @@ lint: \
 
 .PHONY: fix-lint
 fix-lint: \
-    fix-black \
     fix-ruff
 
 .PHONY: build-sample

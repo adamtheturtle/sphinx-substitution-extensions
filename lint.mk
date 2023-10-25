@@ -2,14 +2,6 @@
 
 SHELL := /bin/bash -euxo pipefail
 
-.PHONY: black
-black:
-	black --check .
-
-.PHONY: fix-black
-fix-black:
-	black .
-
 .PHONY: mypy
 mypy:
 	mypy .
@@ -29,10 +21,12 @@ doc8:
 .PHONY: ruff
 ruff:
 	ruff .
+	ruff format --check .
 
 .PHONY: fix-ruff
 fix-ruff:
 	ruff --fix .
+	ruff format .
 
 .PHONY: pip-extra-reqs
 pip-extra-reqs:

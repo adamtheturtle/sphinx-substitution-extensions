@@ -84,10 +84,6 @@
     # --spelling-private-dict-file option instead of raising a message.
     spelling-store-unknown-words = 'no'
 
-[tool.black]
-
-line-length = 79
-
 [tool.coverage.run]
 
 branch = true
@@ -152,6 +148,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.ruff]
 select = ["ALL"]
+line-length = 79
 
 ignore = [
     # We do not annotate the type of 'self'.
@@ -214,7 +211,6 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    "black==23.10.1",
     "check-manifest==0.49",
     "doc8==1.1.1",
     "mypy==1.6.1",
