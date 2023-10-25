@@ -8,9 +8,9 @@ name: CI Versions
 
 on:
   push:
-    branches: [master]
+    branches: [main]
   pull_request:
-    branches: [master]
+    branches: [main]
   schedule:
     # * is a special character in YAML so you have to quote this string
     # Run at 1:00 every day

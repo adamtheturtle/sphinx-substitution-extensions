@@ -110,7 +110,7 @@ See `CONTRIBUTING.rst <./CONTRIBUTING.rst>`_.
 .. _sphinx-prompt: https://github.com/sbrunner/sphinx-prompt
 .. _code-block: http://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-code-block
 .. _@sbrunner: https://github.com/sbrunner
-.. |codecov| image:: https://codecov.io/gh/adamtheturtle/sphinx-substitution-extensions/branch/master/graph/badge.svg
+.. |codecov| image:: https://codecov.io/gh/adamtheturtle/sphinx-substitution-extensions/branch/main/graph/badge.svg
    :target: https://codecov.io/gh/adamtheturtle/sphinx-substitution-extensions
 .. |PyPI| image:: https://badge.fury.io/py/Sphinx-Substitution-Extensions.svg
    :target: https://badge.fury.io/py/Sphinx-Substitution-Extensions
