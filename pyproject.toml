@@ -138,13 +138,13 @@ ignore_path = [
 strict = true
 
 [build-system]
-requires = [
-     "pip",
-     "setuptools",
-     "setuptools_scm[toml]>=7.1.0",
-     "wheel",
- ]
 build-backend = "setuptools.build_meta"
+requires = [
+    "pip",
+    "setuptools",
+    "setuptools_scm[toml]>=7.1",
+    "wheel",
+]
 
 [tool.ruff]
 select = ["ALL"]
@@ -184,31 +184,37 @@ unfixable = ["ERA001"]
 universal = true
 
 [project]
+name = "sphinx-substitution-extensions"
+description = "Extensions for Sphinx which allow for substitutions."
+readme = { file = "README.rst", content-type = "text/x-rst"}
+keywords = [
+    "documentation",
+    "rst",
+    "sphinx",
+]
+license = { file = "LICENSE" }
 authors = [ { name = "Adam Dangoor", email = "adamdangoor@gmail.com"} ]
+requires-python = ">=3.10"
 classifiers = [
-    "Operating System :: POSIX",
+    "Development Status :: 5 - Production/Stable",
     "Environment :: Web Environment",
+    "Framework :: Pytest",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX",
+    "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
-    "License :: OSI Approved :: MIT License",
-    "Development Status :: 5 - Production/Stable",
-    "Framework :: Pytest",
 ]
-description = "Extensions for Sphinx which allow for substitutions."
-dynamic = ["version"]
-keywords = ["sphinx", "rst", "documentation"]
-license = { file = "LICENSE" }
-name = "sphinx-substitution-extensions"
-readme = { file = "README.rst", content-type = "text/x-rst"}
-requires-python = ">=3.10"
+dynamic = [
+    "version",
+]
 dependencies = [
     # The lowest versions of these are matched in the ``.github/workflows/ci-versions.yml`` workflow.
     "docutils>=0.19",
-    "sphinx>=7.2.0",
-	"sphinx-prompt>=1.8.0",
+    "sphinx>=7.2",
+    "sphinx-prompt>=1.8",
 ]
-
 [project.optional-dependencies]
 dev = [
     "check-manifest==0.49",
@@ -218,19 +224,17 @@ dev = [
     "pip_check_reqs==2.5.3",
     "pyenchant==3.2.2",
     "pylint==3.0.2",
+    "pyproject-fmt==1.3",
     "pyright==1.1.333",
     "pyroma==4.2",
-    "pytest-cov==4.1.0",
     "pytest==7.4.3",
+    "pytest-cov==4.1",
     "ruff==0.1.2",
     "types-docutils==0.20.0.3",
     "vulture==2.10",
 ]
-# We used to have "sphinx-prompt" as an optional extra.
-# We keep this optional-dependencies block here so as not to break anyone who
-# used that extra.
-prompt = []
-
+prompt = [
+]
 [project.urls]
 Source = "https://github.com/adamtheturtle/sphinx-substitution-extensions"
 
