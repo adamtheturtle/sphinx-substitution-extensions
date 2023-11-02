@@ -250,3 +250,6 @@ sphinx_substitution_extensions = ["py.typed"]
 [tool.setuptools_scm]
 
 [tool.pyright]
+# We would like this to be "strict" but we would need either to ignore errors,
+# or for more of docutils to be typed.
+typeCheckingMode = "basic"
