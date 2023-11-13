@@ -219,7 +219,7 @@ dependencies = [
 dev = [
     "check-manifest==0.49",
     "doc8==1.1.1",
-    "mypy==1.6.1",
+    "mypy==1.7.0",
     "pdm==2.10.1",
     "pip_check_reqs==2.5.3",
     "pyenchant==3.2.2",
