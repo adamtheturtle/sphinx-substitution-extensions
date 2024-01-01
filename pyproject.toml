@@ -227,7 +227,7 @@ dev = [
     "pyproject-fmt==1.5.3",
     "pyright==1.1.343",
     "pyroma==4.2",
-    "pytest==7.4.3",
+    "pytest==7.4.4",
     "pytest-cov==4.1",
     "ruff==0.1.9",
     "types-docutils==0.20.0.3",
