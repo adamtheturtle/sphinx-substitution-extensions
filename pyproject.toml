@@ -224,7 +224,7 @@ dev = [
     "pip_check_reqs==2.5.3",
     "pyenchant==3.2.2",
     "pylint==3.0.3",
-    "pyproject-fmt==1.5.3",
+    "pyproject-fmt==1.6.0",
     "pyright==1.1.345",
     "pyroma==4.2",
     "pytest==7.4.4",
