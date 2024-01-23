@@ -224,7 +224,7 @@ dev = [
     "pip_check_reqs==2.5.3",
     "pyenchant==3.2.2",
     "pylint==3.0.3",
-    "pyproject-fmt==1.6.0",
+    "pyproject-fmt==1.7.0",
     "pyright==1.1.348",
     "pyroma==4.2",
     "pytest==7.4.4",
@@ -248,6 +248,10 @@ where = ["src"]
 sphinx_substitution_extensions = ["py.typed"]
 
 [tool.setuptools_scm]
+
+ [tool.pyproject-fmt]
+indent = 4
+keep_full_version = false
 
 [tool.pyright]
 # We would like this to be "strict" but we would need either to ignore errors,
