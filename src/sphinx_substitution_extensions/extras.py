@@ -24,7 +24,7 @@ class SubstitutionPrompt(sphinx_prompt.PromptDirective):
     option_spec = sphinx_prompt.PromptDirective.option_spec or {}
     option_spec["substitutions"] = directives.flag
 
-    def run(self) -> list[raw]:
+    def run(self) -> list[raw]:  # pyright: ignore[reportUnknownParameterType]
         """
         Replace placeholders with given variables.
         """

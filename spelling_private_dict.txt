@@ -5,7 +5,10 @@ hardcoded
 inline
 linters
 py
+pyright
 pytest
+reportUnknownParameterType
+reportUnknownVariableType
 rst
 str
 tuple
