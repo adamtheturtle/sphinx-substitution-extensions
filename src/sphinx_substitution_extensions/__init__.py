@@ -71,7 +71,9 @@ def substitution_code_role(  # pylint: disable=dangerous-default-value
     # constructor but it is set by the time we get here.
     document = inliner.document  # type: ignore[attr-defined]
     for name, value in document.substitution_defs.items():
+        assert isinstance(name, str)
         replacement: str = value.astext()
+        assert isinstance(replacement, str)
         text = text.replace(f"|{name}|", replacement)
         rawtext = text.replace(f"|{name}|", replacement)
         rawtext = rawtext.replace(name, replacement)
