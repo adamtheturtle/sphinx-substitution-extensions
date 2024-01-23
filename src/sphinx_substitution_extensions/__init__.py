@@ -32,7 +32,7 @@ class SubstitutionCodeBlock(CodeBlock):
     option_spec = CodeBlock.option_spec
     option_spec["substitutions"] = directives.flag
 
-    def run(self) -> list[literal_block]:
+    def run(self) -> list[literal_block]:  # pyright: ignore[reportUnknownParameterType]
         """
         Replace placeholders with given variables.
         """
@@ -51,10 +51,10 @@ class SubstitutionCodeBlock(CodeBlock):
             new_content.append(new_item)
 
         self.content = new_content
-        return list(super().run())
+        return list(super().run())  # pyright: ignore[reportUnknownVariableType]
 
 
-def substitution_code_role(  # pylint: disable=dangerous-default-value
+def substitution_code_role(  # pyright: ignore[reportUnknownParameterType], pylint: disable=dangerous-default-value
     typ: str,
     rawtext: str,
     text: str,
@@ -70,9 +70,9 @@ def substitution_code_role(  # pylint: disable=dangerous-default-value
     # We ignore this type error as "document" is not defined in the ``Inliner``
     # constructor but it is set by the time we get here.
     document = inliner.document  # type: ignore[attr-defined]
-    for name, value in document.substitution_defs.items():
+    for name, value in document.substitution_defs.items():  # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
         assert isinstance(name, str)
-        replacement: str = value.astext()
+        replacement: str = value.astext()  # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
         assert isinstance(replacement, str)
         text = text.replace(f"|{name}|", replacement)
         rawtext = text.replace(f"|{name}|", replacement)
