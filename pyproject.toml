@@ -254,4 +254,5 @@ indent = 4
 keep_full_version = true
 
 [tool.pyright]
+reportUnnecessaryTypeIgnoreComment = true
 typeCheckingMode = "strict"
