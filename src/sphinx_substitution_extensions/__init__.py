@@ -17,7 +17,7 @@ from sphinx_substitution_extensions.shared import (
 )
 
 if TYPE_CHECKING:
-    from docutils.nodes import Node, literal_block, system_message
+    from docutils.nodes import Node, system_message
     from docutils.parsers.rst.states import Inliner
     from sphinx.application import Sphinx
 
@@ -32,7 +32,7 @@ class SubstitutionCodeBlock(CodeBlock):
     option_spec = CodeBlock.option_spec
     option_spec["substitutions"] = directives.flag
 
-    def run(self) -> list[literal_block]:  # pyright: ignore[reportUnknownParameterType]
+    def run(self) -> list[Node]:
         """
         Replace placeholders with given variables.
         """
@@ -51,7 +51,7 @@ class SubstitutionCodeBlock(CodeBlock):
             new_content.append(new_item)
 
         self.content = new_content
-        return list(super().run())  # pyright: ignore[reportUnknownVariableType]
+        return super().run()
 
 
 def substitution_code_role(  # pyright: ignore[reportUnknownParameterType], pylint: disable=dangerous-default-value
