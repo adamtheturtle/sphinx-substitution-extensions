@@ -7,6 +7,7 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
+from docutils.nodes import document
 from docutils.parsers.rst import directives
 from docutils.parsers.rst.roles import code_role
 from sphinx.directives.code import CodeBlock
@@ -69,11 +70,11 @@ def substitution_code_role(  # pyright: ignore[reportUnknownParameterType], pyli
     """
     # We ignore this type error as "document" is not defined in the ``Inliner``
     # constructor but it is set by the time we get here.
-    document = inliner.document  # type: ignore[attr-defined]
-    for name, value in document.substitution_defs.items():  # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
+    inliner_document = inliner.document  # type: ignore[attr-defined]
+    assert isinstance(inliner_document, document)
+    for name, value in inliner_document.substitution_defs.items():
         assert isinstance(name, str)
-        replacement: str = value.astext()  # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
-        assert isinstance(replacement, str)
+        replacement = value.astext()
         text = text.replace(f"|{name}|", replacement)
         rawtext = text.replace(f"|{name}|", replacement)
         rawtext = rawtext.replace(name, replacement)
