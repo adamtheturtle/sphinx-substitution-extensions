@@ -7,6 +7,7 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
+from docutils.nodes import document
 from docutils.parsers.rst import directives
 from docutils.parsers.rst.roles import code_role
 from sphinx.directives.code import CodeBlock
@@ -17,7 +18,7 @@ from sphinx_substitution_extensions.shared import (
 )
 
 if TYPE_CHECKING:
-    from docutils.nodes import Node, literal_block, system_message
+    from docutils.nodes import Node, system_message
     from docutils.parsers.rst.states import Inliner
     from sphinx.application import Sphinx
 
@@ -32,7 +33,7 @@ class SubstitutionCodeBlock(CodeBlock):
     option_spec = CodeBlock.option_spec
     option_spec["substitutions"] = directives.flag
 
-    def run(self) -> list[literal_block]:  # pyright: ignore[reportUnknownParameterType]
+    def run(self) -> list[Node]:
         """
         Replace placeholders with given variables.
         """
@@ -51,7 +52,7 @@ class SubstitutionCodeBlock(CodeBlock):
             new_content.append(new_item)
 
         self.content = new_content
-        return list(super().run())  # pyright: ignore[reportUnknownVariableType]
+        return super().run()
 
 
 def substitution_code_role(  # pyright: ignore[reportUnknownParameterType], pylint: disable=dangerous-default-value
@@ -69,11 +70,11 @@ def substitution_code_role(  # pyright: ignore[reportUnknownParameterType], pyli
     """
     # We ignore this type error as "document" is not defined in the ``Inliner``
     # constructor but it is set by the time we get here.
-    document = inliner.document  # type: ignore[attr-defined]
-    for name, value in document.substitution_defs.items():  # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
+    inliner_document = inliner.document  # type: ignore[attr-defined]
+    assert isinstance(inliner_document, document)
+    for name, value in inliner_document.substitution_defs.items():
         assert isinstance(name, str)
-        replacement: str = value.astext()  # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
-        assert isinstance(replacement, str)
+        replacement = value.astext()
         text = text.replace(f"|{name}|", replacement)
         rawtext = text.replace(f"|{name}|", replacement)
         rawtext = rawtext.replace(name, replacement)
