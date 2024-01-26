@@ -55,7 +55,7 @@ class SubstitutionCodeBlock(CodeBlock):
         return super().run()
 
 
-def substitution_code_role(  # pyright: ignore[reportUnknownParameterType], pylint: disable=dangerous-default-value
+def substitution_code_role(  # pylint: disable=dangerous-default-value
     typ: str,
     rawtext: str,
     text: str,
