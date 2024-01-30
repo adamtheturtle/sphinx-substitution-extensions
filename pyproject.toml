@@ -168,6 +168,7 @@ ignore = [
     # docstrings.
     "D406",
     "D407",
+    "D413",
     # Ignore "too-many-*" errors as they seem to get in the way more than
     # helping.
     "PLR0913",
