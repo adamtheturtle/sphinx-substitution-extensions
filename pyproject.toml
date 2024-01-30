@@ -168,6 +168,7 @@ ignore = [
     # docstrings.
     "D406",
     "D407",
+    "D413",
     # Ignore "too-many-*" errors as they seem to get in the way more than
     # helping.
     "PLR0913",
@@ -229,7 +230,7 @@ dev = [
     "pyroma==4.2",
     "pytest==8.0.0",
     "pytest-cov==4.1",
-    "ruff==0.1.14",
+    "ruff==0.1.15",
     "types-docutils==0.20.0.20240126",
     "vulture==2.11",
 ]
