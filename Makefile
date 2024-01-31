@@ -4,6 +4,7 @@ include lint.mk
 
 .PHONY: lint
 lint: \
+    actionlint \
     check-manifest \
     doc8 \
     mypy \
