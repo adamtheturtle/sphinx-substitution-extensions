@@ -218,6 +218,7 @@ dependencies = [
 ]
 [project.optional-dependencies]
 dev = [
+    "actionlint-py==1.6.26.11",
     "check-manifest==0.49",
     "doc8==1.1.1",
     "mypy==1.8.0",
