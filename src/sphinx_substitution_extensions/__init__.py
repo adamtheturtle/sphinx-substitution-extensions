@@ -25,7 +25,7 @@ if TYPE_CHECKING:
 LOGGER = logging.getLogger(__name__)
 
 
-class SubstitutionCodeBlock(CodeBlock):
+class _SubstitutionCodeBlock(CodeBlock):
     """
     Similar to CodeBlock but replaces placeholders with variables.
     """
@@ -55,7 +55,7 @@ class SubstitutionCodeBlock(CodeBlock):
         return super().run()
 
 
-def substitution_code_role(  # pylint: disable=dangerous-default-value
+def _substitution_code_role(  # pylint: disable=dangerous-default-value
     typ: str,
     rawtext: str,
     text: str,
@@ -92,7 +92,7 @@ def substitution_code_role(  # pylint: disable=dangerous-default-value
     return result_nodes, system_messages
 
 
-substitution_code_role.options = {  # type: ignore[attr-defined]
+_substitution_code_role.options = {  # type: ignore[attr-defined]
     "class": directives.class_option,
     "language": directives.unchanged,
 }
@@ -103,8 +103,8 @@ def setup(app: Sphinx) -> dict[str, Any]:
     Add the custom directives to Sphinx.
     """
     app.add_config_value("substitutions", [], "html")
-    directives.register_directive("code-block", SubstitutionCodeBlock)
+    directives.register_directive("code-block", _SubstitutionCodeBlock)
     app.setup_extension("sphinx-prompt")
     directives.register_directive("prompt", SubstitutionPrompt)
-    app.add_role("substitution-code", substitution_code_role)
+    app.add_role("substitution-code", _substitution_code_role)
     return {"parallel_read_safe": True}
