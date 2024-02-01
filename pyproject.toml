@@ -10,9 +10,28 @@
 
     # List of plugins (as comma separated values of python modules names) to load,
     # usually to register additional checkers.
+    # See https://chezsoi.org/lucas/blog/pylint-strict-base-configuration.html.
+    # We do not use the plugins:
+    # - pylint.extensions.code_style
+    # - pylint.extensions.magic_value
+    # - pylint.extensions.while_used
+    # as they seemed to get in the way.
     load-plugins = [
+        'pylint.extensions.bad_builtin',
+        'pylint.extensions.comparison_placement',
+        'pylint.extensions.consider_refactoring_into_while_condition',
         'pylint.extensions.docparams',
+        'pylint.extensions.dunder',
+        'pylint.extensions.eq_without_hash',
+        'pylint.extensions.for_any_all',
+        'pylint.extensions.mccabe',
         'pylint.extensions.no_self_use',
+        'pylint.extensions.overlapping_exceptions',
+        'pylint.extensions.private_import',
+        'pylint.extensions.redefined_loop_name',
+        'pylint.extensions.redefined_variable_type',
+        'pylint.extensions.set_membership',
+        'pylint.extensions.typing',
     ]
 
     # Allow loading of arbitrary C extensions. Extensions are imported into the
@@ -26,7 +45,11 @@
     # multiple time (only on the command line, not in the configuration file where
     # it should appear only once). See also the "--disable" option for examples.
     enable = [
+        'bad-inline-option',
+        'deprecated-pragma',
+        'file-ignored',
         'spelling',
+        'use-symbolic-message-instead',
         'useless-suppression',
     ]
 
