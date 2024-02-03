@@ -5,11 +5,11 @@ Custom Sphinx extensions.
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any, ClassVar
+from typing import TYPE_CHECKING, Any, ClassVar, cast
 
-from docutils.nodes import document
 from docutils.parsers.rst import directives
 from docutils.parsers.rst.roles import code_role
+from docutils.parsers.rst.states import Inliner
 from sphinx.directives.code import CodeBlock
 
 from sphinx_substitution_extensions.extras import SubstitutionPrompt
@@ -18,8 +18,8 @@ from sphinx_substitution_extensions.shared import (
 )
 
 if TYPE_CHECKING:
+    import docutils.nodes
     from docutils.nodes import Node, system_message
-    from docutils.parsers.rst.states import Inliner
     from sphinx.application import Sphinx
 
 LOGGER = logging.getLogger(__name__)
@@ -55,6 +55,12 @@ class SubstitutionCodeBlock(CodeBlock):
         return super().run()
 
 
+class _PostParseInliner(Inliner):
+    """``Inliner.document`` is set in ``Inliner.parse``."""
+
+    document: docutils.nodes.document
+
+
 class SubstitutionCodeRole:
     """Custom role for substitution code."""
 
@@ -77,10 +83,8 @@ class SubstitutionCodeRole:
         """
         Replace placeholders with given variables.
         """
-        # We ignore this type error as "document" is not defined in the
-        # ``Inliner`` constructor but it is set by the time we get here.
-        inliner_document = inliner.document  # type: ignore[attr-defined]
-        assert isinstance(inliner_document, document)
+        cast_inliner = cast(_PostParseInliner, inliner)
+        inliner_document = cast_inliner.document
         for name, value in inliner_document.substitution_defs.items():
             assert isinstance(name, str)
             replacement = value.astext()
