@@ -5,7 +5,7 @@ Custom Sphinx extensions.
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any, ClassVar, cast
+from typing import TYPE_CHECKING, Any, ClassVar
 
 from docutils.parsers.rst import directives
 from docutils.parsers.rst.roles import code_role
@@ -75,7 +75,8 @@ class SubstitutionCodeRole:
         rawtext: str,
         text: str,
         lineno: int,
-        inliner: Inliner,
+        # The ``inliner`` type is, in Sphinx, typed as ``Inliner``.
+        inliner: _PostParseInliner,
         # We allow mutable defaults as the Sphinx implementation requires it.
         options: dict[Any, Any] = {},  # noqa: B006
         content: list[str] = [],  # noqa: B006
@@ -83,8 +84,7 @@ class SubstitutionCodeRole:
         """
         Replace placeholders with given variables.
         """
-        cast_inliner = cast(_PostParseInliner, inliner)
-        inliner_document = cast_inliner.document
+        inliner_document = inliner.document
         for name, value in inliner_document.substitution_defs.items():
             assert isinstance(name, str)
             replacement = value.astext()
