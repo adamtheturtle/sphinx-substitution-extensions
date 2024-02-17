@@ -36,11 +36,11 @@ fix-ruff:
 pip-extra-reqs:
 	# We ignore the sphinx-prompt because we do not import it but we require it
 	# so that users can set it before our extension.
-	pip-extra-reqs --requirements-file=<(pdm export --pyproject) --ignore-requirement sphinx-prompt src/
+	pip-extra-reqs --requirements-file=<(uv pip compile --no-deps pyproject.toml) --ignore-requirement sphinx-prompt src/
 
 .PHONY: pip-missing-reqs
 pip-missing-reqs:
-	pip-missing-reqs --requirements-file=<(pdm export --pyproject) src/
+	pip-missing-reqs --requirements-file=<(uv pip compile --no-deps pyproject.toml) src/
 
 .PHONY: pylint
 pylint:
