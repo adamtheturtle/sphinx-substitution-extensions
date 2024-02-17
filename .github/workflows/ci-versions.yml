@@ -38,7 +38,7 @@ jobs:
           curl -LsSf https://astral.sh/uv/install.sh | sh
           uv venv /home/runner/.venv
           source /home/runner/.venv/bin/activate
-          uv pip install --resolution=lowest --upgrade --editable .[dev]
+          uv pip install --resolution=lowest --editable .[dev]
 
       - name: "Build sample"
         run: |
