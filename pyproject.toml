@@ -240,7 +240,6 @@ dynamic = [
     "version",
 ]
 dependencies = [
-    # The lowest versions of these are matched in the ``.github/workflows/ci-versions.yml`` workflow.
     "docutils>=0.19",
     "sphinx>=7.2",
     "sphinx-prompt>=1.8",
