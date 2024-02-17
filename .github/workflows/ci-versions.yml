@@ -45,7 +45,7 @@ jobs:
           # We use '--ignore-installed' to avoid GitHub's cache which can cause
           # issues - we have seen packages from this cache be cause trouble with
           # pip-extra-reqs.
-          python -m pip install --ignore-installed --upgrade --editable ".[dev,prompt]"
+          python -m pip install --ignore-installed --upgrade --editable ".[dev]"
           # Oldest versions from requirements.
           pip install Sphinx==7.2.0
           pip install sphinx-prompt==1.8.0
