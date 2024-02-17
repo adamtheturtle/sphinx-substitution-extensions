@@ -38,7 +38,7 @@ jobs:
           curl -LsSf https://astral.sh/uv/install.sh | sh
           uv venv /home/runner/.venv
           source /home/runner/.venv/bin/activate
-          uv pip install --ignore-installed --upgrade --editable ".[dev]"
+          uv pip install --upgrade --editable ".[dev]"
           # Oldest versions from requirements.
           # Ideally we would use --resolution=lowest but it does not work -
           # https://github.com/astral-sh/uv/issues/1563
