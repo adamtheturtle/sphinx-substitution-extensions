@@ -36,17 +36,6 @@ Setup
 
 This will replace ``|release|`` in the new directives with ``0.1``, and ``|author|`` with ``Eleanor``.
 
-Optional: sphinx-prompt
-~~~~~~~~~~~~~~~~~~~~~~~
-
-Sphinx Substitution Extensions supports the third-party extension `sphinx-prompt`_.
-
-If you don't have ``sphinx-prompt`` installed, you can include the extension with the extra dependency ``prompt``:
-
-.. code:: console
-
-   $ pip install Sphinx-Substitution-Extensions[prompt]
-
 Directives
 ----------
 
@@ -67,8 +56,6 @@ This adds a ``:substitutions:`` option to Sphinx's built-in `code-block`_ direct
 ~~~~~~~~~~
 
 This adds a ``:substitutions:`` option to `sphinx-prompt`_.
-
-.. note:: Requires the extension `sphinx-prompt`_ >= 1.8.0.
 
 .. code:: rst
 
