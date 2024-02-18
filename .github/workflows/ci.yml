@@ -19,7 +19,8 @@ jobs:
 
     strategy:
       matrix:
-        python-version: ["3.12"]
+        python-version: ["3.10", "3.11", "3.12"]
+        uv-resolution: ["highest", "lowest"]
 
     steps:
       - uses: actions/checkout@v4
@@ -35,6 +36,8 @@ jobs:
           uv venv /home/runner/.venv
           source /home/runner/.venv/bin/activate
           uv pip install --upgrade --editable .[dev]
+          uv pip compile --resolution=${{ matrix.uv-resolution }} --no-deps pyproject.toml > resolved-requirements.txt
+          uv pip install -r resolved-requirements.txt
 
       - name: "Lint"
         run: |
