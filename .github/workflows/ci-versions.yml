@@ -39,12 +39,8 @@ jobs:
           uv venv /home/runner/.venv
           source /home/runner/.venv/bin/activate
           uv pip install --upgrade --editable ".[dev]"
-          # Oldest versions from requirements.
-          # Ideally we would use --resolution=lowest but it does not work -
-          # https://github.com/astral-sh/uv/issues/1563
-          pip install Sphinx==7.2.0
-          pip install sphinx-prompt==1.8.0
-          pip install docutils==0.19
+          uv pip compile --resolution=lowest --no-deps pyproject.toml > lowest-requirements.txt
+          uv pip install -r lowest-requirements.txt
 
       - name: "Build sample"
         run: |
