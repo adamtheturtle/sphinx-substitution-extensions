@@ -32,15 +32,14 @@ fix-ruff:
 	ruff --fix .
 	ruff format .
 
-.PHONY: pip-extra-reqs
-pip-extra-reqs:
-	# We ignore the sphinx-prompt because we do not import it but we require it
-	# so that users can set it before our extension.
-	pip-extra-reqs --requirements-file=<(uv pip compile --no-deps pyproject.toml) --ignore-requirement sphinx-prompt src/
+TEMPFILE:= $(shell mktemp)
 
-.PHONY: pip-missing-reqs
-pip-missing-reqs:
-	pip-missing-reqs --requirements-file=<(uv pip compile --no-deps pyproject.toml) src/
+.PHONY: deptry
+deptry:
+	uv pip compile --no-deps pyproject.toml > $(TEMPFILE)
+	mv pyproject.toml pyproject.bak.toml
+	deptry --requirements-txt=$(TEMPFILE) src/ || (mv pyproject.bak.toml pyproject.toml && exit 1)
+	mv pyproject.bak.toml pyproject.toml
 
 .PHONY: pylint
 pylint:

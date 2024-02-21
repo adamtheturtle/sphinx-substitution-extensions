@@ -6,10 +6,9 @@ include lint.mk
 lint: \
     actionlint \
     check-manifest \
+    deptry \
     doc8 \
     mypy \
-    pip-extra-reqs \
-    pip-missing-reqs \
     pyproject-fmt \
     pyright \
     pyroma \
