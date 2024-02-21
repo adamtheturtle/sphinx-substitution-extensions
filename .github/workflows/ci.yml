@@ -35,7 +35,9 @@ jobs:
           curl -LsSf https://astral.sh/uv/install.sh | sh
           uv venv /home/runner/.venv
           source /home/runner/.venv/bin/activate
-          uv pip install --resolution=${{ matrix.uv-resolution }} --editable .[dev]
+          uv pip install --upgrade --editable .[dev]
+          uv pip compile --resolution=${{ matrix.uv-resolution }} --no-deps pyproject.toml > resolved-requirements.txt
+          uv pip install -r resolved-requirements.txt
 
       - name: "Lint"
         run: |
