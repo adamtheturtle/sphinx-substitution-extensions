@@ -26,6 +26,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          # See
+          # https://github.com/stefanzweifel/git-auto-commit-action?tab=readme-ov-file#push-to-protected-branches
+          token: ${{ secrets.RELEASE_PAT }}
 
       - name: "Set up Python"
         uses: actions/setup-python@v5
