@@ -259,9 +259,9 @@ class TestMyst:
         index_source_file_content = dedent(
             """\
             .. code-block:: bash
-            :substitutions:
+               :substitutions:
 
-            $ PRE-|a|-POST
+               $ PRE-|a|-POST
             """,
         )
         index_source_file.write_text(data=index_source_file_content)
