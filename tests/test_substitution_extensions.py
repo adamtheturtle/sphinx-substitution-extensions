@@ -234,45 +234,44 @@ class TestMyst:
         assert expected in content_html.read_text()
         assert "myst_substitution" not in content_html.read_text()
 
+    @staticmethod
+    def test_myst_substitutions_ignored_without_rst_prolog_rst(
+        tmp_path: Path,
+        make_app: Callable[..., SphinxTestApp],
+    ) -> None:
+        """
+        MyST substitutions are ignored in rST documents with a ``rst_prolog``.
+        """
+        source_directory = tmp_path / "source"
+        source_directory.mkdir()
+        index_source_file = source_directory / "index.rst"
+        conf_py = source_directory / "conf.py"
+        conf_py_content = dedent(
+            """\
+            extensions = ['myst_parser', 'sphinx_substitution_extensions']
+            myst_enable_extensions = ['substitution']
+            myst_substitutions = {
+                "a": "myst_substitution",
+            }
+            """,
+        )
+        conf_py.write_text(conf_py_content)
+        index_source_file_content = dedent(
+            """\
+            .. code-block:: bash
+            :substitutions:
 
-@staticmethod
-def test_myst_substitutions_ignored_without_rst_prolog_rst(
-    tmp_path: Path,
-    make_app: Callable[..., SphinxTestApp],
-) -> None:
-    """
-    MyST substitutions are ignored in rST documents with a ``rst_prolog``.
-    """
-    source_directory = tmp_path / "source"
-    source_directory.mkdir()
-    index_source_file = source_directory / "index.rst"
-    conf_py = source_directory / "conf.py"
-    conf_py_content = dedent(
-        """\
-        extensions = ['myst_parser', 'sphinx_substitution_extensions']
-        myst_enable_extensions = ['substitution']
-        myst_substitutions = {
-            "a": "myst_substitution",
-        }
-        """,
-    )
-    conf_py.write_text(conf_py_content)
-    index_source_file_content = dedent(
-        """\
-        .. code-block:: bash
-           :substitutions:
+            $ PRE-|a|-POST
+            """,
+        )
+        index_source_file.write_text(data=index_source_file_content)
 
-           $ PRE-|a|-POST
-        """,
-    )
-    index_source_file.write_text(data=index_source_file_content)
-
-    app = make_app(srcdir=source_directory)
-    app.build()
-    expected = "PRE-|a|-POST"
-    content_html = app.outdir / "index.html"
-    assert expected in content_html.read_text()
-    assert "myst_substitution" not in content_html.read_text()
+        app = make_app(srcdir=source_directory)
+        app.build()
+        expected = "PRE-|a|-POST"
+        content_html = app.outdir / "index.html"
+        assert expected in content_html.read_text()
+        assert "myst_substitution" not in content_html.read_text()
 
     @staticmethod
     def test_myst_substitutions(
