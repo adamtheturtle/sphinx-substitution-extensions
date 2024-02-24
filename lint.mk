@@ -24,12 +24,12 @@ doc8:
 
 .PHONY: ruff
 ruff:
-	ruff .
+	ruff check .
 	ruff format --check .
 
 .PHONY: fix-ruff
 fix-ruff:
-	ruff --fix .
+	ruff check --fix .
 	ruff format .
 
 TEMPFILE:= $(shell mktemp)

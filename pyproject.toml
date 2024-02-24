@@ -242,9 +242,9 @@ dynamic = [
 ]
 dependencies = [
     "docutils>=0.19",
+    "myst-parser",
     "sphinx>=7.2",
     "sphinx-prompt>=1.8",
-    "myst-parser",
 ]
 [project.optional-dependencies]
 dev = [

@@ -188,6 +188,10 @@ def test_substitution_inline_case_preserving(
 
 
 class TestMyst:
+    """
+    Tests for MyST documents.
+    """
+
     @staticmethod
     def test_myst_substitutions_ignored_given_rst_prolog_rst(
         tmp_path: Path,
