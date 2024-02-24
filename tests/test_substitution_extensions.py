@@ -21,8 +21,6 @@ def test_no_substitution_code_block(
     source_directory.mkdir()
     source_file = source_directory / "index.rst"
     conf_py = source_directory / "conf.py"
-    conf_py.touch()
-    source_file.touch()
     conf_py_content = dedent(
         """\
         extensions = ['sphinx_substitution_extensions']
@@ -59,8 +57,6 @@ def test_substitution_code_block(
     source_directory.mkdir()
     source_file = source_directory / "index.rst"
     conf_py = source_directory / "conf.py"
-    conf_py.touch()
-    source_file.touch()
     conf_py_content = dedent(
         """\
         extensions = ['sphinx_substitution_extensions']
@@ -97,8 +93,6 @@ def test_substitution_code_block_case_preserving(
     source_directory.mkdir()
     source_file = source_directory / "index.rst"
     conf_py = source_directory / "conf.py"
-    conf_py.touch()
-    source_file.touch()
     conf_py_content = dedent(
         """\
         extensions = ['sphinx_substitution_extensions']
@@ -137,8 +131,6 @@ def test_substitution_inline(
     source_directory.mkdir()
     source_file = source_directory / "index.rst"
     conf_py = source_directory / "conf.py"
-    conf_py.touch()
-    source_file.touch()
     conf_py_content = dedent(
         """\
         extensions = ['sphinx_substitution_extensions']
@@ -172,8 +164,6 @@ def test_substitution_inline_case_preserving(
     source_directory.mkdir()
     source_file = source_directory / "index.rst"
     conf_py = source_directory / "conf.py"
-    conf_py.touch()
-    source_file.touch()
     conf_py_content = dedent(
         """\
         extensions = ['sphinx_substitution_extensions']
