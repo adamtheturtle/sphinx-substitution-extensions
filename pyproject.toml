@@ -152,6 +152,7 @@ ignore_path = [
     "./docs/build",
     "./docs/build/spelling/output.txt",
     "./node_modules",
+    "./sample/build",
     "./src/*.egg-info/",
     "./src/*/_setuptools_scm_version.txt",
 ]
@@ -252,6 +253,7 @@ dev = [
     "deptry==0.12.0",
     "doc8==1.1.1",
     "mypy==1.8.0",
+    "myst-parser==2.0.0",
     "pyenchant==3.2.2",
     "pylint==3.0.3",
     "pyproject-fmt==1.7.0",

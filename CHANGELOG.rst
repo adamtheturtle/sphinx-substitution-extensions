@@ -6,6 +6,9 @@ Changelog
 Next
 ----
 
+- Add support for MyST.
+  Thanks to Václav Votípka (@eNcacz) for the contribution.
+
 2024.02.24
 ------------
 

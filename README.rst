@@ -16,16 +16,16 @@ Sphinx Substitution Extensions is compatible with Sphinx 7.2.0+ using Python 3.1
 
    $ pip install Sphinx-Substitution-Extensions
 
-Setup
-~~~~~
+rST setup
+---------
 
-1. Add the following to ``conf.py``:
+1. Add the following to ``conf.py`` to enable the extension:
 
 .. code:: python
 
    extensions += ['sphinx_substitution_extensions']
 
-2. Set the following variable in ``conf.py``:
+2. Set the following variable in ``conf.py`` to define substitutions:
 
 .. code:: python
 
@@ -36,8 +36,8 @@ Setup
 
 This will replace ``|release|`` in the new directives with ``0.1``, and ``|author|`` with ``Eleanor``.
 
-Directives
-----------
+Using substitutions in rST documents
+------------------------------------
 
 ``code-block``
 ~~~~~~~~~~~~~~
@@ -71,6 +71,43 @@ Inline ``:substitution-code:``
 .. code:: rst
 
    :substitution-code:`echo "|author| released version |release|"`
+
+MyST Markdown setup
+-------------------
+
+1. Add the following to ``conf.py`` to enable the extension:
+
+.. code:: python
+
+   extensions += ['sphinx_substitution_extensions']
+
+2. Set the following variables in ``conf.py`` to define substitutions:
+
+.. code:: python
+
+   myst_enable_extensions += ['substitution']
+   myst_substitutions = {
+         "release": "0.1",
+         "author": "Eleanor",
+   }
+
+This will replace ``|release|`` in the new directives with ``0.1``, and ``|author|`` with ``Eleanor``.
+
+Using substitutions in MyST Markdown
+------------------------------------
+
+``code-block``
+~~~~~~~~~~~~~~
+
+This adds a ``:substitutions:`` option to Sphinx's built-in `code-block`_ directive.
+
+.. code:: markdown
+
+   ```{code-block} bash
+      :substitutions:
+
+      echo "|author| released version |release|"
+   ```
 
 Credits
 -------

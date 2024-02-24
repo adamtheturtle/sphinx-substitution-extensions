@@ -5,6 +5,7 @@ Custom Sphinx extensions.
 from __future__ import annotations
 
 import logging
+from pathlib import Path
 from typing import TYPE_CHECKING, Any, ClassVar
 
 from docutils.parsers.rst import directives
@@ -42,12 +43,27 @@ class SubstitutionCodeBlock(CodeBlock):
         new_content: list[str] = []
         self.content: list[str] = self.content
         existing_content = self.content
-        substitution_defs = self.state.document.substitution_defs
+        substitution_defs = {}
+        source_file, _ = self.get_source_info()
+        markdown_suffixes = {
+            key
+            for key, value in self.config.source_suffix.items()
+            if value == "markdown"
+        }
+
+        if Path(source_file).suffix in markdown_suffixes:
+            if "substitution" in self.config.myst_enable_extensions:
+                substitution_defs = self.config.myst_substitutions
+        else:
+            substitution_defs = {
+                key: value.astext()
+                for key, value in self.state.document.substitution_defs.items()
+            }
+
         for item in existing_content:
             new_item = item
-            for name, value in substitution_defs.items():
+            for name, replacement in substitution_defs.items():
                 if SUBSTITUTION_OPTION_NAME in self.options:
-                    replacement = value.astext()
                     new_item = new_item.replace(f"|{name}|", replacement)
             new_content.append(new_item)
 
