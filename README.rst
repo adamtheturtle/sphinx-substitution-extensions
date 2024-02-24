@@ -36,8 +36,8 @@ Setup
 
 This will replace ``|release|`` in the new directives with ``0.1``, and ``|author|`` with ``Eleanor``.
 
-Directives
-----------
+rST Directives
+--------------
 
 ``code-block``
 ~~~~~~~~~~~~~~
@@ -71,6 +71,11 @@ Inline ``:substitution-code:``
 .. code:: rst
 
    :substitution-code:`echo "|author| released version |release|"`
+
+MyST Directives
+---------------
+
+TODO
 
 Credits
 -------

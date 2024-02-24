@@ -25,6 +25,9 @@ if TYPE_CHECKING:
 LOGGER = logging.getLogger(__name__)
 
 
+# TODO get code block working
+# TODO add changelog
+# TODO thank original contributor in changelog
 class SubstitutionCodeBlock(CodeBlock):
     """
     Similar to CodeBlock but replaces placeholders with variables.
@@ -37,6 +40,7 @@ class SubstitutionCodeBlock(CodeBlock):
         """
         Replace placeholders with given variables.
         """
+        breakpoint()
         self.option_spec["substitutions"] = directives.flag
 
         new_content: list[str] = []
@@ -61,6 +65,7 @@ class _PostParseInliner(Inliner):
     document: docutils.nodes.document
 
 
+# TODO: Get role working
 class SubstitutionCodeRole:
     """Custom role for substitution code."""
 
