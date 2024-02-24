@@ -43,7 +43,8 @@ class SubstitutionCodeBlock(CodeBlock):
         new_content: list[str] = []
         self.content: list[str] = self.content
         existing_content = self.content
-        substitution_defs = self.state.document.substitution_defs or self.config.get("mysubstitutions", {})
+        myst_substitutions = self.config["substitutions"]
+        substitution_defs = self.state.document.substitution_defs or myst_substitutions
         for item in existing_content:
             new_item = item
             for name, value in substitution_defs.items():
@@ -86,7 +87,7 @@ class SubstitutionCodeRole:
         """
         Replace placeholders with given variables.
         """
-        breakpoint()
+        # breakpoint()
         inliner_document = inliner.document
         for name, value in inliner_document.substitution_defs.items():
             assert isinstance(name, str)

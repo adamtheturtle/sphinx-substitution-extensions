@@ -205,29 +205,30 @@ class TestMyst:
             extensions = ['myst_parser', 'sphinx_substitution_extensions']
             myst_enable_extensions = ['substitution']
             myst_substitutions = {
-                "a": "example_substitution",
+                "a": "myst_substitution",
             }
             rst_prolog = '''
-            .. |a| replace:: ignored_rst_prolog
+            .. |a| replace:: rst_prolog_substitution
             '''
             """,
         )
         conf_py.write_text(conf_py_content)
         index_source_file_content = dedent(
             """\
-            .. toctree::
+            .. code-block:: bash
+               :substitutions:
 
-               markdown_source_file.md
+               $ PRE-|a|-POST
             """,
         )
         index_source_file.write_text(data=index_source_file_content)
-        markdown_source_file.write_text(data=markdown_source_file_content)
 
         app = make_app(srcdir=source_directory)
         app.build()
-        expected = "PRE-example_substitution-POST"
-        content_html = app.outdir / "markdown_document.html"
+        expected = "PRE-rst_prolog_substitution-POST"
+        content_html = app.outdir / "index.html"
         assert expected in content_html.read_text()
+        assert "myst_substitution" not in content_html.read_text()
 
 
     @staticmethod
@@ -241,6 +242,7 @@ class TestMyst:
         source_directory = tmp_path / "source"
         source_directory.mkdir()
         index_source_file = source_directory / "index.rst"
+        markdown_source_file = source_directory / "markdown_document.md"
         conf_py = source_directory / "conf.py"
         conf_py_content = dedent(
             """\
@@ -254,10 +256,9 @@ class TestMyst:
         conf_py.write_text(conf_py_content)
         index_source_file_content = dedent(
             """\
-            extensions = ['sphinx_substitution_extensions']
-            rst_prolog = '''
-            .. |a| replace:: example_substitution
-            '''
+            .. toctree::
+
+               markdown_document
             """,
         )
         markdown_source_file_content = dedent(
@@ -278,5 +279,6 @@ class TestMyst:
         content_html = app.outdir / "markdown_document.html"
         assert expected in content_html.read_text()
 
+    @staticmethod
     def test_other_method():
         pass
