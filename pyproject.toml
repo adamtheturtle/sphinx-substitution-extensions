@@ -152,6 +152,7 @@ ignore_path = [
     "./docs/build",
     "./docs/build/spelling/output.txt",
     "./node_modules",
+    "./sample/build",
     "./src/*.egg-info/",
     "./src/*/_setuptools_scm_version.txt",
 ]
