@@ -200,8 +200,6 @@ class TestMyst:
         source_directory.mkdir()
         index_source_file = source_directory / "index.rst"
         conf_py = source_directory / "conf.py"
-        conf_py.touch()
-        index_source_file.touch()
         conf_py_content = dedent(
             """\
             extensions = ['myst_parser', 'sphinx_substitution_extensions']
@@ -244,8 +242,6 @@ class TestMyst:
         source_directory.mkdir()
         index_source_file = source_directory / "index.rst"
         conf_py = source_directory / "conf.py"
-        conf_py.touch()
-        index_source_file.touch()
         conf_py_content = dedent(
             """\
             extensions = ['myst_parser', 'sphinx_substitution_extensions']
