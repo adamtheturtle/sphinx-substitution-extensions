@@ -42,7 +42,10 @@ def test_no_substitution_code_block(
     app.build()
     content_html = app.outdir / "index.html"
     assert "PRE-example_substitution-POST" not in content_html.read_text()
-    assert "PRE-|a|-POST" in content_html.read_text()
+    assert (
+        '</span>PRE-<span class="p">|</span>a<span class="p">|</span>-POST'
+        in content_html.read_text()
+    )
 
 
 def test_substitution_code_block(
@@ -367,4 +370,7 @@ class TestMyst:
         app.build()
         content_html = app.outdir / "markdown_document.html"
         assert "PRE-example_substitution-POST" not in content_html.read_text()
-        assert "PRE-|a|-POST" in content_html.read_text()
+        assert (
+            '</span>PRE-<span class="p">|</span>a<span class="p">|</span>-POST'
+            in content_html.read_text()
+        )
