@@ -206,10 +206,12 @@ class TestMyst:
         """ """
         source_directory = tmp_path / "source"
         source_directory.mkdir()
-        source_file = source_directory / "index.rst"
+        index_source_file = source_directory / "index.rst"
+        markdown_source_file = source_directory / "markdown_document.md"
         conf_py = source_directory / "conf.py"
         conf_py.touch()
-        source_file.touch()
+        index_source_file.touch()
+        markdown_source_file.touch()
         conf_py_content = dedent(
             """\
             extensions = ['myst_parser', 'sphinx_substitution_extensions']
@@ -217,10 +219,20 @@ class TestMyst:
             myst_substitutions = {
                 "a": "example_substitution",
             }
+            rst_prolog = '''
+            .. |a| replace:: ignored_rst_prolog
+            '''
             """,
         )
         conf_py.write_text(conf_py_content)
-        source_file_content = dedent(
+        index_source_file_content = dedent(
+            """\
+            .. toctree::
+
+               markdown_source_file.md
+            """,
+        )
+        markdown_source_file_content = dedent(
             """\
             ```{code}
             :substitutions:
@@ -229,11 +241,13 @@ class TestMyst:
             ```
             """,
         )
-        source_file.write_text(source_file_content)
+        index_source_file.write_text(data=index_source_file_content)
+        markdown_source_file.write_text(data=markdown_source_file_content)
+
         app = make_app(srcdir=source_directory)
         app.build()
         expected = "PRE-example_substitution-POST"
-        content_html = app.outdir / "index.html"
+        content_html = app.outdir / "markdown_document.html"
         assert expected in content_html.read_text()
 
     def test_other_method():

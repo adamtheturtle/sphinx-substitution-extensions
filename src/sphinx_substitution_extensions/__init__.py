@@ -24,10 +24,10 @@ if TYPE_CHECKING:
 
 LOGGER = logging.getLogger(__name__)
 
+mySphinx: Sphinx = None
+
 
 # TODO get code block working
-# TODO add changelog
-# TODO thank original contributor in changelog
 class SubstitutionCodeBlock(CodeBlock):
     """
     Similar to CodeBlock but replaces placeholders with variables.
@@ -114,6 +114,8 @@ def setup(app: Sphinx) -> dict[str, Any]:
     """
     Add the custom directives to Sphinx.
     """
+    global mySphinx
+    mySphinx = app
     app.add_config_value("substitutions", [], "html")
     directives.register_directive("code-block", SubstitutionCodeBlock)
     app.setup_extension("sphinx-prompt")
