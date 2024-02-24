@@ -231,6 +231,8 @@ class TestMyst:
         assert "myst_substitution" not in content_html.read_text()
 
 
+    # TODO: Test rst without rst_prolog
+
     @staticmethod
     def test_myst_substitutions(
         tmp_path: Path,
