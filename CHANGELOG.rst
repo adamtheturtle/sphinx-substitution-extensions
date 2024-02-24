@@ -6,6 +6,9 @@ Changelog
 Next
 ----
 
+2024.02.24.1
+------------
+
 - Add support for MyST.
   Thanks to Václav Votípka (@eNcacz) for the contribution.
 
