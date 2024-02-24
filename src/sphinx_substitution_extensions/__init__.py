@@ -24,8 +24,6 @@ if TYPE_CHECKING:
 
 LOGGER = logging.getLogger(__name__)
 
-mySphinx: Sphinx = None
-
 
 # TODO get code block working
 class SubstitutionCodeBlock(CodeBlock):
@@ -40,13 +38,12 @@ class SubstitutionCodeBlock(CodeBlock):
         """
         Replace placeholders with given variables.
         """
-        breakpoint()
         self.option_spec["substitutions"] = directives.flag
 
         new_content: list[str] = []
         self.content: list[str] = self.content
         existing_content = self.content
-        substitution_defs = self.state.document.substitution_defs
+        substitution_defs = self.state.document.substitution_defs or self.config.get("mysubstitutions", {})
         for item in existing_content:
             new_item = item
             for name, value in substitution_defs.items():
@@ -115,8 +112,6 @@ def setup(app: Sphinx) -> dict[str, Any]:
     """
     Add the custom directives to Sphinx.
     """
-    global mySphinx
-    mySphinx = app
     app.add_config_value("substitutions", [], "html")
     directives.register_directive("code-block", SubstitutionCodeBlock)
     app.setup_extension("sphinx-prompt")
