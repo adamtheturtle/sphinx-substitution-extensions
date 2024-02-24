@@ -45,7 +45,7 @@ class SubstitutionCodeBlock(CodeBlock):
         existing_content = self.content
         substitution_defs = {}
         try:
-            if "substitutions" in self.config.myst_enable_extensions:
+            if "substitution" in self.config.myst_enable_extensions:
                 substitution_defs = self.config.myst_substitutions
         except AttributeError:
             substitution_defs = {
