@@ -43,6 +43,7 @@ class SubstitutionCodeBlock(CodeBlock):
         new_content: list[str] = []
         self.content: list[str] = self.content
         existing_content = self.content
+        breakpoint()
         try:
             substitution_defs = self.config.myst_substitutions
         except AttributeError:

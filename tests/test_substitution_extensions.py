@@ -40,9 +40,9 @@ def test_no_substitution_code_block(
     source_file.write_text(source_file_content)
     app = make_app(srcdir=source_directory)
     app.build()
-    expected = "PRE-example_substitution-POST"
     content_html = app.outdir / "index.html"
-    assert expected not in content_html.read_text()
+    assert "PRE-example_substitution-POST" not in content_html.read_text()
+    assert "PRE-|a|-POST" in content_html.read_text()
 
 
 def test_substitution_code_block(
@@ -320,3 +320,51 @@ class TestMyst:
         expected = "PRE-example_substitution-POST"
         content_html = app.outdir / "markdown_document.html"
         assert expected in content_html.read_text()
+
+    @staticmethod
+    def test_myst_substitutions_not_enabled(
+        tmp_path: Path,
+        make_app: Callable[..., SphinxTestApp],
+    ) -> None:
+        """
+        MyST substitutions are respected in MyST documents.
+        """
+        source_directory = tmp_path / "source"
+        source_directory.mkdir()
+        index_source_file = source_directory / "index.rst"
+        markdown_source_file = source_directory / "markdown_document.md"
+        conf_py = source_directory / "conf.py"
+        conf_py_content = dedent(
+            """\
+            extensions = ['myst_parser', 'sphinx_substitution_extensions']
+            myst_enable_extensions = []
+            myst_substitutions = {
+                "a": "example_substitution",
+            }
+            """,
+        )
+        conf_py.write_text(conf_py_content)
+        index_source_file_content = dedent(
+            """\
+            .. toctree::
+
+               markdown_document
+            """,
+        )
+        markdown_source_file_content = dedent(
+            """\
+            ```{code-block}
+            :substitutions:
+
+            $ PRE-|a|-POST
+            ```
+            """,
+        )
+        index_source_file.write_text(data=index_source_file_content)
+        markdown_source_file.write_text(data=markdown_source_file_content)
+
+        app = make_app(srcdir=source_directory)
+        app.build()
+        content_html = app.outdir / "markdown_document.html"
+        assert "PRE-example_substitution-POST" not in content_html.read_text()
+        assert "PRE-|a|-POST" in content_html.read_text()
