@@ -46,12 +46,15 @@ class SubstitutionCodeBlock(CodeBlock):
         existing_content = self.content
         substitution_defs = {}
         source_file, _ = self.get_source_info()
-        if Path(source_file).suffix == ".md":
-            try:
-                if "substitution" in self.config.myst_enable_extensions:
-                    substitution_defs = self.config.myst_substitutions
-            except AttributeError:
-                pass
+        markdown_suffixes = {
+            key
+            for key, value in self.config.source_suffix.items()
+            if value == "markdown"
+        }
+
+        if Path(source_file).suffix in markdown_suffixes:
+            if "substitution" in self.config.myst_enable_extensions:
+                substitution_defs = self.config.myst_substitutions
         else:
             substitution_defs = {
                 key: value.astext()

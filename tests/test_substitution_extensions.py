@@ -342,7 +342,6 @@ class TestMyst:
         conf_py_content = dedent(
             """\
             extensions = ['myst_parser', 'sphinx_substitution_extensions']
-            myst_enable_extensions = []
             myst_substitutions = {
                 "a": "example_substitution",
             }
@@ -373,3 +372,11 @@ class TestMyst:
         content_html = app.outdir / "markdown_document.html"
         assert "PRE-example_substitution-POST" not in content_html.read_text()
         assert "PRE-|a|-POST" in content_html.read_text()
+
+    @staticmethod
+    def test_myst_substitutions_custom_markdown_suffix(
+        tmp_path: Path,
+        make_app: Callable[..., SphinxTestApp],
+    ) -> None:
+        # TODO
+        pass
