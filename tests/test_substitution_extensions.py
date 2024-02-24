@@ -195,3 +195,46 @@ def test_substitution_inline_case_preserving(
     content_html = app.outdir / "index.html"
     expected = "PRE-example_substitution-POST"
     assert expected in content_html.read_text()
+
+
+class TestMyst:
+    @staticmethod
+    def test_myst_substitutions(
+        tmp_path: Path,
+        make_app: Callable[..., SphinxTestApp],
+    ) -> None:
+        """ """
+        source_directory = tmp_path / "source"
+        source_directory.mkdir()
+        source_file = source_directory / "index.rst"
+        conf_py = source_directory / "conf.py"
+        conf_py.touch()
+        source_file.touch()
+        conf_py_content = dedent(
+            """\
+            extensions = ['myst_parser', 'sphinx_substitution_extensions']
+            myst_enable_extensions = ['substitution']
+            myst_substitutions = {
+                "a": "example_substitution",
+            }
+            """,
+        )
+        conf_py.write_text(conf_py_content)
+        source_file_content = dedent(
+            """\
+            ```{code}
+            :substitutions:
+
+            $ PRE-|a|-POST
+            ```
+            """,
+        )
+        source_file.write_text(source_file_content)
+        app = make_app(srcdir=source_directory)
+        app.build()
+        expected = "PRE-example_substitution-POST"
+        content_html = app.outdir / "index.html"
+        assert expected in content_html.read_text()
+
+    def test_other_method():
+        pass
