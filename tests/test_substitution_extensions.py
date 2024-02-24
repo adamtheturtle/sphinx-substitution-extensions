@@ -193,12 +193,12 @@ class TestMyst:
     """
 
     @staticmethod
-    def test_myst_substitutions_ignored_given_rst_prolog_rst(
+    def test_myst_substitutions_ignored_given_rst_definition(
         tmp_path: Path,
         make_app: Callable[..., SphinxTestApp],
     ) -> None:
         """
-        MyST substitutions are ignored in rST documents with a ``rst_prolog``.
+        MyST substitutions are ignored in rST documents with a rST substitution definition.
         """
         source_directory = tmp_path / "source"
         source_directory.mkdir()
@@ -235,12 +235,12 @@ class TestMyst:
         assert "myst_substitution" not in content_html.read_text()
 
     @staticmethod
-    def test_myst_substitutions_ignored_without_rst_prolog_rst(
+    def test_myst_substitutions_ignored_without_rst_definition(
         tmp_path: Path,
         make_app: Callable[..., SphinxTestApp],
     ) -> None:
         """
-        MyST substitutions are ignored in rST documents with a ``rst_prolog``.
+        MyST substitutions are ignored in rST documents with a rST substitution definition.
         """
         source_directory = tmp_path / "source"
         source_directory.mkdir()
@@ -320,7 +320,3 @@ class TestMyst:
         expected = "PRE-example_substitution-POST"
         content_html = app.outdir / "markdown_document.html"
         assert expected in content_html.read_text()
-
-    @staticmethod
-    def test_other_method():
-        pass

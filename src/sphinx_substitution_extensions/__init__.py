@@ -25,7 +25,7 @@ if TYPE_CHECKING:
 LOGGER = logging.getLogger(__name__)
 
 
-# TODO get code block working
+# TODO: get code block working
 class SubstitutionCodeBlock(CodeBlock):
     """
     Similar to CodeBlock but replaces placeholders with variables.
@@ -47,7 +47,8 @@ class SubstitutionCodeBlock(CodeBlock):
             substitution_defs = self.config.myst_substitutions
         except AttributeError:
             substitution_defs = {
-                key: value.astext() for key, value in self.state.document.substitution_defs.items()
+                key: value.astext()
+                for key, value in self.state.document.substitution_defs.items()
             }
 
         for item in existing_content:
@@ -67,7 +68,7 @@ class _PostParseInliner(Inliner):
     document: docutils.nodes.document
 
 
-# TODO: Get role working
+# TODO(adamtheturtle): Get role working
 class SubstitutionCodeRole:
     """Custom role for substitution code."""
 
@@ -91,7 +92,6 @@ class SubstitutionCodeRole:
         """
         Replace placeholders with given variables.
         """
-        # breakpoint()
         inliner_document = inliner.document
         for name, value in inliner_document.substitution_defs.items():
             assert isinstance(name, str)
