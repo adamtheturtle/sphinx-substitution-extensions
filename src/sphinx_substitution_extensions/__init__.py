@@ -43,8 +43,10 @@ class SubstitutionCodeBlock(CodeBlock):
         new_content: list[str] = []
         self.content: list[str] = self.content
         existing_content = self.content
+        substitution_defs = {}
         try:
-            substitution_defs = self.config.myst_substitutions
+            if "substitutions" in self.config.myst_enable_extensions:
+                substitution_defs = self.config.myst_substitutions
         except AttributeError:
             substitution_defs = {
                 key: value.astext()
