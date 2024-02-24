@@ -271,7 +271,9 @@ class TestMyst:
 
         app = make_app(srcdir=source_directory)
         app.build()
-        expected = "PRE-|a|-POST"
+        expected = (
+            '</span>PRE-<span class="p">|</span>a<span class="p">|</span>-POST'
+        )
         content_html = app.outdir / "index.html"
         assert expected in content_html.read_text()
         assert "myst_substitution" not in content_html.read_text()
