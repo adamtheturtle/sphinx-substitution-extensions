@@ -86,3 +86,7 @@ Inline ``:code:``
    three
    four
    five
+
+
+.. toctree::
+   markdown_sample

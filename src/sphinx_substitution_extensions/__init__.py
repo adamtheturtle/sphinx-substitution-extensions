@@ -77,7 +77,6 @@ class _PostParseInliner(Inliner):
     document: docutils.nodes.document
 
 
-# TODO(adamtheturtle): Get role working
 class SubstitutionCodeRole:
     """Custom role for substitution code."""
 

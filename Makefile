@@ -24,7 +24,6 @@ fix-lint: \
 .PHONY: build-sample
 build-sample:
 	rm -rf sample/build
-    # TODO: Either add to the sample, or create a new sample for myst
 	sphinx-build -W -b html sample/source sample/build
 
 .PHONY: build-sample-parallel
