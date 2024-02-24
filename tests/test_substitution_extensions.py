@@ -201,7 +201,8 @@ class TestMyst:
         make_app: Callable[..., SphinxTestApp],
     ) -> None:
         """
-        MyST substitutions are ignored in rST documents with a rST substitution definition.
+        MyST substitutions are ignored in rST documents with a rST substitution
+        definition.
         """
         source_directory = tmp_path / "source"
         source_directory.mkdir()
@@ -243,7 +244,8 @@ class TestMyst:
         make_app: Callable[..., SphinxTestApp],
     ) -> None:
         """
-        MyST substitutions are ignored in rST documents with a rST substitution definition.
+        MyST substitutions are ignored in rST documents with a rST substitution
+        definition.
         """
         source_directory = tmp_path / "source"
         source_directory.mkdir()
@@ -378,6 +380,9 @@ class TestMyst:
         tmp_path: Path,
         make_app: Callable[..., SphinxTestApp],
     ) -> None:
+        """
+        Custom markdown suffixes are respected in MyST documents.
+        """
         source_directory = tmp_path / "source"
         source_directory.mkdir()
         index_source_file = source_directory / "index.rst"
