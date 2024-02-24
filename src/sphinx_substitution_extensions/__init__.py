@@ -43,13 +43,17 @@ class SubstitutionCodeBlock(CodeBlock):
         new_content: list[str] = []
         self.content: list[str] = self.content
         existing_content = self.content
-        myst_substitutions = self.config["substitutions"]
-        substitution_defs = self.state.document.substitution_defs or myst_substitutions
+        try:
+            substitution_defs = self.config.myst_substitutions
+        except AttributeError:
+            substitution_defs = {
+                key: value.astext() for key, value in self.state.document.substitution_defs.items()
+            }
+
         for item in existing_content:
             new_item = item
-            for name, value in substitution_defs.items():
+            for name, replacement in substitution_defs.items():
                 if SUBSTITUTION_OPTION_NAME in self.options:
-                    replacement = value.astext()
                     new_item = new_item.replace(f"|{name}|", replacement)
             new_content.append(new_item)
 
