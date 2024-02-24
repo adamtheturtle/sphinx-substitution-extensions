@@ -26,7 +26,6 @@ if TYPE_CHECKING:
 LOGGER = logging.getLogger(__name__)
 
 
-# TODO: get code block working
 class SubstitutionCodeBlock(CodeBlock):
     """
     Similar to CodeBlock but replaces placeholders with variables.
