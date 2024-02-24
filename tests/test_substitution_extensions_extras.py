@@ -21,8 +21,6 @@ def test_substitution_prompt(
     source_directory.mkdir()
     source_file = source_directory / "index.rst"
     conf_py = source_directory / "conf.py"
-    conf_py.touch()
-    source_file.touch()
     conf_py_content = dedent(
         """\
         extensions = ['sphinx_substitution_extensions']
@@ -59,8 +57,6 @@ def test_substitution_prompt_is_case_preserving(
     source_directory.mkdir()
     source_file = source_directory / "index.rst"
     conf_py = source_directory / "conf.py"
-    conf_py.touch()
-    source_file.touch()
     conf_py_content = dedent(
         """\
         extensions = ['sphinx_substitution_extensions']
@@ -98,8 +94,6 @@ def test_no_substitution_prompt(
     source_directory.mkdir()
     source_file = source_directory / "index.rst"
     conf_py = source_directory / "conf.py"
-    conf_py.touch()
-    source_file.touch()
     conf_py_content = dedent(
         """\
         extensions = ['sphinx_substitution_extensions']
