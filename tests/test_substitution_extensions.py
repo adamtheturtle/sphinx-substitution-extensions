@@ -234,7 +234,7 @@ class TestMyst:
         )
         markdown_source_file_content = dedent(
             """\
-            ```{code}
+            ```{code-block}
             :substitutions:
 
             $ PRE-|a|-POST

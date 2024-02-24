@@ -89,6 +89,7 @@ class SubstitutionCodeRole:
         """
         Replace placeholders with given variables.
         """
+        breakpoint()
         inliner_document = inliner.document
         for name, value in inliner_document.substitution_defs.items():
             assert isinstance(name, str)
