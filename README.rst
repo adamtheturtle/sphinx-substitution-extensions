@@ -10,7 +10,7 @@ Extensions for Sphinx which allow substitutions within code blocks.
 Installation
 ------------
 
-Sphinx Substitution Extensions is compatible with Sphinx 4.0+ using Python 3.10+.
+Sphinx Substitution Extensions is compatible with Sphinx 7.2.0+ using Python 3.10+.
 
 .. code:: console
 
@@ -74,6 +74,7 @@ Inline ``:substitution-code:``
 
 MyST Directives
 ---------------
+
 
 TODO
 
