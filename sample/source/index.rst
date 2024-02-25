@@ -1,5 +1,5 @@
-Samples for substitution directives
-===================================
+Samples for substitution directives and roles
+=============================================
 
 Configuration
 -------------
@@ -71,6 +71,25 @@ Inline ``:code:``
 :code:`echo "The author is |author|"`
 
 :substitution-code:`echo "The author is |author|"`
+
+Inline ``:download:``
+---------------------
+
+.. code-block:: rst
+
+
+    .. We cannot use the substitution in the download target, because
+    .. the download directive will error if the file does not exist.
+    :download:`Script by |author| <../source/Eleanor.txt>`.
+
+    :substitution-download:`Script by |author| <../source/|author|.txt>`.
+
+=>
+
+:download:`Script by |author| <../source/Eleanor.txt>`.
+
+:substitution-download:`Script by |author| <../source/|author|.txt>`.
+
 
 ..
 

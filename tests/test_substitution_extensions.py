@@ -2,6 +2,7 @@
 Tests for Sphinx extensions.
 """
 
+import re
 from collections.abc import Callable
 from pathlib import Path
 from textwrap import dedent
@@ -190,6 +191,62 @@ def test_substitution_inline_case_preserving(
     assert expected in content_html.read_text()
 
 
+def test_substitution_download(
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """
+    The ``substitution-download`` role replaces the placeholders defined in
+    ``conf.py`` as specified in both the download text and the download
+    target.
+    """
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    source_file = source_directory / "index.rst"
+    conf_py = source_directory / "conf.py"
+    conf_py_content = dedent(
+        """\
+        extensions = ['sphinx_substitution_extensions']
+        rst_prolog = '''
+        .. |a| replace:: example_substitution
+        '''
+        """,
+    )
+    conf_py.write_text(conf_py_content)
+    # Importantly we have a non-space whitespace character in the target name.
+    downloadable_file = (
+        source_directory / "tgt_pre-example_substitution-tgt_post .py"
+    )
+    downloadable_file.write_text(data="Sample")
+    source_file_content = (
+        # Importantly we have a substitution in the download text and the
+        # target.
+        ":substitution-download:"
+        "`txt_pre-|a|-txt_post <tgt_pre-|a|-tgt_post\t.py>`"
+    )
+    source_file.write_text(source_file_content)
+    app = make_app(srcdir=source_directory)
+    app.build()
+    content_html = app.outdir / "index.html"
+    # We use a pattern here because the download target is not predictable.
+    expected_pattern = re.compile(
+        "<p>"
+        '<a class="reference download internal" download="" '
+        'href="_downloads/.*/tgt_pre-example_substitution-tgt_post%20.py">'
+        "<code "
+        'class="xref substitution-download docutils literal notranslate"'
+        ">"
+        '<span class="pre">'
+        "txt_pre-example_substitution-txt_post"
+        "</span>"
+        "</code>"
+        "</a>"
+        "</p>"
+    )
+    content_html_text = content_html.read_text()
+    assert expected_pattern.search(string=content_html_text) is not None
+
+
 class TestMyst:
     """
     Tests for MyST documents.
@@ -210,8 +267,8 @@ class TestMyst:
         conf_py = source_directory / "conf.py"
         conf_py_content = dedent(
             """\
-            extensions = ['myst_parser', 'sphinx_substitution_extensions']
-            myst_enable_extensions = ['substitution']
+            extensions = ["myst_parser", "sphinx_substitution_extensions"]
+            myst_enable_extensions = ["substitution"]
             myst_substitutions = {
                 "a": "myst_substitution",
             }

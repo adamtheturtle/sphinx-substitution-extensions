@@ -6,6 +6,8 @@ Changelog
 Next
 ----
 
+- Add ``substitution-download`` role.
+
 2024.02.24.1
 ------------
 
