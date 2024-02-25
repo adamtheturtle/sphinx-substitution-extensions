@@ -2,6 +2,7 @@
 Tests for Sphinx extensions.
 """
 
+import re
 from collections.abc import Callable
 from pathlib import Path
 from textwrap import dedent
@@ -212,7 +213,13 @@ def test_substitution_download(
         """,
     )
     conf_py.write_text(conf_py_content)
+    downloadable_file = (
+        source_directory
+        / "download_target_pre-example_substitution-download_target_post.py"
+    )
+    downloadable_file.write_text(data="Sample")
     source_file_content = dedent(
+        # Importantly we have a substitution in the download text and the target.
         """\
         See :substitution-download:`download_text_pre-|a|-download_text_post <download_target_pre-|a|-download_target_post.py>`.
         """,
@@ -221,10 +228,22 @@ def test_substitution_download(
     app = make_app(srcdir=source_directory)
     app.build()
     content_html = app.outdir / "index.html"
-    # TODO check download target
-    expected = '<p>See <code class="xref download docutils literal notranslate"><span class="pre">download_text_pre-example_substitution-download_text_post</span></code>.</p>'
-    breakpoint()
-    assert expected in content_html.read_text()
+    # We use a pattern here because the download target is not predictable.
+    expected_pattern = re.compile(
+        "<p>See "
+        '<a class="reference download internal" download="" '
+        'href="_downloads/.*/download_target_pre-example_substitution-download_target_post.py">'
+        '<code class="xref substitution-download docutils literal notranslate">'
+        '<span class="pre">'
+        "download_text_pre-example_substitution-download_text_post"
+        "</span>"
+        "</code>"
+        "</a>"
+        "."
+        "</p>"
+    )
+    content_html_text = content_html.read_text()
+    assert expected_pattern.search(string=content_html_text) is not None
 
 
 # TODO: Test with space
