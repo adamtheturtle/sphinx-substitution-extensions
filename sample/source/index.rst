@@ -80,13 +80,13 @@ Inline ``:download:``
 
     .. We cannot use the substitution in the download target, because
     .. the download directive will error if the file does not exist.
-    :download:`Script by |author| <../source/eleanor.txt>`.
+    :download:`Script by |author| <../source/Eleanor.txt>`.
 
     :substitution-download:`Script by |author| <../source/|author|.txt>`.
 
 =>
 
-:download:`Script by |author| <../source/eleanor.txt>`.
+:download:`Script by |author| <../source/Eleanor.txt>`.
 
 :substitution-download:`Script by |author| <../source/|author|.txt>`.
 
