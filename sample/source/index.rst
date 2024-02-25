@@ -1,7 +1,7 @@
 Samples for substitution directives
 ===================================
 
-See :substitution-download:`this |a| script <../source/conf.py>`.
+See :substitution-download:`this |author| script <../source/conf|author|.py>`.
 
 Configuration
 -------------

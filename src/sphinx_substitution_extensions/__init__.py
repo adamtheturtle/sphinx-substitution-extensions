@@ -142,8 +142,29 @@ class SubstitutionXRefRole(XRefRole):
         tuple.
         """
         # return title, ws_re.sub(" ", target)
+        inliner_document = self.inliner.document
+        for name, value in inliner_document.substitution_defs.items():
+            assert isinstance(name, str)
+            replacement = value.astext()
+            title = title.replace(f"|{name}|", replacement)
+            target = target.replace(f"|{name}|", replacement)
+
         breakpoint()
-        return "HELLO DOWNLOAD TITLE", ws_re.sub(" ", target)
+        return title, ws_re.sub(" ", target)
+
+    def result_nodes(
+        self,
+        document: nodes.document,
+        env: BuildEnvironment,
+        node: Element,
+        is_ref: bool,
+    ) -> tuple[list[Node], list[system_message]]:
+        """Called before returning the finished nodes.  *node* is the reference
+        node if one was created (*is_ref* is then true), else the content node.
+        This method can add other nodes and must return a ``(nodes, messages)``
+        tuple (the usual return value of a role function).
+        """
+        return [node], []
 
 
 def setup(app: Sphinx) -> dict[str, Any]:
@@ -155,6 +176,7 @@ def setup(app: Sphinx) -> dict[str, Any]:
     app.setup_extension("sphinx-prompt")
     directives.register_directive("prompt", SubstitutionPrompt)
     app.add_role("substitution-code", SubstitutionCodeRole())
+    # TODO: Maybe do a for loop with the Sphinx dictionary that creates download?
     substitution_download_role = SubstitutionXRefRole(
         nodeclass=addnodes.download_reference
     )
