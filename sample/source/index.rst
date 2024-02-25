@@ -1,8 +1,6 @@
 Samples for substitution directives
 ===================================
 
-See :substitution-download:`this |author| script <../source/conf|author|.py>`.
-
 Configuration
 -------------
 
@@ -77,7 +75,21 @@ Inline ``:code:``
 Inline ``:download:``
 ---------------------
 
-# TODO
+.. code-block:: rst
+
+
+    .. We cannot use the substitution in the download target, because
+    .. the download directive will error if the file does not exist.
+    :download:`Script by |author| <../source/eleanor.txt>`.
+
+    :substitution-download:`Script by |author| <../source/|author|.txt>`.
+
+=>
+
+:download:`Script by |author| <../source/eleanor.txt>`.
+
+:substitution-download:`Script by |author| <../source/|author|.txt>`.
+
 
 ..
 
