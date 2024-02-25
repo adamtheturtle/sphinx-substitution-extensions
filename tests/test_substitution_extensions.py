@@ -214,14 +214,14 @@ def test_substitution_download(
     )
     conf_py.write_text(conf_py_content)
     downloadable_file = (
-        source_directory
-        / "download_target_pre-example_substitution-download_target_post.py"
+        source_directory / "tgt_pre-example_substitution-tgt_post.py"
     )
     downloadable_file.write_text(data="Sample")
     source_file_content = dedent(
-        # Importantly we have a substitution in the download text and the target.
+        # Importantly we have a substitution in the download text and the
+        # target.
         """\
-        See :substitution-download:`download_text_pre-|a|-download_text_post <download_target_pre-|a|-download_target_post.py>`.
+        :substitution-download:`txt_pre-|a|-txt_post <tgt_pre-|a|-tgt_post.py>`
         """,
     )
     source_file.write_text(source_file_content)
@@ -230,17 +230,7 @@ def test_substitution_download(
     content_html = app.outdir / "index.html"
     # We use a pattern here because the download target is not predictable.
     expected_pattern = re.compile(
-        "<p>See "
-        '<a class="reference download internal" download="" '
-        'href="_downloads/.*/download_target_pre-example_substitution-download_target_post.py">'
-        '<code class="xref substitution-download docutils literal notranslate">'
-        '<span class="pre">'
-        "download_text_pre-example_substitution-download_text_post"
-        "</span>"
-        "</code>"
-        "</a>"
-        "."
-        "</p>"
+        '<p><a class="reference download internal" download="" href="_downloads/.*/tgt_pre-example_substitution-tgt_post.py"><code class="xref substitution-download docutils literal notranslate"><span class="pre">txt_pre-example_substitution-txt_post</span></code></a></p>'
     )
     content_html_text = content_html.read_text()
     assert expected_pattern.search(string=content_html_text) is not None
