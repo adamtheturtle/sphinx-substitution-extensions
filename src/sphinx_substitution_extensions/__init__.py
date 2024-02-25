@@ -22,7 +22,6 @@ from sphinx_substitution_extensions.shared import (
 )
 
 if TYPE_CHECKING:
-    import docutils.nodes
     from docutils.nodes import Element, Node, system_message
     from sphinx.application import Sphinx
     from sphinx.environment import BuildEnvironment
@@ -132,14 +131,14 @@ class SubstitutionXRefRole(XRefRole):
         self,
         env: BuildEnvironment,
         refnode: Element,
-        has_explicit_title: bool,
+        # We allow a boolean-typed positional argument as we are matching the
+        # method signature of the parent class.
+        has_explicit_title: bool,  # noqa: FBT001
         title: str,
         target: str,
     ) -> tuple[str, str]:
-        """Called after parsing title and target text, and creating the
-        reference node (given in *refnode*).  This method can alter the
-        reference node and must return a new (or the same) ``(title, target)``
-        tuple.
+        """
+        Override parent method to replace placeholders with given variables.
         """
         document = self.inliner.document  # type: ignore[attr-defined]
         assert isinstance(document, docutils.nodes.document)

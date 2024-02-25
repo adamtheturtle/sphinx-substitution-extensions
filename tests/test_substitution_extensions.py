@@ -233,7 +233,9 @@ def test_substitution_download(
         "<p>"
         '<a class="reference download internal" download="" '
         'href="_downloads/.*/tgt_pre-example_substitution-tgt_post%20.py">'
-        '<code class="xref substitution-download docutils literal notranslate">'
+        "<code "
+        'class="xref substitution-download docutils literal notranslate"'
+        ">"
         '<span class="pre">'
         "txt_pre-example_substitution-txt_post"
         "</span>"
