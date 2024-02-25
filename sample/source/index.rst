@@ -1,5 +1,5 @@
-Samples for substitution directives
-===================================
+Samples for substitution directives and roles
+=============================================
 
 Configuration
 -------------
