@@ -11,7 +11,10 @@ from typing import TYPE_CHECKING, Any, ClassVar
 from docutils.parsers.rst import directives
 from docutils.parsers.rst.roles import code_role
 from docutils.parsers.rst.states import Inliner
+from sphinx import addnodes
 from sphinx.directives.code import CodeBlock
+from sphinx.roles import XRefRole
+from sphinx.util import ws_re
 
 from sphinx_substitution_extensions.extras import SubstitutionPrompt
 from sphinx_substitution_extensions.shared import (
@@ -20,8 +23,9 @@ from sphinx_substitution_extensions.shared import (
 
 if TYPE_CHECKING:
     import docutils.nodes
-    from docutils.nodes import Node, system_message
+    from docutils.nodes import Element, Node, system_message
     from sphinx.application import Sphinx
+    from sphinx.environment import BuildEnvironment
 
 LOGGER = logging.getLogger(__name__)
 
@@ -121,6 +125,27 @@ class SubstitutionCodeRole:
         return result_nodes, system_messages
 
 
+class SubstitutionXRefRole(XRefRole):
+    """Custom role for XRefs."""
+
+    def process_link(
+        self,
+        env: BuildEnvironment,
+        refnode: Element,
+        has_explicit_title: bool,
+        title: str,
+        target: str,
+    ) -> tuple[str, str]:
+        """Called after parsing title and target text, and creating the
+        reference node (given in *refnode*).  This method can alter the
+        reference node and must return a new (or the same) ``(title, target)``
+        tuple.
+        """
+        # return title, ws_re.sub(" ", target)
+        breakpoint()
+        return "HELLO DOWNLOAD TITLE", ws_re.sub(" ", target)
+
+
 def setup(app: Sphinx) -> dict[str, Any]:
     """
     Add the custom directives to Sphinx.
@@ -130,4 +155,8 @@ def setup(app: Sphinx) -> dict[str, Any]:
     app.setup_extension("sphinx-prompt")
     directives.register_directive("prompt", SubstitutionPrompt)
     app.add_role("substitution-code", SubstitutionCodeRole())
+    substitution_download_role = SubstitutionXRefRole(
+        nodeclass=addnodes.download_reference
+    )
+    app.add_role("substitution-download", substitution_download_role)
     return {"parallel_read_safe": True}

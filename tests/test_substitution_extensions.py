@@ -221,10 +221,13 @@ def test_substitution_download(
     app = make_app(srcdir=source_directory)
     app.build()
     content_html = app.outdir / "index.html"
+    # TODO check download target
     expected = '<p>See <code class="xref download docutils literal notranslate"><span class="pre">download_text_pre-example_substitution-download_text_post</span></code>.</p>'
+    breakpoint()
     assert expected in content_html.read_text()
 
 
+# TODO: Test with space
 class TestMyst:
     """
     Tests for MyST documents.

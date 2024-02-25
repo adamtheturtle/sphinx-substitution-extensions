@@ -1,7 +1,7 @@
 Samples for substitution directives
 ===================================
 
-See :download:`this foo script <../source/conf.py>`.
+See :substitution-download:`this |a| script <../source/conf.py>`.
 
 Configuration
 -------------
@@ -73,6 +73,11 @@ Inline ``:code:``
 :code:`echo "The author is |author|"`
 
 :substitution-code:`echo "The author is |author|"`
+
+Inline ``:download:``
+---------------------
+
+# TODO
 
 ..
 
