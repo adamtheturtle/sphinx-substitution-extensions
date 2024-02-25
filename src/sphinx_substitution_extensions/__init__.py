@@ -150,7 +150,7 @@ class SubstitutionXRefRole(XRefRole):
             target = target.replace(f"|{name}|", replacement)
 
         # Use the default implementation to process the link
-        # as it handles spaces in target text.
+        # as it handles whitespace in target text.
         return super().process_link(
             env=env,
             refnode=refnode,

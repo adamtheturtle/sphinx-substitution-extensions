@@ -213,16 +213,16 @@ def test_substitution_download(
         """,
     )
     conf_py.write_text(conf_py_content)
+    # Importantly we have a non-space whitespace character in the target name.
     downloadable_file = (
-        source_directory / "tgt_pre-example_substitution-tgt_post.py"
+        source_directory / "tgt_pre-example_substitution-tgt_post .py"
     )
     downloadable_file.write_text(data="Sample")
-    source_file_content = dedent(
+    source_file_content = (
         # Importantly we have a substitution in the download text and the
         # target.
-        """\
-        :substitution-download:`txt_pre-|a|-txt_post <tgt_pre-|a|-tgt_post.py>`
-        """,
+        ":substitution-download:"
+        "`txt_pre-|a|-txt_post <tgt_pre-|a|-tgt_post\t.py>`"
     )
     source_file.write_text(source_file_content)
     app = make_app(srcdir=source_directory)
@@ -232,7 +232,7 @@ def test_substitution_download(
     expected_pattern = re.compile(
         "<p>"
         '<a class="reference download internal" download="" '
-        'href="_downloads/.*/tgt_pre-example_substitution-tgt_post.py">'
+        'href="_downloads/.*/tgt_pre-example_substitution-tgt_post%20.py">'
         '<code class="xref substitution-download docutils literal notranslate">'
         '<span class="pre">'
         "txt_pre-example_substitution-txt_post"
@@ -245,7 +245,6 @@ def test_substitution_download(
     assert expected_pattern.search(string=content_html_text) is not None
 
 
-# TODO: Test with space
 class TestMyst:
     """
     Tests for MyST documents.
@@ -266,8 +265,8 @@ class TestMyst:
         conf_py = source_directory / "conf.py"
         conf_py_content = dedent(
             """\
-            extensions = ['myst_parser', 'sphinx_substitution_extensions']
-            myst_enable_extensions = ['substitution']
+            extensions = ["myst_parser", "sphinx_substitution_extensions"]
+            myst_enable_extensions = ["substitution"]
             myst_substitutions = {
                 "a": "myst_substitution",
             }
