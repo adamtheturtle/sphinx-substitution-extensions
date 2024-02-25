@@ -72,6 +72,14 @@ Inline ``:substitution-code:``
 
    :substitution-code:`echo "|author| released version |release|"`
 
+``substitution-download``
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code:: rst
+
+   :substitution-download:`|author|'s manuscript <|author|_manuscript.txt>`
+
+
 MyST Markdown setup
 -------------------
 
