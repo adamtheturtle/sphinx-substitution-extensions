@@ -169,7 +169,6 @@ def setup(app: Sphinx) -> dict[str, Any]:
     app.setup_extension("sphinx-prompt")
     directives.register_directive("prompt", SubstitutionPrompt)
     app.add_role("substitution-code", SubstitutionCodeRole())
-    # TODO: Maybe do a for loop with the Sphinx dictionary that creates download?
     substitution_download_role = SubstitutionXRefRole(
         nodeclass=addnodes.download_reference
     )
