@@ -1,6 +1,8 @@
 Samples for substitution directives
 ===================================
 
+See :download:`this foo script <../source/conf.py>`.
+
 Configuration
 -------------
 

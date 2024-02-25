@@ -190,6 +190,41 @@ def test_substitution_inline_case_preserving(
     assert expected in content_html.read_text()
 
 
+def test_substitution_download(
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """
+    The ``substitution-download`` role replaces the placeholders defined in
+    ``conf.py`` as specified in both the download text and the download
+    target.
+    """
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    source_file = source_directory / "index.rst"
+    conf_py = source_directory / "conf.py"
+    conf_py_content = dedent(
+        """\
+        extensions = ['sphinx_substitution_extensions']
+        rst_prolog = '''
+        .. |a| replace:: example_substitution
+        '''
+        """,
+    )
+    conf_py.write_text(conf_py_content)
+    source_file_content = dedent(
+        """\
+        See :substitution-download:`download_text_pre-|a|-download_text_post <download_target_pre-|a|-download_target_post.py>`.
+        """,
+    )
+    source_file.write_text(source_file_content)
+    app = make_app(srcdir=source_directory)
+    app.build()
+    content_html = app.outdir / "index.html"
+    expected = '<p>See <code class="xref download docutils literal notranslate"><span class="pre">download_text_pre-example_substitution-download_text_post</span></code>.</p>'
+    assert expected in content_html.read_text()
+
+
 class TestMyst:
     """
     Tests for MyST documents.
