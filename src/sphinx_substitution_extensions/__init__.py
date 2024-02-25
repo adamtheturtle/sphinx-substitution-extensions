@@ -8,13 +8,13 @@ import logging
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, ClassVar
 
+import docutils.nodes
 from docutils.parsers.rst import directives
 from docutils.parsers.rst.roles import code_role
 from docutils.parsers.rst.states import Inliner
 from sphinx import addnodes
 from sphinx.directives.code import CodeBlock
 from sphinx.roles import XRefRole
-from sphinx.util import ws_re
 
 from sphinx_substitution_extensions.extras import SubstitutionPrompt
 from sphinx_substitution_extensions.shared import (
@@ -141,30 +141,23 @@ class SubstitutionXRefRole(XRefRole):
         reference node and must return a new (or the same) ``(title, target)``
         tuple.
         """
-        # return title, ws_re.sub(" ", target)
-        inliner_document = self.inliner.document
-        for name, value in inliner_document.substitution_defs.items():
+        document = self.inliner.document  # type: ignore[attr-defined]
+        assert isinstance(document, docutils.nodes.document)
+        for name, value in document.substitution_defs.items():
             assert isinstance(name, str)
             replacement = value.astext()
             title = title.replace(f"|{name}|", replacement)
             target = target.replace(f"|{name}|", replacement)
 
-        breakpoint()
-        return title, ws_re.sub(" ", target)
-
-    def result_nodes(
-        self,
-        document: nodes.document,
-        env: BuildEnvironment,
-        node: Element,
-        is_ref: bool,
-    ) -> tuple[list[Node], list[system_message]]:
-        """Called before returning the finished nodes.  *node* is the reference
-        node if one was created (*is_ref* is then true), else the content node.
-        This method can add other nodes and must return a ``(nodes, messages)``
-        tuple (the usual return value of a role function).
-        """
-        return [node], []
+        # Use the default implementation to process the link
+        # as it handles spaces in target text.
+        return super().process_link(
+            env=env,
+            refnode=refnode,
+            has_explicit_title=has_explicit_title,
+            title=title,
+            target=target,
+        )
 
 
 def setup(app: Sphinx) -> dict[str, Any]:
