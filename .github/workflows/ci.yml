@@ -33,30 +33,24 @@ jobs:
       - name: "Install dependencies"
         run: |
           curl -LsSf https://astral.sh/uv/install.sh | sh
-          uv venv /home/runner/.venv
-          source /home/runner/.venv/bin/activate
-          uv pip install --upgrade --editable .[dev]
+          uv pip install --system --upgrade --editable .[dev]
           uv pip compile --resolution=${{ matrix.uv-resolution }} --no-deps pyproject.toml > resolved-requirements.txt
-          uv pip install -r resolved-requirements.txt
+          uv pip install --system --requirement resolved-requirements.txt
 
       - name: "Lint"
         run: |
-          source /home/runner/.venv/bin/activate
           make lint
 
       - name: "Build sample"
         run: |
-          source /home/runner/.venv/bin/activate
           make build-sample
 
       - name: "Build sample parallel"
         run: |
-          source /home/runner/.venv/bin/activate
           make build-sample-parallel
 
       - name: "Run tests"
         run: |
-          source /home/runner/.venv/bin/activate
           pytest -s -vvv --cov-fail-under 100 --cov=src/ --cov=tests tests/ --cov-report=xml
 
       - name: "Upload coverage to Codecov"
