@@ -11,7 +11,6 @@ from typing import TYPE_CHECKING, Any, ClassVar
 import docutils.nodes
 from docutils.parsers.rst import directives
 from docutils.parsers.rst.roles import code_role
-from docutils.parsers.rst.states import Inliner
 from sphinx import addnodes
 from sphinx.directives.code import CodeBlock
 from sphinx.roles import XRefRole
@@ -22,7 +21,9 @@ from sphinx_substitution_extensions.shared import (
 )
 
 if TYPE_CHECKING:
-    from docutils.nodes import Element, Node, system_message
+    from docutils.nodes import Element, Node
+    from docutils.parsers.rst.states import Inliner
+    from docutils.utils import SystemMessage
     from sphinx.application import Sphinx
     from sphinx.environment import BuildEnvironment
 
@@ -74,12 +75,6 @@ class SubstitutionCodeBlock(CodeBlock):
         return super().run()
 
 
-class _PostParseInliner(Inliner):
-    """``Inliner.document`` is set in ``Inliner.parse``."""
-
-    document: docutils.nodes.document
-
-
 class SubstitutionCodeRole:
     """Custom role for substitution code."""
 
@@ -95,11 +90,11 @@ class SubstitutionCodeRole:
         text: str,
         lineno: int,
         # The ``inliner`` type is, in Sphinx, typed as ``Inliner``.
-        inliner: _PostParseInliner,
+        inliner: Inliner,
         # We allow mutable defaults as the Sphinx implementation requires it.
         options: dict[Any, Any] = {},  # noqa: B006
         content: list[str] = [],  # noqa: B006
-    ) -> tuple[list[Node], list[system_message]]:
+    ) -> tuple[list[Node], list[SystemMessage]]:
         """
         Replace placeholders with given variables.
         """
@@ -140,7 +135,7 @@ class SubstitutionXRefRole(XRefRole):
         """
         Override parent method to replace placeholders with given variables.
         """
-        document = self.inliner.document  # type: ignore[attr-defined]
+        document = self.inliner.document
         assert isinstance(document, docutils.nodes.document)
         for name, value in document.substitution_defs.items():
             assert isinstance(name, str)
