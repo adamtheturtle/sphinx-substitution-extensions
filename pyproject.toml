@@ -262,7 +262,7 @@ dev = [
     "pytest==8.1.1",
     "pytest-cov==4.1",
     "ruff==0.3.2",
-    "types-docutils==0.20.0.20240308",
+    "types-docutils==0.20.0.20240311",
     "uv==0.1.17",
     "vulture==2.11",
 ]
@@ -287,5 +287,6 @@ indent = 4
 keep_full_version = true
 
 [tool.pyright]
+enableTypeIgnoreComments = false
 reportUnnecessaryTypeIgnoreComment = true
 typeCheckingMode = "strict"
