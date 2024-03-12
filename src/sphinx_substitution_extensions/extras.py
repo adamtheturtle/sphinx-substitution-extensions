@@ -6,8 +6,10 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+import docutils.nodes
 import sphinx_prompt
 from docutils.parsers.rst import directives
+from docutils.parsers.rst.states import RSTState
 
 from sphinx_substitution_extensions.shared import (
     SUBSTITUTION_OPTION_NAME,
@@ -32,7 +34,12 @@ class SubstitutionPrompt(sphinx_prompt.PromptDirective):
         new_content: list[str] = []
         self.content: list[str] = self.content
         existing_content = self.content
-        substitution_defs = self.state.document.substitution_defs
+        state = self.state  # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
+        assert isinstance(state, RSTState)
+        document = state.document  # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
+        assert isinstance(document, docutils.nodes.document)
+        substitution_defs = document.substitution_defs
+
         for item in existing_content:
             new_item = item
             for name, value in substitution_defs.items():

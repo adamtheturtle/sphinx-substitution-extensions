@@ -11,6 +11,7 @@ from typing import TYPE_CHECKING, Any, ClassVar
 import docutils.nodes
 from docutils.parsers.rst import directives
 from docutils.parsers.rst.roles import code_role
+from docutils.parsers.rst.states import RSTState
 from sphinx import addnodes
 from sphinx.directives.code import CodeBlock
 from sphinx.roles import XRefRole
@@ -35,7 +36,10 @@ class SubstitutionCodeBlock(CodeBlock):
     Similar to CodeBlock but replaces placeholders with variables.
     """
 
-    option_spec = CodeBlock.option_spec
+    # ``option_spec`` should be typed as a ``typing.ClassVar`` in Sphinx
+    # but it is not.
+    # See https://github.com/python/typeshed/pull/11550#issuecomment-1991708769.
+    option_spec = CodeBlock.option_spec  # type: ignore[misc]
     option_spec["substitutions"] = directives.flag
 
     def run(self) -> list[Node]:
@@ -59,9 +63,13 @@ class SubstitutionCodeBlock(CodeBlock):
             if "substitution" in self.config.myst_enable_extensions:
                 substitution_defs = self.config.myst_substitutions
         else:
+            state = self.state  # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
+            assert isinstance(state, RSTState)
+            document = state.document  # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
+            assert isinstance(document, docutils.nodes.document)
             substitution_defs = {
                 key: value.astext()
-                for key, value in self.state.document.substitution_defs.items()
+                for key, value in document.substitution_defs.items()
             }
 
         for item in existing_content:
