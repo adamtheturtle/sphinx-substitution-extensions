@@ -10,6 +10,7 @@ import docutils.nodes
 import sphinx_prompt
 from docutils.parsers.rst import directives
 from docutils.parsers.rst.states import RSTState
+from docutils.statemachine import StringList
 
 from sphinx_substitution_extensions.shared import (
     SUBSTITUTION_OPTION_NAME,
@@ -31,8 +32,7 @@ class SubstitutionPrompt(sphinx_prompt.PromptDirective):
         """
         Replace placeholders with given variables.
         """
-        new_content: list[str] = []
-        self.content: list[str] = self.content
+        new_content = StringList()
         existing_content = self.content
         state = self.state  # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
         assert isinstance(state, RSTState)
@@ -47,7 +47,8 @@ class SubstitutionPrompt(sphinx_prompt.PromptDirective):
                     replacement = value.astext()
                     new_item = new_item.replace(f"|{name}|", replacement)
 
-            new_content.append(new_item)
+            new_item_string_list = StringList(initlist=[new_item])
+            new_content.extend(new_item_string_list)
 
         self.content = new_content
         return super().run()

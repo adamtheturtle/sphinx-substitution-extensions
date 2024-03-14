@@ -12,6 +12,7 @@ import docutils.nodes
 from docutils.parsers.rst import directives
 from docutils.parsers.rst.roles import code_role
 from docutils.parsers.rst.states import RSTState
+from docutils.statemachine import StringList
 from sphinx import addnodes
 from sphinx.directives.code import CodeBlock
 from sphinx.roles import XRefRole
@@ -48,8 +49,7 @@ class SubstitutionCodeBlock(CodeBlock):
         """
         self.option_spec["substitutions"] = directives.flag
 
-        new_content: list[str] = []
-        self.content: list[str] = self.content
+        new_content = StringList()
         existing_content = self.content
         substitution_defs = {}
         source_file, _ = self.get_source_info()
@@ -77,7 +77,8 @@ class SubstitutionCodeBlock(CodeBlock):
             for name, replacement in substitution_defs.items():
                 if SUBSTITUTION_OPTION_NAME in self.options:
                     new_item = new_item.replace(f"|{name}|", replacement)
-            new_content.append(new_item)
+            new_item_string_list = StringList(initlist=[new_item])
+            new_content.extend(new_item_string_list)
 
         self.content = new_content
         return super().run()
