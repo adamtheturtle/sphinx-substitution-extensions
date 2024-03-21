@@ -263,7 +263,7 @@ dev = [
     "pytest-cov==4.1",
     "ruff==0.3.3",
     "types-docutils==0.20.0.20240317",
-    "uv==0.1.22",
+    "uv==0.1.23",
     "vulture==2.11",
 ]
 prompt = [
