@@ -263,7 +263,6 @@ dev = [
     "pytest-cov==5.0.0",
     "ruff==0.3.4",
     "types-docutils==0.20.0.20240317",
-    "uv==0.1.24",
     "vulture==2.11",
 ]
 prompt = [
@@ -290,3 +289,6 @@ keep_full_version = true
 enableTypeIgnoreComments = false
 reportUnnecessaryTypeIgnoreComment = true
 typeCheckingMode = "strict"
+
+[tool.deptry]
+pep621_dev_dependency_groups = ["dev"]
