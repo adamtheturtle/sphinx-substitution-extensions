@@ -95,7 +95,6 @@ class SubstitutionCodeRole:
         rawtext: str,
         text: str,
         lineno: int,
-        # The ``inliner`` type is, in Sphinx, typed as ``Inliner``.
         inliner: Inliner,
         # We allow mutable defaults as the Sphinx implementation requires it.
         options: dict[Any, Any] = {},  # noqa: B006
