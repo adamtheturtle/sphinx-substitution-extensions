@@ -83,6 +83,7 @@ jobs:
           git checkout "$(git describe --tags "$(git rev-list --tags --max-count=1)")"
           python -m pip install build
           python -m build --sdist --wheel --outdir dist/ .
+          check-wheel-contents dist/*.whl
 
       # We use PyPI trusted publishing rather than a PyPI API token.
       # See https://github.com/pypa/gh-action-pypi-publish/tree/release/v1/?tab=readme-ov-file#trusted-publishing.
