@@ -6,6 +6,8 @@ Changelog
 Next
 ----
 
+- Bump the minimum supported version of Sphinx to 7.3.5.
+
 2024.02.25
 ------------
 

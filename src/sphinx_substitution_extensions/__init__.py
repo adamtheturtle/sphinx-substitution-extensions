@@ -36,10 +36,7 @@ class SubstitutionCodeBlock(CodeBlock):
     Similar to CodeBlock but replaces placeholders with variables.
     """
 
-    # ``option_spec`` should be typed as a ``typing.ClassVar`` in Sphinx
-    # but it is not.
-    # See https://github.com/python/typeshed/pull/11550#issuecomment-1991708769.
-    option_spec = CodeBlock.option_spec  # type: ignore[misc]
+    option_spec = CodeBlock.option_spec
     option_spec["substitutions"] = directives.flag
 
     def run(self) -> list[Node]:
