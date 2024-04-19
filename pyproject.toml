@@ -255,7 +255,7 @@ dev = [
     "pytest==8.1.1",
     "pytest-cov==5.0.0",
     "ruff==0.3.7",
-    "sphinx[test]==7.3.6", # We use `sphinx.testing`.
+    "sphinx[test]==7.3.7", # We use `sphinx.testing`.
     "types-docutils==0.20.0.20240406",
     "vulture==2.11",
 ]
