@@ -27,6 +27,7 @@ if TYPE_CHECKING:
     from docutils.utils import SystemMessage
     from sphinx.application import Sphinx
     from sphinx.environment import BuildEnvironment
+    from sphinx.util.typing import ExtensionMetadata
 
 LOGGER = logging.getLogger(__name__)
 
@@ -156,7 +157,7 @@ class SubstitutionXRefRole(XRefRole):
         )
 
 
-def setup(app: Sphinx) -> dict[str, Any]:
+def setup(app: Sphinx) -> ExtensionMetadata:
     """
     Add the custom directives to Sphinx.
     """
