@@ -245,7 +245,7 @@ dev = [
     "check-wheel-contents==0.6.0",
     "deptry==0.16.1",
     "doc8==1.1.1",
-    "mypy==1.9.0",
+    "mypy==1.10.0",
     "myst-parser==3.0.0",
     "pyenchant==3.2.2",
     "pylint==3.1.0",
