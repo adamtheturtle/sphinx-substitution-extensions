@@ -103,7 +103,6 @@ class SubstitutionCodeRole:
         """
         inliner_document = inliner.document
         for name, value in inliner_document.substitution_defs.items():
-            assert isinstance(name, str)
             replacement = value.astext()
             text = text.replace(f"|{name}|", replacement)
             rawtext = text.replace(f"|{name}|", replacement)
@@ -141,7 +140,6 @@ class SubstitutionXRefRole(XRefRole):
         document = self.inliner.document
         assert isinstance(document, docutils.nodes.document)
         for name, value in document.substitution_defs.items():
-            assert isinstance(name, str)
             replacement = value.astext()
             title = title.replace(f"|{name}|", replacement)
             target = target.replace(f"|{name}|", replacement)
