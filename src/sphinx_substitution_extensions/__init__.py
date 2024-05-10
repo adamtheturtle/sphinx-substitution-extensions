@@ -138,7 +138,6 @@ class SubstitutionXRefRole(XRefRole):
         Override parent method to replace placeholders with given variables.
         """
         document = self.inliner.document
-        assert isinstance(document, docutils.nodes.document)
         for name, value in document.substitution_defs.items():
             replacement = value.astext()
             title = title.replace(f"|{name}|", replacement)
