@@ -1,123 +1,229 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = [
+    "pip",
+    "setuptools",
+    "setuptools-scm[toml]>=7.1",
+    "wheel",
+]
+
+[project]
+name = "sphinx-substitution-extensions"
+description = "Extensions for Sphinx which allow for substitutions."
+readme = { file = "README.rst", content-type = "text/x-rst" }
+keywords = [
+    "documentation",
+    "rst",
+    "sphinx",
+]
+license = { file = "LICENSE" }
+authors = [
+    { name = "Adam Dangoor", email = "adamdangoor@gmail.com" },
+]
+requires-python = ">=3.10"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Web Environment",
+    "Framework :: Pytest",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dynamic = [
+    "version",
+]
+dependencies = [
+    "docutils>=0.19",
+    "sphinx>=7.3.5",
+    "sphinx-prompt>=1.8",
+]
+optional-dependencies.dev = [
+    "actionlint-py==1.6.27.13",
+    "check-manifest==0.49",
+    "check-wheel-contents==0.6.0",
+    "deptry==0.16.1",
+    "doc8==1.1.1",
+    "mypy==1.10.0",
+    "myst-parser==3.0.1",
+    "pyenchant==3.2.2",
+    "pylint==3.2.0",
+    "pyproject-fmt==2.1.1",
+    "pyright==1.1.363",
+    "pyroma==4.2",
+    "pytest==8.2.0",
+    "pytest-cov==5.0.0",
+    "ruff==0.4.4",
+    "sphinx[test]==7.3.7",             # We use `sphinx.testing`.
+    "types-docutils==0.21.0.20240423",
+    "vulture==2.11",
+]
+optional-dependencies.prompt = [
+]
+urls.Source = "https://github.com/adamtheturtle/sphinx-substitution-extensions"
+
+[tool.setuptools]
+zip-safe = false
+
+[tool.setuptools.packages.find]
+where = [
+    "src",
+]
+
+[tool.setuptools.package-data]
+sphinx_substitution_extensions = [
+    "py.typed",
+]
+
+[tool.distutils.bdist_wheel]
+universal = true
+
+[tool.setuptools_scm]
+
+[tool.ruff]
+target-version = "py310"
+
+line-length = 79
+lint.select = [
+    "ALL",
+]
+
+# Do not automatically remove commented out code.
+# We comment out code during development, and with VSCode auto-save, this code
+# is sometimes annoyingly removed.
+lint.unfixable = [
+    "ERA001",
+]
+lint.pydocstyle.convention = "google"
+lint.ignore = [
+    # We do not annotate the type of 'self'.
+    "ANN101",
+    # Ruff warns that this conflicts with the formatter.
+    "COM812",
+    # Allow our chosen docstring line-style - no one-line summary.
+    "D200",
+    "D205",
+    "D212",
+    "D415",
+    # Ruff warns that this conflicts with the formatter.
+    "ISC001",
+    # Ignore "too-many-*" errors as they seem to get in the way more than
+    # helping.
+    "PLR0913",
+    # Allow 'assert' as we use it for tests.
+    "S101",
+]
+
 [tool.pylint]
 
-    [tool.pylint.'MASTER']
+[tool.pylint.'MASTER']
 
-    # Pickle collected data for later comparisons.
-    persistent = true
+# Pickle collected data for later comparisons.
+persistent = true
 
-    # Use multiple processes to speed up Pylint.
-    jobs = 0
+# Use multiple processes to speed up Pylint.
+jobs = 0
 
-    # List of plugins (as comma separated values of python modules names) to load,
-    # usually to register additional checkers.
-    # See https://chezsoi.org/lucas/blog/pylint-strict-base-configuration.html.
-    # We do not use the plugins:
-    # - pylint.extensions.code_style
-    # - pylint.extensions.magic_value
-    # - pylint.extensions.while_used
-    # as they seemed to get in the way.
-    load-plugins = [
-        'pylint.extensions.bad_builtin',
-        'pylint.extensions.comparison_placement',
-        'pylint.extensions.consider_refactoring_into_while_condition',
-        'pylint.extensions.docparams',
-        'pylint.extensions.dunder',
-        'pylint.extensions.eq_without_hash',
-        'pylint.extensions.for_any_all',
-        'pylint.extensions.mccabe',
-        'pylint.extensions.no_self_use',
-        'pylint.extensions.overlapping_exceptions',
-        'pylint.extensions.private_import',
-        'pylint.extensions.redefined_loop_name',
-        'pylint.extensions.redefined_variable_type',
-        'pylint.extensions.set_membership',
-        'pylint.extensions.typing',
-    ]
+# List of plugins (as comma separated values of python modules names) to load,
+# usually to register additional checkers.
+# See https://chezsoi.org/lucas/blog/pylint-strict-base-configuration.html.
+# We do not use the plugins:
+# - pylint.extensions.code_style
+# - pylint.extensions.magic_value
+# - pylint.extensions.while_used
+# as they seemed to get in the way.
+load-plugins = [
+    'pylint.extensions.bad_builtin',
+    'pylint.extensions.comparison_placement',
+    'pylint.extensions.consider_refactoring_into_while_condition',
+    'pylint.extensions.docparams',
+    'pylint.extensions.dunder',
+    'pylint.extensions.eq_without_hash',
+    'pylint.extensions.for_any_all',
+    'pylint.extensions.mccabe',
+    'pylint.extensions.no_self_use',
+    'pylint.extensions.overlapping_exceptions',
+    'pylint.extensions.private_import',
+    'pylint.extensions.redefined_loop_name',
+    'pylint.extensions.redefined_variable_type',
+    'pylint.extensions.set_membership',
+    'pylint.extensions.typing',
+]
 
-    # Allow loading of arbitrary C extensions. Extensions are imported into the
-    # active Python interpreter and may run arbitrary code.
-    unsafe-load-any-extension = false
+# Allow loading of arbitrary C extensions. Extensions are imported into the
+# active Python interpreter and may run arbitrary code.
+unsafe-load-any-extension = false
 
-    [tool.pylint.'MESSAGES CONTROL']
+[tool.pylint.'MESSAGES CONTROL']
 
-    # Enable the message, report, category or checker with the given id(s). You can
-    # either give multiple identifier separated by comma (,) or put this option
-    # multiple time (only on the command line, not in the configuration file where
-    # it should appear only once). See also the "--disable" option for examples.
-    enable = [
-        'bad-inline-option',
-        'deprecated-pragma',
-        'file-ignored',
-        'spelling',
-        'use-symbolic-message-instead',
-        'useless-suppression',
-    ]
+# Enable the message, report, category or checker with the given id(s). You can
+# either give multiple identifier separated by comma (,) or put this option
+# multiple time (only on the command line, not in the configuration file where
+# it should appear only once). See also the "--disable" option for examples.
+enable = [
+    'bad-inline-option',
+    'deprecated-pragma',
+    'file-ignored',
+    'spelling',
+    'use-symbolic-message-instead',
+    'useless-suppression',
+]
 
-    # Disable the message, report, category or checker with the given id(s). You
-    # can either give multiple identifiers separated by comma (,) or put this
-    # option multiple times (only on the command line, not in the configuration
-    # file where it should appear only once).You can also use "--disable=all" to
-    # disable everything first and then reenable specific checks. For example, if
-    # you want to run only the similarities checker, you can use "--disable=all
-    # --enable=similarities". If you want to run only the classes checker, but have
-    # no Warning level messages displayed, use"--disable=all --enable=classes
-    # --disable=W"
+# Disable the message, report, category or checker with the given id(s). You
+# can either give multiple identifiers separated by comma (,) or put this
+# option multiple times (only on the command line, not in the configuration
+# file where it should appear only once).You can also use "--disable=all" to
+# disable everything first and then reenable specific checks. For example, if
+# you want to run only the similarities checker, you can use "--disable=all
+# --enable=similarities". If you want to run only the classes checker, but have
+# no Warning level messages displayed, use"--disable=all --enable=classes
+# --disable=W"
 
-    disable = [
-        'too-few-public-methods',
-        'too-many-locals',
-        'too-many-arguments',
-        'too-many-instance-attributes',
-        'too-many-return-statements',
-        'too-many-lines',
-        'locally-disabled',
-        # Let flake8 handle long lines
-        'line-too-long',
-        # Let ruff handle unused imports
-        'unused-import',
-        # Let ruff deal with sorting
-        'ungrouped-imports',
-        # We don't need everything to be documented because of mypy
-        'missing-type-doc',
-        'missing-return-type-doc',
-        # Too difficult to please
-        'duplicate-code',
-        # Let ruff handle imports
-        'wrong-import-order',
-        # Let ruff find protected member access.
-        'protected-access',
-    ]
+disable = [
+    'too-few-public-methods',
+    'too-many-locals',
+    'too-many-arguments',
+    'too-many-instance-attributes',
+    'too-many-return-statements',
+    'too-many-lines',
+    'locally-disabled',
+    # Let flake8 handle long lines
+    'line-too-long',
+    # Let ruff handle unused imports
+    'unused-import',
+    # Let ruff deal with sorting
+    'ungrouped-imports',
+    # We don't need everything to be documented because of mypy
+    'missing-type-doc',
+    'missing-return-type-doc',
+    # Too difficult to please
+    'duplicate-code',
+    # Let ruff handle imports
+    'wrong-import-order',
+    # Let ruff find protected member access.
+    'protected-access',
+]
 
-    [tool.pylint.'FORMAT']
+[tool.pylint.'FORMAT']
 
-    # Allow the body of an if to be on the same line as the test if there is no
-    # else.
-    single-line-if-stmt = false
+# Allow the body of an if to be on the same line as the test if there is no
+# else.
+single-line-if-stmt = false
 
-    [tool.pylint.'SPELLING']
+[tool.pylint.'SPELLING']
 
-    # Spelling dictionary name. Available dictionaries: none. To make it working
-    # install python-enchant package.
-    spelling-dict = 'en_US'
+# Spelling dictionary name. Available dictionaries: none. To make it working
+# install python-enchant package.
+spelling-dict = 'en_US'
 
-    # A path to a file that contains private dictionary; one word per line.
-    spelling-private-dict-file = 'spelling_private_dict.txt'
+# A path to a file that contains private dictionary; one word per line.
+spelling-private-dict-file = 'spelling_private_dict.txt'
 
-    # Tells whether to store unknown words to indicated private dictionary in
-    # --spelling-private-dict-file option instead of raising a message.
-    spelling-store-unknown-words = 'no'
-
-[tool.coverage.run]
-
-branch = true
-
-[tool.coverage.report]
-exclude_also = ["if TYPE_CHECKING:"]
-
-[tool.pytest.ini_options]
-
-xfail_strict = true
-log_cli = true
+# Tells whether to store unknown words to indicated private dictionary in
+# --spelling-private-dict-file option instead of raising a message.
+spelling-store-unknown-words = 'no'
 
 [tool.check-manifest]
 
@@ -144,6 +250,38 @@ ignore = [
     "lint.mk",
 ]
 
+[tool.deptry]
+pep621_dev_dependency_groups = [
+    "dev",
+]
+
+[tool.pyproject-fmt]
+indent = 4
+keep_full_version = true
+
+[tool.pytest.ini_options]
+
+xfail_strict = true
+log_cli = true
+
+[tool.coverage.run]
+
+branch = true
+
+[tool.coverage.report]
+exclude_also = [
+    "if TYPE_CHECKING:",
+]
+
+[tool.mypy]
+
+strict = true
+
+[tool.pyright]
+enableTypeIgnoreComments = false
+reportUnnecessaryTypeIgnoreComment = true
+typeCheckingMode = "strict"
+
 [tool.doc8]
 
 max_line_length = 2000
@@ -156,133 +294,3 @@ ignore_path = [
     "./src/*.egg-info/",
     "./src/*/_setuptools_scm_version.txt",
 ]
-
-[tool.mypy]
-
-strict = true
-
-[build-system]
-build-backend = "setuptools.build_meta"
-requires = [
-    "pip",
-    "setuptools",
-    "setuptools_scm[toml]>=7.1",
-    "wheel",
-]
-
-[tool.ruff]
-line-length = 79
-target-version = "py310"
-
-[tool.ruff.lint]
-select = ["ALL"]
-
-ignore = [
-    # We do not annotate the type of 'self'.
-    "ANN101",
-    # Ruff warns that this conflicts with the formatter.
-    "COM812",
-    # Allow our chosen docstring line-style - no one-line summary.
-    "D200",
-    "D205",
-    "D212",
-    "D415",
-    # Ruff warns that this conflicts with the formatter.
-    "ISC001",
-    # Ignore "too-many-*" errors as they seem to get in the way more than
-    # helping.
-    "PLR0913",
-    # Allow 'assert' as we use it for tests.
-    "S101",
-]
-
-# Do not automatically remove commented out code.
-# We comment out code during development, and with VSCode auto-save, this code
-# is sometimes annoyingly removed.
-unfixable = ["ERA001"]
-
-[tool.ruff.lint.pydocstyle]
-convention = "google"
-
-[tool.distutils.bdist_wheel]
-universal = true
-
-[project]
-name = "sphinx-substitution-extensions"
-description = "Extensions for Sphinx which allow for substitutions."
-readme = { file = "README.rst", content-type = "text/x-rst"}
-keywords = [
-    "documentation",
-    "rst",
-    "sphinx",
-]
-license = { file = "LICENSE" }
-authors = [ { name = "Adam Dangoor", email = "adamdangoor@gmail.com"} ]
-requires-python = ">=3.10"
-classifiers = [
-    "Development Status :: 5 - Production/Stable",
-    "Environment :: Web Environment",
-    "Framework :: Pytest",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: POSIX",
-    "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-]
-dynamic = [
-    "version",
-]
-dependencies = [
-    "docutils>=0.19",
-    "sphinx>=7.3.5",
-    "sphinx-prompt>=1.8",
-]
-[project.optional-dependencies]
-dev = [
-    "actionlint-py==1.6.27.13",
-    "check-manifest==0.49",
-    "check-wheel-contents==0.6.0",
-    "deptry==0.16.1",
-    "doc8==1.1.1",
-    "mypy==1.10.0",
-    "myst-parser==3.0.1",
-    "pyenchant==3.2.2",
-    "pylint==3.2.0",
-    "pyproject-fmt==1.8.0",
-    "pyright==1.1.363",
-    "pyroma==4.2",
-    "pytest==8.2.0",
-    "pytest-cov==5.0.0",
-    "ruff==0.4.4",
-    "sphinx[test]==7.3.7", # We use `sphinx.testing`.
-    "types-docutils==0.21.0.20240423",
-    "vulture==2.11",
-]
-prompt = [
-]
-[project.urls]
-Source = "https://github.com/adamtheturtle/sphinx-substitution-extensions"
-
-[tool.setuptools]
-zip-safe = false
-
-[tool.setuptools.packages.find]
-where = ["src"]
-
-[tool.setuptools.package-data]
-sphinx_substitution_extensions = ["py.typed"]
-
-[tool.setuptools_scm]
-
- [tool.pyproject-fmt]
-indent = 4
-keep_full_version = true
-
-[tool.pyright]
-enableTypeIgnoreComments = false
-reportUnnecessaryTypeIgnoreComment = true
-typeCheckingMode = "strict"
-
-[tool.deptry]
-pep621_dev_dependency_groups = ["dev"]
