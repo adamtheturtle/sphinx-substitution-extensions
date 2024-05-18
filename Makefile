@@ -1,26 +1,5 @@
 SHELL := /bin/bash -euxo pipefail
 
-include lint.mk
-
-.PHONY: lint
-lint: \
-    actionlint \
-    check-manifest \
-    deptry \
-    doc8 \
-    mypy \
-    pyproject-fmt \
-    pyright \
-    pyroma \
-    ruff \
-    vulture \
-    pylint
-
-.PHONY: fix-lint
-fix-lint: \
-    fix-pyproject-fmt \
-    fix-ruff
-
 .PHONY: build-sample
 build-sample:
 	rm -rf sample/build

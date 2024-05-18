@@ -1,0 +1,111 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.2.0
+    hooks:
+    -   id: trailing-whitespace
+    -   id: end-of-file-fixer
+    -   id: check-yaml
+    -   id: check-added-large-files
+-   repo: local
+    hooks:
+    -   id: actionlint
+        name: actionlint
+        entry: actionlint
+        language: system
+        pass_filenames: false
+        types: [yaml]
+
+    -   id: mypy
+        name: mypy
+        stages: [push]
+        entry: mypy .
+        language: system
+        types: [python, toml]
+        pass_filenames: false
+
+    -   id: check-manifest
+        name: check-manifest
+        stages: [push]
+        entry: check-manifest .
+        language: system
+        pass_filenames: false
+
+    -   id: pyright
+        name: pyright
+        stages: [push]
+        entry: pyright .
+        language: system
+        types: [python, toml]
+        pass_filenames: false
+
+    -   id: vulture
+        name: vulture
+        entry: vulture --min-confidence 100 --exclude .eggs
+        language: system
+        types: [python]
+
+    -   id: pyroma
+        name: pyroma
+        entry: pyroma --min 10 .
+        language: system
+        pass_filenames: false
+        types: [toml]
+
+    -   id: deptry
+        name: deptry
+        entry: deptry src/
+        language: system
+        pass_filenames: false
+
+    -   id: pylint
+        name: pylint
+        entry: pylint src/ tests/
+        language: system
+        stages: [manual]
+        pass_filenames: false
+
+    -   id: ruff-check
+        name: Ruff check
+        entry: ruff check
+        language: system
+        types: [python]
+
+    -   id: ruff-format-check
+        name: Ruff format check
+        entry: ruff format --check
+        language: system
+        types: [python]
+
+    -   id: ruff-check-fix
+        name: Ruff check fix
+        entry: ruff check --fix
+        language: system
+        types: [python]
+
+    -   id: ruff-format-fix
+        name: Ruff format
+        entry: ruff format
+        language: system
+        types: [python]
+
+    -   id: doc8
+        name: doc8
+        entry: doc8
+        language: system
+        types: [rst]
+
+    -   id: pyproject-fmt-check
+        name: pyproject-fmt check
+        entry: pyproject-fmt --check
+        language: system
+        types: [toml]
+        files: pyproject.toml
+
+    -   id: pyproject-fmt-fix
+        name: pyproject-fmt
+        entry: pyproject-fmt
+        language: system
+        types: [toml]
+        files: pyproject.toml

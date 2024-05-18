@@ -48,6 +48,7 @@ optional-dependencies.dev = [
     "doc8==1.1.1",
     "mypy==1.10.0",
     "myst-parser==3.0.1",
+    "pre-commit==3.7.1",
     "pyenchant==3.2.2",
     "pylint==3.2.0",
     "pyproject-fmt==2.1.1",
@@ -229,6 +230,7 @@ spelling-store-unknown-words = 'no'
 
 ignore = [
     "*.enc",
+    ".pre-commit-config.yaml",
     "readthedocs.yaml",
     "CHANGELOG.rst",
     "CODE_OF_CONDUCT.rst",
