@@ -59,6 +59,7 @@ optional-dependencies.dev = [
     "sphinx[test]==7.3.7",             # We use `sphinx.testing`.
     "types-docutils==0.21.0.20240423",
     "vulture==2.11",
+    "pre-commit==3.7.1",
 ]
 optional-dependencies.prompt = [
 ]
@@ -229,6 +230,7 @@ spelling-store-unknown-words = 'no'
 
 ignore = [
     "*.enc",
+    ".pre-commit-config.yaml",
     "readthedocs.yaml",
     "CHANGELOG.rst",
     "CODE_OF_CONDUCT.rst",
