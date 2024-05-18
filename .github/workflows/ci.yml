@@ -39,7 +39,9 @@ jobs:
 
       - name: "Lint"
         run: |
-          make lint
+          pre-commit run --all-files --hook-stage commit --verbose
+          pre-commit run --all-files --hook-stage push --verbose
+          pre-commit run --all-files --hook-stage manual --verbose
 
       - name: "Build sample"
         run: |
@@ -58,3 +60,6 @@ jobs:
         with:
           fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
+
+      - uses: pre-commit-ci/lite-action@v1.0.2
+        if: always()
