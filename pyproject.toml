@@ -91,13 +91,6 @@ lint.select = [
     "ALL",
 ]
 
-# Do not automatically remove commented out code.
-# We comment out code during development, and with VSCode auto-save, this code
-# is sometimes annoyingly removed.
-lint.unfixable = [
-    "ERA001",
-]
-lint.pydocstyle.convention = "google"
 lint.ignore = [
     # We do not annotate the type of 'self'.
     "ANN101",
@@ -116,6 +109,14 @@ lint.ignore = [
     # Allow 'assert' as we use it for tests.
     "S101",
 ]
+
+# Do not automatically remove commented out code.
+# We comment out code during development, and with VSCode auto-save, this code
+# is sometimes annoyingly removed.
+lint.unfixable = [
+    "ERA001",
+]
+lint.pydocstyle.convention = "google"
 
 [tool.pylint]
 
