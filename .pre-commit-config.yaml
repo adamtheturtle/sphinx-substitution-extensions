@@ -15,14 +15,14 @@ repos:
         entry: actionlint
         language: system
         pass_filenames: false
-        types: [yaml]
+        types_or: [yaml]
 
     -   id: mypy
         name: mypy
         stages: [push]
         entry: mypy .
         language: system
-        types: [python, toml]
+        types_or: [python, toml]
         pass_filenames: false
 
     -   id: check-manifest
@@ -37,21 +37,21 @@ repos:
         stages: [push]
         entry: pyright .
         language: system
-        types: [python, toml]
+        types_or: [python, toml]
         pass_filenames: false
 
     -   id: vulture
         name: vulture
         entry: vulture --min-confidence 100 --exclude .eggs
         language: system
-        types: [python]
+        types_or: [python]
 
     -   id: pyroma
         name: pyroma
         entry: pyroma --min 10 .
         language: system
         pass_filenames: false
-        types: [toml]
+        types_or: [toml]
 
     -   id: deptry
         name: deptry
@@ -70,42 +70,42 @@ repos:
         name: Ruff check
         entry: ruff check
         language: system
-        types: [python]
+        types_or: [python]
 
     -   id: ruff-format-check
         name: Ruff format check
         entry: ruff format --check
         language: system
-        types: [python]
+        types_or: [python]
 
     -   id: ruff-check-fix
         name: Ruff check fix
         entry: ruff check --fix
         language: system
-        types: [python]
+        types_or: [python]
 
     -   id: ruff-format-fix
         name: Ruff format
         entry: ruff format
         language: system
-        types: [python]
+        types_or: [python]
 
     -   id: doc8
         name: doc8
         entry: doc8
         language: system
-        types: [rst]
+        types_or: [rst]
 
     -   id: pyproject-fmt-check
         name: pyproject-fmt check
         entry: pyproject-fmt --check
         language: system
-        types: [toml]
+        types_or: [toml]
         files: pyproject.toml
 
     -   id: pyproject-fmt-fix
         name: pyproject-fmt
         entry: pyproject-fmt
         language: system
-        types: [toml]
+        types_or: [toml]
         files: pyproject.toml
