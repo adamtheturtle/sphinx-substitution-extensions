@@ -46,6 +46,7 @@ optional-dependencies.dev = [
     "check-wheel-contents==0.6.0",
     "deptry==0.16.1",
     "doc8==1.1.1",
+    "interrogate==1.7.0",
     "mypy==1.10.0",
     "myst-parser==3.0.1",
     "pre-commit==3.7.1",
@@ -284,6 +285,11 @@ strict = true
 enableTypeIgnoreComments = false
 reportUnnecessaryTypeIgnoreComment = true
 typeCheckingMode = "strict"
+
+[tool.interrogate]
+fail-under = 100
+omit-covered-files = true
+verbose = 2
 
 [tool.doc8]
 
