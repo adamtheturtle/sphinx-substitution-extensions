@@ -108,7 +108,7 @@ repos:
 
     -   id: interrogate
         name: interrogate
-        entry: interrogate src/ tests/ ci/
+        entry: interrogate src/ tests/
         language: system
         types_or: [python]
 
