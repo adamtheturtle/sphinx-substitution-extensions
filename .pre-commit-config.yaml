@@ -106,6 +106,12 @@ repos:
         language: system
         types_or: [rst]
 
+    -   id: interrogate
+        name: interrogate
+        entry: interrogate src/ tests/ ci/
+        language: system
+        types_or: [python]
+
     -   id: pyproject-fmt-check
         name: pyproject-fmt check
         entry: pyproject-fmt --check
