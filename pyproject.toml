@@ -46,6 +46,7 @@ optional-dependencies.dev = [
     "check-wheel-contents==0.6.0",
     "deptry==0.16.1",
     "doc8==1.1.1",
+    "interrogate==1.7.0",
     "mypy==1.10.0",
     "myst-parser==3.0.1",
     "pre-commit==3.7.1",
@@ -91,6 +92,11 @@ lint.select = [
     "ALL",
 ]
 
+lint.unfixable = [
+    "ERA001",
+]
+lint.pydocstyle.convention = "google"
+
 lint.ignore = [
     # We do not annotate the type of 'self'.
     "ANN101",
@@ -113,10 +119,6 @@ lint.ignore = [
 # Do not automatically remove commented out code.
 # We comment out code during development, and with VSCode auto-save, this code
 # is sometimes annoyingly removed.
-lint.unfixable = [
-    "ERA001",
-]
-lint.pydocstyle.convention = "google"
 
 [tool.pylint]
 
