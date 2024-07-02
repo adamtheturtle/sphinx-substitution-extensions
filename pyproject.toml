@@ -43,7 +43,6 @@ dependencies = [
 optional-dependencies.dev = [
     "actionlint-py==1.7.1.15",
     "check-manifest==0.49",
-    "check-wheel-contents==0.6.0",
     "deptry==0.16.1",
     "doc8==1.1.1",
     "interrogate==1.7.0",

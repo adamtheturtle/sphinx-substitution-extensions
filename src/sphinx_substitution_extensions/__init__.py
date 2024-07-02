@@ -11,6 +11,7 @@ from typing import TYPE_CHECKING, Any, ClassVar
 import docutils.nodes
 from docutils.parsers.rst import directives
 from docutils.parsers.rst.roles import code_role
+from docutils.parsers.rst.states import Inliner, RSTState
 from docutils.statemachine import StringList
 from sphinx import addnodes
 from sphinx.directives.code import CodeBlock
@@ -60,7 +61,10 @@ class SubstitutionCodeBlock(CodeBlock):
             if "substitution" in self.config.myst_enable_extensions:
                 substitution_defs = self.config.myst_substitutions
         else:
-            document = self.state.document  # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
+            assert isinstance(self.state, RSTState)
+            state = self.state
+            assert isinstance(state, RSTState)
+            document = state.document  # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
             assert isinstance(document, docutils.nodes.document)
             substitution_defs = {
                 key: value.astext()
