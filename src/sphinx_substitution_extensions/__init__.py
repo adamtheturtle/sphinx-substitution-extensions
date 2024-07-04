@@ -8,7 +8,6 @@ import logging
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, ClassVar
 
-import docutils.nodes
 from docutils.parsers.rst import directives
 from docutils.parsers.rst.roles import code_role
 from docutils.statemachine import StringList
@@ -60,11 +59,9 @@ class SubstitutionCodeBlock(CodeBlock):
             if "substitution" in self.config.myst_enable_extensions:
                 substitution_defs = self.config.myst_substitutions
         else:
-            document = self.state.document  # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
-            assert isinstance(document, docutils.nodes.document)
             substitution_defs = {
                 key: value.astext()
-                for key, value in document.substitution_defs.items()
+                for key, value in self.state.document.substitution_defs.items()
             }
 
         for item in existing_content:
