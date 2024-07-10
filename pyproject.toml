@@ -58,7 +58,7 @@ optional-dependencies.dev = [
     "pytest-cov==5.0.0",
     "ruff==0.5.1",
     "sphinx[test]==7.3.7",             # We use `sphinx.testing`.
-    "types-docutils==0.21.0.20240708",
+    "types-docutils==0.21.0.20240710",
     "vulture==2.11",
 ]
 optional-dependencies.prompt = [
