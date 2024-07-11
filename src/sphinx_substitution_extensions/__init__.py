@@ -21,9 +21,8 @@ from sphinx_substitution_extensions.shared import (
 )
 
 if TYPE_CHECKING:
-    from docutils.nodes import Element, Node
+    from docutils.nodes import Element, Node, system_message
     from docutils.parsers.rst.states import Inliner
-    from docutils.utils import SystemMessage
     from sphinx.application import Sphinx
     from sphinx.environment import BuildEnvironment
     from sphinx.util.typing import ExtensionMetadata
@@ -94,7 +93,7 @@ class SubstitutionCodeRole:
         # We allow mutable defaults as the Sphinx implementation requires it.
         options: dict[Any, Any] = {},  # noqa: B006
         content: list[str] = [],  # noqa: B006
-    ) -> tuple[list[Node], list[SystemMessage]]:
+    ) -> tuple[list[Node], list[system_message]]:
         """
         Replace placeholders with given variables.
         """
@@ -105,7 +104,7 @@ class SubstitutionCodeRole:
             rawtext = text.replace(f"|{name}|", replacement)
             rawtext = rawtext.replace(name, replacement)
 
-        result_nodes, system_messages = code_role(
+        return code_role(
             role=typ,
             rawtext=rawtext,
             text=text,
@@ -114,8 +113,6 @@ class SubstitutionCodeRole:
             options=options,
             content=content,
         )
-
-        return result_nodes, system_messages
 
 
 class SubstitutionXRefRole(XRefRole):
