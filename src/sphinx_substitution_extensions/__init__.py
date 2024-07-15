@@ -48,12 +48,17 @@ class SubstitutionCodeBlock(CodeBlock):
         existing_content = self.content
         substitution_defs = {}
         source_file, _ = self.get_source_info()
+
         markdown_suffixes = {
             key
             for key, value in self.config.source_suffix.items()
             if value == "markdown"
         }
 
+        # Rather than checking the file extension, we could check if
+        # ``self.env.parser`` were a type we support, but this is simpler
+        # and does not require having ``myst_parser`` installed or
+        # Sphinx >= 7.4.0.
         if Path(source_file).suffix in markdown_suffixes:
             if "substitution" in self.config.myst_enable_extensions:
                 substitution_defs = self.config.myst_substitutions
