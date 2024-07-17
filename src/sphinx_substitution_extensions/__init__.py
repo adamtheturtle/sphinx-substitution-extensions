@@ -42,8 +42,6 @@ class SubstitutionCodeBlock(CodeBlock):
         """
         Replace placeholders with given variables.
         """
-        self.option_spec["substitutions"] = directives.flag
-
         new_content = StringList()
         existing_content = self.content
         substitution_defs = {}
