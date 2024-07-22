@@ -54,7 +54,7 @@ optional-dependencies.dev = [
     "pyproject-fmt==2.1.4",
     "pyright==1.1.372",
     "pyroma==4.2",
-    "pytest==8.2.2",
+    "pytest==8.3.1",
     "pytest-cov==5.0.0",
     "ruff==0.5.3",
     "sphinx[test]==7.4.6",             # We use `sphinx.testing`.
