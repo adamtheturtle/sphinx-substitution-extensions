@@ -48,7 +48,7 @@ optional-dependencies.dev = [
     "interrogate==1.7.0",
     "mypy==1.11.0",
     "myst-parser==3.0.1",
-    "pre-commit==3.7.1",
+    "pre-commit==3.8.0",
     "pyenchant==3.2.2",
     "pylint==3.2.6",
     "pyproject-fmt==2.1.4",
