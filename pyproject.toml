@@ -45,7 +45,7 @@ optional-dependencies.dev = [
     "deptry==0.18.0",
     "doc8==1.1.1",
     "interrogate==1.7.0",
-    "mypy==1.11.0",
+    "mypy==1.11.1",
     "myst-parser==3.0.1",
     "pre-commit==3.8.0",
     "pyenchant==3.2.2",
