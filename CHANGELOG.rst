@@ -7,6 +7,8 @@ Next
 ----
 
 - Bump the minimum supported version of Sphinx to 7.3.5.
+- Remove support for ``sphinx-prompt``.
+  Please create a GitHub issue if you have a use case for this extension which is not covered by the built-in Sphinx functionality.
 
 2024.02.25
 ------------

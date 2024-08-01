@@ -38,7 +38,6 @@ dynamic = [
 dependencies = [
     "docutils>=0.19",
     "sphinx>=7.3.5",
-    "sphinx-prompt>=1.8",
 ]
 optional-dependencies.dev = [
     "actionlint-py==1.7.1.15",
@@ -60,8 +59,6 @@ optional-dependencies.dev = [
     "sphinx[test]==7.4.7",             # We use `sphinx.testing`.
     "types-docutils==0.21.0.20240724",
     "vulture==2.11",
-]
-optional-dependencies.prompt = [
 ]
 urls.Source = "https://github.com/adamtheturtle/sphinx-substitution-extensions"
 

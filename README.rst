@@ -51,20 +51,6 @@ This adds a ``:substitutions:`` option to Sphinx's built-in `code-block`_ direct
 
       echo "|author| released version |release|"
 
-
-``prompt``
-~~~~~~~~~~
-
-This adds a ``:substitutions:`` option to `sphinx-prompt`_.
-
-.. code:: rst
-
-   .. prompt:: bash
-      :substitutions:
-
-      echo "|author| released version |release|"
-
-
 Inline ``:substitution-code:``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -120,12 +106,6 @@ This adds a ``:substitutions:`` option to Sphinx's built-in `code-block`_ direct
 Credits
 -------
 
-``sphinx-prompt`` authors
-~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Thanks to `@sbrunner`_ and other contributors for `sphinx-prompt`_.
-``substitution-prompt`` is based on `sphinx-prompt`_.
-
 ClusterHQ Developers
 ~~~~~~~~~~~~~~~~~~~~
 
@@ -139,9 +119,7 @@ See `CONTRIBUTING.rst <./CONTRIBUTING.rst>`_.
 
 .. |Build Status| image:: https://github.com/adamtheturtle/sphinx-substitution-extensions/workflows/CI/badge.svg
    :target: https://github.com/adamtheturtle/sphinx-substitution-extensions/actions
-.. _sphinx-prompt: https://github.com/sbrunner/sphinx-prompt
 .. _code-block: http://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-code-block
-.. _@sbrunner: https://github.com/sbrunner
 .. |codecov| image:: https://codecov.io/gh/adamtheturtle/sphinx-substitution-extensions/branch/main/graph/badge.svg
    :target: https://codecov.io/gh/adamtheturtle/sphinx-substitution-extensions
 .. |PyPI| image:: https://badge.fury.io/py/Sphinx-Substitution-Extensions.svg
