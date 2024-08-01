@@ -15,7 +15,6 @@ from sphinx import addnodes
 from sphinx.directives.code import CodeBlock
 from sphinx.roles import XRefRole
 
-from sphinx_substitution_extensions.extras import SubstitutionPrompt
 from sphinx_substitution_extensions.shared import (
     SUBSTITUTION_OPTION_NAME,
 )
@@ -157,8 +156,6 @@ def setup(app: Sphinx) -> ExtensionMetadata:
     """
     app.add_config_value("substitutions", [], "html")
     directives.register_directive("code-block", SubstitutionCodeBlock)
-    app.setup_extension("sphinx-prompt")
-    directives.register_directive("prompt", SubstitutionPrompt)
     app.add_role("substitution-code", SubstitutionCodeRole())
     substitution_download_role = SubstitutionXRefRole(
         nodeclass=addnodes.download_reference
