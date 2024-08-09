@@ -55,7 +55,7 @@ optional-dependencies.dev = [
     "pyroma==4.2",
     "pytest==8.3.2",
     "pytest-cov==5.0.0",
-    "ruff==0.5.6",
+    "ruff==0.5.7",
     "sphinx[test]==8.0.2",             # We use `sphinx.testing`.
     "types-docutils==0.21.0.20240724",
     "vulture==2.11",
