@@ -1,4 +1,5 @@
 admin
+beartype
 changelog
 conf
 hardcoded
