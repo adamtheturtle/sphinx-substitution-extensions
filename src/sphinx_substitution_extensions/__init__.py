@@ -2,29 +2,25 @@
 Custom Sphinx extensions.
 """
 
-from __future__ import annotations
-
 import logging
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, ClassVar
+from typing import Any, ClassVar
 
+from docutils.nodes import Element, Node, system_message
 from docutils.parsers.rst import directives
 from docutils.parsers.rst.roles import code_role
+from docutils.parsers.rst.states import Inliner
 from docutils.statemachine import StringList
 from sphinx import addnodes
+from sphinx.application import Sphinx
 from sphinx.directives.code import CodeBlock
+from sphinx.environment import BuildEnvironment
 from sphinx.roles import XRefRole
+from sphinx.util.typing import ExtensionMetadata
 
 from sphinx_substitution_extensions.shared import (
     SUBSTITUTION_OPTION_NAME,
 )
-
-if TYPE_CHECKING:
-    from docutils.nodes import Element, Node, system_message
-    from docutils.parsers.rst.states import Inliner
-    from sphinx.application import Sphinx
-    from sphinx.environment import BuildEnvironment
-    from sphinx.util.typing import ExtensionMetadata
 
 LOGGER = logging.getLogger(__name__)
 
