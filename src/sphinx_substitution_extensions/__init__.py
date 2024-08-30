@@ -6,6 +6,7 @@ import logging
 from pathlib import Path
 from typing import Any, ClassVar
 
+from beartype import beartype
 from docutils.nodes import Element, Node, system_message
 from docutils.parsers.rst import directives
 from docutils.parsers.rst.roles import code_role
@@ -25,6 +26,7 @@ from sphinx_substitution_extensions.shared import (
 LOGGER = logging.getLogger(__name__)
 
 
+@beartype
 class SubstitutionCodeBlock(CodeBlock):
     """
     Similar to CodeBlock but replaces placeholders with variables.
@@ -73,6 +75,7 @@ class SubstitutionCodeBlock(CodeBlock):
         return super().run()
 
 
+@beartype
 class SubstitutionCodeRole:
     """Custom role for substitution code."""
 
@@ -113,6 +116,7 @@ class SubstitutionCodeRole:
         )
 
 
+@beartype
 class SubstitutionXRefRole(XRefRole):
     """Custom role for XRefs."""
 
@@ -146,6 +150,7 @@ class SubstitutionXRefRole(XRefRole):
         )
 
 
+@beartype
 def setup(app: Sphinx) -> ExtensionMetadata:
     """
     Add the custom directives to Sphinx.
