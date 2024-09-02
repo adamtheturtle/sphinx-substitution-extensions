@@ -50,7 +50,7 @@ optional-dependencies.dev = [
     "myst-parser==4.0.0",
     "pre-commit==3.8.0",
     "pyenchant==3.2.2",
-    "pylint==3.2.6",
+    "pylint==3.2.7",
     "pyproject-fmt==2.2.1",
     "pyright==1.1.378",
     "pyroma==4.2",
