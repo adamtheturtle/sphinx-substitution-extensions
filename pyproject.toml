@@ -44,7 +44,7 @@ optional-dependencies.dev = [
     "actionlint-py==1.7.1.15",
     "check-manifest==0.49",
     "deptry==0.20.0",
-    "doc8==1.1.1",
+    "doc8==1.1.2",
     "interrogate==1.7.0",
     "mypy==1.11.2",
     "myst-parser==4.0.0",
