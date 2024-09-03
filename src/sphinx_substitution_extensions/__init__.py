@@ -23,7 +23,7 @@ from sphinx_substitution_extensions.shared import (
     SUBSTITUTION_OPTION_NAME,
 )
 
-LOGGER = logging.getLogger(__name__)
+LOGGER = logging.getLogger(name=__name__)
 
 
 @beartype
