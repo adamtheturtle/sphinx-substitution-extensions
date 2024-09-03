@@ -230,7 +230,7 @@ def test_substitution_download(
     content_html = app.outdir / "index.html"
     # We use a pattern here because the download target is not predictable.
     expected_pattern = re.compile(
-        "<p>"
+        pattern="<p>"
         '<a class="reference download internal" download="" '
         'href="_downloads/.*/tgt_pre-example_substitution-tgt_post%20.py">'
         "<code "
