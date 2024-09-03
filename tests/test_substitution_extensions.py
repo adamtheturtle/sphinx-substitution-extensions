@@ -23,7 +23,7 @@ def test_no_substitution_code_block(
     source_file = source_directory / "index.rst"
     conf_py = source_directory / "conf.py"
     conf_py_content = dedent(
-        """\
+        text="""\
         extensions = ['sphinx_substitution_extensions']
         rst_prolog = '''
         .. |a| replace:: example_substitution
@@ -32,7 +32,7 @@ def test_no_substitution_code_block(
     )
     conf_py.write_text(conf_py_content)
     source_file_content = dedent(
-        """\
+        text="""\
         .. code-block:: bash
 
            $ PRE-|a|-POST
@@ -62,7 +62,7 @@ def test_substitution_code_block(
     source_file = source_directory / "index.rst"
     conf_py = source_directory / "conf.py"
     conf_py_content = dedent(
-        """\
+        text="""\
         extensions = ['sphinx_substitution_extensions']
         rst_prolog = '''
         .. |a| replace:: example_substitution
@@ -71,7 +71,7 @@ def test_substitution_code_block(
     )
     conf_py.write_text(conf_py_content)
     source_file_content = dedent(
-        """\
+        text="""\
         .. code-block:: bash
            :substitutions:
 
@@ -98,7 +98,7 @@ def test_substitution_code_block_case_preserving(
     source_file = source_directory / "index.rst"
     conf_py = source_directory / "conf.py"
     conf_py_content = dedent(
-        """\
+        text="""\
         extensions = ['sphinx_substitution_extensions']
         rst_prolog = '''
         .. |aBcD_eFgH| replace:: example_substitution
@@ -107,7 +107,7 @@ def test_substitution_code_block_case_preserving(
     )
     conf_py.write_text(conf_py_content)
     source_file_content = dedent(
-        """\
+        text="""\
         .. code-block:: bash
            :substitutions:
 
@@ -136,7 +136,7 @@ def test_substitution_inline(
     source_file = source_directory / "index.rst"
     conf_py = source_directory / "conf.py"
     conf_py_content = dedent(
-        """\
+        text="""\
         extensions = ['sphinx_substitution_extensions']
         rst_prolog = '''
         .. |a| replace:: example_substitution
@@ -145,7 +145,7 @@ def test_substitution_inline(
     )
     conf_py.write_text(conf_py_content)
     source_file_content = dedent(
-        """\
+        text="""\
         Example :substitution-code:`PRE-|a|-POST`
         """,
     )
@@ -169,7 +169,7 @@ def test_substitution_inline_case_preserving(
     source_file = source_directory / "index.rst"
     conf_py = source_directory / "conf.py"
     conf_py_content = dedent(
-        """\
+        text="""\
         extensions = ['sphinx_substitution_extensions']
         rst_prolog = '''
         .. |aBcD_eFgH| replace:: example_substitution
@@ -178,7 +178,7 @@ def test_substitution_inline_case_preserving(
     )
     conf_py.write_text(conf_py_content)
     source_file_content = dedent(
-        """\
+        text="""\
         Example :substitution-code:`PRE-|aBcD_eFgH|-POST`
         """,
     )
@@ -205,7 +205,7 @@ def test_substitution_download(
     source_file = source_directory / "index.rst"
     conf_py = source_directory / "conf.py"
     conf_py_content = dedent(
-        """\
+        text="""\
         extensions = ['sphinx_substitution_extensions']
         rst_prolog = '''
         .. |a| replace:: example_substitution
@@ -266,7 +266,7 @@ class TestMyst:
         index_source_file = source_directory / "index.rst"
         conf_py = source_directory / "conf.py"
         conf_py_content = dedent(
-            """\
+            text="""\
             extensions = ["myst_parser", "sphinx_substitution_extensions"]
             myst_enable_extensions = ["substitution"]
             myst_substitutions = {
@@ -279,7 +279,7 @@ class TestMyst:
         )
         conf_py.write_text(conf_py_content)
         index_source_file_content = dedent(
-            """\
+            text="""\
             .. code-block:: bash
                :substitutions:
 
@@ -309,7 +309,7 @@ class TestMyst:
         index_source_file = source_directory / "index.rst"
         conf_py = source_directory / "conf.py"
         conf_py_content = dedent(
-            """\
+            text="""\
             extensions = ['myst_parser', 'sphinx_substitution_extensions']
             myst_enable_extensions = ['substitution']
             myst_substitutions = {
@@ -319,7 +319,7 @@ class TestMyst:
         )
         conf_py.write_text(conf_py_content)
         index_source_file_content = dedent(
-            """\
+            text="""\
             .. code-block:: bash
                :substitutions:
 
@@ -351,7 +351,7 @@ class TestMyst:
         markdown_source_file = source_directory / "markdown_document.md"
         conf_py = source_directory / "conf.py"
         conf_py_content = dedent(
-            """\
+            text="""\
             extensions = ['myst_parser', 'sphinx_substitution_extensions']
             myst_enable_extensions = ['substitution']
             myst_substitutions = {
@@ -361,14 +361,14 @@ class TestMyst:
         )
         conf_py.write_text(conf_py_content)
         index_source_file_content = dedent(
-            """\
+            text="""\
             .. toctree::
 
                markdown_document
             """,
         )
         markdown_source_file_content = dedent(
-            """\
+            text="""\
             ```{code-block}
             :substitutions:
 
@@ -399,7 +399,7 @@ class TestMyst:
         markdown_source_file = source_directory / "markdown_document.md"
         conf_py = source_directory / "conf.py"
         conf_py_content = dedent(
-            """\
+            text="""\
             extensions = ['myst_parser', 'sphinx_substitution_extensions']
             myst_substitutions = {
                 "a": "example_substitution",
@@ -408,14 +408,14 @@ class TestMyst:
         )
         conf_py.write_text(conf_py_content)
         index_source_file_content = dedent(
-            """\
+            text="""\
             .. toctree::
 
                markdown_document
             """,
         )
         markdown_source_file_content = dedent(
-            """\
+            text="""\
             ```{code-block}
             :substitutions:
 
@@ -446,7 +446,7 @@ class TestMyst:
         markdown_source_file = source_directory / "markdown_document.txt"
         conf_py = source_directory / "conf.py"
         conf_py_content = dedent(
-            """\
+            text="""\
             extensions = ['myst_parser', 'sphinx_substitution_extensions']
             myst_enable_extensions = ['substitution']
             source_suffix = {
@@ -460,14 +460,14 @@ class TestMyst:
         )
         conf_py.write_text(conf_py_content)
         index_source_file_content = dedent(
-            """\
+            text="""\
             .. toctree::
 
             markdown_document
             """,
         )
         markdown_source_file_content = dedent(
-            """\
+            text="""\
             ```{code-block}
             :substitutions:
 
