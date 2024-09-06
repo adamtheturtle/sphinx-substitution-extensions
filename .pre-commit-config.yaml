@@ -82,9 +82,9 @@ repos:
     language: system
     types_or: [python]
 
-  - id: ruff-format-check
-    name: Ruff format check
-    entry: ruff format --check
+  - id: ruff-format-diff
+    name: Ruff format diff
+    entry: ruff format --diff
     language: system
     types_or: [python]
 
