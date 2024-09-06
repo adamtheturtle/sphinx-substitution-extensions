@@ -138,7 +138,7 @@ ci:
   - deptry
   - pylint
   - ruff-check
-  - ruff-format-check
+  - ruff-format-diff
   - ruff-check-fix
   - ruff-format-fix
   - doc8
