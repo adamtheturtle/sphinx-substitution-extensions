@@ -27,7 +27,7 @@ repos:
   hooks:
   - id: actionlint
     name: actionlint
-    entry: python -m actionlint
+    entry: actionlint
     language: system
     pass_filenames: false
     types_or: [yaml]
@@ -119,14 +119,14 @@ repos:
 
   - id: pyproject-fmt-check
     name: pyproject-fmt check
-    entry: python -m pyproject-fmt --check
+    entry: pyproject-fmt --check
     language: system
     types_or: [toml]
     files: pyproject.toml
 
   - id: pyproject-fmt-fix
     name: pyproject-fmt
-    entry: python -m pyproject-fmt
+    entry: pyproject-fmt
     language: system
     types_or: [toml]
     files: pyproject.toml
