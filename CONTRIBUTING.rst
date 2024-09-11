@@ -10,26 +10,26 @@ Install contribution dependencies
 
 Install Python dependencies in a virtual environment.
 
-.. code:: bash
+.. code-block:: bash
 
    pip install --editable '.[dev]'
 
 Spell checking requires ``enchant``.
 This can be installed on macOS, for example, with `Homebrew`_:
 
-.. code:: bash
+.. code-block:: bash
 
    brew install enchant
 
 and on Ubuntu with ``apt``:
 
-.. code:: bash
+.. code-block:: bash
 
    apt-get install -y enchant
 
 Install ``pre-commit`` hooks:
 
-.. code:: bash
+.. code-block:: bash
 
    pre-commit install
 
@@ -38,7 +38,7 @@ Linting
 
 Run lint tools either by committing, or with:
 
-.. code:: bash
+.. code-block:: bash
 
    pre-commit run --all-files --hook-stage commit --verbose
    pre-commit run --all-files --hook-stage push --verbose
@@ -51,7 +51,7 @@ Running tests
 
 Run ``pytest``:
 
-.. code:: bash
+.. code-block:: bash
 
    pytest
 
@@ -77,7 +77,7 @@ Perform a Release
 
 #. Perform a release:
 
-   .. code:: bash
+   .. code-block:: bash
 
       $ gh workflow run release.yml --repo adamtheturtle/sphinx-substitution-extensions
 

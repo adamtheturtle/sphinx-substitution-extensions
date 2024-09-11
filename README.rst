@@ -12,7 +12,7 @@ Installation
 
 Sphinx Substitution Extensions is compatible with Sphinx 7.2.0+ using Python 3.10+.
 
-.. code:: console
+.. code-block:: console
 
    $ pip install Sphinx-Substitution-Extensions
 
@@ -21,13 +21,13 @@ rST setup
 
 1. Add the following to ``conf.py`` to enable the extension:
 
-.. code:: python
+.. code-block:: python
 
    extensions += ['sphinx_substitution_extensions']
 
 2. Set the following variable in ``conf.py`` to define substitutions:
 
-.. code:: python
+.. code-block:: python
 
    rst_prolog = """
    .. |release| replace:: 0.1
@@ -44,7 +44,7 @@ Using substitutions in rST documents
 
 This adds a ``:substitutions:`` option to Sphinx's built-in `code-block`_ directive.
 
-.. code:: rst
+.. code-block:: rst
 
    .. code-block:: bash
       :substitutions:
@@ -54,14 +54,14 @@ This adds a ``:substitutions:`` option to Sphinx's built-in `code-block`_ direct
 Inline ``:substitution-code:``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. code:: rst
+.. code-block:: rst
 
    :substitution-code:`echo "|author| released version |release|"`
 
 ``substitution-download``
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. code:: rst
+.. code-block:: rst
 
    :substitution-download:`|author|'s manuscript <|author|_manuscript.txt>`
 
@@ -71,13 +71,13 @@ MyST Markdown setup
 
 1. Add the following to ``conf.py`` to enable the extension:
 
-.. code:: python
+.. code-block:: python
 
    extensions += ['sphinx_substitution_extensions']
 
 2. Set the following variables in ``conf.py`` to define substitutions:
 
-.. code:: python
+.. code-block:: python
 
    myst_enable_extensions += ['substitution']
    myst_substitutions = {
@@ -95,7 +95,7 @@ Using substitutions in MyST Markdown
 
 This adds a ``:substitutions:`` option to Sphinx's built-in `code-block`_ directive.
 
-.. code:: markdown
+.. code-block:: markdown
 
    ```{code-block} bash
       :substitutions:
