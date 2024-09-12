@@ -12,22 +12,22 @@ Configuration
 
 .. code-block:: rst
 
-    .. code-block:: bash
+    .. code-block:: shell
 
        echo "The author is |author|"
 
-    .. code-block:: bash
+    .. code-block:: shell
        :substitutions:
 
        echo "The author is |author|"
 
 =>
 
-.. code-block:: bash
+.. code-block:: shell
 
    echo "The author is |author|"
 
-.. code-block:: bash
+.. code-block:: shell
    :substitutions:
 
    echo "The author is |author|"

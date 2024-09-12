@@ -46,7 +46,7 @@ This adds a ``:substitutions:`` option to Sphinx's built-in `code-block`_ direct
 
 .. code-block:: rst
 
-   .. code-block:: bash
+   .. code-block:: shell
       :substitutions:
 
       echo "|author| released version |release|"

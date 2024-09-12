@@ -33,7 +33,7 @@ def test_no_substitution_code_block(
     conf_py.write_text(conf_py_content)
     source_file_content = dedent(
         text="""\
-        .. code-block:: bash
+        .. code-block:: shell
 
            $ PRE-|a|-POST
         """,
@@ -72,7 +72,7 @@ def test_substitution_code_block(
     conf_py.write_text(conf_py_content)
     source_file_content = dedent(
         text="""\
-        .. code-block:: bash
+        .. code-block:: shell
            :substitutions:
 
            $ PRE-|a|-POST
@@ -108,7 +108,7 @@ def test_substitution_code_block_case_preserving(
     conf_py.write_text(conf_py_content)
     source_file_content = dedent(
         text="""\
-        .. code-block:: bash
+        .. code-block:: shell
            :substitutions:
 
            $ PRE-|aBcD_eFgH|-POST
@@ -280,7 +280,7 @@ class TestMyst:
         conf_py.write_text(conf_py_content)
         index_source_file_content = dedent(
             text="""\
-            .. code-block:: bash
+            .. code-block:: shell
                :substitutions:
 
                $ PRE-|a|-POST
@@ -320,7 +320,7 @@ class TestMyst:
         conf_py.write_text(conf_py_content)
         index_source_file_content = dedent(
             text="""\
-            .. code-block:: bash
+            .. code-block:: shell
                :substitutions:
 
                $ PRE-|a|-POST
