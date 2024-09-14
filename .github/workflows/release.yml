@@ -59,6 +59,7 @@ jobs:
         id: commit
         with:
           commit_message: Bump CHANGELOG
+          file_pattern: CHANGELOG.rst
 
       - name: Bump version and push tag
         id: tag_version
