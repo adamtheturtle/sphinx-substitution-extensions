@@ -95,30 +95,6 @@ repos:
     stages: [manual]
     pass_filenames: false
 
-  - id: ruff-check
-    name: Ruff check
-    entry: python -m ruff check
-    language: system
-    types_or: [python]
-
-  - id: ruff-check-docs
-    name: Ruff check docs
-    entry: doccmd --language=python --command="ruff check"
-    language: system
-    types_or: [markdown, rst]
-
-  - id: ruff-format-diff
-    name: Ruff format diff
-    entry: python -m ruff format --diff
-    language: system
-    types_or: [python]
-
-  - id: ruff-format-diff-docs
-    name: Ruff format diff docs
-    entry: doccmd --language=python --no-pad-file --command="ruff format --diff"
-    language: system
-    types_or: [markdown, rst]
-
   - id: ruff-check-fix
     name: Ruff check fix
     entry: python -m ruff check --fix
@@ -161,13 +137,6 @@ repos:
     language: system
     types_or: [markdown, rst]
 
-  - id: pyproject-fmt-check
-    name: pyproject-fmt check
-    entry: pyproject-fmt --check
-    language: system
-    types_or: [toml]
-    files: pyproject.toml
-
   - id: pyproject-fmt-fix
     name: pyproject-fmt
     entry: pyproject-fmt
@@ -187,17 +156,12 @@ ci:
   - mypy
   - mypy-docs
   - pylint
-  - pyproject-fmt-check
   - pyproject-fmt-fix
   - pyright
   - pyright-docs
   - pyroma
-  - ruff-check
-  - ruff-check-docs
   - ruff-check-fix
   - ruff-check-fix-docs
-  - ruff-format-diff
-  - ruff-format-diff-docs
   - ruff-format-fix
   - ruff-format-fix-docs
   - vulture
