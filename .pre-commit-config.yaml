@@ -40,6 +40,13 @@ repos:
     types_or: [python, toml]
     pass_filenames: false
 
+  - id: mypy-docs
+    name: mypy-docs
+    stages: [push]
+    entry: doccmd --language=python --command="mypy"
+    language: system
+    types_or: [markdown, rst, python, toml]
+
   - id: check-manifest
     name: check-manifest
     stages: [push]
@@ -54,6 +61,13 @@ repos:
     language: system
     types_or: [python, toml]
     pass_filenames: false
+
+  - id: pyright-docs
+    name: pyright-docs
+    stages: [push]
+    entry: doccmd --language=python --command="pyright"
+    language: system
+    types_or: [markdown, rst, python, toml]
 
   - id: vulture
     name: vulture
@@ -87,11 +101,23 @@ repos:
     language: system
     types_or: [python]
 
+  - id: ruff-check-docs
+    name: Ruff check docs
+    entry: doccmd --language=python --command="ruff check"
+    language: system
+    types_or: [markdown, rst]
+
   - id: ruff-format-diff
     name: Ruff format diff
     entry: python -m ruff format --diff
     language: system
     types_or: [python]
+
+  - id: ruff-format-diff-docs
+    name: Ruff format diff docs
+    entry: doccmd --language=python --no-pad-file --command="ruff format --diff"
+    language: system
+    types_or: [markdown, rst]
 
   - id: ruff-check-fix
     name: Ruff check fix
@@ -99,11 +125,23 @@ repos:
     language: system
     types_or: [python]
 
+  - id: ruff-check-fix-docs
+    name: Ruff check fix docs
+    entry: doccmd --language=python --command="ruff check --fix"
+    language: system
+    types_or: [markdown, rst]
+
   - id: ruff-format-fix
     name: Ruff format
     entry: python -m ruff format
     language: system
     types_or: [python]
+
+  - id: ruff-format-fix-docs
+    name: Ruff format docs
+    entry: doccmd --language=python --no-pad-file --command="ruff format"
+    language: system
+    types_or: [markdown, rst]
 
   - id: doc8
     name: doc8
@@ -116,6 +154,12 @@ repos:
     entry: python -m interrogate
     language: system
     types_or: [python]
+
+  - id: interrogate-docs
+    name: interrogate docs
+    entry: doccmd --language=python --command="interrogate"
+    language: system
+    types_or: [markdown, rst]
 
   - id: pyproject-fmt-check
     name: pyproject-fmt check
@@ -135,18 +179,25 @@ repos:
 ci:
   skip:
   - actionlint
-  - mypy
   - check-manifest
-  - pyright
-  - vulture
-  - pyroma
   - deptry
-  - pylint
-  - ruff-check
-  - ruff-format-diff
-  - ruff-check-fix
-  - ruff-format-fix
   - doc8
   - interrogate
+  - interrogate-docs
+  - mypy
+  - mypy-docs
+  - pylint
   - pyproject-fmt-check
   - pyproject-fmt-fix
+  - pyright
+  - pyright-docs
+  - pyroma
+  - ruff-check
+  - ruff-check-docs
+  - ruff-check-fix
+  - ruff-check-fix-docs
+  - ruff-format-diff
+  - ruff-format-diff-docs
+  - ruff-format-fix
+  - ruff-format-fix-docs
+  - vulture

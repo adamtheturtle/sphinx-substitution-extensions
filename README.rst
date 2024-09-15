@@ -23,11 +23,17 @@ rST setup
 
 .. code-block:: python
 
-   extensions += ['sphinx_substitution_extensions']
+   """Configuration for Sphinx."""
+
+   extensions = ["sphinxcontrib.spelling"]  # Example existing extensions
+
+   extensions += ["sphinx_substitution_extensions"]
 
 2. Set the following variable in ``conf.py`` to define substitutions:
 
 .. code-block:: python
+
+   """Configuration for Sphinx."""
 
    rst_prolog = """
    .. |release| replace:: 0.1
@@ -69,20 +75,27 @@ Inline ``:substitution-code:``
 MyST Markdown setup
 -------------------
 
-1. Add the following to ``conf.py`` to enable the extension:
+1. Add ``sphinx_substitution_extensions`` to ``extensions`` in ``conf.py`` to enable the extension:
 
 .. code-block:: python
 
-   extensions += ['sphinx_substitution_extensions']
+   """Configuration for Sphinx."""
+
+   extensions = ["myst_parser"]  # Example existing extensions
+
+   extensions += ["sphinx_substitution_extensions"]
 
 2. Set the following variables in ``conf.py`` to define substitutions:
 
 .. code-block:: python
 
-   myst_enable_extensions += ['substitution']
+   """Configuration for Sphinx."""
+
+   myst_enable_extensions = ["substitution"]
+
    myst_substitutions = {
-         "release": "0.1",
-         "author": "Eleanor",
+       "release": "0.1",
+       "author": "Eleanor",
    }
 
 This will replace ``|release|`` in the new directives with ``0.1``, and ``|author|`` with ``Eleanor``.
