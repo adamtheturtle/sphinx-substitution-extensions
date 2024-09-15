@@ -23,7 +23,7 @@ rST setup
 
 .. code-block:: python
 
-   extensions += ['sphinx_substitution_extensions']
+   extensions += ["sphinx_substitution_extensions"]
 
 2. Set the following variable in ``conf.py`` to define substitutions:
 
@@ -73,16 +73,16 @@ MyST Markdown setup
 
 .. code-block:: python
 
-   extensions += ['sphinx_substitution_extensions']
+   extensions += ["sphinx_substitution_extensions"]
 
 2. Set the following variables in ``conf.py`` to define substitutions:
 
 .. code-block:: python
 
-   myst_enable_extensions += ['substitution']
+   myst_enable_extensions += ["substitution"]
    myst_substitutions = {
-         "release": "0.1",
-         "author": "Eleanor",
+       "release": "0.1",
+       "author": "Eleanor",
    }
 
 This will replace ``|release|`` in the new directives with ``0.1``, and ``|author|`` with ``Eleanor``.
