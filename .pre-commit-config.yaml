@@ -71,7 +71,7 @@ repos:
 
   - id: vulture
     name: vulture
-    entry: python -m vulture --min-confidence 100
+    entry: python -m vulture
     language: system
     types_or: [python]
 
