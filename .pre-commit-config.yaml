@@ -71,7 +71,7 @@ repos:
 
   - id: vulture
     name: vulture
-    entry: python -m vulture --min-confidence 100 --exclude .eggs
+    entry: python -m vulture --min-confidence 100
     language: system
     types_or: [python]
 
