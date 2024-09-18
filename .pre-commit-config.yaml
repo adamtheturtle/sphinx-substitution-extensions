@@ -71,9 +71,10 @@ repos:
 
   - id: vulture
     name: vulture
-    entry: python -m vulture
+    entry: python -m vulture .
     language: system
     types_or: [python]
+    pass_filenames: false
 
   - id: vulture-docs
     name: vulture docs
