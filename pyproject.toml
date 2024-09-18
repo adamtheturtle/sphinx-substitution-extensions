@@ -65,7 +65,7 @@ optional-dependencies.dev = [
     # We use `sphinx.testing`.
     "sphinx[test]==8.0.2",
     "types-docutils==0.21.0.20240907",
-    "vulture==2.11",
+    "vulture==2.12",
 ]
 urls.Source = "https://github.com/adamtheturtle/sphinx-substitution-extensions"
 
