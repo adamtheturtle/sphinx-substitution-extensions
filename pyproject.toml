@@ -306,3 +306,47 @@ ignore_path = [
     "./src/*.egg-info/",
     "./src/*/_setuptools_scm_version.txt",
 ]
+
+[tool.vulture]
+# Ideally we would limit the paths to the source code where we want to ignore names,
+# but Vulture does not enable this.
+ignore_names = [
+    # pytest configuration
+    "pytest_collect_file",
+    "pytest_collection_modifyitems",
+    "pytest_plugins",
+    # pytest fixtures - we name fixtures like this for this purpose
+    "fixture_*",
+    # Sphinx
+    "autoclass_content",
+    "autoclass_content",
+    "autodoc_member_order",
+    "copybutton_exclude",
+    "extensions",
+    "html_show_copyright",
+    "html_show_sourcelink",
+    "html_show_sphinx",
+    "html_theme",
+    "html_theme_options",
+    "html_title",
+    "htmlhelp_basename",
+    "intersphinx_mapping",
+    "language",
+    "linkcheck_ignore",
+    "linkcheck_retries",
+    "master_doc",
+    "myst_enable_extensions",
+    "myst_substitutions",
+    "nitpicky",
+    "project_copyright",
+    "pygments_style",
+    "rst_prolog",
+    "setup",
+    "source_suffix",
+    "spelling_word_list_filename",
+    "templates_path",
+    "warning_is_error",
+]
+
+# Duplicate some of .gitignore
+exclude = [ ".venv" ]

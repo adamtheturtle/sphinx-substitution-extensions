@@ -71,9 +71,16 @@ repos:
 
   - id: vulture
     name: vulture
-    entry: python -m vulture
+    entry: python -m vulture .
     language: system
     types_or: [python]
+    pass_filenames: false
+
+  - id: vulture-docs
+    name: vulture docs
+    entry: doccmd --language=python --command="vulture"
+    language: system
+    types_or: [markdown, rst]
 
   - id: pyroma
     name: pyroma
@@ -165,3 +172,4 @@ ci:
   - ruff-format-fix
   - ruff-format-fix-docs
   - vulture
+  - vulture-docs
