@@ -75,6 +75,12 @@ repos:
     language: system
     types_or: [python]
 
+  - id: vulture-docs
+    name: vulture docs
+    entry: doccmd --language=python --command="vulture"
+    language: system
+    types_or: [markdown, rst]
+
   - id: pyroma
     name: pyroma
     entry: python -m pyroma --min 10 .
