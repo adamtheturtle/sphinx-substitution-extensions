@@ -2,7 +2,6 @@
 Custom Sphinx extensions.
 """
 
-import logging
 from pathlib import Path
 from typing import Any, ClassVar
 
@@ -22,8 +21,6 @@ from sphinx.util.typing import ExtensionMetadata
 from sphinx_substitution_extensions.shared import (
     SUBSTITUTION_OPTION_NAME,
 )
-
-LOGGER = logging.getLogger(name=__name__)
 
 
 @beartype
