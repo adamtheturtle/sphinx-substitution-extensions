@@ -165,3 +165,4 @@ ci:
   - ruff-format-fix
   - ruff-format-fix-docs
   - vulture
+  - vulture-docs
