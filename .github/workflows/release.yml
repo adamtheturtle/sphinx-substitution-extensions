@@ -47,11 +47,9 @@ jobs:
 
       - name: "Update changelog"
         uses: jacobtomlinson/gha-find-replace@v3
-        env:
-          NEXT_VERSION: ${{ steps.calver.outputs.release }}
         with:
           find: "Next\n----"
-          replace: "Next\n----\n\n${{ env.NEXT_VERSION }}\n------------"
+          replace: "Next\n----\n\n${{ steps.calver.outputs.release }}\n------------"
           include: "CHANGELOG.rst"
           regex: false
 
