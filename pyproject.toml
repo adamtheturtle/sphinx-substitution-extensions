@@ -51,7 +51,7 @@ optional-dependencies.dev = [
     "myst-parser==4.0.0",
     "pre-commit==3.8.0",
     "pyenchant==3.2.2",
-    "pylint==3.2.7",
+    "pylint==3.3.0",
     "pyproject-fmt==2.2.4",
     "pyright==1.1.381",
     "pyroma==4.2",
@@ -189,6 +189,7 @@ enable = [
 
 disable = [
     'too-few-public-methods',
+    'too-many-positional-arguments',
     'too-many-locals',
     'too-many-arguments',
     'too-many-instance-attributes',
