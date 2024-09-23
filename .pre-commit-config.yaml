@@ -2,6 +2,9 @@
 # See https://pre-commit.com/hooks.html for more hooks
 default_install_hook_types: [pre-commit, pre-push, commit-msg]
 repos:
+- repo: meta
+  hooks:
+    - id: check-useless-excludes
 - repo: https://github.com/pre-commit/pre-commit-hooks
   rev: v4.6.0
   hooks:
@@ -11,7 +14,8 @@ repos:
   - id: check-merge-conflict
   - id: check-shebang-scripts-are-executable
   - id: check-symlinks
-  - id: check-toml
+  - id: check-json
+ - id: check-toml
   - id: check-vcs-permalinks
   - id: check-yaml
   - id: end-of-file-fixer
