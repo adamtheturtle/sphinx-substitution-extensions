@@ -83,6 +83,7 @@ class SubstitutionCodeRole:
 
     def __call__(  # pylint: disable=dangerous-default-value
         self,
+        *,
         typ: str,
         rawtext: str,
         text: str,
