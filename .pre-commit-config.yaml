@@ -45,14 +45,13 @@ repos:
 
   - id: shfmt
     name: shfmt
-    entry: shfmt --write
+    entry: shfmt --write --space-redirects --indent=4
     language: system
-    pass_filenames: false
     types_or: [shell]
 
   - id: shfmt-docs
     name: shfmt-docs
-    entry: doccmd --language=shell --language=console --no-pad-file --command="shfmt --write"
+    entry: doccmd --language=shell --language=console --skip-marker=shfmt --no-pad-file --command="shfmt --write --space-redirects --indent=4"
     language: system
     types_or: [markdown, rst]
 
