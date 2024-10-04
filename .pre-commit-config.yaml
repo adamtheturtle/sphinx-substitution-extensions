@@ -43,6 +43,19 @@ repos:
     language: system
     types_or: [markdown, rst]
 
+  - id: shfmt
+    name: shfmt
+    entry: shfmt --write
+    language: system
+    pass_filenames: false
+    types_or: [shell]
+
+  - id: shfmt-docs
+    name: shfmt-docs
+    entry: doccmd --language=shell --language=console --no-pad-file --command="shfmt --write"
+    language: system
+    types_or: [markdown, rst]
+
   - id: mypy
     name: mypy
     stages: [push]
@@ -184,5 +197,7 @@ ci:
   - ruff-format-fix-docs
   - shellcheck
   - shellcheck-docs
+  - shfmt
+  - shfmt-docs
   - vulture
   - vulture-docs
