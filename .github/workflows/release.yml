@@ -77,8 +77,7 @@ jobs:
         run: |
           git fetch --tags
           git checkout ${{ steps.tag_version.outputs.new_tag }}
-          uv run pip install build check-wheel-contents
-          uv run python -m build --sdist --wheel --outdir dist/ .
+          uv run --extra=release python -m build --sdist --wheel --outdir dist/ .
           uv run check-wheel-contents dist/*.whl
 
       # We use PyPI trusted publishing rather than a PyPI API token.
