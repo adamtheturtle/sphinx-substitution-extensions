@@ -261,6 +261,7 @@ ignore = [
 [tool.deptry]
 pep621_dev_dependency_groups = [
     "dev",
+    "release",
 ]
 
 [tool.pyproject-fmt]
