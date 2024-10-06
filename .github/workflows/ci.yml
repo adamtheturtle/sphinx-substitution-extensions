@@ -30,10 +30,10 @@ jobs:
           uv pip install --system --requirement resolved-requirements.txt
 
       - name: "Lint"
-         run: |
-           uv run --all-extras --python=${{ matrix.python-version }} pre-commit run --all-files --hook-stage commit --verbose
-           uv run --all-extras --python=${{ matrix.python-version }} pre-commit run --all-files --hook-stage push --verbose
-           uv run --all-extras --python=${{ matrix.python-version }} pre-commit run --all-files --hook-stage manual --verbose
+        run: |
+          uv run --all-extras --python=${{ matrix.python-version }} pre-commit run --all-files --hook-stage commit --verbose
+          uv run --all-extras --python=${{ matrix.python-version }} pre-commit run --all-files --hook-stage push --verbose
+          uv run --all-extras --python=${{ matrix.python-version }} pre-commit run --all-files --hook-stage manual --verbose
 
       - name: "Build sample"
         run: |
