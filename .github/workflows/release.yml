@@ -31,10 +31,8 @@ jobs:
           # https://github.com/stefanzweifel/git-auto-commit-action?tab=readme-ov-file#push-to-protected-branches
           token: ${{ secrets.RELEASE_PAT }}
 
-      - name: "Set up Python"
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
 
       - name: "Calver calculate version"
         uses: StephaneBour/actions-calver@master
@@ -77,12 +75,11 @@ jobs:
 
       - name: Build a binary wheel and a source tarball
         run: |
-          # Checkout the latest tag - the one we just created.
           git fetch --tags
           git checkout ${{ steps.tag_version.outputs.new_tag }}
-          python -m pip install build check-wheel-contents
-          python -m build --sdist --wheel --outdir dist/ .
-          check-wheel-contents dist/*.whl
+          uv run pip install build check-wheel-contents
+          uv run python -m build --sdist --wheel --outdir dist/ .
+          uv run check-wheel-contents dist/*.whl
 
       # We use PyPI trusted publishing rather than a PyPI API token.
       # See https://github.com/pypa/gh-action-pypi-publish/tree/release/v1/?tab=readme-ov-file#trusted-publishing.
