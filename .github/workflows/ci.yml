@@ -39,8 +39,8 @@ jobs:
 
       - name: "Lint"
         run: |
-          pre-commit run --all-files --hook-stage commit --verbose
-          pre-commit run --all-files --hook-stage push --verbose
+          pre-commit run --all-files --hook-stage pre-commit --verbose
+          pre-commit run --all-files --hook-stage pre-push --verbose
           pre-commit run --all-files --hook-stage manual --verbose
 
       - name: "Build sample"
