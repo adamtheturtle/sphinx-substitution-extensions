@@ -30,30 +30,35 @@ repos:
     language: python
     pass_filenames: false
     types_or: [yaml]
+    additional_dependencies: ["uv"]
 
   - id: shellcheck
     name: shellcheck
     entry: uv run --extra=dev shellcheck --shell=bash --exclude=SC1017
     language: python
     types_or: [shell]
+    additional_dependencies: ["uv"]
 
   - id: shellcheck-docs
     name: shellcheck-docs
     entry: uv run --extra=dev doccmd --language=shell --language=console --command="shellcheck --shell=bash --exclude=SC1017"
     language: python
     types_or: [markdown, rst]
+    additional_dependencies: ["uv"]
 
   - id: shfmt
     name: shfmt
     entry: shfmt --write --space-redirects --indent=4
     language: python
     types_or: [shell]
+    additional_dependencies: ["uv"]
 
   - id: shfmt-docs
     name: shfmt-docs
     entry: uv run --extra=dev doccmd --language=shell --language=console --skip-marker=shfmt --no-pad-file --command="shfmt --write --space-redirects --indent=4"
     language: python
     types_or: [markdown, rst]
+    additional_dependencies: ["uv"]
 
   - id: mypy
     name: mypy
@@ -104,6 +109,7 @@ repos:
     entry: uv run --extra=dev doccmd --language=python --command="vulture"
     language: python
     types_or: [markdown, rst]
+    additional_dependencies: ["uv"]
 
   - id: pyroma
     name: pyroma
@@ -111,6 +117,7 @@ repos:
     language: python
     pass_filenames: false
     types_or: [toml]
+    additional_dependencies: ["uv"]
 
   - id: deptry
     name: deptry
@@ -130,42 +137,49 @@ repos:
     entry: uv run --extra=dev -m ruff check --fix
     language: python
     types_or: [python]
+    additional_dependencies: ["uv"]
 
   - id: ruff-check-fix-docs
     name: Ruff check fix docs
     entry: uv run --extra=dev doccmd --language=python --command="ruff check --fix"
     language: python
     types_or: [markdown, rst]
+    additional_dependencies: ["uv"]
 
   - id: ruff-format-fix
     name: Ruff format
     entry: uv run --extra=dev -m ruff format
     language: python
     types_or: [python]
+    additional_dependencies: ["uv"]
 
   - id: ruff-format-fix-docs
     name: Ruff format docs
     entry: uv run --extra=dev doccmd --language=python --no-pad-file --command="ruff format"
     language: python
     types_or: [markdown, rst]
+    additional_dependencies: ["uv"]
 
   - id: doc8
     name: doc8
     entry: uv run --extra=dev -m doc8
     language: python
     types_or: [rst]
+    additional_dependencies: ["uv"]
 
   - id: interrogate
     name: interrogate
     entry: uv run --extra=dev -m interrogate
     language: python
     types_or: [python]
+    additional_dependencies: ["uv"]
 
   - id: interrogate-docs
     name: interrogate docs
     entry: uv run --extra=dev doccmd --language=python --command="interrogate"
     language: python
     types_or: [markdown, rst]
+    additional_dependencies: ["uv"]
 
   - id: pyproject-fmt-fix
     name: pyproject-fmt
