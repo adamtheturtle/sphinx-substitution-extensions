@@ -67,6 +67,7 @@ repos:
     language: python
     types_or: [python, toml]
     pass_filenames: false
+  additional_dependencies: ["uv"]
 
   - id: mypy-docs
     name: mypy-docs
@@ -81,6 +82,7 @@ repos:
     entry: uv run --extra=dev -m check_manifest .
     language: python
     pass_filenames: false
+  additional_dependencies: ["uv"]
 
   - id: pyright
     name: pyright
@@ -89,6 +91,7 @@ repos:
     language: python
     types_or: [python, toml]
     pass_filenames: false
+  additional_dependencies: ["uv"]
 
   - id: pyright-docs
     name: pyright-docs
@@ -103,6 +106,7 @@ repos:
     language: python
     types_or: [python]
     pass_filenames: false
+  additional_dependencies: ["uv"]
 
   - id: vulture-docs
     name: vulture docs
@@ -124,6 +128,7 @@ repos:
     entry: uv run --extra=dev -m deptry src/
     language: python
     pass_filenames: false
+  additional_dependencies: ["uv"]
 
   - id: pylint
     name: pylint
@@ -131,6 +136,7 @@ repos:
     language: python
     stages: [manual]
     pass_filenames: false
+  additional_dependencies: ["uv"]
 
   - id: ruff-check-fix
     name: Ruff check fix
