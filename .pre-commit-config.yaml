@@ -27,39 +27,39 @@ repos:
   - id: actionlint
     name: actionlint
     entry: actionlint
-    language: system
+    language: python
     pass_filenames: false
     types_or: [yaml]
 
   - id: shellcheck
     name: shellcheck
     entry: shellcheck --shell=bash --exclude=SC1017
-    language: system
+    language: python
     types_or: [shell]
 
   - id: shellcheck-docs
     name: shellcheck-docs
     entry: doccmd --language=shell --language=console --command="shellcheck --shell=bash --exclude=SC1017"
-    language: system
+    language: python
     types_or: [markdown, rst]
 
   - id: shfmt
     name: shfmt
     entry: shfmt --write --space-redirects --indent=4
-    language: system
+    language: python
     types_or: [shell]
 
   - id: shfmt-docs
     name: shfmt-docs
     entry: doccmd --language=shell --language=console --skip-marker=shfmt --no-pad-file --command="shfmt --write --space-redirects --indent=4"
-    language: system
+    language: python
     types_or: [markdown, rst]
 
   - id: mypy
     name: mypy
     stages: [pre-push]
     entry: python -m mypy .
-    language: system
+    language: python
     types_or: [python, toml]
     pass_filenames: false
 
@@ -67,21 +67,21 @@ repos:
     name: mypy-docs
     stages: [pre-push]
     entry: doccmd --language=python --command="mypy"
-    language: system
+    language: python
     types_or: [markdown, rst, python, toml]
 
   - id: check-manifest
     name: check-manifest
     stages: [pre-push]
     entry: python -m check_manifest .
-    language: system
+    language: python
     pass_filenames: false
 
   - id: pyright
     name: pyright
     stages: [pre-push]
     entry: python -m pyright .
-    language: system
+    language: python
     types_or: [python, toml]
     pass_filenames: false
 
@@ -89,88 +89,88 @@ repos:
     name: pyright-docs
     stages: [pre-push]
     entry: doccmd --language=python --command="pyright"
-    language: system
+    language: python
     types_or: [markdown, rst, python, toml]
 
   - id: vulture
     name: vulture
     entry: python -m vulture .
-    language: system
+    language: python
     types_or: [python]
     pass_filenames: false
 
   - id: vulture-docs
     name: vulture docs
     entry: doccmd --language=python --command="vulture"
-    language: system
+    language: python
     types_or: [markdown, rst]
 
   - id: pyroma
     name: pyroma
     entry: python -m pyroma --min 10 .
-    language: system
+    language: python
     pass_filenames: false
     types_or: [toml]
 
   - id: deptry
     name: deptry
     entry: python -m deptry src/
-    language: system
+    language: python
     pass_filenames: false
 
   - id: pylint
     name: pylint
     entry: python -m pylint src/ tests/
-    language: system
+    language: python
     stages: [manual]
     pass_filenames: false
 
   - id: ruff-check-fix
     name: Ruff check fix
     entry: python -m ruff check --fix
-    language: system
+    language: python
     types_or: [python]
 
   - id: ruff-check-fix-docs
     name: Ruff check fix docs
     entry: doccmd --language=python --command="ruff check --fix"
-    language: system
+    language: python
     types_or: [markdown, rst]
 
   - id: ruff-format-fix
     name: Ruff format
     entry: python -m ruff format
-    language: system
+    language: python
     types_or: [python]
 
   - id: ruff-format-fix-docs
     name: Ruff format docs
     entry: doccmd --language=python --no-pad-file --command="ruff format"
-    language: system
+    language: python
     types_or: [markdown, rst]
 
   - id: doc8
     name: doc8
     entry: python -m doc8
-    language: system
+    language: python
     types_or: [rst]
 
   - id: interrogate
     name: interrogate
     entry: python -m interrogate
-    language: system
+    language: python
     types_or: [python]
 
   - id: interrogate-docs
     name: interrogate docs
     entry: doccmd --language=python --command="interrogate"
-    language: system
+    language: python
     types_or: [markdown, rst]
 
   - id: pyproject-fmt-fix
     name: pyproject-fmt
     entry: pyproject-fmt
-    language: system
+    language: python
     types_or: [toml]
     files: pyproject.toml
 # We use system Python, with required dependencies specified in pyproject.toml.
