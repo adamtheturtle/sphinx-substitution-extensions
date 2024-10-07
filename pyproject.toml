@@ -45,11 +45,11 @@ optional-dependencies.dev = [
     "check-manifest==0.49",
     "deptry==0.20.0",
     "doc8==1.1.2",
-    "doccmd==2024.9.27",
+    "doccmd==2024.10.6",
     "interrogate==1.7.0",
     "mypy==1.11.2",
     "myst-parser==4.0.0",
-    "pre-commit==3.8.0",
+    "pre-commit==4.0.0",
     "pyenchant==3.3.0rc1",
     "pylint==3.3.1",
     "pyproject-fmt==2.2.4",
@@ -57,7 +57,7 @@ optional-dependencies.dev = [
     "pyroma==4.2",
     "pytest==8.3.3",
     "pytest-cov==5.0.0",
-    "ruff==0.6.8",
+    "ruff==0.6.9",
     # We add shellcheck-py not only for shell scripts and shell code blocks,
     # but also because having it installed means that ``actionlint-py`` will
     # use it to lint shell commands in GitHub workflow files.
@@ -65,9 +65,10 @@ optional-dependencies.dev = [
     "shfmt-py==3.7.0.1",
     # We use `sphinx.testing`.
     "sphinx[test]==8.0.2",
-    "types-docutils==0.21.0.20241004",
+    "types-docutils==0.21.0.20241005",
     "vulture==2.13",
 ]
+optional-dependencies.release = ["build", "check-wheel-contents"]
 urls.Source = "https://github.com/adamtheturtle/sphinx-substitution-extensions"
 
 [tool.setuptools]
@@ -260,6 +261,7 @@ ignore = [
 [tool.deptry]
 pep621_dev_dependency_groups = [
     "dev",
+    "release",
 ]
 
 [tool.pyproject-fmt]
