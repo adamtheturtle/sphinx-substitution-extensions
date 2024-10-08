@@ -74,7 +74,9 @@ class SubstitutionCodeBlock(CodeBlock):
 
 @beartype
 class SubstitutionCodeRole:
-    """Custom role for substitution code."""
+    """
+    Custom role for substitution code.
+    """
 
     options: ClassVar[dict[str, Any]] = {
         "class": directives.class_option,
@@ -115,7 +117,9 @@ class SubstitutionCodeRole:
 
 @beartype
 class SubstitutionXRefRole(XRefRole):
-    """Custom role for XRefs."""
+    """
+    Custom role for XRefs.
+    """
 
     def process_link(
         self,
