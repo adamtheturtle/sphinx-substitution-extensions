@@ -43,11 +43,17 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Get the changelog underline
+        id: changelog_underline
+        run: |
+          underline="$(echo "${{ steps.calver.outputs.release }}" | tr -c '\n' '-')"
+          echo "underline=${underline}" >> "$GITHUB_OUTPUT"
+
       - name: "Update changelog"
         uses: jacobtomlinson/gha-find-replace@v3
         with:
           find: "Next\n----"
-          replace: "Next\n----\n\n${{ steps.calver.outputs.release }}\n------------"
+          replace: "Next\n----\n\n${{ steps.calver.outputs.release }}\n${{ steps.changelog_underline.outputs.underline }}"
           include: "CHANGELOG.rst"
           regex: false
 
