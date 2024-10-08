@@ -23,6 +23,22 @@ repos:
       - id: file-contents-sorter
         files: spelling_private_dict\.txt$
       - id: trailing-whitespace
+  - repo: https://github.com/pre-commit/pygrep-hooks
+    rev: v1.10.0
+    hooks:
+      - id: rst-directive-colons
+      - id: rst-inline-touching-normal
+      - id: text-unicode-replacement-char
+      - id: rst-backticks
+  - repo: https://github.com/mrtazz/checkmake.git
+    rev: 0.2.2
+    hooks:
+      - id: checkmake
+        args: ["--config", ".checkmake-config.ini"]
+  - repo: https://github.com/google/yamlfmt
+    rev: v0.13.0
+    hooks:
+      - id: yamlfmt
   - repo: local
     hooks:
       - id: actionlint
@@ -31,6 +47,13 @@ repos:
         language: python
         pass_filenames: false
         types_or: [yaml]
+        additional_dependencies: ["uv"]
+
+      - id: docformatter
+        name: docformatter
+        entry: uv run --extra=dev -m docformatter
+        language: python
+        types_or: [python]
         additional_dependencies: ["uv"]
 
       - id: shellcheck
@@ -215,7 +238,9 @@ ci:
     - ruff-check-fix-docs
     - ruff-format-fix
     - ruff-format-fix-docs
+    - docformatter
     - shellcheck
+    - docformatter
     - shellcheck-docs
     - shfmt
     - shfmt-docs
