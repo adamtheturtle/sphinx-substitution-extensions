@@ -30,7 +30,7 @@ jobs:
 
       - name: "Lint"
         run: |
-          uv run --all-extras --python=${{ matrix.python-version }} --resolution=${{ matrix.uv-resolution }} pre-commit run --all-files --hook-stage precommit --verbose
+          uv run --all-extras --python=${{ matrix.python-version }} --resolution=${{ matrix.uv-resolution }} pre-commit run --all-files --hook-stage pre-commit --verbose
           uv run --all-extras --python=${{ matrix.python-version }} --resolution=${{ matrix.uv-resolution }} pre-commit run --all-files --hook-stage pre-push --verbose
           uv run --all-extras --python=${{ matrix.python-version }} --resolution=${{ matrix.uv-resolution }} pre-commit run --all-files --hook-stage manual --verbose
 
