@@ -68,7 +68,7 @@ optional-dependencies.dev = [
     "types-docutils==0.21.0.20241005",
     "vulture==2.13",
 ]
-optional-dependencies.release = [ "build", "check-wheel-contents" ]
+optional-dependencies.release = [ "build==1.2.2.post1", "check-wheel-contents==0.6.0" ]
 urls.Source = "https://github.com/adamtheturtle/sphinx-substitution-extensions"
 
 [tool.setuptools]
