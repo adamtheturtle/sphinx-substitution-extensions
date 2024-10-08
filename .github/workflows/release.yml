@@ -77,8 +77,8 @@ jobs:
         run: |
           git fetch --tags
           git checkout ${{ steps.tag_version.outputs.new_tag }}
-          uv run --extra=release python -m build --sdist --wheel --outdir dist/ .
-          uv run check-wheel-contents dist/*.whl
+          uv build --sdist --wheel --out-dir dist/
+          uv run --extra=release check-wheel-contents dist/*.whl
 
       # We use PyPI trusted publishing rather than a PyPI API token.
       # See https://github.com/pypa/gh-action-pypi-publish/tree/release/v1/?tab=readme-ov-file#trusted-publishing.
