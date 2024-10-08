@@ -30,9 +30,9 @@ jobs:
 
       - name: "Lint"
         run: |
-          uv run --all-extras pre-commit run --all-files --hook-stage pre-commit --verbose
-          uv run --all-extras pre-commit run --all-files --hook-stage pre-push --verbose
-          uv run --all-extras pre-commit run --all-files --hook-stage manual --verbose
+          uv run --extra=dev pre-commit run --all-files --hook-stage pre-commit --verbose
+          uv run --extra=dev pre-commit run --all-files --hook-stage pre-push --verbose
+          uv run --extra=dev pre-commit run --all-files --hook-stage manual --verbose
         env:
           UV_PYTHON: python${{ matrix.python-version }}
           UV_RESOLUTION: ${{ matrix.uv-resolution }}
@@ -53,7 +53,7 @@ jobs:
 
       - name: "Run tests"
         run: |
-          uv run --all-extras pytest -s -vvv --cov-fail-under 100 --cov=src/ --cov=tests . --cov-report=xml
+          uv run --extra=dev pytest -s -vvv --cov-fail-under 100 --cov=src/ --cov=tests . --cov-report=xml
         env:
           UV_PYTHON: python${{ matrix.python-version }}
           UV_RESOLUTION: ${{ matrix.uv-resolution }}
