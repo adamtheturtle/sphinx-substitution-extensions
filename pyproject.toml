@@ -67,7 +67,7 @@ optional-dependencies.dev = [
     "sphinx[test]==8.0.2",
     "types-docutils==0.21.0.20241005",
     "vulture==2.13",
-    "docformatter --in-place==1.7.5",
+    "docformatter==1.7.5",
 ]
 optional-dependencies.release = [ "check-wheel-contents==0.6.0" ]
 urls.Source = "https://github.com/adamtheturtle/sphinx-substitution-extensions"
