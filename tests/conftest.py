@@ -1,4 +1,6 @@
-"""Configuration for pytest."""
+"""
+Configuration for pytest.
+"""
 
 import pytest
 from beartype import beartype

@@ -197,8 +197,7 @@ def test_substitution_download(
 ) -> None:
     """
     The ``substitution-download`` role replaces the placeholders defined in
-    ``conf.py`` as specified in both the download text and the download
-    target.
+    ``conf.py`` as specified in both the download text and the download target.
     """
     source_directory = tmp_path / "source"
     source_directory.mkdir()
