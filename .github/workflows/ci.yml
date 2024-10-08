@@ -34,28 +34,28 @@ jobs:
           uv run --all-extras pre-commit run --all-files --hook-stage pre-push --verbose
           uv run --all-extras pre-commit run --all-files --hook-stage manual --verbose
         env:
-          UV_PYTHON: python${{ matrix.python-version }}
+          UV_PYTHON: ${{ matrix.python-version }}
           UV_RESOLUTION: ${{ matrix.uv-resolution }}
 
       - name: "Build sample"
         run: |
           make build-sample
         env:
-          UV_PYTHON: python${{ matrix.python-version }}
+          UV_PYTHON: ${{ matrix.python-version }}
           UV_RESOLUTION: ${{ matrix.uv-resolution }}
 
       - name: "Build sample parallel"
         run: |
           make build-sample-parallel
         env:
-          UV_PYTHON: python${{ matrix.python-version }}
+          UV_PYTHON: ${{ matrix.python-version }}
           UV_RESOLUTION: ${{ matrix.uv-resolution }}
 
       - name: "Run tests"
         run: |
           uv run --all-extras pytest -s -vvv --cov-fail-under 100 --cov=src/ --cov=tests . --cov-report=xml
         env:
-          UV_PYTHON: python${{ matrix.python-version }}
+          UV_PYTHON: ${{ matrix.python-version }}
           UV_RESOLUTION: ${{ matrix.uv-resolution }}
 
       - name: "Upload coverage to Codecov"
