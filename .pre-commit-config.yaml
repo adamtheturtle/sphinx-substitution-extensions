@@ -49,8 +49,8 @@ repos:
         types_or: [yaml]
         additional_dependencies: ["uv"]
 
-      - id: docformatter --in-place
-        name: docformatter --in-place
+      - id: docformatter
+        name: docformatter
         entry: uv run --extra=dev -m docformatter --in-place
         language: python
         types_or: [python]
