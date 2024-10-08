@@ -238,9 +238,8 @@ ci:
     - ruff-check-fix-docs
     - ruff-format-fix
     - ruff-format-fix-docs
-    - docformatter --in-place
+    - docformatter
     - shellcheck
-    - docformatter --in-place
     - shellcheck-docs
     - shfmt
     - shfmt-docs
