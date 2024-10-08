@@ -20,7 +20,7 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.10", "3.11", "3.12"]
-        uv-resolution: ["highest", "lowest"]
+        uv-resolution: ["highest", "lowest-direct"]
 
     steps:
       - uses: actions/checkout@v4
@@ -30,23 +30,33 @@ jobs:
 
       - name: "Lint"
         run: |
-          uv run --all-extras --python=${{ matrix.python-version }} --resolution=${{ matrix.uv-resolution }} pre-commit run --all-files --hook-stage pre-commit --verbose
-          uv run --all-extras --python=${{ matrix.python-version }} --resolution=${{ matrix.uv-resolution }} pre-commit run --all-files --hook-stage pre-push --verbose
-          uv run --all-extras --python=${{ matrix.python-version }} --resolution=${{ matrix.uv-resolution }} pre-commit run --all-files --hook-stage manual --verbose
+          uv run --all-extras pre-commit run --all-files --hook-stage pre-commit --verbose
+          uv run --all-extras pre-commit run --all-files --hook-stage pre-push --verbose
+          uv run --all-extras pre-commit run --all-files --hook-stage manual --verbose
+        env:
+          UV_PYTHON: python${{ matrix.python-version }}
+          UV_RESOLUTION: ${{ matrix.uv-resolution }}
 
       - name: "Build sample"
         run: |
           make build-sample
         env:
-          UV_RESOLUTION: foobar
+          UV_PYTHON: python${{ matrix.python-version }}
+          UV_RESOLUTION: ${{ matrix.uv-resolution }}
 
       - name: "Build sample parallel"
         run: |
           make build-sample-parallel
+        env:
+          UV_PYTHON: python${{ matrix.python-version }}
+          UV_RESOLUTION: ${{ matrix.uv-resolution }}
 
       - name: "Run tests"
         run: |
-          uv run --all-extras --python=${{ matrix.python-version }} --resolution=${{ matrix.uv-resolution }} pytest -s -vvv --cov-fail-under 100 --cov=src/ --cov=tests . --cov-report=xml
+          uv run --all-extras pytest -s -vvv --cov-fail-under 100 --cov=src/ --cov=tests . --cov-report=xml
+        env:
+          UV_PYTHON: python${{ matrix.python-version }}
+          UV_RESOLUTION: ${{ matrix.uv-resolution }}
 
       - name: "Upload coverage to Codecov"
         uses: "codecov/codecov-action@v4"
