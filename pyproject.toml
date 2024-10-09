@@ -42,7 +42,7 @@ dependencies = [
 ]
 optional-dependencies.dev = [
     "actionlint-py==1.7.3.17",
-    "check-manifest==0.49",
+    "check-manifest==0.50",
     "deptry==0.20.0",
     "doc8==1.1.2",
     "doccmd==2024.10.8.12",
