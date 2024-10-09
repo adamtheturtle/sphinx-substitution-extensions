@@ -362,3 +362,7 @@ ignore_names = [
 
 # Duplicate some of .gitignore
 exclude = [ ".venv" ]
+
+[tool.yamlfix]
+section_whitelines = 1
+whitelines = 1
