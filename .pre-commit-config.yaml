@@ -30,15 +30,7 @@ repos:
       - id: rst-inline-touching-normal
       - id: text-unicode-replacement-char
       - id: rst-backticks
-  - repo: https://github.com/mrtazz/checkmake.git
-    rev: 0.2.2
-    hooks:
-      - id: checkmake
-        args: ["--config", ".checkmake-config.ini"]
-  - repo: https://github.com/google/yamlfmt
-    rev: v0.13.0
-    hooks:
-      - id: yamlfmt
+
   - repo: local
     hooks:
       - id: actionlint
@@ -245,3 +237,4 @@ ci:
     - shfmt-docs
     - vulture
     - vulture-docs
+    - yamlfix
