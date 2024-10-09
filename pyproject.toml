@@ -26,6 +26,7 @@ classifiers = [
     "Environment :: Web Environment",
     "Framework :: Pytest",
     "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows",
     "Operating System :: POSIX",
     "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3.10",
