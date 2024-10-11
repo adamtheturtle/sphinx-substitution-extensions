@@ -6,6 +6,8 @@ Changelog
 Next
 ----
 
+- Support Python 3.13.
+
 2024.08.06
 ------------
 
