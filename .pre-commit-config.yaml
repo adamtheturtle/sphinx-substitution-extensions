@@ -98,7 +98,7 @@ repos:
       - id: check-manifest
         name: check-manifest
         stages: [pre-push]
-        entry: uv run --extra=dev -m check_manifest .
+        entry: uv run --extra=dev -m check_manifest
         language: python
         pass_filenames: false
         additional_dependencies: [uv]
