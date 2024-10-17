@@ -484,7 +484,7 @@ class TestMyst:
         assert expected in content_html.read_text()
 
     @staticmethod
-    def test_default_myst_sub_delimiters(
+    def test_default_myst_sub_delimiters_code_block(
         tmp_path: Path,
         make_app: Callable[..., SphinxTestApp],
     ) -> None:
@@ -532,7 +532,7 @@ class TestMyst:
         assert expected in content_html.read_text()
 
     @staticmethod
-    def test_custom_myst_sub_delimiters(
+    def test_custom_myst_sub_delimiters_code_block(
         tmp_path: Path,
         make_app: Callable[..., SphinxTestApp],
     ) -> None:
