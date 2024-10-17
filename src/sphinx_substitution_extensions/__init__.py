@@ -47,6 +47,10 @@ class SubstitutionCodeBlock(CodeBlock):
             if value == "markdown"
         }
 
+        # Use `| |` on reST as it is the default substitution syntax.
+        # Use `| |` on MyST for backwards compatibility as this is what we
+        # originally shipped with.
+        delimiter_pairs = {("|", "|")}
         # Rather than checking the file extension, we could check if
         # ``self.env.parser`` were a type we support, but this is simpler
         # and does not require having ``myst_parser`` installed or
@@ -54,6 +58,14 @@ class SubstitutionCodeBlock(CodeBlock):
         if Path(source_file).suffix in markdown_suffixes:
             if "substitution" in self.config.myst_enable_extensions:
                 substitution_defs = self.config.myst_substitutions
+            opening_delimiter, closing_delimiter = (
+                self.config.myst_sub_delimiters
+            )
+            new_delimiter_pair = (
+                opening_delimiter + opening_delimiter,
+                closing_delimiter + closing_delimiter,
+            )
+            delimiter_pairs = {*delimiter_pairs, new_delimiter_pair}
         else:
             substitution_defs = {
                 key: value.astext()
@@ -64,7 +76,12 @@ class SubstitutionCodeBlock(CodeBlock):
             new_item = item
             for name, replacement in substitution_defs.items():
                 if SUBSTITUTION_OPTION_NAME in self.options:
-                    new_item = new_item.replace(f"|{name}|", replacement)
+                    for delimiter_pair in delimiter_pairs:
+                        opening_delimiter, closing_delimiter = delimiter_pair
+                        new_item = new_item.replace(
+                            f"{opening_delimiter}{name}{closing_delimiter}",
+                            replacement,
+                        )
             new_item_string_list = StringList(initlist=[new_item])
             new_content.extend(new_item_string_list)
 

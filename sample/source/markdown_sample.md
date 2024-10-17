@@ -23,6 +23,19 @@ Configuration
 
        echo "The author is |author|"
     ```
+
+    or, with the value of the `myst_sub_delimiters` `conf.py` setting:
+
+    ```{code-block} markdown
+
+       echo "The author is {{author}}"
+    ```
+
+    ```{code-block} markdown
+    :substitutions:
+
+       echo "The author is {{author}}"
+    ```
 ```
 
 =>
@@ -36,4 +49,15 @@ Configuration
     :substitutions:
 
     echo "The author is |author|"
+```
+
+```{code-block} markdown
+
+    echo "The author is {{author}}"
+```
+
+```{code-block} markdown
+    :substitutions:
+
+    echo "The author is {{author}}"
 ```
