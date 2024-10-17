@@ -116,6 +116,9 @@ This adds a ``:substitutions:`` option to Sphinx's built-in `code-block`_ direct
       echo "|author| released version |release|"
    ```
 
+As well as using ``|author|``, you can also use ``{{author}}``.
+This will respect the value of ``myst_sub_delimiters`` as set in ``conf.py``.
+
 Credits
 -------
 
