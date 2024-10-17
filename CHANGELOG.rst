@@ -7,6 +7,8 @@ Next
 ----
 
 - Support Python 3.13.
+- In MyST documents, support the ``myst_sub_delimiters`` option.
+  This means you can use the ``{{replace-me}}`` syntax in MyST documents.
 
 2024.08.06
 ------------
