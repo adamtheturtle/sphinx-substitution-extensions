@@ -482,3 +482,6 @@ class TestMyst:
         expected = "PRE-example_substitution-POST"
         content_html = app.outdir / "markdown_document.html"
         assert expected in content_html.read_text()
+
+    def test_myst_sub_delimiters(self) -> None:
+        pass
