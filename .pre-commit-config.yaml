@@ -93,7 +93,7 @@ repos:
         stages: [pre-push]
         entry: uv run --extra=dev doccmd --language=python --command="mypy"
         language: python
-        types_or: [markdown, rst, python, toml]
+        types_or: [markdown, rst]
 
       - id: check-manifest
         name: check-manifest
@@ -117,7 +117,7 @@ repos:
         stages: [pre-push]
         entry: uv run --extra=dev doccmd --language=python --command="pyright"
         language: python
-        types_or: [markdown, rst, python, toml]
+        types_or: [markdown, rst]
 
       - id: vulture
         name: vulture
