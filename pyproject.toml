@@ -67,7 +67,7 @@ optional-dependencies.dev = [
     "shfmt-py==3.7.0.1",
     # We use `sphinx.testing`.
     "sphinx[test]==8.1.3",
-    "types-docutils==0.21.0.20241005",
+    "types-docutils==0.21.0.20241128",
     "vulture==2.13",
     "yamlfix==1.17.0",
 ]
