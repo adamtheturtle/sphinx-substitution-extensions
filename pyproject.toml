@@ -68,7 +68,7 @@ optional-dependencies.dev = [
     # We use `sphinx.testing`.
     "sphinx[test]==8.1.3",
     "types-docutils==0.21.0.20241128",
-    "vulture==2.13",
+    "vulture==2.14",
     "yamlfix==1.17.0",
 ]
 optional-dependencies.release = [ "check-wheel-contents==0.6.1" ]
