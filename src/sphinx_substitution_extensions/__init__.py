@@ -83,7 +83,7 @@ class SubstitutionCodeBlock(CodeBlock):
                             replacement,
                         )
             new_item_string_list = StringList(initlist=[new_item])
-            new_content.extend(new_item_string_list)
+            new_content.extend(other=new_item_string_list)
 
         self.content = new_content
         return super().run()
@@ -173,11 +173,14 @@ def setup(app: Sphinx) -> ExtensionMetadata:
     """
     Add the custom directives to Sphinx.
     """
-    app.add_config_value("substitutions", [], "html")
-    directives.register_directive("code-block", SubstitutionCodeBlock)
-    app.add_role("substitution-code", SubstitutionCodeRole())
+    app.add_config_value(name="substitutions", default=[], rebuild="html")
+    directives.register_directive(
+        name="code-block",
+        directive=SubstitutionCodeBlock,
+    )
+    app.add_role(name="substitution-code", role=SubstitutionCodeRole())
     substitution_download_role = SubstitutionXRefRole(
         nodeclass=addnodes.download_reference
     )
-    app.add_role("substitution-download", substitution_download_role)
+    app.add_role(name="substitution-download", role=substitution_download_role)
     return {"parallel_read_safe": True}

@@ -30,7 +30,7 @@ def test_no_substitution_code_block(
         '''
         """,
     )
-    conf_py.write_text(conf_py_content)
+    conf_py.write_text(data=conf_py_content)
     source_file_content = dedent(
         text="""\
         .. code-block:: shell
@@ -38,7 +38,7 @@ def test_no_substitution_code_block(
            $ PRE-|a|-POST
         """,
     )
-    source_file.write_text(source_file_content)
+    source_file.write_text(data=source_file_content)
     app = make_app(srcdir=source_directory)
     app.build()
     content_html = app.outdir / "index.html"
@@ -69,7 +69,7 @@ def test_substitution_code_block(
         '''
         """,
     )
-    conf_py.write_text(conf_py_content)
+    conf_py.write_text(data=conf_py_content)
     source_file_content = dedent(
         text="""\
         .. code-block:: shell
@@ -78,7 +78,7 @@ def test_substitution_code_block(
            $ PRE-|a|-POST
         """,
     )
-    source_file.write_text(source_file_content)
+    source_file.write_text(data=source_file_content)
     app = make_app(srcdir=source_directory)
     app.build()
     expected = "PRE-example_substitution-POST"
@@ -105,7 +105,7 @@ def test_substitution_code_block_case_preserving(
         '''
         """,
     )
-    conf_py.write_text(conf_py_content)
+    conf_py.write_text(data=conf_py_content)
     source_file_content = dedent(
         text="""\
         .. code-block:: shell
@@ -114,7 +114,7 @@ def test_substitution_code_block_case_preserving(
            $ PRE-|aBcD_eFgH|-POST
         """,
     )
-    source_file.write_text(source_file_content)
+    source_file.write_text(data=source_file_content)
 
     app = make_app(srcdir=source_directory)
     app.build()
@@ -143,13 +143,13 @@ def test_substitution_inline(
         '''
         """,
     )
-    conf_py.write_text(conf_py_content)
+    conf_py.write_text(data=conf_py_content)
     source_file_content = dedent(
         text="""\
         Example :substitution-code:`PRE-|a|-POST`
         """,
     )
-    source_file.write_text(source_file_content)
+    source_file.write_text(data=source_file_content)
     app = make_app(srcdir=source_directory)
     app.build()
     content_html = app.outdir / "index.html"
@@ -176,13 +176,13 @@ def test_substitution_inline_case_preserving(
         '''
         """,
     )
-    conf_py.write_text(conf_py_content)
+    conf_py.write_text(data=conf_py_content)
     source_file_content = dedent(
         text="""\
         Example :substitution-code:`PRE-|aBcD_eFgH|-POST`
         """,
     )
-    source_file.write_text(source_file_content)
+    source_file.write_text(data=source_file_content)
     expected = "PRE-example_substitution-POST"
     app = make_app(srcdir=source_directory)
     app.build()
@@ -211,7 +211,7 @@ def test_substitution_download(
         '''
         """,
     )
-    conf_py.write_text(conf_py_content)
+    conf_py.write_text(data=conf_py_content)
     # Importantly we have a non-space whitespace character in the target name.
     downloadable_file = (
         source_directory / "tgt_pre-example_substitution-tgt_post .py"
@@ -223,7 +223,7 @@ def test_substitution_download(
         ":substitution-download:"
         "`txt_pre-|a|-txt_post <tgt_pre-|a|-tgt_post\t.py>`"
     )
-    source_file.write_text(source_file_content)
+    source_file.write_text(data=source_file_content)
     app = make_app(srcdir=source_directory)
     app.build()
     content_html = app.outdir / "index.html"
@@ -276,7 +276,7 @@ class TestMyst:
             '''
             """,
         )
-        conf_py.write_text(conf_py_content)
+        conf_py.write_text(data=conf_py_content)
         index_source_file_content = dedent(
             text="""\
             .. code-block:: shell
@@ -316,7 +316,7 @@ class TestMyst:
             }
             """,
         )
-        conf_py.write_text(conf_py_content)
+        conf_py.write_text(data=conf_py_content)
         index_source_file_content = dedent(
             text="""\
             .. code-block:: shell
@@ -358,7 +358,7 @@ class TestMyst:
             }
             """,
         )
-        conf_py.write_text(conf_py_content)
+        conf_py.write_text(data=conf_py_content)
         index_source_file_content = dedent(
             text="""\
             .. toctree::
@@ -405,7 +405,7 @@ class TestMyst:
             }
             """,
         )
-        conf_py.write_text(conf_py_content)
+        conf_py.write_text(data=conf_py_content)
         index_source_file_content = dedent(
             text="""\
             .. toctree::
@@ -457,7 +457,7 @@ class TestMyst:
             }
             """,
         )
-        conf_py.write_text(conf_py_content)
+        conf_py.write_text(data=conf_py_content)
         index_source_file_content = dedent(
             text="""\
             .. toctree::
@@ -505,7 +505,7 @@ class TestMyst:
             }
             """,
         )
-        conf_py.write_text(conf_py_content)
+        conf_py.write_text(data=conf_py_content)
         index_source_file_content = dedent(
             text="""\
             .. toctree::
@@ -554,7 +554,7 @@ class TestMyst:
             myst_sub_delimiters = ("[", "]")
             """,
         )
-        conf_py.write_text(conf_py_content)
+        conf_py.write_text(data=conf_py_content)
         index_source_file_content = dedent(
             text="""\
             .. toctree::
