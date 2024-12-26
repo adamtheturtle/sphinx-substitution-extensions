@@ -16,7 +16,7 @@ from sphinx.application import Sphinx
 from sphinx.directives.code import CodeBlock
 from sphinx.environment import BuildEnvironment
 from sphinx.roles import XRefRole
-from sphinx.util.typing import ExtensionMetadata
+from sphinx.util.typing import ExtensionMetadata, OptionSpec
 
 from sphinx_substitution_extensions.shared import (
     SUBSTITUTION_OPTION_NAME,
@@ -29,7 +29,7 @@ class SubstitutionCodeBlock(CodeBlock):
     Similar to CodeBlock but replaces placeholders with variables.
     """
 
-    option_spec = CodeBlock.option_spec
+    option_spec: ClassVar[OptionSpec] = CodeBlock.option_spec
     option_spec["substitutions"] = directives.flag
 
     def run(self) -> list[Node]:
