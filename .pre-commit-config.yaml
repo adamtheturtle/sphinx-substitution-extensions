@@ -119,6 +119,15 @@ repos:
         language: python
         types_or: [markdown, rst]
 
+      - id: pyright-verifytypes
+        name: pyright-verifytypes
+        stages: [pre-push]
+        entry: uv run --extra=dev -m pyright --ignoreexternal --verifytypes sphinx_substitution_extensions
+        language: python
+        pass_filenames: false
+        types_or: [python]
+        additional_dependencies: [uv==0.4.25]
+
       - id: vulture
         name: vulture
         entry: uv run --extra=dev -m vulture .
@@ -237,6 +246,7 @@ ci:
     - pyproject-fmt-fix
     - pyright
     - pyright-docs
+    - pyright-verifytypes
     - pyroma
     - ruff-check-fix
     - ruff-check-fix-docs
