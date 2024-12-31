@@ -49,7 +49,7 @@ optional-dependencies.dev = [
     "doccmd==2024.12.26",
     "docformatter==1.7.5",
     "interrogate==1.7.0",
-    "mypy[faster-cache]==1.14.0",
+    "mypy[faster-cache]==1.14.1",
     "mypy-strict-kwargs==2024.12.25",
     "myst-parser==4.0.0",
     "pre-commit==4.0.1",
