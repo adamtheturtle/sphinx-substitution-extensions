@@ -6,6 +6,9 @@ Changelog
 Next
 ----
 
+2025.01.02
+----------
+
 - Supports situations where there is no source file name available to the extension, such as when using ``sphinx_toolbox.rest_example``.
 
 2024.10.17
