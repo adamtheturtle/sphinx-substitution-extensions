@@ -10,61 +10,36 @@ Configuration
 ``code-block``
 --------------
 
-.. code-block:: rst
+.. rest-example::
 
-    .. code-block:: shell
+   .. code-block:: shell
 
-       echo "The author is |author|"
+      echo "The author is |author|"
 
-    .. code-block:: shell
-       :substitutions:
+   .. code-block:: shell
+      :substitutions:
 
-       echo "The author is |author|"
-
-=>
-
-.. code-block:: shell
-
-   echo "The author is |author|"
-
-.. code-block:: shell
-   :substitutions:
-
-   echo "The author is |author|"
+      echo "The author is |author|"
 
 Inline ``:code:``
 -----------------
 
-.. code-block:: rst
+.. rest-example::
 
     :code:`echo "The author is |author|"`
 
     :substitution-code:`echo "The author is |author|"`
 
-=>
-
-:code:`echo "The author is |author|"`
-
-:substitution-code:`echo "The author is |author|"`
-
 Inline ``:download:``
 ---------------------
 
-.. code-block:: rst
+.. rest-example:: rst
 
+   .. We cannot use the substitution in the download target, because the download directive will error if the file does not exist.
 
-    .. We cannot use the substitution in the download target, because
-    .. the download directive will error if the file does not exist.
-    :download:`Script by |author| <../source/Eleanor.txt>`.
+   :download:`Script by |author| <../source/Eleanor.txt>`.
 
-    :substitution-download:`Script by |author| <../source/|author|.txt>`.
-
-=>
-
-:download:`Script by |author| <../source/Eleanor.txt>`.
-
-:substitution-download:`Script by |author| <../source/|author|.txt>`.
-
+   :substitution-download:`Script by |author| <../source/|author|.txt>`.
 
 ..
 

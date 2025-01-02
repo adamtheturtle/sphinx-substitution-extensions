@@ -5,6 +5,7 @@ Sample ``conf.py``.
 extensions = [
     "myst_parser",
     "sphinx_substitution_extensions",
+    "sphinx_toolbox.rest_example",
 ]
 
 rst_prolog = """
