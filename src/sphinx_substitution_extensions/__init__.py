@@ -2,7 +2,6 @@
 Custom Sphinx extensions.
 """
 
-from pathlib import Path
 from typing import Any, ClassVar
 
 from beartype import beartype
@@ -39,10 +38,9 @@ class SubstitutionCodeBlock(CodeBlock):
         new_content = StringList()
         existing_content = self.content
         substitution_defs = {}
-        source_file, _ = self.get_source_info()
 
         markdown_suffixes = {
-            key
+            key.lstrip(".")
             for key, value in self.config.source_suffix.items()
             if value == "markdown"
         }
@@ -51,11 +49,8 @@ class SubstitutionCodeBlock(CodeBlock):
         # Use `| |` on MyST for backwards compatibility as this is what we
         # originally shipped with.
         delimiter_pairs = {("|", "|")}
-        # Rather than checking the file extension, we could check if
-        # ``self.env.parser`` were a type we support, but this is simpler
-        # and does not require having ``myst_parser`` installed or
-        # Sphinx >= 7.4.0.
-        if Path(source_file).suffix in markdown_suffixes:
+        parser_supported_formats = set(self.env.parser.supported)
+        if parser_supported_formats.intersection(markdown_suffixes):
             if "substitution" in self.config.myst_enable_extensions:
                 substitution_defs = self.config.myst_substitutions
             opening_delimiter, closing_delimiter = (
