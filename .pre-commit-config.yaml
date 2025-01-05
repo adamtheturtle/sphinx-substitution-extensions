@@ -269,7 +269,6 @@ repos:
       - id: sphinx-lint
         name: sphinx-lint
         entry: uv run --extra=dev sphinx-lint --enable=all --disable=line-too-long
-          README.rst CHANGELOG.rst
         language: python
         types_or: [rst]
         additional_dependencies: [uv==0.5.14]
