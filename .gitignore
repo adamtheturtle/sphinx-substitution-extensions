@@ -113,3 +113,7 @@ venv.bak/
 src/*/_setuptools_scm_version.txt
 
 uv.lock
+
+# Ignore Mac DS_Store files
+.DS_Store
+**/.DS_Store
