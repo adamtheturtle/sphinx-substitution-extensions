@@ -52,9 +52,7 @@ optional-dependencies.dev = [
     "mypy[faster-cache]==1.14.1",
     "mypy-strict-kwargs==2024.12.25",
     "myst-parser==4.0.0",
-    # Dependency of mypy[faster-cache].
-    # Versioned here to work around https://github.com/ijl/orjson/issues/548
-    "orjson==3.10.14",
+
     "pre-commit==4.0.1",
     "pyenchant==3.3.0rc1",
     "pylint==3.3.3",
