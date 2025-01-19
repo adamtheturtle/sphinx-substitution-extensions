@@ -525,16 +525,7 @@ class TestMyst:
         source_directory.mkdir()
         index_source_file = source_directory / "index.rst"
         markdown_source_file = source_directory / "markdown_document.md"
-        conf_py = source_directory / "conf.py"
-        conf_py_content = dedent(
-            text="""\
-            myst_enable_extensions = ['substitution']
-            myst_substitutions = {
-                "a": "example_substitution",
-            }
-            """,
-        )
-        conf_py.write_text(data=conf_py_content)
+        (source_directory / "conf.py").touch()
         index_source_file_content = dedent(
             text="""\
             .. toctree::
@@ -559,7 +550,14 @@ class TestMyst:
         app = make_app(
             srcdir=source_directory,
             confoverrides={
-                "extensions": ["myst_parser", "sphinx_substitution_extensions"]
+                "extensions": [
+                    "myst_parser",
+                    "sphinx_substitution_extensions",
+                ],
+                "myst_enable_extensions": ["substitution"],
+                "myst_substitutions": {
+                    "a": "example_substitution",
+                },
             },
         )
         app.build()
