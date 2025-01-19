@@ -21,12 +21,8 @@ def test_no_substitution_code_block(
     source_directory = tmp_path / "source"
     source_directory.mkdir()
     source_file = source_directory / "index.rst"
-    conf_py = source_directory / "conf.py"
-    conf_py_content = dedent(
-        text="""\
-        """,
-    )
-    conf_py.write_text(data=conf_py_content)
+    (source_directory / "conf.py").touch()
+
     source_file_content = dedent(
         text="""\
         .. |a| replace:: example_substitution
@@ -63,12 +59,8 @@ def test_substitution_code_block(
     source_directory = tmp_path / "source"
     source_directory.mkdir()
     source_file = source_directory / "index.rst"
-    conf_py = source_directory / "conf.py"
-    conf_py_content = dedent(
-        text="""\
-        """,
-    )
-    conf_py.write_text(data=conf_py_content)
+    (source_directory / "conf.py").touch()
+
     source_file_content = dedent(
         text="""\
         .. |a| replace:: example_substitution
@@ -102,12 +94,8 @@ def test_substitution_code_block_case_preserving(
     source_directory = tmp_path / "source"
     source_directory.mkdir()
     source_file = source_directory / "index.rst"
-    conf_py = source_directory / "conf.py"
-    conf_py_content = dedent(
-        text="""\
-        """,
-    )
-    conf_py.write_text(data=conf_py_content)
+    (source_directory / "conf.py").touch()
+
     source_file_content = dedent(
         text="""\
         .. |aBcD_eFgH| replace:: example_substitution
@@ -143,12 +131,8 @@ def test_substitution_inline(
     source_directory = tmp_path / "source"
     source_directory.mkdir()
     source_file = source_directory / "index.rst"
-    conf_py = source_directory / "conf.py"
-    conf_py_content = dedent(
-        text="""\
-        """,
-    )
-    conf_py.write_text(data=conf_py_content)
+    (source_directory / "conf.py").touch()
+
     source_file_content = dedent(
         text="""\
         .. |a| replace:: example_substitution
@@ -179,12 +163,8 @@ def test_substitution_inline_case_preserving(
     source_directory = tmp_path / "source"
     source_directory.mkdir()
     source_file = source_directory / "index.rst"
-    conf_py = source_directory / "conf.py"
-    conf_py_content = dedent(
-        text="""\
-        """,
-    )
-    conf_py.write_text(data=conf_py_content)
+    (source_directory / "conf.py").touch()
+
     source_file_content = dedent(
         text="""\
         .. |aBcD_eFgH| replace:: example_substitution
@@ -217,12 +197,8 @@ def test_substitution_download(
     source_directory = tmp_path / "source"
     source_directory.mkdir()
     source_file = source_directory / "index.rst"
-    conf_py = source_directory / "conf.py"
-    conf_py_content = dedent(
-        text="""\
-        """,
-    )
-    conf_py.write_text(data=conf_py_content)
+    (source_directory / "conf.py").touch()
+
     # Importantly we have a non-space whitespace character in the target name.
     downloadable_file = (
         source_directory / "tgt_pre-example_substitution-tgt_post .py"
