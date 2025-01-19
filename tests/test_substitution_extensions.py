@@ -257,15 +257,7 @@ class TestMyst:
         source_directory = tmp_path / "source"
         source_directory.mkdir()
         index_source_file = source_directory / "index.rst"
-        conf_py = source_directory / "conf.py"
-        conf_py_content = dedent(
-            text="""\
-            myst_substitutions = {
-                "a": "myst_substitution",
-            }
-            """,
-        )
-        conf_py.write_text(data=conf_py_content)
+        (source_directory / "conf.py").touch()
         index_source_file_content = dedent(
             text="""\
             .. |a| replace:: rst_prolog_substitution
@@ -286,6 +278,9 @@ class TestMyst:
                     "sphinx_substitution_extensions",
                 ],
                 "myst_enable_extensions": ["substitution"],
+                "myst_substitutions": {
+                    "a": "myst_substitution",
+                },
             },
         )
         app.build()
@@ -308,15 +303,7 @@ class TestMyst:
         source_directory = tmp_path / "source"
         source_directory.mkdir()
         index_source_file = source_directory / "index.rst"
-        conf_py = source_directory / "conf.py"
-        conf_py_content = dedent(
-            text="""\
-            myst_substitutions = {
-                "a": "myst_substitution",
-            }
-            """,
-        )
-        conf_py.write_text(data=conf_py_content)
+        (source_directory / "conf.py").touch()
         index_source_file_content = dedent(
             text="""\
             .. code-block:: shell
@@ -335,6 +322,9 @@ class TestMyst:
                     "sphinx_substitution_extensions",
                 ],
                 "myst_enable_extensions": ["substitution"],
+                "myst_substitutions": {
+                    "a": "myst_substitution",
+                },
             },
         )
         app.build()
@@ -359,15 +349,7 @@ class TestMyst:
         source_directory.mkdir()
         index_source_file = source_directory / "index.rst"
         markdown_source_file = source_directory / "markdown_document.md"
-        conf_py = source_directory / "conf.py"
-        conf_py_content = dedent(
-            text="""\
-            myst_substitutions = {
-                "a": "example_substitution",
-            }
-            """,
-        )
-        conf_py.write_text(data=conf_py_content)
+        (source_directory / "conf.py").touch()
         index_source_file_content = dedent(
             text="""\
             .. toctree::
@@ -397,6 +379,9 @@ class TestMyst:
                     "sphinx_substitution_extensions",
                 ],
                 "myst_enable_extensions": ["substitution"],
+                "myst_substitutions": {
+                    "a": "example_substitution",
+                },
             },
         )
         app.build()
@@ -418,15 +403,7 @@ class TestMyst:
         source_directory.mkdir()
         index_source_file = source_directory / "index.rst"
         markdown_source_file = source_directory / "markdown_document.md"
-        conf_py = source_directory / "conf.py"
-        conf_py_content = dedent(
-            text="""\
-            myst_substitutions = {
-                "a": "example_substitution",
-            }
-            """,
-        )
-        conf_py.write_text(data=conf_py_content)
+        (source_directory / "conf.py").touch()
         index_source_file_content = dedent(
             text="""\
             .. toctree::
@@ -455,6 +432,9 @@ class TestMyst:
                     "myst_parser",
                     "sphinx_substitution_extensions",
                 ],
+                "myst_substitutions": {
+                    "a": "example_substitution",
+                },
             },
         )
         app.build()
@@ -476,19 +456,7 @@ class TestMyst:
         source_directory.mkdir()
         index_source_file = source_directory / "index.rst"
         markdown_source_file = source_directory / "markdown_document.txt"
-        conf_py = source_directory / "conf.py"
-        conf_py_content = dedent(
-            text="""\
-            source_suffix = {
-                ".rst": "restructuredtext",
-                ".txt": "markdown",
-            }
-            myst_substitutions = {
-                "a": "example_substitution",
-            }
-            """,
-        )
-        conf_py.write_text(data=conf_py_content)
+        (source_directory / "conf.py").touch()
         index_source_file_content = dedent(
             text="""\
             .. toctree::
@@ -518,6 +486,13 @@ class TestMyst:
                     "sphinx_substitution_extensions",
                 ],
                 "myst_enable_extensions": ["substitution"],
+                "myst_substitutions": {
+                    "a": "example_substitution",
+                },
+                "source_suffix": {
+                    ".rst": "restructuredtext",
+                    ".txt": "markdown",
+                },
             },
         )
         app.build()
@@ -593,16 +568,7 @@ class TestMyst:
         source_directory.mkdir()
         index_source_file = source_directory / "index.rst"
         markdown_source_file = source_directory / "markdown_document.md"
-        conf_py = source_directory / "conf.py"
-        conf_py_content = dedent(
-            text="""\
-            myst_substitutions = {
-                "a": "example_substitution",
-            }
-            myst_sub_delimiters = ("[", "]")
-            """,
-        )
-        conf_py.write_text(data=conf_py_content)
+        (source_directory / "conf.py").touch()
         index_source_file_content = dedent(
             text="""\
             .. toctree::
@@ -632,6 +598,10 @@ class TestMyst:
                     "sphinx_substitution_extensions",
                 ],
                 "myst_enable_extensions": ["substitution"],
+                "myst_substitutions": {
+                    "a": "example_substitution",
+                },
+                "myst_sub_delimiters": ("[", "]"),
             },
         )
         app.build()
