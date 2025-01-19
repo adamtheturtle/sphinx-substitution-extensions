@@ -260,7 +260,6 @@ class TestMyst:
         conf_py = source_directory / "conf.py"
         conf_py_content = dedent(
             text="""\
-            myst_enable_extensions = ["substitution"]
             myst_substitutions = {
                 "a": "myst_substitution",
             }
@@ -286,6 +285,7 @@ class TestMyst:
                     "myst_parser",
                     "sphinx_substitution_extensions",
                 ],
+                "myst_enable_extensions": ["substitution"],
             },
         )
         app.build()
@@ -311,7 +311,6 @@ class TestMyst:
         conf_py = source_directory / "conf.py"
         conf_py_content = dedent(
             text="""\
-            myst_enable_extensions = ['substitution']
             myst_substitutions = {
                 "a": "myst_substitution",
             }
@@ -330,7 +329,13 @@ class TestMyst:
 
         app = make_app(
             srcdir=source_directory,
-            confoverrides={"extensions": ["sphinx_substitution_extensions"]},
+            confoverrides={
+                "extensions": [
+                    "myst_parser",
+                    "sphinx_substitution_extensions",
+                ],
+                "myst_enable_extensions": ["substitution"],
+            },
         )
         app.build()
         assert app.statuscode == 0
@@ -357,7 +362,6 @@ class TestMyst:
         conf_py = source_directory / "conf.py"
         conf_py_content = dedent(
             text="""\
-            myst_enable_extensions = ['substitution']
             myst_substitutions = {
                 "a": "example_substitution",
             }
@@ -392,6 +396,7 @@ class TestMyst:
                     "myst_parser",
                     "sphinx_substitution_extensions",
                 ],
+                "myst_enable_extensions": ["substitution"],
             },
         )
         app.build()
@@ -474,7 +479,6 @@ class TestMyst:
         conf_py = source_directory / "conf.py"
         conf_py_content = dedent(
             text="""\
-            myst_enable_extensions = ['substitution']
             source_suffix = {
                 ".rst": "restructuredtext",
                 ".txt": "markdown",
@@ -509,7 +513,11 @@ class TestMyst:
         app = make_app(
             srcdir=source_directory,
             confoverrides={
-                "extensions": ["myst_parser", "sphinx_substitution_extensions"]
+                "extensions": [
+                    "myst_parser",
+                    "sphinx_substitution_extensions",
+                ],
+                "myst_enable_extensions": ["substitution"],
             },
         )
         app.build()
@@ -588,7 +596,6 @@ class TestMyst:
         conf_py = source_directory / "conf.py"
         conf_py_content = dedent(
             text="""\
-            myst_enable_extensions = ['substitution']
             myst_substitutions = {
                 "a": "example_substitution",
             }
@@ -624,6 +631,7 @@ class TestMyst:
                     "myst_parser",
                     "sphinx_substitution_extensions",
                 ],
+                "myst_enable_extensions": ["substitution"],
             },
         )
         app.build()
