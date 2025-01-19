@@ -157,17 +157,11 @@ def test_substitution_inline_case_preserving(
     source_directory = tmp_path / "source"
     source_directory.mkdir()
     source_file = source_directory / "index.rst"
-    conf_py = source_directory / "conf.py"
-    conf_py_content = dedent(
-        text="""\
-        rst_prolog = '''
-        .. |aBcD_eFgH| replace:: example_substitution
-        '''
-        """,
-    )
-    conf_py.write_text(data=conf_py_content)
+    (source_directory / "conf.py").touch()
     source_file_content = dedent(
         text="""\
+        .. |aBcD_eFgH| replace:: example_substitution
+
         Example :substitution-code:`PRE-|aBcD_eFgH|-POST`
         """,
     )
@@ -196,25 +190,20 @@ def test_substitution_download(
     source_directory = tmp_path / "source"
     source_directory.mkdir()
     source_file = source_directory / "index.rst"
-    conf_py = source_directory / "conf.py"
-    conf_py_content = dedent(
-        text="""\
-        rst_prolog = '''
-        .. |a| replace:: example_substitution
-        '''
-        """,
-    )
-    conf_py.write_text(data=conf_py_content)
+    (source_directory / "conf.py").touch()
     # Importantly we have a non-space whitespace character in the target name.
     downloadable_file = (
         source_directory / "tgt_pre-example_substitution-tgt_post .py"
     )
     downloadable_file.write_text(data="Sample")
-    source_file_content = (
+    source_file_content = dedent(
         # Importantly we have a substitution in the download text and the
         # target.
-        ":substitution-download:"
-        "`txt_pre-|a|-txt_post <tgt_pre-|a|-tgt_post\t.py>`"
+        text="""\
+    .. |a| replace:: example_substitution
+
+    :substitution-download:`txt_pre-|a|-txt_post <tgt_pre-|a|-tgt_post\t.py>`
+        """,
     )
     source_file.write_text(data=source_file_content)
     app = make_app(
