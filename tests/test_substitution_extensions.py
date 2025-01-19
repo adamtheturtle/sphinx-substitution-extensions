@@ -43,6 +43,7 @@ def test_no_substitution_code_block(
         confoverrides={"extensions": ["sphinx_substitution_extensions"]},
     )
     app.build()
+    assert app.statuscode == 0
     assert not app.warning.getvalue()
     content_html = app.outdir / "index.html"
     assert "PRE-example_substitution-POST" not in content_html.read_text()
@@ -86,6 +87,7 @@ def test_substitution_code_block(
         confoverrides={"extensions": ["sphinx_substitution_extensions"]},
     )
     app.build()
+    assert app.statuscode == 0
     assert not app.warning.getvalue()
     expected = "PRE-example_substitution-POST"
     content_html = app.outdir / "index.html"
@@ -126,6 +128,7 @@ def test_substitution_code_block_case_preserving(
         confoverrides={"extensions": ["sphinx_substitution_extensions"]},
     )
     app.build()
+    assert app.statuscode == 0
     assert not app.warning.getvalue()
     content_html = app.outdir / "index.html"
     expected = "PRE-example_substitution-POST"
@@ -163,6 +166,7 @@ def test_substitution_inline(
         confoverrides={"extensions": ["sphinx_substitution_extensions"]},
     )
     app.build()
+    assert app.statuscode == 0
     assert not app.warning.getvalue()
     content_html = app.outdir / "index.html"
     expected = "PRE-example_substitution-POST"
@@ -200,6 +204,7 @@ def test_substitution_inline_case_preserving(
         confoverrides={"extensions": ["sphinx_substitution_extensions"]},
     )
     app.build()
+    assert app.statuscode == 0
     assert not app.warning.getvalue()
     content_html = app.outdir / "index.html"
     expected = "PRE-example_substitution-POST"
@@ -243,6 +248,7 @@ def test_substitution_download(
         confoverrides={"extensions": ["sphinx_substitution_extensions"]},
     )
     app.build()
+    assert app.statuscode == 0
     assert not app.warning.getvalue()
     content_html = app.outdir / "index.html"
     # We use a pattern here because the download target is not predictable.
@@ -314,6 +320,7 @@ class TestMyst:
             },
         )
         app.build()
+        assert app.statuscode == 0
         assert not app.warning.getvalue()
         expected = "PRE-rst_prolog_substitution-POST"
         content_html = app.outdir / "index.html"
@@ -357,6 +364,7 @@ class TestMyst:
             confoverrides={"extensions": ["sphinx_substitution_extensions"]},
         )
         app.build()
+        assert app.statuscode == 0
         assert not app.warning.getvalue()
         expected = (
             '</span>PRE-<span class="p">|</span>a<span class="p">|</span>-POST'
@@ -418,6 +426,7 @@ class TestMyst:
             },
         )
         app.build()
+        assert app.statuscode == 0
         assert not app.warning.getvalue()
         expected = "PRE-example_substitution-POST"
         content_html = app.outdir / "markdown_document.html"
@@ -475,6 +484,7 @@ class TestMyst:
             },
         )
         app.build()
+        assert app.statuscode == 0
         assert not app.warning.getvalue()
         content_html = app.outdir / "markdown_document.html"
         assert "PRE-example_substitution-POST" not in content_html.read_text()
@@ -534,6 +544,7 @@ class TestMyst:
             },
         )
         app.build()
+        assert app.statuscode == 0
         assert not app.warning.getvalue()
         expected = "PRE-example_substitution-POST"
         content_html = app.outdir / "markdown_document.html"
@@ -589,6 +600,7 @@ class TestMyst:
             },
         )
         app.build()
+        assert app.statuscode == 0
         assert not app.warning.getvalue()
         expected = "PRE-example_substitution-POST"
         content_html = app.outdir / "markdown_document.html"
@@ -648,6 +660,7 @@ class TestMyst:
             },
         )
         app.build()
+        assert app.statuscode == 0
         assert not app.warning.getvalue()
         expected = "PRE-example_substitution-POST"
         content_html = app.outdir / "markdown_document.html"
