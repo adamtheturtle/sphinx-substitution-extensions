@@ -24,14 +24,13 @@ def test_no_substitution_code_block(
     conf_py = source_directory / "conf.py"
     conf_py_content = dedent(
         text="""\
-        rst_prolog = '''
-        .. |a| replace:: example_substitution
-        '''
         """,
     )
     conf_py.write_text(data=conf_py_content)
     source_file_content = dedent(
         text="""\
+        .. |a| replace:: example_substitution
+
         .. code-block:: shell
 
            $ PRE-|a|-POST
@@ -67,14 +66,13 @@ def test_substitution_code_block(
     conf_py = source_directory / "conf.py"
     conf_py_content = dedent(
         text="""\
-        rst_prolog = '''
-        .. |a| replace:: example_substitution
-        '''
         """,
     )
     conf_py.write_text(data=conf_py_content)
     source_file_content = dedent(
         text="""\
+        .. |a| replace:: example_substitution
+
         .. code-block:: shell
            :substitutions:
 
@@ -107,14 +105,13 @@ def test_substitution_code_block_case_preserving(
     conf_py = source_directory / "conf.py"
     conf_py_content = dedent(
         text="""\
-        rst_prolog = '''
-        .. |aBcD_eFgH| replace:: example_substitution
-        '''
         """,
     )
     conf_py.write_text(data=conf_py_content)
     source_file_content = dedent(
         text="""\
+        .. |aBcD_eFgH| replace:: example_substitution
+
         .. code-block:: shell
            :substitutions:
 
@@ -149,14 +146,13 @@ def test_substitution_inline(
     conf_py = source_directory / "conf.py"
     conf_py_content = dedent(
         text="""\
-        rst_prolog = '''
-        .. |a| replace:: example_substitution
-        '''
         """,
     )
     conf_py.write_text(data=conf_py_content)
     source_file_content = dedent(
         text="""\
+        .. |a| replace:: example_substitution
+
         Example :substitution-code:`PRE-|a|-POST`
         """,
     )
@@ -186,14 +182,13 @@ def test_substitution_inline_case_preserving(
     conf_py = source_directory / "conf.py"
     conf_py_content = dedent(
         text="""\
-        rst_prolog = '''
-        .. |aBcD_eFgH| replace:: example_substitution
-        '''
         """,
     )
     conf_py.write_text(data=conf_py_content)
     source_file_content = dedent(
         text="""\
+        .. |aBcD_eFgH| replace:: example_substitution
+
         Example :substitution-code:`PRE-|aBcD_eFgH|-POST`
         """,
     )
@@ -225,9 +220,6 @@ def test_substitution_download(
     conf_py = source_directory / "conf.py"
     conf_py_content = dedent(
         text="""\
-        rst_prolog = '''
-        .. |a| replace:: example_substitution
-        '''
         """,
     )
     conf_py.write_text(data=conf_py_content)
@@ -236,11 +228,14 @@ def test_substitution_download(
         source_directory / "tgt_pre-example_substitution-tgt_post .py"
     )
     downloadable_file.write_text(data="Sample")
-    source_file_content = (
+    source_file_content = dedent(
         # Importantly we have a substitution in the download text and the
         # target.
-        ":substitution-download:"
-        "`txt_pre-|a|-txt_post <tgt_pre-|a|-tgt_post\t.py>`"
+        text="""\
+    .. |a| replace:: example_substitution
+
+    :substitution-download:`txt_pre-|a|-txt_post <tgt_pre-|a|-tgt_post\t.py>`
+        """,
     )
     source_file.write_text(data=source_file_content)
     app = make_app(
@@ -294,14 +289,13 @@ class TestMyst:
             myst_substitutions = {
                 "a": "myst_substitution",
             }
-            rst_prolog = '''
-            .. |a| replace:: rst_prolog_substitution
-            '''
             """,
         )
         conf_py.write_text(data=conf_py_content)
         index_source_file_content = dedent(
             text="""\
+            .. |a| replace:: rst_prolog_substitution
+
             .. code-block:: shell
                :substitutions:
 
