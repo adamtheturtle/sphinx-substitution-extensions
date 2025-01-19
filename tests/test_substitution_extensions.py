@@ -257,14 +257,13 @@ class TestMyst:
             myst_substitutions = {
                 "a": "myst_substitution",
             }
-            rst_prolog = '''
-            .. |a| replace:: rst_prolog_substitution
-            '''
             """,
         )
         conf_py.write_text(data=conf_py_content)
         index_source_file_content = dedent(
             text="""\
+            .. |a| replace:: rst_prolog_substitution
+
             .. code-block:: shell
                :substitutions:
 
