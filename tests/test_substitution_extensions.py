@@ -476,7 +476,7 @@ class TestMyst:
             text="""\
             .. toctree::
 
-            markdown_document
+                markdown_document
             """,
         )
         markdown_source_file_content = dedent(
