@@ -24,7 +24,6 @@ def test_no_substitution_code_block(
     conf_py = source_directory / "conf.py"
     conf_py_content = dedent(
         text="""\
-        extensions = ['sphinx_substitution_extensions']
         rst_prolog = '''
         .. |a| replace:: example_substitution
         '''
@@ -39,7 +38,10 @@ def test_no_substitution_code_block(
         """,
     )
     source_file.write_text(data=source_file_content)
-    app = make_app(srcdir=source_directory)
+    app = make_app(
+        srcdir=source_directory,
+        confoverrides={"extensions": ["sphinx_substitution_extensions"]},
+    )
     app.build()
     assert not app.warning.getvalue()
     content_html = app.outdir / "index.html"
@@ -64,7 +66,6 @@ def test_substitution_code_block(
     conf_py = source_directory / "conf.py"
     conf_py_content = dedent(
         text="""\
-        extensions = ['sphinx_substitution_extensions']
         rst_prolog = '''
         .. |a| replace:: example_substitution
         '''
@@ -80,7 +81,10 @@ def test_substitution_code_block(
         """,
     )
     source_file.write_text(data=source_file_content)
-    app = make_app(srcdir=source_directory)
+    app = make_app(
+        srcdir=source_directory,
+        confoverrides={"extensions": ["sphinx_substitution_extensions"]},
+    )
     app.build()
     assert not app.warning.getvalue()
     expected = "PRE-example_substitution-POST"
@@ -101,7 +105,6 @@ def test_substitution_code_block_case_preserving(
     conf_py = source_directory / "conf.py"
     conf_py_content = dedent(
         text="""\
-        extensions = ['sphinx_substitution_extensions']
         rst_prolog = '''
         .. |aBcD_eFgH| replace:: example_substitution
         '''
@@ -118,7 +121,10 @@ def test_substitution_code_block_case_preserving(
     )
     source_file.write_text(data=source_file_content)
 
-    app = make_app(srcdir=source_directory)
+    app = make_app(
+        srcdir=source_directory,
+        confoverrides={"extensions": ["sphinx_substitution_extensions"]},
+    )
     app.build()
     assert not app.warning.getvalue()
     content_html = app.outdir / "index.html"
@@ -140,7 +146,6 @@ def test_substitution_inline(
     conf_py = source_directory / "conf.py"
     conf_py_content = dedent(
         text="""\
-        extensions = ['sphinx_substitution_extensions']
         rst_prolog = '''
         .. |a| replace:: example_substitution
         '''
@@ -153,7 +158,10 @@ def test_substitution_inline(
         """,
     )
     source_file.write_text(data=source_file_content)
-    app = make_app(srcdir=source_directory)
+    app = make_app(
+        srcdir=source_directory,
+        confoverrides={"extensions": ["sphinx_substitution_extensions"]},
+    )
     app.build()
     assert not app.warning.getvalue()
     content_html = app.outdir / "index.html"
@@ -174,7 +182,6 @@ def test_substitution_inline_case_preserving(
     conf_py = source_directory / "conf.py"
     conf_py_content = dedent(
         text="""\
-        extensions = ['sphinx_substitution_extensions']
         rst_prolog = '''
         .. |aBcD_eFgH| replace:: example_substitution
         '''
@@ -188,7 +195,10 @@ def test_substitution_inline_case_preserving(
     )
     source_file.write_text(data=source_file_content)
     expected = "PRE-example_substitution-POST"
-    app = make_app(srcdir=source_directory)
+    app = make_app(
+        srcdir=source_directory,
+        confoverrides={"extensions": ["sphinx_substitution_extensions"]},
+    )
     app.build()
     assert not app.warning.getvalue()
     content_html = app.outdir / "index.html"
@@ -210,7 +220,6 @@ def test_substitution_download(
     conf_py = source_directory / "conf.py"
     conf_py_content = dedent(
         text="""\
-        extensions = ['sphinx_substitution_extensions']
         rst_prolog = '''
         .. |a| replace:: example_substitution
         '''
@@ -229,7 +238,10 @@ def test_substitution_download(
         "`txt_pre-|a|-txt_post <tgt_pre-|a|-tgt_post\t.py>`"
     )
     source_file.write_text(data=source_file_content)
-    app = make_app(srcdir=source_directory)
+    app = make_app(
+        srcdir=source_directory,
+        confoverrides={"extensions": ["sphinx_substitution_extensions"]},
+    )
     app.build()
     assert not app.warning.getvalue()
     content_html = app.outdir / "index.html"
@@ -272,7 +284,6 @@ class TestMyst:
         conf_py = source_directory / "conf.py"
         conf_py_content = dedent(
             text="""\
-            extensions = ["myst_parser", "sphinx_substitution_extensions"]
             myst_enable_extensions = ["substitution"]
             myst_substitutions = {
                 "a": "myst_substitution",
@@ -293,7 +304,15 @@ class TestMyst:
         )
         index_source_file.write_text(data=index_source_file_content)
 
-        app = make_app(srcdir=source_directory)
+        app = make_app(
+            srcdir=source_directory,
+            confoverrides={
+                "extensions": [
+                    "myst_parser",
+                    "sphinx_substitution_extensions",
+                ],
+            },
+        )
         app.build()
         assert not app.warning.getvalue()
         expected = "PRE-rst_prolog_substitution-POST"
@@ -316,7 +335,6 @@ class TestMyst:
         conf_py = source_directory / "conf.py"
         conf_py_content = dedent(
             text="""\
-            extensions = ['myst_parser', 'sphinx_substitution_extensions']
             myst_enable_extensions = ['substitution']
             myst_substitutions = {
                 "a": "myst_substitution",
@@ -334,7 +352,10 @@ class TestMyst:
         )
         index_source_file.write_text(data=index_source_file_content)
 
-        app = make_app(srcdir=source_directory)
+        app = make_app(
+            srcdir=source_directory,
+            confoverrides={"extensions": ["sphinx_substitution_extensions"]},
+        )
         app.build()
         assert not app.warning.getvalue()
         expected = (
@@ -359,7 +380,6 @@ class TestMyst:
         conf_py = source_directory / "conf.py"
         conf_py_content = dedent(
             text="""\
-            extensions = ['myst_parser', 'sphinx_substitution_extensions']
             myst_enable_extensions = ['substitution']
             myst_substitutions = {
                 "a": "example_substitution",
@@ -388,7 +408,15 @@ class TestMyst:
         index_source_file.write_text(data=index_source_file_content)
         markdown_source_file.write_text(data=markdown_source_file_content)
 
-        app = make_app(srcdir=source_directory)
+        app = make_app(
+            srcdir=source_directory,
+            confoverrides={
+                "extensions": [
+                    "myst_parser",
+                    "sphinx_substitution_extensions",
+                ],
+            },
+        )
         app.build()
         assert not app.warning.getvalue()
         expected = "PRE-example_substitution-POST"
@@ -410,7 +438,6 @@ class TestMyst:
         conf_py = source_directory / "conf.py"
         conf_py_content = dedent(
             text="""\
-            extensions = ['myst_parser', 'sphinx_substitution_extensions']
             myst_substitutions = {
                 "a": "example_substitution",
             }
@@ -438,7 +465,15 @@ class TestMyst:
         index_source_file.write_text(data=index_source_file_content)
         markdown_source_file.write_text(data=markdown_source_file_content)
 
-        app = make_app(srcdir=source_directory)
+        app = make_app(
+            srcdir=source_directory,
+            confoverrides={
+                "extensions": [
+                    "myst_parser",
+                    "sphinx_substitution_extensions",
+                ],
+            },
+        )
         app.build()
         assert not app.warning.getvalue()
         content_html = app.outdir / "markdown_document.html"
@@ -460,7 +495,6 @@ class TestMyst:
         conf_py = source_directory / "conf.py"
         conf_py_content = dedent(
             text="""\
-            extensions = ['myst_parser', 'sphinx_substitution_extensions']
             myst_enable_extensions = ['substitution']
             source_suffix = {
                 ".rst": "restructuredtext",
@@ -493,7 +527,12 @@ class TestMyst:
         index_source_file.write_text(data=index_source_file_content)
         markdown_source_file.write_text(data=markdown_source_file_content)
 
-        app = make_app(srcdir=source_directory)
+        app = make_app(
+            srcdir=source_directory,
+            confoverrides={
+                "extensions": ["myst_parser", "sphinx_substitution_extensions"]
+            },
+        )
         app.build()
         assert not app.warning.getvalue()
         expected = "PRE-example_substitution-POST"
@@ -515,7 +554,6 @@ class TestMyst:
         conf_py = source_directory / "conf.py"
         conf_py_content = dedent(
             text="""\
-            extensions = ['myst_parser', 'sphinx_substitution_extensions']
             myst_enable_extensions = ['substitution']
             myst_substitutions = {
                 "a": "example_substitution",
@@ -544,7 +582,12 @@ class TestMyst:
         index_source_file.write_text(data=index_source_file_content)
         markdown_source_file.write_text(data=markdown_source_file_content)
 
-        app = make_app(srcdir=source_directory)
+        app = make_app(
+            srcdir=source_directory,
+            confoverrides={
+                "extensions": ["myst_parser", "sphinx_substitution_extensions"]
+            },
+        )
         app.build()
         assert not app.warning.getvalue()
         expected = "PRE-example_substitution-POST"
@@ -566,7 +609,6 @@ class TestMyst:
         conf_py = source_directory / "conf.py"
         conf_py_content = dedent(
             text="""\
-            extensions = ['myst_parser', 'sphinx_substitution_extensions']
             myst_enable_extensions = ['substitution']
             myst_substitutions = {
                 "a": "example_substitution",
@@ -596,7 +638,15 @@ class TestMyst:
         index_source_file.write_text(data=index_source_file_content)
         markdown_source_file.write_text(data=markdown_source_file_content)
 
-        app = make_app(srcdir=source_directory)
+        app = make_app(
+            srcdir=source_directory,
+            confoverrides={
+                "extensions": [
+                    "myst_parser",
+                    "sphinx_substitution_extensions",
+                ],
+            },
+        )
         app.build()
         assert not app.warning.getvalue()
         expected = "PRE-example_substitution-POST"
