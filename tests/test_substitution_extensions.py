@@ -15,23 +15,16 @@ def test_no_substitution_code_block(
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
     """
-    The ``code-block`` directive does not replace the placeholders defined in
-    ``conf.py`` when not specified.
+    The ``code-block`` directive does not replace placeholders.
     """
     source_directory = tmp_path / "source"
     source_directory.mkdir()
     source_file = source_directory / "index.rst"
-    conf_py = source_directory / "conf.py"
-    conf_py_content = dedent(
-        text="""\
-        rst_prolog = '''
-        .. |a| replace:: example_substitution
-        '''
-        """,
-    )
-    conf_py.write_text(data=conf_py_content)
+    (source_directory / "conf.py").touch()
     source_file_content = dedent(
         text="""\
+        .. |a| replace:: example_substitution
+
         .. code-block:: shell
 
            $ PRE-|a|-POST
@@ -64,17 +57,11 @@ def test_substitution_code_block(
     source_directory = tmp_path / "source"
     source_directory.mkdir()
     source_file = source_directory / "index.rst"
-    conf_py = source_directory / "conf.py"
-    conf_py_content = dedent(
-        text="""\
-        rst_prolog = '''
-        .. |a| replace:: example_substitution
-        '''
-        """,
-    )
-    conf_py.write_text(data=conf_py_content)
+    (source_directory / "conf.py").touch()
     source_file_content = dedent(
         text="""\
+        .. |a| replace:: example_substitution
+
         .. code-block:: shell
            :substitutions:
 
@@ -104,17 +91,11 @@ def test_substitution_code_block_case_preserving(
     source_directory = tmp_path / "source"
     source_directory.mkdir()
     source_file = source_directory / "index.rst"
-    conf_py = source_directory / "conf.py"
-    conf_py_content = dedent(
-        text="""\
-        rst_prolog = '''
-        .. |aBcD_eFgH| replace:: example_substitution
-        '''
-        """,
-    )
-    conf_py.write_text(data=conf_py_content)
+    (source_directory / "conf.py").touch()
     source_file_content = dedent(
         text="""\
+        .. |aBcD_eFgH| replace:: example_substitution
+
         .. code-block:: shell
            :substitutions:
 
@@ -140,23 +121,16 @@ def test_substitution_inline(
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
     """
-    The ``substitution-code`` role replaces the placeholders defined in
-    ``conf.py`` as specified.
+    The ``substitution-code`` role replaces placeholders.
     """
     source_directory = tmp_path / "source"
     source_directory.mkdir()
     source_file = source_directory / "index.rst"
-    conf_py = source_directory / "conf.py"
-    conf_py_content = dedent(
-        text="""\
-        rst_prolog = '''
-        .. |a| replace:: example_substitution
-        '''
-        """,
-    )
-    conf_py.write_text(data=conf_py_content)
+    (source_directory / "conf.py").touch()
     source_file_content = dedent(
         text="""\
+        .. |a| replace:: example_substitution
+
         Example :substitution-code:`PRE-|a|-POST`
         """,
     )
