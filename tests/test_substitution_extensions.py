@@ -21,6 +21,7 @@ def test_no_substitution_code_block(
     source_directory.mkdir()
     source_file = source_directory / "index.rst"
     (source_directory / "conf.py").touch()
+
     source_file_content = dedent(
         text="""\
         .. |a| replace:: example_substitution
@@ -58,6 +59,7 @@ def test_substitution_code_block(
     source_directory.mkdir()
     source_file = source_directory / "index.rst"
     (source_directory / "conf.py").touch()
+
     source_file_content = dedent(
         text="""\
         .. |a| replace:: example_substitution
@@ -92,6 +94,7 @@ def test_substitution_code_block_case_preserving(
     source_directory.mkdir()
     source_file = source_directory / "index.rst"
     (source_directory / "conf.py").touch()
+
     source_file_content = dedent(
         text="""\
         .. |aBcD_eFgH| replace:: example_substitution
@@ -121,12 +124,14 @@ def test_substitution_inline(
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
     """
-    The ``substitution-code`` role replaces placeholders.
+    The ``substitution-code`` role replaces the placeholders defined in
+    ``conf.py`` as specified.
     """
     source_directory = tmp_path / "source"
     source_directory.mkdir()
     source_file = source_directory / "index.rst"
     (source_directory / "conf.py").touch()
+
     source_file_content = dedent(
         text="""\
         .. |a| replace:: example_substitution
@@ -158,6 +163,7 @@ def test_substitution_inline_case_preserving(
     source_directory.mkdir()
     source_file = source_directory / "index.rst"
     (source_directory / "conf.py").touch()
+
     source_file_content = dedent(
         text="""\
         .. |aBcD_eFgH| replace:: example_substitution
@@ -191,6 +197,7 @@ def test_substitution_download(
     source_directory.mkdir()
     source_file = source_directory / "index.rst"
     (source_directory / "conf.py").touch()
+
     # Importantly we have a non-space whitespace character in the target name.
     downloadable_file = (
         source_directory / "tgt_pre-example_substitution-tgt_post .py"
