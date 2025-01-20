@@ -34,11 +34,11 @@ def test_no_substitution_code_block(
     source_file.write_text(data=source_file_content)
     app = make_app(
         srcdir=source_directory,
+        exception_on_warning=True,
         confoverrides={"extensions": ["sphinx_substitution_extensions"]},
     )
     app.build()
     assert app.statuscode == 0
-    assert not app.warning.getvalue()
     content_html = app.outdir / "index.html"
     assert "PRE-example_substitution-POST" not in content_html.read_text()
     assert (
@@ -73,11 +73,11 @@ def test_substitution_code_block(
     source_file.write_text(data=source_file_content)
     app = make_app(
         srcdir=source_directory,
+        exception_on_warning=True,
         confoverrides={"extensions": ["sphinx_substitution_extensions"]},
     )
     app.build()
     assert app.statuscode == 0
-    assert not app.warning.getvalue()
     expected = "PRE-example_substitution-POST"
     content_html = app.outdir / "index.html"
     assert expected in content_html.read_text()
@@ -109,11 +109,11 @@ def test_substitution_code_block_case_preserving(
 
     app = make_app(
         srcdir=source_directory,
+        exception_on_warning=True,
         confoverrides={"extensions": ["sphinx_substitution_extensions"]},
     )
     app.build()
     assert app.statuscode == 0
-    assert not app.warning.getvalue()
     content_html = app.outdir / "index.html"
     expected = "PRE-example_substitution-POST"
     assert expected in content_html.read_text()
@@ -142,11 +142,11 @@ def test_substitution_inline(
     source_file.write_text(data=source_file_content)
     app = make_app(
         srcdir=source_directory,
+        exception_on_warning=True,
         confoverrides={"extensions": ["sphinx_substitution_extensions"]},
     )
     app.build()
     assert app.statuscode == 0
-    assert not app.warning.getvalue()
     content_html = app.outdir / "index.html"
     expected = "PRE-example_substitution-POST"
     assert expected in content_html.read_text()
@@ -175,11 +175,11 @@ def test_substitution_inline_case_preserving(
     expected = "PRE-example_substitution-POST"
     app = make_app(
         srcdir=source_directory,
+        exception_on_warning=True,
         confoverrides={"extensions": ["sphinx_substitution_extensions"]},
     )
     app.build()
     assert app.statuscode == 0
-    assert not app.warning.getvalue()
     content_html = app.outdir / "index.html"
     expected = "PRE-example_substitution-POST"
     assert expected in content_html.read_text()
@@ -215,11 +215,11 @@ def test_substitution_download(
     source_file.write_text(data=source_file_content)
     app = make_app(
         srcdir=source_directory,
+        exception_on_warning=True,
         confoverrides={"extensions": ["sphinx_substitution_extensions"]},
     )
     app.build()
     assert app.statuscode == 0
-    assert not app.warning.getvalue()
     content_html = app.outdir / "index.html"
     # We use a pattern here because the download target is not predictable.
     expected_pattern = re.compile(
@@ -272,6 +272,7 @@ class TestMyst:
 
         app = make_app(
             srcdir=source_directory,
+            exception_on_warning=True,
             confoverrides={
                 "extensions": [
                     "myst_parser",
@@ -285,7 +286,6 @@ class TestMyst:
         )
         app.build()
         assert app.statuscode == 0
-        assert not app.warning.getvalue()
         expected = "PRE-rst_prolog_substitution-POST"
         content_html = app.outdir / "index.html"
         assert expected in content_html.read_text()
@@ -316,6 +316,7 @@ class TestMyst:
 
         app = make_app(
             srcdir=source_directory,
+            exception_on_warning=True,
             confoverrides={
                 "extensions": [
                     "myst_parser",
@@ -329,7 +330,6 @@ class TestMyst:
         )
         app.build()
         assert app.statuscode == 0
-        assert not app.warning.getvalue()
         expected = (
             '</span>PRE-<span class="p">|</span>a<span class="p">|</span>-POST'
         )
@@ -373,6 +373,7 @@ class TestMyst:
 
         app = make_app(
             srcdir=source_directory,
+            exception_on_warning=True,
             confoverrides={
                 "extensions": [
                     "myst_parser",
@@ -386,7 +387,6 @@ class TestMyst:
         )
         app.build()
         assert app.statuscode == 0
-        assert not app.warning.getvalue()
         expected = "PRE-example_substitution-POST"
         content_html = app.outdir / "markdown_document.html"
         assert expected in content_html.read_text()
@@ -427,6 +427,7 @@ class TestMyst:
 
         app = make_app(
             srcdir=source_directory,
+            exception_on_warning=True,
             confoverrides={
                 "extensions": [
                     "myst_parser",
@@ -439,7 +440,6 @@ class TestMyst:
         )
         app.build()
         assert app.statuscode == 0
-        assert not app.warning.getvalue()
         content_html = app.outdir / "markdown_document.html"
         assert "PRE-example_substitution-POST" not in content_html.read_text()
         assert "PRE-|a|-POST" in content_html.read_text()
@@ -480,6 +480,7 @@ class TestMyst:
 
         app = make_app(
             srcdir=source_directory,
+            exception_on_warning=True,
             confoverrides={
                 "extensions": [
                     "myst_parser",
@@ -497,7 +498,6 @@ class TestMyst:
         )
         app.build()
         assert app.statuscode == 0
-        assert not app.warning.getvalue()
         expected = "PRE-example_substitution-POST"
         content_html = app.outdir / "markdown_document.html"
         assert expected in content_html.read_text()
@@ -538,6 +538,7 @@ class TestMyst:
 
         app = make_app(
             srcdir=source_directory,
+            exception_on_warning=True,
             confoverrides={
                 "extensions": [
                     "myst_parser",
@@ -551,7 +552,6 @@ class TestMyst:
         )
         app.build()
         assert app.statuscode == 0
-        assert not app.warning.getvalue()
         expected = "PRE-example_substitution-POST"
         content_html = app.outdir / "markdown_document.html"
         assert expected in content_html.read_text()
@@ -592,6 +592,7 @@ class TestMyst:
 
         app = make_app(
             srcdir=source_directory,
+            exception_on_warning=True,
             confoverrides={
                 "extensions": [
                     "myst_parser",
@@ -606,7 +607,6 @@ class TestMyst:
         )
         app.build()
         assert app.statuscode == 0
-        assert not app.warning.getvalue()
         expected = "PRE-example_substitution-POST"
         content_html = app.outdir / "markdown_document.html"
         assert expected in content_html.read_text()
