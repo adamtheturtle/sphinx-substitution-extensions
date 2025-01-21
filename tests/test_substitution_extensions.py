@@ -920,3 +920,81 @@ class TestMyst:
             app_expected.outdir / "markdown_document.html"
         ).read_text()
         assert content_html == expected_content_html
+
+    @staticmethod
+    def test_substitution_download(
+        tmp_path: Path,
+        make_app: Callable[..., SphinxTestApp],
+    ) -> None:
+        """
+        The ``substitution-download`` role replaces the placeholders defined in
+        ``conf.py`` as specified.
+        """
+        source_directory = tmp_path / "source"
+        source_directory.mkdir()
+        index_source_file = source_directory / "index.rst"
+        markdown_source_file = source_directory / "markdown_document.md"
+        (source_directory / "conf.py").touch()
+
+        index_source_file_content = dedent(
+            text="""\
+            .. toctree::
+
+               markdown_document
+            """,
+        )
+        markdown_source_file_content = dedent(
+            text="""\
+    # Title
+
+    {substitution-download}`txt_pre-|a|-txt_post <tgt_pre-|a|-tgt_post\t.py>`
+            """,
+        )
+        # Importantly we have a non-space whitespace character in the target
+        # name.
+        downloadable_file = (
+            source_directory / "tgt_pre-example_substitution-tgt_post .py"
+        )
+        downloadable_file.write_text(data="Sample")
+        index_source_file.write_text(data=index_source_file_content)
+        markdown_source_file.write_text(data=markdown_source_file_content)
+        app = make_app(
+            srcdir=source_directory,
+            exception_on_warning=True,
+            confoverrides={
+                "extensions": [
+                    "myst_parser",
+                    "sphinx_substitution_extensions",
+                ],
+                "myst_enable_extensions": ["substitution"],
+                "myst_substitutions": {
+                    "a": "example_substitution",
+                },
+            },
+        )
+        app.build()
+        assert app.statuscode == 0
+        content_html = (app.outdir / "markdown_document.html").read_text()
+        app.cleanup()
+
+        equivalent_source = dedent(
+            text="""\
+            # Title
+
+            {download}`txt_pre-example_substitution-txt_post <tgt_pre-example_substitution-tgt_post\t.py>`
+            """,  # noqa: E501
+        )
+
+        markdown_source_file.write_text(data=equivalent_source)
+        app_expected = make_app(
+            srcdir=source_directory,
+            exception_on_warning=True,
+            confoverrides={"extensions": ["myst_parser"]},
+        )
+        app_expected.build()
+        assert app_expected.statuscode == 0
+
+        expected_content_html = (
+            app_expected.outdir / "markdown_document.html"
+        ).read_text()
+        assert content_html == expected_content_html
