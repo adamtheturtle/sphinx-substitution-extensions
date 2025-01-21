@@ -5,10 +5,15 @@ Custom Sphinx extensions.
 from typing import Any, ClassVar
 
 from beartype import beartype
-from docutils.nodes import Element, Node, system_message
+from docutils.nodes import (
+    Element,
+    Node,
+    substitution_definition,
+    system_message,
+)
 from docutils.parsers.rst import directives
 from docutils.parsers.rst.roles import code_role
-from docutils.parsers.rst.states import Inliner, RSTState
+from docutils.parsers.rst.states import Inliner
 from docutils.statemachine import StringList
 from myst_parser.mocking import MockInliner
 from sphinx import addnodes
@@ -56,13 +61,11 @@ def _get_delimiter_pairs(
 def _get_substitution_defs(
     env: BuildEnvironment,
     config: Config,
-    state: RSTState,
+    substitution_defs: dict[str, substitution_definition],
 ) -> dict[str, str]:
     """
     Get the substitution definitions from the environment.
     """
-    substitution_defs = {}
-
     markdown_suffixes = {
         key.lstrip(".")
         for key, value in config.source_suffix.items()
@@ -72,14 +75,13 @@ def _get_substitution_defs(
     parser_supported_formats = set(env.parser.supported)
     if parser_supported_formats.intersection(markdown_suffixes):
         if "substitution" in config.myst_enable_extensions:
-            substitution_defs = config.myst_substitutions
+            return dict(config.myst_substitutions)
     else:
-        substitution_defs = {
-            key: value.astext()
-            for key, value in state.document.substitution_defs.items()
+        return {
+            key: value.astext() for key, value in substitution_defs.items()
         }
 
-    return substitution_defs
+    return {}
 
 
 @beartype
@@ -100,7 +102,7 @@ class SubstitutionCodeBlock(CodeBlock):
         substitution_defs = _get_substitution_defs(
             env=self.env,
             config=self.config,
-            state=self.state,
+            substitution_defs=self.state.document.substitution_defs,
         )
 
         delimiter_pairs = _get_delimiter_pairs(
@@ -150,11 +152,29 @@ class SubstitutionCodeRole:
         """
         Replace placeholders with given variables.
         """
-        for name, value in inliner.document.substitution_defs.items():
-            replacement = value.astext()
-            text = text.replace(f"|{name}|", replacement)
-            rawtext = text.replace(f"|{name}|", replacement)
-            rawtext = rawtext.replace(name, replacement)
+        substitution_defs = _get_substitution_defs(
+            env=inliner.document.settings.env,
+            config=inliner.document.settings.env.config,
+            substitution_defs=inliner.document.substitution_defs,
+        )
+
+        delimiter_pairs = _get_delimiter_pairs(
+            env=inliner.document.settings.env,
+            config=inliner.document.settings.env.config,
+        )
+
+        for name, value in substitution_defs.items():
+            for delimiter_pair in delimiter_pairs:
+                opening_delimiter, closing_delimiter = delimiter_pair
+                text = text.replace(
+                    f"{opening_delimiter}{name}{closing_delimiter}",
+                    value,
+                )
+                rawtext = text.replace(
+                    f"{opening_delimiter}{name}{closing_delimiter}",
+                    value,
+                )
+                rawtext = rawtext.replace(name, value)
 
         # ``types-docutils`` says that ``code_role`` requires an ``Inliner``
         # for ``inliner``.
