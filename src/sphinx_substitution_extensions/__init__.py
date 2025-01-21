@@ -10,6 +10,7 @@ from docutils.parsers.rst import directives
 from docutils.parsers.rst.roles import code_role
 from docutils.parsers.rst.states import Inliner
 from docutils.statemachine import StringList
+from myst_parser.mocking import MockInliner
 from sphinx import addnodes
 from sphinx.application import Sphinx
 from sphinx.directives.code import CodeBlock
@@ -101,7 +102,7 @@ class SubstitutionCodeRole:
         rawtext: str,
         text: str,
         lineno: int,
-        inliner: Inliner,
+        inliner: Inliner | MockInliner,
         # We allow mutable defaults as the Sphinx implementation requires it.
         options: dict[Any, Any] = {},  # noqa: B006
         content: list[str] = [],  # noqa: B006
@@ -109,12 +110,22 @@ class SubstitutionCodeRole:
         """
         Replace placeholders with given variables.
         """
-        inliner_document = inliner.document
-        for name, value in inliner_document.substitution_defs.items():
+        for name, value in inliner.document.substitution_defs.items():
             replacement = value.astext()
             text = text.replace(f"|{name}|", replacement)
             rawtext = text.replace(f"|{name}|", replacement)
             rawtext = rawtext.replace(name, replacement)
+
+        # ``types-docutils`` says that ``code_role`` requires an ``Inliner``
+        # for ``inliner``.
+        #
+        # We can remove this when
+        # https://github.com/executablebooks/MyST-Parser/issues/1017
+        # is resolved by typing ``inliner`` as ``Inliner``.
+        if isinstance(inliner, MockInliner):
+            new_inliner = Inliner()
+            new_inliner.document = inliner.document
+            inliner = new_inliner
 
         return code_role(
             role=typ,

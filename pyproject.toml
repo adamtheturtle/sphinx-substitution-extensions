@@ -39,6 +39,7 @@ dynamic = [
 dependencies = [
     "beartype>=0.18.5",
     "docutils>=0.19",
+    "myst-parser>=4.0.0",
     "sphinx>=7.3.5",
 ]
 optional-dependencies.dev = [
@@ -51,7 +52,6 @@ optional-dependencies.dev = [
     "interrogate==1.7.0",
     "mypy[faster-cache]==1.14.1",
     "mypy-strict-kwargs==2024.12.25",
-    "myst-parser==4.0.0",
     "pre-commit==4.0.1",
     "pyenchant==3.3.0rc1",
     "pylint==3.3.3",
