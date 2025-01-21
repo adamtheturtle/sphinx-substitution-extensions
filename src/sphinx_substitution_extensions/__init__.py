@@ -152,15 +152,18 @@ class SubstitutionCodeRole:
         """
         Replace placeholders with given variables.
         """
+        settings = inliner.document.settings
+        env = settings.env  # pyright: ignore[reportUnknownMemberType, reportUnknownVariableType]
+        assert isinstance(env, BuildEnvironment)
         substitution_defs = _get_substitution_defs(
-            env=inliner.document.settings.env,
-            config=inliner.document.settings.env.config,
+            env=env,
+            config=env.config,
             substitution_defs=inliner.document.substitution_defs,
         )
 
         delimiter_pairs = _get_delimiter_pairs(
-            env=inliner.document.settings.env,
-            config=inliner.document.settings.env.config,
+            env=env,
+            config=env.config,
         )
 
         for name, value in substitution_defs.items():
