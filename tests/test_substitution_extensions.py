@@ -892,7 +892,6 @@ class TestMyst:
                 "myst_substitutions": {
                     "a": "example_substitution",
                 },
-                "myst_sub_delimiters": ("|", "|"),
             },
         )
         app.build()
