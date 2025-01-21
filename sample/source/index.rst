@@ -33,7 +33,7 @@ Inline ``:code:``
 Inline ``:download:``
 ---------------------
 
-.. rest-example:: rst
+.. rest-example::
 
    .. We cannot use the substitution in the download target, because the download directive will error if the file does not exist.
 
