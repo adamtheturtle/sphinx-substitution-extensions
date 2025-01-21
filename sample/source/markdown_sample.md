@@ -61,3 +61,15 @@ Configuration
 
     echo "The author is {{author}}"
 ```
+
+Inline ``:substitution-code:``
+------------------------------
+
+```{code-block} markdown
+
+   {substitution-code}`The author is {{author}}`
+```
+
+=>
+
+{substitution-code}`The author is {{author}}`
