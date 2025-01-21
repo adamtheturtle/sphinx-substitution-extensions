@@ -133,6 +133,18 @@ class SubstitutionXRefRole(XRefRole):
     Custom role for XRefs.
     """
 
+    def create_xref_node(self) -> tuple[list[Node], list[system_message]]:
+        """Override parent method to set classes.
+
+        This is a bit of a hack because it assumes that the role name
+        will be `substitution-<class_name>` and that we want to remove
+        the `substitution-`.
+        """
+        for index, class_name in enumerate(iterable=self.classes):
+            self.classes[index] = class_name.replace("substitution-", "")
+
+        return super().create_xref_node()
+
     def process_link(
         self,
         env: BuildEnvironment,
@@ -175,7 +187,7 @@ def setup(app: Sphinx) -> ExtensionMetadata:
     )
     app.add_role(name="substitution-code", role=SubstitutionCodeRole())
     substitution_download_role = SubstitutionXRefRole(
-        nodeclass=addnodes.download_reference
+        nodeclass=addnodes.download_reference,
     )
     app.add_role(name="substitution-download", role=substitution_download_role)
     return {"parallel_read_safe": True}
