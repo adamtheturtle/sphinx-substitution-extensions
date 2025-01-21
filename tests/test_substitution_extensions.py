@@ -979,10 +979,10 @@ class TestMyst:
 
         equivalent_source = dedent(
             text="""\
-# Title
+            # Title
 
-{download}`txt_pre-example_substitution-txt_post <tgt_pre-|a|-tgt_post\t.py>`
-            """,
+            {download}`txt_pre-example_substitution-txt_post <tgt_pre-example_substitution-tgt_post\t.py>`
+            """,  # noqa: E501
         )
 
         markdown_source_file.write_text(data=equivalent_source)
