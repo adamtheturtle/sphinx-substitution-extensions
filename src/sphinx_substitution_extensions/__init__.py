@@ -232,11 +232,28 @@ class SubstitutionXRefRole(XRefRole):
         """
         Override parent method to replace placeholders with given variables.
         """
-        document = self.inliner.document
-        for name, value in document.substitution_defs.items():
-            replacement = value.astext()
-            title = title.replace(f"|{name}|", replacement)
-            target = target.replace(f"|{name}|", replacement)
+        assert isinstance(env, BuildEnvironment)
+        substitution_defs = _get_substitution_defs(
+            env=env,
+            config=env.config,
+            substitution_defs=self.inliner.document.substitution_defs,
+        )
+
+        delimiter_pairs = _get_delimiter_pairs(
+            env=env,
+            config=env.config,
+        )
+        for name, value in substitution_defs.items():
+            for delimiter_pair in delimiter_pairs:
+                opening_delimiter, closing_delimiter = delimiter_pair
+                title = title.replace(
+                    f"{opening_delimiter}{name}{closing_delimiter}",
+                    value,
+                )
+                target = target.replace(
+                    f"{opening_delimiter}{name}{closing_delimiter}",
+                    value,
+                )
 
         # Use the default implementation to process the link
         # as it handles whitespace in target text.
