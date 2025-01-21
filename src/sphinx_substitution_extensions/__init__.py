@@ -134,7 +134,7 @@ class SubstitutionXRefRole(XRefRole):
     """
 
     def create_xref_node(self) -> tuple[list[Node], list[system_message]]:
-        """Override parent mathod to set classes.
+        """Override parent method to set classes.
 
         This is a bit of a hack because it assumes that the role name
         will be `substitution-<class_name>` and that we want to remove
