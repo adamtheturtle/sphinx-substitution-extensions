@@ -6,6 +6,8 @@ Changelog
 Next
 ----
 
+- Support the ``substitution-code`` role in MyST documents.
+
 2025.01.02
 ----------
 

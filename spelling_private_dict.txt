@@ -8,6 +8,7 @@ linters
 py
 pyright
 pytest
+reportUnknownMemberType
 reportUnknownParameterType
 reportUnknownVariableType
 rst
