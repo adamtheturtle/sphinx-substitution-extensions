@@ -2,7 +2,6 @@
 Tests for Sphinx extensions.
 """
 
-import re
 from collections.abc import Callable
 from pathlib import Path
 from textwrap import dedent
@@ -39,12 +38,21 @@ def test_no_substitution_code_block(
     )
     app.build()
     assert app.statuscode == 0
-    content_html = app.outdir / "index.html"
-    assert "PRE-example_substitution-POST" not in content_html.read_text()
-    assert (
-        '</span>PRE-<span class="p">|</span>a<span class="p">|</span>-POST'
-        in content_html.read_text()
+    content_html = (app.outdir / "index.html").read_text()
+    app.cleanup()
+
+    app_expected = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        freshenv=True,
     )
+
+    app_expected.build()
+    assert app_expected.statuscode == 0
+
+    expected_content_html = (app_expected.outdir / "index.html").read_text()
+
+    assert content_html == expected_content_html
 
 
 def test_substitution_code_block(
@@ -78,9 +86,27 @@ def test_substitution_code_block(
     )
     app.build()
     assert app.statuscode == 0
-    expected = "PRE-example_substitution-POST"
-    content_html = app.outdir / "index.html"
-    assert expected in content_html.read_text()
+    content_html = (app.outdir / "index.html").read_text()
+    app.cleanup()
+
+    equivalent_source = dedent(
+        text="""\
+        .. code-block:: shell
+
+            $ PRE-example_substitution-POST
+        """,
+    )
+
+    source_file.write_text(data=equivalent_source)
+    app_expected = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+    )
+    app_expected.build()
+    assert app_expected.statuscode == 0
+
+    expected_content_html = (app_expected.outdir / "index.html").read_text()
+    assert content_html == expected_content_html
 
 
 def test_substitution_code_block_case_preserving(
@@ -113,10 +139,27 @@ def test_substitution_code_block_case_preserving(
         confoverrides={"extensions": ["sphinx_substitution_extensions"]},
     )
     app.build()
-    assert app.statuscode == 0
-    content_html = app.outdir / "index.html"
-    expected = "PRE-example_substitution-POST"
-    assert expected in content_html.read_text()
+    content_html = (app.outdir / "index.html").read_text()
+    app.cleanup()
+
+    equivalent_source = dedent(
+        text="""\
+        .. code-block:: shell
+
+            $ PRE-example_substitution-POST
+        """,
+    )
+
+    source_file.write_text(data=equivalent_source)
+    app_expected = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+    )
+    app_expected.build()
+    assert app_expected.statuscode == 0
+
+    expected_content_html = (app_expected.outdir / "index.html").read_text()
+    assert content_html == expected_content_html
 
 
 def test_substitution_inline(
@@ -147,9 +190,25 @@ def test_substitution_inline(
     )
     app.build()
     assert app.statuscode == 0
-    content_html = app.outdir / "index.html"
-    expected = "PRE-example_substitution-POST"
-    assert expected in content_html.read_text()
+    content_html = (app.outdir / "index.html").read_text()
+    app.cleanup()
+
+    equivalent_source = dedent(
+        text="""\
+        Example :code:`PRE-example_substitution-POST`
+        """,
+    )
+
+    source_file.write_text(data=equivalent_source)
+    app_expected = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+    )
+    app_expected.build()
+    assert app_expected.statuscode == 0
+
+    expected_content_html = (app_expected.outdir / "index.html").read_text()
+    assert content_html == expected_content_html
 
 
 def test_substitution_inline_case_preserving(
@@ -172,7 +231,6 @@ def test_substitution_inline_case_preserving(
         """,
     )
     source_file.write_text(data=source_file_content)
-    expected = "PRE-example_substitution-POST"
     app = make_app(
         srcdir=source_directory,
         exception_on_warning=True,
@@ -180,9 +238,25 @@ def test_substitution_inline_case_preserving(
     )
     app.build()
     assert app.statuscode == 0
-    content_html = app.outdir / "index.html"
-    expected = "PRE-example_substitution-POST"
-    assert expected in content_html.read_text()
+    content_html = (app.outdir / "index.html").read_text()
+    app.cleanup()
+
+    equivalent_source = dedent(
+        text="""\
+        Example :code:`PRE-example_substitution-POST`
+        """,
+    )
+
+    source_file.write_text(data=equivalent_source)
+    app_expected = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+    )
+    app_expected.build()
+    assert app_expected.statuscode == 0
+
+    expected_content_html = (app_expected.outdir / "index.html").read_text()
+    assert content_html == expected_content_html
 
 
 def test_substitution_download(
@@ -220,24 +294,25 @@ def test_substitution_download(
     )
     app.build()
     assert app.statuscode == 0
-    content_html = app.outdir / "index.html"
-    # We use a pattern here because the download target is not predictable.
-    expected_pattern = re.compile(
-        pattern="<p>"
-        '<a class="reference download internal" download="" '
-        'href="_downloads/.*/tgt_pre-example_substitution-tgt_post%20.py">'
-        "<code "
-        'class="xref download docutils literal notranslate"'
-        ">"
-        '<span class="pre">'
-        "txt_pre-example_substitution-txt_post"
-        "</span>"
-        "</code>"
-        "</a>"
-        "</p>"
+    content_html = (app.outdir / "index.html").read_text()
+    app.cleanup()
+
+    equivalent_source = dedent(
+        text="""\
+        :download:`txt_pre-example_substitution-txt_post <tgt_pre-example_substitution-tgt_post\t.py>`
+        """,  # noqa: E501
     )
-    content_html_text = content_html.read_text()
-    assert expected_pattern.search(string=content_html_text) is not None
+
+    source_file.write_text(data=equivalent_source)
+    app_expected = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+    )
+    app_expected.build()
+    assert app_expected.statuscode == 0
+
+    expected_content_html = (app_expected.outdir / "index.html").read_text()
+    assert content_html == expected_content_html
 
 
 class TestMyst:
@@ -256,7 +331,7 @@ class TestMyst:
         """
         source_directory = tmp_path / "source"
         source_directory.mkdir()
-        index_source_file = source_directory / "index.rst"
+        source_file = source_directory / "index.rst"
         (source_directory / "conf.py").touch()
         index_source_file_content = dedent(
             text="""\
@@ -268,7 +343,7 @@ class TestMyst:
                $ PRE-|a|-POST
             """,
         )
-        index_source_file.write_text(data=index_source_file_content)
+        source_file.write_text(data=index_source_file_content)
 
         app = make_app(
             srcdir=source_directory,
@@ -286,10 +361,29 @@ class TestMyst:
         )
         app.build()
         assert app.statuscode == 0
-        expected = "PRE-rst_prolog_substitution-POST"
-        content_html = app.outdir / "index.html"
-        assert expected in content_html.read_text()
-        assert "myst_substitution" not in content_html.read_text()
+        content_html = (app.outdir / "index.html").read_text()
+        app.cleanup()
+
+        equivalent_source = dedent(
+            text="""\
+            .. code-block:: shell
+
+               $ PRE-rst_prolog_substitution-POST
+            """,
+        )
+
+        source_file.write_text(data=equivalent_source)
+        app_expected = make_app(
+            srcdir=source_directory,
+            exception_on_warning=True,
+        )
+        app_expected.build()
+        assert app_expected.statuscode == 0
+
+        expected_content_html = (
+            app_expected.outdir / "index.html"
+        ).read_text()
+        assert content_html == expected_content_html
 
     @staticmethod
     def test_myst_substitutions_ignored_without_rst_definition(
@@ -302,9 +396,9 @@ class TestMyst:
         """
         source_directory = tmp_path / "source"
         source_directory.mkdir()
-        index_source_file = source_directory / "index.rst"
+        source_file = source_directory / "index.rst"
         (source_directory / "conf.py").touch()
-        index_source_file_content = dedent(
+        source_file_content = dedent(
             text="""\
             .. code-block:: shell
                :substitutions:
@@ -312,7 +406,7 @@ class TestMyst:
                $ PRE-|a|-POST
             """,
         )
-        index_source_file.write_text(data=index_source_file_content)
+        source_file.write_text(data=source_file_content)
 
         app = make_app(
             srcdir=source_directory,
@@ -330,12 +424,29 @@ class TestMyst:
         )
         app.build()
         assert app.statuscode == 0
-        expected = (
-            '</span>PRE-<span class="p">|</span>a<span class="p">|</span>-POST'
+        content_html = (app.outdir / "index.html").read_text()
+        app.cleanup()
+
+        equivalent_source = dedent(
+            text="""\
+            .. code-block:: shell
+
+               $ PRE-|a|-POST
+            """,
         )
-        content_html = app.outdir / "index.html"
-        assert expected in content_html.read_text()
-        assert "myst_substitution" not in content_html.read_text()
+
+        source_file.write_text(data=equivalent_source)
+        app_expected = make_app(
+            srcdir=source_directory,
+            exception_on_warning=True,
+        )
+        app_expected.build()
+        assert app_expected.statuscode == 0
+
+        expected_content_html = (
+            app_expected.outdir / "index.html"
+        ).read_text()
+        assert content_html == expected_content_html
 
     @staticmethod
     def test_myst_substitutions(
@@ -387,9 +498,33 @@ class TestMyst:
         )
         app.build()
         assert app.statuscode == 0
-        expected = "PRE-example_substitution-POST"
-        content_html = app.outdir / "markdown_document.html"
-        assert expected in content_html.read_text()
+        content_html = (app.outdir / "markdown_document.html").read_text()
+        app.cleanup()
+
+        equivalent_source = dedent(
+            text="""\
+            # Title
+
+            ```{code-block}
+
+            $ PRE-example_substitution-POST
+            ```
+            """,
+        )
+
+        markdown_source_file.write_text(data=equivalent_source)
+        app_expected = make_app(
+            srcdir=source_directory,
+            exception_on_warning=True,
+            confoverrides={"extensions": ["myst_parser"]},
+        )
+        app_expected.build()
+        assert app_expected.statuscode == 0
+
+        expected_content_html = (
+            app_expected.outdir / "markdown_document.html"
+        ).read_text()
+        assert content_html == expected_content_html
 
     @staticmethod
     def test_myst_substitutions_not_enabled(
@@ -441,9 +576,33 @@ class TestMyst:
         )
         app.build()
         assert app.statuscode == 0
-        content_html = app.outdir / "markdown_document.html"
-        assert "PRE-example_substitution-POST" not in content_html.read_text()
-        assert "PRE-|a|-POST" in content_html.read_text()
+        content_html = (app.outdir / "markdown_document.html").read_text()
+        app.cleanup()
+
+        equivalent_source = dedent(
+            text="""\
+            # Title
+
+            ```{code-block}
+
+            $ PRE-|a|-POST
+            ```
+            """,
+        )
+
+        markdown_source_file.write_text(data=equivalent_source)
+        app_expected = make_app(
+            srcdir=source_directory,
+            exception_on_warning=True,
+            confoverrides={"extensions": ["myst_parser"]},
+        )
+        app_expected.build()
+        assert app_expected.statuscode == 0
+
+        expected_content_html = (
+            app_expected.outdir / "markdown_document.html"
+        ).read_text()
+        assert content_html == expected_content_html
 
     @staticmethod
     def test_myst_substitutions_custom_markdown_suffix(
@@ -499,9 +658,39 @@ class TestMyst:
         )
         app.build()
         assert app.statuscode == 0
-        expected = "PRE-example_substitution-POST"
-        content_html = app.outdir / "markdown_document.html"
-        assert expected in content_html.read_text()
+        content_html = (app.outdir / "markdown_document.html").read_text()
+        app.cleanup()
+
+        equivalent_source = dedent(
+            text="""\
+            # Title
+
+            ```{code-block}
+
+            $ PRE-example_substitution-POST
+            ```
+            """,
+        )
+
+        markdown_source_file.write_text(data=equivalent_source)
+        app_expected = make_app(
+            srcdir=source_directory,
+            exception_on_warning=True,
+            confoverrides={
+                "extensions": ["myst_parser"],
+                "source_suffix": {
+                    ".rst": "restructuredtext",
+                    ".txt": "markdown",
+                },
+            },
+        )
+        app_expected.build()
+        assert app_expected.statuscode == 0
+
+        expected_content_html = (
+            app_expected.outdir / "markdown_document.html"
+        ).read_text()
+        assert content_html == expected_content_html
 
     @staticmethod
     def test_default_myst_sub_delimiters_code_block(
@@ -553,9 +742,33 @@ class TestMyst:
         )
         app.build()
         assert app.statuscode == 0
-        expected = "PRE-example_substitution-POST"
-        content_html = app.outdir / "markdown_document.html"
-        assert expected in content_html.read_text()
+        content_html = (app.outdir / "markdown_document.html").read_text()
+        app.cleanup()
+
+        equivalent_source = dedent(
+            text="""\
+            # Title
+
+            ```{code-block}
+
+            $ PRE-example_substitution-POST
+            ```
+            """,
+        )
+
+        markdown_source_file.write_text(data=equivalent_source)
+        app_expected = make_app(
+            srcdir=source_directory,
+            exception_on_warning=True,
+            confoverrides={"extensions": ["myst_parser"]},
+        )
+        app_expected.build()
+        assert app_expected.statuscode == 0
+
+        expected_content_html = (
+            app_expected.outdir / "markdown_document.html"
+        ).read_text()
+        assert content_html == expected_content_html
 
     @staticmethod
     def test_custom_myst_sub_delimiters_code_block(
@@ -608,6 +821,30 @@ class TestMyst:
         )
         app.build()
         assert app.statuscode == 0
-        expected = "PRE-example_substitution-POST"
-        content_html = app.outdir / "markdown_document.html"
-        assert expected in content_html.read_text()
+        content_html = (app.outdir / "markdown_document.html").read_text()
+        app.cleanup()
+
+        equivalent_source = dedent(
+            text="""\
+            # Title
+
+            ```{code-block}
+
+            $ PRE-example_substitution-POST
+            ```
+            """,
+        )
+
+        markdown_source_file.write_text(data=equivalent_source)
+        app_expected = make_app(
+            srcdir=source_directory,
+            exception_on_warning=True,
+            confoverrides={"extensions": ["myst_parser"]},
+        )
+        app_expected.build()
+        assert app_expected.statuscode == 0
+
+        expected_content_html = (
+            app_expected.outdir / "markdown_document.html"
+        ).read_text()
+        assert content_html == expected_content_html
