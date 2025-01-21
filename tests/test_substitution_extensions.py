@@ -848,3 +848,76 @@ class TestMyst:
             app_expected.outdir / "markdown_document.html"
         ).read_text()
         assert content_html == expected_content_html
+
+    @staticmethod
+    def test_substitution_code_role(
+        tmp_path: Path,
+        make_app: Callable[..., SphinxTestApp],
+    ) -> None:
+        """
+        The ``substitution-code`` role replaces the placeholders defined in
+        ``conf.py`` as specified.
+        """
+        source_directory = tmp_path / "source"
+        source_directory.mkdir()
+        index_source_file = source_directory / "index.rst"
+        markdown_source_file = source_directory / "markdown_document.md"
+        (source_directory / "conf.py").touch()
+
+        index_source_file_content = dedent(
+            text="""\
+            .. toctree::
+
+               markdown_document
+            """,
+        )
+        markdown_source_file_content = dedent(
+            text="""\
+            # Title
+
+            Example {substitution-code}`PRE-|a|-POST`
+            """,
+        )
+        index_source_file.write_text(data=index_source_file_content)
+        markdown_source_file.write_text(data=markdown_source_file_content)
+        app = make_app(
+            srcdir=source_directory,
+            exception_on_warning=True,
+            confoverrides={
+                "extensions": [
+                    "myst_parser",
+                    "sphinx_substitution_extensions",
+                ],
+                "myst_enable_extensions": ["substitution"],
+                "myst_substitutions": {
+                    "a": "example_substitution",
+                },
+                "myst_sub_delimiters": ("|", "|"),
+            },
+        )
+        app.build()
+        assert app.statuscode == 0
+        content_html = (app.outdir / "markdown_document.html").read_text()
+        app.cleanup()
+
+        equivalent_source = dedent(
+            text="""\
+            # Title
+
+            Example `PRE-example_substitution-POST`
+            """,
+        )
+
+        markdown_source_file.write_text(data=equivalent_source)
+        app_expected = make_app(
+            srcdir=source_directory,
+            exception_on_warning=True,
+            confoverrides={"extensions": ["myst_parser"]},
+        )
+        app_expected.build()
+        assert app_expected.statuscode == 0
+
+        expected_content_html = (
+            app_expected.outdir / "markdown_document.html"
+        ).read_text()
+        assert content_html == expected_content_html
