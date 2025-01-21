@@ -73,3 +73,15 @@ Inline ``:substitution-code:``
 =>
 
 {substitution-code}`The author is {{author}}`
+
+``substitution-download``
+-------------------------
+
+```{code-block} markdown
+
+   {substitution-download}`Script by {{author}} <../source/Eleanor.txt>`
+```
+
+=>
+
+{substitution-download}`Script by {{author}} <../source/Eleanor.txt>`
