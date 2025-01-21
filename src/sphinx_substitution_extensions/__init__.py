@@ -8,11 +8,12 @@ from beartype import beartype
 from docutils.nodes import Element, Node, system_message
 from docutils.parsers.rst import directives
 from docutils.parsers.rst.roles import code_role
-from docutils.parsers.rst.states import Inliner
+from docutils.parsers.rst.states import Inliner, RSTState
 from docutils.statemachine import StringList
 from myst_parser.mocking import MockInliner
 from sphinx import addnodes
 from sphinx.application import Sphinx
+from sphinx.config import Config
 from sphinx.directives.code import CodeBlock
 from sphinx.environment import BuildEnvironment
 from sphinx.roles import XRefRole
@@ -21,6 +22,64 @@ from sphinx.util.typing import ExtensionMetadata, OptionSpec
 from sphinx_substitution_extensions.shared import (
     SUBSTITUTION_OPTION_NAME,
 )
+
+
+def _get_delimiter_pairs(
+    env: BuildEnvironment,
+    config: Config,
+) -> set[tuple[str, str]]:
+    """
+    Get the delimiter pairs for substitution.
+    """
+    markdown_suffixes = {
+        key.lstrip(".")
+        for key, value in config.source_suffix.items()
+        if value == "markdown"
+    }
+
+    # Use `| |` on reST as it is the default substitution syntax.
+    # Use `| |` on MyST for backwards compatibility as this is what we
+    # originally shipped with.
+    delimiter_pairs = {("|", "|")}
+    parser_supported_formats = set(env.parser.supported)
+    if parser_supported_formats.intersection(markdown_suffixes):
+        opening_delimiter, closing_delimiter = config.myst_sub_delimiters
+        new_delimiter_pair = (
+            opening_delimiter + opening_delimiter,
+            closing_delimiter + closing_delimiter,
+        )
+        delimiter_pairs = {*delimiter_pairs, new_delimiter_pair}
+
+    return delimiter_pairs
+
+
+def _get_substitution_defs(
+    env: BuildEnvironment,
+    config: Config,
+    state: RSTState,
+) -> dict[str, str]:
+    """
+    Get the substitution definitions from the environment.
+    """
+    substitution_defs = {}
+
+    markdown_suffixes = {
+        key.lstrip(".")
+        for key, value in config.source_suffix.items()
+        if value == "markdown"
+    }
+
+    parser_supported_formats = set(env.parser.supported)
+    if parser_supported_formats.intersection(markdown_suffixes):
+        if "substitution" in config.myst_enable_extensions:
+            substitution_defs = config.myst_substitutions
+    else:
+        substitution_defs = {
+            key: value.astext()
+            for key, value in state.document.substitution_defs.items()
+        }
+
+    return substitution_defs
 
 
 @beartype
@@ -38,35 +97,16 @@ class SubstitutionCodeBlock(CodeBlock):
         """
         new_content = StringList()
         existing_content = self.content
-        substitution_defs = {}
+        substitution_defs = _get_substitution_defs(
+            env=self.env,
+            config=self.config,
+            state=self.state,
+        )
 
-        markdown_suffixes = {
-            key.lstrip(".")
-            for key, value in self.config.source_suffix.items()
-            if value == "markdown"
-        }
-
-        # Use `| |` on reST as it is the default substitution syntax.
-        # Use `| |` on MyST for backwards compatibility as this is what we
-        # originally shipped with.
-        delimiter_pairs = {("|", "|")}
-        parser_supported_formats = set(self.env.parser.supported)
-        if parser_supported_formats.intersection(markdown_suffixes):
-            if "substitution" in self.config.myst_enable_extensions:
-                substitution_defs = self.config.myst_substitutions
-            opening_delimiter, closing_delimiter = (
-                self.config.myst_sub_delimiters
-            )
-            new_delimiter_pair = (
-                opening_delimiter + opening_delimiter,
-                closing_delimiter + closing_delimiter,
-            )
-            delimiter_pairs = {*delimiter_pairs, new_delimiter_pair}
-        else:
-            substitution_defs = {
-                key: value.astext()
-                for key, value in self.state.document.substitution_defs.items()
-            }
+        delimiter_pairs = _get_delimiter_pairs(
+            env=self.env,
+            config=self.config,
+        )
 
         for item in existing_content:
             new_item = item
