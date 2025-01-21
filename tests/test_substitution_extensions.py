@@ -904,7 +904,7 @@ class TestMyst:
             text="""\
             # Title
 
-            Example `PRE-example_substitution-POST`
+            Example {code}`PRE-example_substitution-POST`
             """,
         )
 
