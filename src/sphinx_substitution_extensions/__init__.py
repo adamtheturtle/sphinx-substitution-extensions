@@ -153,8 +153,7 @@ class SubstitutionCodeRole:
         Replace placeholders with given variables.
         """
         settings = inliner.document.settings
-        env = settings.env  # pyright: ignore[reportUnknownMemberType, reportUnknownVariableType]
-        assert isinstance(env, BuildEnvironment)
+        env = settings.env
         substitution_defs = _get_substitution_defs(
             env=env,
             config=env.config,
