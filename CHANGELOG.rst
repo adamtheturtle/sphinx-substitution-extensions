@@ -6,6 +6,9 @@ Changelog
 Next
 ----
 
+2025.02.19
+----------
+
 - Support the ``substitution-code`` role in MyST documents.
 - Support the ``substitution-download`` role in MyST documents.
 - Drop support for Python 3.10.
