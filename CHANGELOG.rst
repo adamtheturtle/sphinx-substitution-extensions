@@ -8,6 +8,7 @@ Next
 
 - Support the ``substitution-code`` role in MyST documents.
 - Support the ``substitution-download`` role in MyST documents.
+- Drop support for Python 3.10.
 
 2025.01.02
 ----------
