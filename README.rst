@@ -10,7 +10,7 @@ Extensions for Sphinx which allow substitutions within code blocks.
 Installation
 ------------
 
-Sphinx Substitution Extensions is compatible with Sphinx 7.2.0+ using Python 3.10+.
+Sphinx Substitution Extensions is compatible with Sphinx 7.2.0+ using Python |minimum-python-version|\+.
 
 .. code-block:: console
 
@@ -154,3 +154,4 @@ See `CONTRIBUTING.rst <./CONTRIBUTING.rst>`_.
    :target: https://codecov.io/gh/adamtheturtle/sphinx-substitution-extensions
 .. |PyPI| image:: https://badge.fury.io/py/Sphinx-Substitution-Extensions.svg
    :target: https://badge.fury.io/py/Sphinx-Substitution-Extensions
+.. |minimum-python-version| replace:: 3.11
