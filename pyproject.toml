@@ -68,7 +68,7 @@ optional-dependencies.dev = [
     # We use `sphinx.testing`.
     "sphinx[test]==8.2.0",
     "sphinx-lint==1.0.0",
-    "sphinx-toolbox==3.8.2",
+    "sphinx-toolbox==3.8.3",
     "types-docutils==0.21.0.20241128",
     "vulture==2.14",
     "yamlfix==1.17.0",
