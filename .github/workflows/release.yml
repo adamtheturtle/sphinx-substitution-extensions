@@ -65,6 +65,8 @@ jobs:
         with:
           commit_message: Bump CHANGELOG
           file_pattern: CHANGELOG.rst
+          # Error if there are no changes.
+          skip_dirty_check: true
 
       - name: Bump version and push tag
         id: tag_version
