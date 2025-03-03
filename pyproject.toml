@@ -39,7 +39,7 @@ dependencies = [
     "beartype>=0.18.5",
     "docutils>=0.19",
     "myst-parser>=4.0.0",
-    "sphinx>=7.3.5",
+    "sphinx>=8.2.0",
 ]
 optional-dependencies.dev = [
     "actionlint-py==1.7.7.23",
@@ -66,7 +66,10 @@ optional-dependencies.dev = [
     "shellcheck-py==0.10.0.1",
     "shfmt-py==3.7.0.1",
     # We use `sphinx.testing`.
-    "sphinx[test]==8.2.3",
+    # We do not specify the version here as we want to use the version that
+    # we install Sphinx with, which is specified in the `dependencies` section.
+    # This allows us to test with dev dependencies and multiple versions of Sphinx.
+    "sphinx[test]",
     "sphinx-lint==1.0.0",
     "sphinx-toolbox==3.9.0",
     "types-docutils==0.21.0.20241128",
