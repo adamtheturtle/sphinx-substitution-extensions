@@ -41,6 +41,10 @@ jobs:
           UV_PYTHON: ${{ matrix.python-version }}
           UV_RESOLUTION: ${{ matrix.uv-resolution }}
 
+      - name: Freeze for debugging
+        run: |
+          uv pip freeze
+
       - name: Build sample
         run: |
           make build-sample
