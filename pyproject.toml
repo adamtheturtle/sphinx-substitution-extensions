@@ -105,8 +105,6 @@ universal = true
 version_scheme = "post-release"
 
 [tool.ruff]
-target-version = "py310"
-
 line-length = 79
 lint.select = [
     "ALL",
