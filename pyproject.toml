@@ -53,7 +53,7 @@ optional-dependencies.dev = [
     "mypy-strict-kwargs==2024.12.25",
     "pre-commit==4.2.0",
     "pyenchant==3.3.0rc1",
-    "pylint==3.3.4",
+    "pylint==3.3.6",
     "pyproject-fmt==2.5.1",
     "pyright==1.1.397",
     "pyroma==4.2",
