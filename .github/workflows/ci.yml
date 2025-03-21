@@ -74,3 +74,15 @@ jobs:
 
       - uses: pre-commit-ci/lite-action@v1.1.0
         if: always()
+
+  completion-ci:
+    needs: build
+    runs-on: ubuntu-latest
+    if: always()  # Run even if one matrix job fails
+    steps:
+      - name: Check matrix job status
+        run: |-
+          if ! ${{ needs.build.result == 'success' }}; then
+            echo "One or more matrix jobs failed"
+            exit 1
+          fi
