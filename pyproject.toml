@@ -46,7 +46,7 @@ optional-dependencies.dev = [
     "check-manifest==0.50",
     "deptry==0.23.0",
     "doc8==1.1.2",
-    "doccmd==2025.3.18",
+    "doccmd==2025.3.27",
     "docformatter==1.7.5",
     "interrogate==1.7.0",
     "mypy[faster-cache]==1.15.0",
