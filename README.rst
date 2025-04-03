@@ -154,4 +154,4 @@ See `CONTRIBUTING.rst <./CONTRIBUTING.rst>`_.
    :target: https://codecov.io/gh/adamtheturtle/sphinx-substitution-extensions
 .. |PyPI| image:: https://badge.fury.io/py/Sphinx-Substitution-Extensions.svg
    :target: https://badge.fury.io/py/Sphinx-Substitution-Extensions
-.. |minimum-python-version| replace:: 3.11
+.. |minimum-python-version| replace:: 3.10
