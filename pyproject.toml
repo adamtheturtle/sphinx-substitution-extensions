@@ -19,7 +19,7 @@ license = { file = "LICENSE" }
 authors = [
     { name = "Adam Dangoor", email = "adamdangoor@gmail.com" },
 ]
-requires-python = ">=3.11"
+requires-python = ">=3.10"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Environment :: Web Environment",
@@ -28,6 +28,7 @@ classifiers = [
     "Operating System :: Microsoft :: Windows",
     "Operating System :: POSIX",
     "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
@@ -39,18 +40,18 @@ dependencies = [
     "beartype>=0.18.5",
     "docutils>=0.19",
     "myst-parser>=4.0.0",
-    "sphinx>=8.2.0",
+    "sphinx>=8.1.0",
 ]
 optional-dependencies.dev = [
     "actionlint-py==1.7.7.23",
     "check-manifest==0.50",
     "deptry==0.23.0",
     "doc8==1.1.2",
-    "doccmd==2025.3.27",
+    "doccmd==2025.2.18",
     "docformatter==1.7.5",
     "interrogate==1.7.0",
     "mypy[faster-cache]==1.15.0",
-    "mypy-strict-kwargs==2025.3.28",
+    "mypy-strict-kwargs==2025.4.3",
     "pre-commit==4.2.0",
     "pyenchant==3.3.0rc1",
     "pylint==3.3.6",
