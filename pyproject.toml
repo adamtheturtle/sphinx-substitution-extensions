@@ -47,7 +47,7 @@ optional-dependencies.dev = [
     "deptry==0.23.0",
     "doc8==1.1.2",
     "doccmd==2025.4.8",
-    "docformatter==1.7.5",
+    "docformatter==1.7.6",
     "interrogate==1.7.0",
     "mypy[faster-cache]==1.15.0",
     "mypy-strict-kwargs==2025.4.3",
