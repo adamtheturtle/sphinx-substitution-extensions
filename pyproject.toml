@@ -71,7 +71,7 @@ optional-dependencies.dev = [
     "vulture==2.14",
     "yamlfix==1.17.0",
 ]
-optional-dependencies.release = [ "check-wheel-contents==0.6.1" ]
+optional-dependencies.release = [ "check-wheel-contents==0.6.2" ]
 urls.Source = "https://github.com/adamtheturtle/sphinx-substitution-extensions"
 
 [tool.setuptools]
