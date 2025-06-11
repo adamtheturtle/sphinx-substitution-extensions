@@ -63,7 +63,7 @@ jobs:
           include: CHANGELOG.rst
           regex: false
 
-      - uses: stefanzweifel/git-auto-commit-action@v5
+      - uses: stefanzweifel/git-auto-commit-action@v6
         id: commit
         with:
           commit_message: Bump CHANGELOG
