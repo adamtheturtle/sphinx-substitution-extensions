@@ -64,7 +64,7 @@ optional-dependencies.dev = [
     # but also because having it installed means that ``actionlint-py`` will
     # use it to lint shell commands in GitHub workflow files.
     "shellcheck-py==0.10.0.1",
-    "shfmt-py==3.11.0.2",
+    "shfmt-py==3.12.0.2",
     "sphinx-lint==1.0.0",
     "sphinx-toolbox==4.0.0",
     "types-docutils==0.21.0.20250604",
