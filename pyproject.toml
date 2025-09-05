@@ -56,7 +56,7 @@ optional-dependencies.dev = [
     "pyproject-fmt==2.6.0",
     "pyright==1.1.405",
     "pyroma==5.0",
-    "pytest==8.4.1",
+    "pytest==8.4.2",
     "pytest-cov==6.2.1",
     "ruff==0.12.11",
     # We add shellcheck-py not only for shell scripts and shell code blocks,
