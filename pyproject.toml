@@ -65,7 +65,7 @@ optional-dependencies.dev = [
     "shfmt-py==3.12.0.2",
     "sphinx-lint==1.0.0",
     "sphinx-toolbox==4.0.0",
-    "types-docutils==0.22.2.20250924",
+    "types-docutils==0.22.2.20251006",
     "vulture==2.14",
     "yamlfix==1.18.0",
 ]
