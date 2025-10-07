@@ -1,4 +1,4 @@
-|Build Status| |codecov| |PyPI|
+|Build Status| |PyPI|
 
 Sphinx Substitution Extensions
 ==============================
@@ -150,8 +150,6 @@ See `CONTRIBUTING.rst <./CONTRIBUTING.rst>`_.
 .. |Build Status| image:: https://github.com/adamtheturtle/sphinx-substitution-extensions/actions/workflows/ci.yml/badge.svg?branch=main
    :target: https://github.com/adamtheturtle/sphinx-substitution-extensions/actions
 .. _code-block: http://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-code-block
-.. |codecov| image:: https://codecov.io/gh/adamtheturtle/sphinx-substitution-extensions/branch/main/graph/badge.svg
-   :target: https://codecov.io/gh/adamtheturtle/sphinx-substitution-extensions
 .. |PyPI| image:: https://badge.fury.io/py/Sphinx-Substitution-Extensions.svg
    :target: https://badge.fury.io/py/Sphinx-Substitution-Extensions
 .. |minimum-python-version| replace:: 3.10

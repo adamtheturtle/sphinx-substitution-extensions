@@ -61,16 +61,10 @@ jobs:
 
       - name: Run tests
         run: |
-          uv run --extra=dev pytest -s -vvv --cov-fail-under 100 --cov=src/ --cov=tests . --cov-report=xml
+          uv run --extra=dev pytest -s -vvv --cov-fail-under 100 --cov=src/ --cov=tests .
         env:
           UV_PYTHON: ${{ matrix.python-version }}
           UV_RESOLUTION: ${{ matrix.uv-resolution }}
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v5
-        with:
-          fail_ci_if_error: true
-          token: ${{ secrets.CODECOV_TOKEN }}
 
       - uses: pre-commit-ci/lite-action@v1.1.0
         if: always()

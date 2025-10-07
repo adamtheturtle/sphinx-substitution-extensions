@@ -256,7 +256,6 @@ ignore = [
     "Makefile",
     "ci",
     "ci/**",
-    "codecov.yaml",
     "docs",
     "docs/**",
     ".git_archival.txt",
