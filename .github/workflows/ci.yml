@@ -1,5 +1,4 @@
 ---
-
 name: CI
 
 on:
@@ -14,7 +13,6 @@ on:
 
 jobs:
   build:
-
     strategy:
       matrix:
         python-version: ['3.10', '3.11', '3.12', '3.13']
@@ -47,14 +45,14 @@ jobs:
 
       - name: Build sample
         run: |
-          make build-sample
+          uv run --extra=dev sphinx-build -W -b html sample/source sample/build
         env:
           UV_PYTHON: ${{ matrix.python-version }}
           UV_RESOLUTION: ${{ matrix.uv-resolution }}
 
       - name: Build sample parallel
         run: |
-          make build-sample-parallel
+          uv run --extra=dev sphinx-build -j 2 -W -b html sample/source sample/build
         env:
           UV_PYTHON: ${{ matrix.python-version }}
           UV_RESOLUTION: ${{ matrix.uv-resolution }}
