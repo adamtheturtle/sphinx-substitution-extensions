@@ -2,6 +2,7 @@
 Custom Sphinx extensions.
 """
 
+from importlib.metadata import version
 from typing import Any, ClassVar
 
 from beartype import beartype
@@ -280,4 +281,7 @@ def setup(app: Sphinx) -> ExtensionMetadata:
         nodeclass=addnodes.download_reference,
     )
     app.add_role(name="substitution-download", role=substitution_download_role)
-    return {"parallel_read_safe": True}
+    return {
+        "parallel_read_safe": True,
+        "version": version(distribution_name="sphinx-substitution-extensions"),
+    }

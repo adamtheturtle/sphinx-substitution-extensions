@@ -3,10 +3,35 @@ Tests for Sphinx extensions.
 """
 
 from collections.abc import Callable
+from importlib.metadata import version
 from pathlib import Path
 from textwrap import dedent
 
 from sphinx.testing.util import SphinxTestApp
+
+import sphinx_substitution_extensions
+
+
+def test_setup(
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """
+    Test that the setup function returns the expected metadata.
+    """
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    (source_directory / "conf.py").touch()
+
+    app = make_app(
+        srcdir=source_directory,
+    )
+    setup_result = sphinx_substitution_extensions.setup(app=app)
+    pkg_version = version(distribution_name="sphinx-substitution-extensions")
+    assert setup_result == {
+        "parallel_read_safe": True,
+        "version": pkg_version,
+    }
 
 
 def test_no_substitution_code_block(
