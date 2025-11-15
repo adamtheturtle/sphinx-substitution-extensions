@@ -25,7 +25,6 @@ def test_setup(
 
     app = make_app(
         srcdir=source_directory,
-        confoverrides={"extensions": ["sphinx_substitution_extensions"]},
     )
     setup_result = sphinx_substitution_extensions.setup(app=app)
     pkg_version = version(distribution_name="sphinx-substitution-extensions")
