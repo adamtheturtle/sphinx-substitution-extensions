@@ -1,3 +1,2 @@
 This is a sample file for demonstrating literalinclude.
 The author is |author|.
-The version is |release|.
