@@ -89,6 +89,26 @@ def _get_substitution_defs(
 
 
 @beartype
+def _apply_substitutions(
+    text: str,
+    substitution_defs: dict[str, str],
+    delimiter_pairs: set[tuple[str, str]],
+) -> str:
+    """
+    Apply substitutions to text using the given delimiter pairs.
+    """
+    new_text = text
+    for name, replacement in substitution_defs.items():
+        for delimiter_pair in delimiter_pairs:
+            opening_delimiter, closing_delimiter = delimiter_pair
+            new_text = new_text.replace(
+                f"{opening_delimiter}{name}{closing_delimiter}",
+                replacement,
+            )
+    return new_text
+
+
+@beartype
 def _process_node(
     node: Node,
     substitution_defs: dict[str, str],
@@ -98,14 +118,11 @@ def _process_node(
     Recursively process nodes to apply substitutions.
     """
     if isinstance(node, Element):
-        new_text = node.rawsource
-        for name, replacement in substitution_defs.items():
-            for delimiter_pair in delimiter_pairs:
-                opening_delimiter, closing_delimiter = delimiter_pair
-                new_text = new_text.replace(
-                    f"{opening_delimiter}{name}{closing_delimiter}",
-                    replacement,
-                )
+        new_text = _apply_substitutions(
+            text=node.rawsource,
+            substitution_defs=substitution_defs,
+            delimiter_pairs=delimiter_pairs,
+        )
         node.rawsource = new_text
         first_child = node.children[0]
         if isinstance(first_child, Text):
@@ -147,14 +164,12 @@ class SubstitutionCodeBlock(CodeBlock):
 
         for item in existing_content:
             new_item = item
-            for name, replacement in substitution_defs.items():
-                if SUBSTITUTION_OPTION_NAME in self.options:
-                    for delimiter_pair in delimiter_pairs:
-                        opening_delimiter, closing_delimiter = delimiter_pair
-                        new_item = new_item.replace(
-                            f"{opening_delimiter}{name}{closing_delimiter}",
-                            replacement,
-                        )
+            if SUBSTITUTION_OPTION_NAME in self.options:
+                new_item = _apply_substitutions(
+                    text=item,
+                    substitution_defs=substitution_defs,
+                    delimiter_pairs=delimiter_pairs,
+                )
             new_item_string_list = StringList(initlist=[new_item])
             new_content.extend(other=new_item_string_list)
 
@@ -200,17 +215,16 @@ class SubstitutionCodeRole:
             config=env.config,
         )
 
-        for name, value in substitution_defs.items():
-            for delimiter_pair in delimiter_pairs:
-                opening_delimiter, closing_delimiter = delimiter_pair
-                text = text.replace(
-                    f"{opening_delimiter}{name}{closing_delimiter}",
-                    value,
-                )
-                rawtext = text.replace(
-                    f"{opening_delimiter}{name}{closing_delimiter}",
-                    value,
-                )
+        text = _apply_substitutions(
+            text=text,
+            substitution_defs=substitution_defs,
+            delimiter_pairs=delimiter_pairs,
+        )
+        rawtext = _apply_substitutions(
+            text=rawtext,
+            substitution_defs=substitution_defs,
+            delimiter_pairs=delimiter_pairs,
+        )
 
         # ``types-docutils`` says that ``code_role`` requires an ``Inliner``
         # for ``inliner``.
@@ -315,17 +329,17 @@ class SubstitutionXRefRole(XRefRole):
             env=env,
             config=env.config,
         )
-        for name, value in substitution_defs.items():
-            for delimiter_pair in delimiter_pairs:
-                opening_delimiter, closing_delimiter = delimiter_pair
-                title = title.replace(
-                    f"{opening_delimiter}{name}{closing_delimiter}",
-                    value,
-                )
-                target = target.replace(
-                    f"{opening_delimiter}{name}{closing_delimiter}",
-                    value,
-                )
+
+        title = _apply_substitutions(
+            text=title,
+            substitution_defs=substitution_defs,
+            delimiter_pairs=delimiter_pairs,
+        )
+        target = _apply_substitutions(
+            text=target,
+            substitution_defs=substitution_defs,
+            delimiter_pairs=delimiter_pairs,
+        )
 
         # Use the default implementation to process the link
         # as it handles whitespace in target text.
