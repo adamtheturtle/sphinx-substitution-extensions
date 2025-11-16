@@ -257,8 +257,8 @@ class SubstitutionLiteralInclude(LiteralInclude):
     """
 
     option_spec: ClassVar[OptionSpec] = LiteralInclude.option_spec.copy()
-    option_spec["content-substitutions"] = directives.flag
-    option_spec["path-substitutions"] = directives.flag
+    option_spec[CONTENT_SUBSTITUTION_OPTION_NAME] = directives.flag
+    option_spec[PATH_SUBSTITUTION_OPTION_NAME] = directives.flag
 
     def run(self) -> list[Node]:
         """
