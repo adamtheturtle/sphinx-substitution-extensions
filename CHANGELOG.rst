@@ -7,7 +7,10 @@ Next
 ----
 
 - Give version in extension metadata.
-- Add ``literalinclude`` directive with ``:substitutions:`` option.
+- ``literalinclude`` directive now supports the following options:
+
+  - ``:content-substitutions:`` - Performs substitutions on the included file content.
+  - ``:path-substitutions:`` - Performs substitutions on the file path.
 
 2025.10.24
 ----------

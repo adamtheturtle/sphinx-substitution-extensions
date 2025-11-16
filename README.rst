@@ -74,14 +74,21 @@ Inline ``:substitution-code:``
 ``literalinclude``
 ~~~~~~~~~~~~~~~~~~
 
-This adds a ``:substitutions:`` option to Sphinx's built-in `literalinclude`_ directive.
+This adds ``:content-substitutions:`` and ``:path-substitutions:`` options to Sphinx's built-in `literalinclude`_ directive.
+
+Replace substitutions in the content of the included file:
 
 .. code-block:: rst
 
    .. literalinclude:: path/to/file.txt
-      :substitutions:
+      :content-substitutions:
 
-This will replace substitutions in the content of the included file.
+Replace substitutions in the file path:
+
+.. code-block:: rst
+
+   .. literalinclude:: path/to/|author|_file.txt
+      :path-substitutions:
 
 MyST Markdown setup
 -------------------
@@ -147,15 +154,23 @@ Inline ``:substitution-code:``
 ``literalinclude``
 ~~~~~~~~~~~~~~~~~~
 
-This adds a ``:substitutions:`` option to Sphinx's built-in `literalinclude`_ directive.
+This adds ``:content-substitutions:`` and ``:path-substitutions:`` options to Sphinx's built-in `literalinclude`_ directive.
+
+Replace substitutions in the content of the included file:
 
 .. code-block:: markdown
 
    ```{literalinclude} path/to/file.txt
-      :substitutions:
+      :content-substitutions:
    ```
 
-This will replace substitutions in the content of the included file.
+Replace substitutions in the file path:
+
+.. code-block:: markdown
+
+   ```{literalinclude} path/to/|author|_file.txt
+      :path-substitutions:
+   ```
 
 Credits
 -------
