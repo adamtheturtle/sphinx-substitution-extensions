@@ -250,9 +250,8 @@ class SubstitutionLiteralInclude(LiteralInclude):
                     assert isinstance(first_child, Text)
                     node.replace(first_child, Text(data=new_text))
 
-            if isinstance(node, Element):
-                for child in node.children:
-                    process_node(node=child)
+            for child in node.children:
+                process_node(node=child)
 
         for node in nodes_list:
             process_node(node=node)
