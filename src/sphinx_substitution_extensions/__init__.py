@@ -114,6 +114,24 @@ def _apply_substitutions(
 
 
 @beartype
+def _should_apply_substitutions(
+    options: dict[str, Any],
+    config: Config,
+    yes_flag: str,
+    no_flag: str,
+) -> bool:
+    """Determine if substitutions should be applied based on flags and config.
+
+    Priority: explicit no-flag > explicit yes-flag > config default.
+    """
+    if no_flag in options:
+        return False
+    if yes_flag in options:
+        return True
+    return config.substitutions_default_enabled
+
+
+@beartype
 def _process_node(
     node: Node,
     substitution_defs: dict[str, str],
@@ -168,16 +186,12 @@ class SubstitutionCodeBlock(CodeBlock):
             config=self.config,
         )
 
-        should_apply_substitutions = False
-
-        if NO_SUBSTITUTION_OPTION_NAME in self.options:
-            should_apply_substitutions = False
-        elif SUBSTITUTION_OPTION_NAME in self.options:
-            should_apply_substitutions = True
-        else:
-            should_apply_substitutions = (
-                self.config.substitutions_default_enabled
-            )
+        should_apply_substitutions = _should_apply_substitutions(
+            options=self.options,
+            config=self.config,
+            yes_flag=SUBSTITUTION_OPTION_NAME,
+            no_flag=NO_SUBSTITUTION_OPTION_NAME,
+        )
 
         for item in existing_content:
             new_item = item
@@ -282,16 +296,12 @@ class SubstitutionLiteralInclude(LiteralInclude):
         Replace placeholders with given variables in the file path and/or
         included file content.
         """
-        should_apply_path_substitutions = False
-
-        if NO_PATH_SUBSTITUTION_OPTION_NAME in self.options:
-            should_apply_path_substitutions = False
-        elif PATH_SUBSTITUTION_OPTION_NAME in self.options:
-            should_apply_path_substitutions = True
-        else:
-            should_apply_path_substitutions = (
-                self.config.substitutions_default_enabled
-            )
+        should_apply_path_substitutions = _should_apply_substitutions(
+            options=self.options,
+            config=self.config,
+            yes_flag=PATH_SUBSTITUTION_OPTION_NAME,
+            no_flag=NO_PATH_SUBSTITUTION_OPTION_NAME,
+        )
 
         if should_apply_path_substitutions:
             substitution_defs = _get_substitution_defs(
@@ -314,16 +324,12 @@ class SubstitutionLiteralInclude(LiteralInclude):
 
         nodes_list = super().run()
 
-        should_apply_content_substitutions = False
-
-        if NO_CONTENT_SUBSTITUTION_OPTION_NAME in self.options:
-            should_apply_content_substitutions = False
-        elif CONTENT_SUBSTITUTION_OPTION_NAME in self.options:
-            should_apply_content_substitutions = True
-        else:
-            should_apply_content_substitutions = (
-                self.config.substitutions_default_enabled
-            )
+        should_apply_content_substitutions = _should_apply_substitutions(
+            options=self.options,
+            config=self.config,
+            yes_flag=CONTENT_SUBSTITUTION_OPTION_NAME,
+            no_flag=NO_CONTENT_SUBSTITUTION_OPTION_NAME,
+        )
 
         if should_apply_content_substitutions:
             substitution_defs = _get_substitution_defs(
