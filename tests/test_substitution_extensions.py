@@ -984,7 +984,6 @@ def test_default_substitutions_literal_include_disabled_content(
     content_html = (app.outdir / "index.html").read_text()
     app.cleanup()
 
-    # Content should NOT be substituted
     equivalent_source = dedent(
         text="""\
         .. literalinclude:: example.txt
@@ -1017,7 +1016,6 @@ def test_default_substitutions_literal_include_disabled_path(
     source_file = source_directory / "index.rst"
     (source_directory / "conf.py").touch()
 
-    # Create a file with literal name "|a|.txt"
     include_file = source_directory / "|a|.txt"
     include_file.write_text(data="File content")
 
@@ -1043,7 +1041,6 @@ def test_default_substitutions_literal_include_disabled_path(
     content_html = (app.outdir / "index.html").read_text()
     app.cleanup()
 
-    # Path should NOT be substituted
     equivalent_source = dedent(
         text="""\
         .. literalinclude:: |a|.txt

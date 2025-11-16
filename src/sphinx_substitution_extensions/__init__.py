@@ -168,19 +168,13 @@ class SubstitutionCodeBlock(CodeBlock):
             config=self.config,
         )
 
-        # Determine if substitutions should be applied
-        # Priority: explicit :nosubstitutions: flag >
-        # explicit :substitutions: flag > config default
         should_apply_substitutions = False
 
         if NO_SUBSTITUTION_OPTION_NAME in self.options:
-            # Explicitly disabled
             should_apply_substitutions = False
         elif SUBSTITUTION_OPTION_NAME in self.options:
-            # Explicitly enabled
             should_apply_substitutions = True
         else:
-            # Check config default
             default_enabled = getattr(
                 self.config,
                 "substitutions_default_enabled",
@@ -291,8 +285,6 @@ class SubstitutionLiteralInclude(LiteralInclude):
         Replace placeholders with given variables in the file path and/or
         included file content.
         """
-        # Determine if path substitutions should be applied
-        # Priority: explicit no-flag > explicit yes-flag > config default
         should_apply_path_substitutions = False
 
         if NO_PATH_SUBSTITUTION_OPTION_NAME in self.options:
@@ -328,8 +320,6 @@ class SubstitutionLiteralInclude(LiteralInclude):
 
         nodes_list = super().run()
 
-        # Determine if content substitutions should be applied
-        # Priority: explicit no-flag > explicit yes-flag > config default
         should_apply_content_substitutions = False
 
         if NO_CONTENT_SUBSTITUTION_OPTION_NAME in self.options:
