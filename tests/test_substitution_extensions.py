@@ -1007,57 +1007,85 @@ def test_default_substitutions_literal_include_disabled_path(
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
-    """
-    When ``substitutions_default_enabled`` is True but ``literalinclude`` has
-    the ``:nopath-substitutions:`` flag, path substitutions should not be
+    """When ``substitutions_default_enabled`` is True but ``literalinclude``
+    has the ``:nopath-substitutions:`` flag, path substitutions should not be
     applied.
+
+    Note: This test uses MyST format with custom delimiters because the `|`
+    character cannot be used in Windows file paths.
     """
     source_directory = tmp_path / "source"
     source_directory.mkdir()
-    source_file = source_directory / "index.rst"
+    index_source_file = source_directory / "index.rst"
+    markdown_source_file = source_directory / "markdown_document.md"
     (source_directory / "conf.py").touch()
 
-    include_file = source_directory / "|a|.txt"
+    # Use custom delimiters [[a]] instead of |a| because | is not allowed
+    # in Windows file paths
+    include_file = source_directory / "[[a]].txt"
     include_file.write_text(data="File content")
 
-    source_file_content = dedent(
+    index_source_file_content = dedent(
         text="""\
-        .. |a| replace:: example_substitution
+        .. toctree::
 
-        .. literalinclude:: |a|.txt
-           :nopath-substitutions:
+           markdown_document
         """,
     )
-    source_file.write_text(data=source_file_content)
+    markdown_source_file_content = dedent(
+        text="""\
+        # Title
+
+        ```{literalinclude} [[a]].txt
+        :nopath-substitutions:
+        ```
+        """,
+    )
+    index_source_file.write_text(data=index_source_file_content)
+    markdown_source_file.write_text(data=markdown_source_file_content)
     app = make_app(
         srcdir=source_directory,
         exception_on_warning=True,
         confoverrides={
-            "extensions": ["sphinx_substitution_extensions"],
+            "extensions": [
+                "myst_parser",
+                "sphinx_substitution_extensions",
+            ],
+            "myst_enable_extensions": ["substitution"],
+            "myst_substitutions": {
+                "a": "example_substitution",
+            },
+            "myst_sub_delimiters": ("[", "]"),
             "substitutions_default_enabled": True,
         },
     )
     app.build()
     assert app.statuscode == 0
-    content_html = (app.outdir / "index.html").read_text()
+    content_html = (app.outdir / "markdown_document.html").read_text()
     app.cleanup()
 
     equivalent_source = dedent(
         text="""\
-        .. literalinclude:: |a|.txt
+        # Title
+
+        ```{literalinclude} [[a]].txt
+        ```
         """,
     )
 
-    source_file.write_text(data=equivalent_source)
+    markdown_source_file.write_text(data=equivalent_source)
     app_expected = make_app(
         srcdir=source_directory,
         exception_on_warning=True,
+        confoverrides={"extensions": ["myst_parser"]},
         freshenv=True,
     )
     app_expected.build()
     assert app_expected.statuscode == 0
 
-    expected_content_html = (app_expected.outdir / "index.html").read_text()
+    expected_content_html = (
+        app_expected.outdir / "markdown_document.html"
+    ).read_text()
     assert content_html == expected_content_html
 
 
