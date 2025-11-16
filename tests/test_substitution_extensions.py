@@ -340,6 +340,267 @@ def test_substitution_download(
     assert content_html == expected_content_html
 
 
+def test_no_substitution_literal_include(
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """
+    The ``literalinclude`` directive does not replace placeholders.
+    """
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    source_file = source_directory / "index.rst"
+    (source_directory / "conf.py").touch()
+
+    include_file = source_directory / "example.txt"
+    include_file.write_text(data="Content with |a| placeholder")
+
+    source_file_content = dedent(
+        text="""\
+        .. |a| replace:: example_substitution
+
+        .. literalinclude:: example.txt
+        """,
+    )
+    source_file.write_text(data=source_file_content)
+    app = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        confoverrides={"extensions": ["sphinx_substitution_extensions"]},
+    )
+    app.build()
+    assert app.statuscode == 0
+    content_html = (app.outdir / "index.html").read_text()
+    app.cleanup()
+
+    app_expected = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        freshenv=True,
+    )
+
+    app_expected.build()
+    assert app_expected.statuscode == 0
+
+    expected_content_html = (app_expected.outdir / "index.html").read_text()
+
+    assert content_html == expected_content_html
+
+
+def test_substitution_literal_include(
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """
+    The ``literalinclude`` directive replaces the placeholders defined in
+    ``conf.py`` as specified when the `:substitutions:` flag is set.
+    """
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    source_file = source_directory / "index.rst"
+    (source_directory / "conf.py").touch()
+
+    include_file = source_directory / "example.txt"
+    include_file.write_text(data="Content with |a| placeholder")
+
+    source_file_content = dedent(
+        text="""\
+        .. |a| replace:: example_substitution
+
+        .. literalinclude:: example.txt
+           :substitutions:
+        """,
+    )
+    source_file.write_text(data=source_file_content)
+    app = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        confoverrides={"extensions": ["sphinx_substitution_extensions"]},
+    )
+    app.build()
+    assert app.statuscode == 0
+    content_html = (app.outdir / "index.html").read_text()
+    app.cleanup()
+
+    include_file.write_text(
+        data="Content with example_substitution placeholder"
+    )
+
+    equivalent_source = dedent(
+        text="""\
+        .. literalinclude:: example.txt
+        """,
+    )
+
+    source_file.write_text(data=equivalent_source)
+    app_expected = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+    )
+    app_expected.build()
+    assert app_expected.statuscode == 0
+
+    expected_content_html = (app_expected.outdir / "index.html").read_text()
+    assert content_html == expected_content_html
+
+
+def test_substitution_literal_include_multiple(
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """
+    The ``literalinclude`` directive replaces multiple placeholders.
+    """
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    source_file = source_directory / "index.rst"
+    (source_directory / "conf.py").touch()
+
+    include_file = source_directory / "example.txt"
+    include_file.write_text(data="PRE-|a|-MID-|b|-POST")
+
+    source_file_content = dedent(
+        text="""\
+        .. |a| replace:: first_substitution
+        .. |b| replace:: second_substitution
+
+        .. literalinclude:: example.txt
+           :substitutions:
+        """,
+    )
+    source_file.write_text(data=source_file_content)
+    app = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        confoverrides={"extensions": ["sphinx_substitution_extensions"]},
+    )
+    app.build()
+    assert app.statuscode == 0
+    content_html = (app.outdir / "index.html").read_text()
+    app.cleanup()
+
+    include_file.write_text(
+        data="PRE-first_substitution-MID-second_substitution-POST",
+    )
+
+    equivalent_source = dedent(
+        text="""\
+        .. literalinclude:: example.txt
+        """,
+    )
+
+    source_file.write_text(data=equivalent_source)
+    app_expected = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+    )
+    app_expected.build()
+    assert app_expected.statuscode == 0
+
+    expected_content_html = (app_expected.outdir / "index.html").read_text()
+    assert content_html == expected_content_html
+
+
+def test_substitution_literal_include_with_caption(
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """
+    The ``literalinclude`` directive works with captions.
+    """
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    source_file = source_directory / "index.rst"
+    (source_directory / "conf.py").touch()
+
+    include_file = source_directory / "example.txt"
+    include_file.write_text(data="Content with |a| placeholder")
+
+    source_file_content = dedent(
+        text="""\
+        .. |a| replace:: example_substitution
+
+        .. literalinclude:: example.txt
+           :caption: Example caption
+           :substitutions:
+        """,
+    )
+    source_file.write_text(data=source_file_content)
+    app = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        confoverrides={"extensions": ["sphinx_substitution_extensions"]},
+    )
+    app.build()
+    assert app.statuscode == 0
+    content_html = (app.outdir / "index.html").read_text()
+    app.cleanup()
+
+    include_file.write_text(
+        data="Content with example_substitution placeholder"
+    )
+
+    equivalent_source = dedent(
+        text="""\
+        .. literalinclude:: example.txt
+           :caption: Example caption
+        """,
+    )
+
+    source_file.write_text(data=equivalent_source)
+    app_expected = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+    )
+    app_expected.build()
+    assert app_expected.statuscode == 0
+
+    expected_content_html = (app_expected.outdir / "index.html").read_text()
+    assert content_html == expected_content_html
+
+
+def test_substitution_literal_include_in_rest_example(
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """
+    The ``literalinclude`` directive works inside rest-example.
+    """
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    source_file = source_directory / "index.rst"
+    (source_directory / "conf.py").touch()
+
+    include_file = source_directory / "example.txt"
+    include_file.write_text(data="Content with |a| placeholder")
+
+    source_file_content = dedent(
+        text="""\
+        .. |a| replace:: example_substitution
+
+        .. rest-example::
+
+           .. literalinclude:: example.txt
+              :substitutions:
+        """,
+    )
+    source_file.write_text(data=source_file_content)
+    app = make_app(
+        srcdir=source_directory,
+        warningiserror=True,
+        confoverrides={
+            "extensions": [
+                "sphinx_substitution_extensions",
+                "sphinx_toolbox.rest_example",
+            ],
+        },
+    )
+    app.build()
+    assert app.statuscode == 0
+    content_html = (app.outdir / "index.html").read_text()
+    assert "example_substitution" in content_html
+
+
 class TestMyst:
     """
     Tests for MyST documents.
