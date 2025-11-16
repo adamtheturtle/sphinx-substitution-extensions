@@ -265,7 +265,6 @@ class SubstitutionLiteralInclude(LiteralInclude):
         Replace placeholders with given variables in the file path and/or
         included file content.
         """
-        # Handle path substitutions first
         if PATH_SUBSTITUTION_OPTION_NAME in self.options:
             substitution_defs = _get_substitution_defs(
                 env=self.env,
@@ -278,7 +277,6 @@ class SubstitutionLiteralInclude(LiteralInclude):
                 config=self.config,
             )
 
-            # Apply substitutions to the file path
             for argument_index, argument in enumerate(iterable=self.arguments):
                 self.arguments[argument_index] = _apply_substitutions(
                     text=argument,
@@ -286,10 +284,8 @@ class SubstitutionLiteralInclude(LiteralInclude):
                     delimiter_pairs=delimiter_pairs,
                 )
 
-        # Call parent to process the file
         nodes_list = super().run()
 
-        # Handle content substitutions
         if CONTENT_SUBSTITUTION_OPTION_NAME in self.options:
             substitution_defs = _get_substitution_defs(
                 env=self.env,
