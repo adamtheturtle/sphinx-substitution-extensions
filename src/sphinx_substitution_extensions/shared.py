@@ -6,3 +6,7 @@ Constants and functions shared between modules.
 # may break doc8 linting.
 # See https://github.com/PyCQA/doc8/pull/34.
 SUBSTITUTION_OPTION_NAME = "substitutions"
+
+# New option names for literalinclude directive
+CONTENT_SUBSTITUTION_OPTION_NAME = "content-substitutions"
+PATH_SUBSTITUTION_OPTION_NAME = "path-substitutions"

@@ -44,12 +44,25 @@ Inline ``:download:``
 ``literalinclude``
 ------------------
 
+Content substitutions
+~~~~~~~~~~~~~~~~~~~~~
+
 .. rest-example::
 
    .. literalinclude:: sample_include.txt
 
    .. literalinclude:: sample_include.txt
-      :substitutions:
+      :content-substitutions:
+
+Path substitutions
+~~~~~~~~~~~~~~~~~~
+
+.. rest-example::
+
+   .. literalinclude:: sample_include.txt
+
+   .. literalinclude:: |author|.txt
+      :path-substitutions:
 
 ..
 

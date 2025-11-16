@@ -27,6 +27,8 @@ from sphinx.roles import XRefRole
 from sphinx.util.typing import ExtensionMetadata, OptionSpec
 
 from sphinx_substitution_extensions.shared import (
+    CONTENT_SUBSTITUTION_OPTION_NAME,
+    PATH_SUBSTITUTION_OPTION_NAME,
     SUBSTITUTION_OPTION_NAME,
 )
 
@@ -255,34 +257,57 @@ class SubstitutionLiteralInclude(LiteralInclude):
     """
 
     option_spec: ClassVar[OptionSpec] = LiteralInclude.option_spec.copy()
-    option_spec["substitutions"] = directives.flag
+    option_spec["content-substitutions"] = directives.flag
+    option_spec["path-substitutions"] = directives.flag
 
     def run(self) -> list[Node]:
         """
-        Replace placeholders with given variables in the included file content.
+        Replace placeholders with given variables in the file path and/or
+        included file content.
         """
+        # Handle path substitutions first
+        if PATH_SUBSTITUTION_OPTION_NAME in self.options:
+            substitution_defs = _get_substitution_defs(
+                env=self.env,
+                config=self.config,
+                substitution_defs=self.state.document.substitution_defs,
+            )
+
+            delimiter_pairs = _get_delimiter_pairs(
+                env=self.env,
+                config=self.config,
+            )
+
+            # Apply substitutions to the file path
+            for argument_index, argument in enumerate(self.arguments):
+                self.arguments[argument_index] = _apply_substitutions(
+                    text=argument,
+                    substitution_defs=substitution_defs,
+                    delimiter_pairs=delimiter_pairs,
+                )
+
+        # Call parent to process the file
         nodes_list = super().run()
 
-        if SUBSTITUTION_OPTION_NAME not in self.options:
-            return nodes_list
-
-        substitution_defs = _get_substitution_defs(
-            env=self.env,
-            config=self.config,
-            substitution_defs=self.state.document.substitution_defs,
-        )
-
-        delimiter_pairs = _get_delimiter_pairs(
-            env=self.env,
-            config=self.config,
-        )
-
-        for node in nodes_list:
-            _process_node(
-                node=node,
-                substitution_defs=substitution_defs,
-                delimiter_pairs=delimiter_pairs,
+        # Handle content substitutions
+        if CONTENT_SUBSTITUTION_OPTION_NAME in self.options:
+            substitution_defs = _get_substitution_defs(
+                env=self.env,
+                config=self.config,
+                substitution_defs=self.state.document.substitution_defs,
             )
+
+            delimiter_pairs = _get_delimiter_pairs(
+                env=self.env,
+                config=self.config,
+            )
+
+            for node in nodes_list:
+                _process_node(
+                    node=node,
+                    substitution_defs=substitution_defs,
+                    delimiter_pairs=delimiter_pairs,
+                )
 
         return nodes_list
 
