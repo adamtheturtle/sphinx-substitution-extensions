@@ -106,7 +106,7 @@ def _process_node(
         node.rawsource = new_text
         first_child = node.children[0]
         if isinstance(first_child, Text):
-            node.replace(first_child, Text(data=new_text))
+            node.replace(old=first_child, new=Text(data=new_text))
 
     for child in node.children:
         _process_node(
