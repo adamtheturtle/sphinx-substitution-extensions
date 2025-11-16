@@ -187,6 +187,114 @@ def test_substitution_code_block_case_preserving(
     assert content_html == expected_content_html
 
 
+def test_default_substitutions_enabled(
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """
+    When ``substitutions_default_enabled`` is set to True in conf.py, code
+    blocks should apply substitutions by default without needing the
+    ``:substitutions:`` flag.
+    """
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    source_file = source_directory / "index.rst"
+    (source_directory / "conf.py").touch()
+
+    source_file_content = dedent(
+        text="""\
+        .. |a| replace:: example_substitution
+
+        .. code-block:: shell
+
+           $ PRE-|a|-POST
+        """,
+    )
+    source_file.write_text(data=source_file_content)
+    app = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        confoverrides={
+            "extensions": ["sphinx_substitution_extensions"],
+            "substitutions_default_enabled": True,
+        },
+    )
+    app.build()
+    assert app.statuscode == 0
+    content_html = (app.outdir / "index.html").read_text()
+    app.cleanup()
+
+    equivalent_source = dedent(
+        text="""\
+        .. code-block:: shell
+
+            $ PRE-example_substitution-POST
+        """,
+    )
+
+    source_file.write_text(data=equivalent_source)
+    app_expected = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+    )
+    app_expected.build()
+    assert app_expected.statuscode == 0
+
+    expected_content_html = (app_expected.outdir / "index.html").read_text()
+    assert content_html == expected_content_html
+
+
+def test_default_substitutions_disabled_with_flag(
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """
+    When ``substitutions_default_enabled`` is True but a code block has the
+    ``:nosubstitutions:`` flag, substitutions should not be applied.
+    """
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    source_file = source_directory / "index.rst"
+    (source_directory / "conf.py").touch()
+
+    source_file_content = dedent(
+        text="""\
+        .. |a| replace:: example_substitution
+
+        .. code-block:: shell
+           :nosubstitutions:
+
+           $ PRE-|a|-POST
+        """,
+    )
+    source_file.write_text(data=source_file_content)
+    app = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        confoverrides={
+            "extensions": ["sphinx_substitution_extensions"],
+            "substitutions_default_enabled": True,
+        },
+    )
+    app.build()
+    assert app.statuscode == 0
+    content_html = (app.outdir / "index.html").read_text()
+    app.cleanup()
+
+    app_expected = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        freshenv=True,
+    )
+
+    app_expected.build()
+    assert app_expected.statuscode == 0
+
+    expected_content_html = (app_expected.outdir / "index.html").read_text()
+
+    assert content_html == expected_content_html
+
+
 def test_substitution_inline(
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],

@@ -9,3 +9,4 @@ SUBSTITUTION_OPTION_NAME = "substitutions"
 
 CONTENT_SUBSTITUTION_OPTION_NAME = "content-substitutions"
 PATH_SUBSTITUTION_OPTION_NAME = "path-substitutions"
+NO_SUBSTITUTION_OPTION_NAME = "nosubstitutions"

@@ -28,6 +28,7 @@ from sphinx.util.typing import ExtensionMetadata, OptionSpec
 
 from sphinx_substitution_extensions.shared import (
     CONTENT_SUBSTITUTION_OPTION_NAME,
+    NO_SUBSTITUTION_OPTION_NAME,
     PATH_SUBSTITUTION_OPTION_NAME,
     SUBSTITUTION_OPTION_NAME,
 )
@@ -146,6 +147,7 @@ class SubstitutionCodeBlock(CodeBlock):
 
     option_spec: ClassVar[OptionSpec] = CodeBlock.option_spec
     option_spec["substitutions"] = directives.flag
+    option_spec["nosubstitutions"] = directives.flag
 
     def run(self) -> list[Node]:
         """
@@ -164,9 +166,29 @@ class SubstitutionCodeBlock(CodeBlock):
             config=self.config,
         )
 
+        # Determine if substitutions should be applied
+        # Priority: explicit :nosubstitutions: flag >
+        # explicit :substitutions: flag > config default
+        should_apply_substitutions = False
+
+        if NO_SUBSTITUTION_OPTION_NAME in self.options:
+            # Explicitly disabled
+            should_apply_substitutions = False
+        elif SUBSTITUTION_OPTION_NAME in self.options:
+            # Explicitly enabled
+            should_apply_substitutions = True
+        else:
+            # Check config default
+            default_enabled = getattr(
+                self.config,
+                "substitutions_default_enabled",
+                False,
+            )
+            should_apply_substitutions = default_enabled
+
         for item in existing_content:
             new_item = item
-            if SUBSTITUTION_OPTION_NAME in self.options:
+            if should_apply_substitutions:
                 new_item = _apply_substitutions(
                     text=item,
                     substitution_defs=substitution_defs,
@@ -379,6 +401,11 @@ def setup(app: Sphinx) -> ExtensionMetadata:
     Add the custom directives to Sphinx.
     """
     app.add_config_value(name="substitutions", default=[], rebuild="html")
+    app.add_config_value(
+        name="substitutions_default_enabled",
+        default=False,
+        rebuild="html",
+    )
     directives.register_directive(
         name="code-block",
         directive=SubstitutionCodeBlock,
