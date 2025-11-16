@@ -145,7 +145,7 @@ class SubstitutionCodeBlock(CodeBlock):
     """
 
     option_spec: ClassVar[OptionSpec] = CodeBlock.option_spec
-    option_spec["substitutions"] = directives.flag
+    option_spec[SUBSTITUTION_OPTION_NAME] = directives.flag
 
     def run(self) -> list[Node]:
         """
