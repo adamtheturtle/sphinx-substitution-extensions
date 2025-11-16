@@ -86,6 +86,36 @@ def _get_substitution_defs(
     return {}
 
 
+def _process_node(
+    node: Node,
+    substitution_defs: dict[str, str],
+    delimiter_pairs: set[tuple[str, str]],
+) -> None:
+    """
+    Recursively process nodes to apply substitutions.
+    """
+    if isinstance(node, Element):
+        new_text = node.rawsource
+        for name, replacement in substitution_defs.items():
+            for delimiter_pair in delimiter_pairs:
+                opening_delimiter, closing_delimiter = delimiter_pair
+                new_text = new_text.replace(
+                    f"{opening_delimiter}{name}{closing_delimiter}",
+                    replacement,
+                )
+        node.rawsource = new_text
+        first_child = node.children[0]
+        if isinstance(first_child, Text):
+            node.replace(first_child, Text(data=new_text))
+
+    for child in node.children:
+        _process_node(
+            node=child,
+            substitution_defs=substitution_defs,
+            delimiter_pairs=delimiter_pairs,
+        )
+
+
 @beartype
 class SubstitutionCodeBlock(CodeBlock):
     """
@@ -211,36 +241,6 @@ class SubstitutionLiteralInclude(LiteralInclude):
     option_spec: ClassVar[OptionSpec] = LiteralInclude.option_spec.copy()
     option_spec["substitutions"] = directives.flag
 
-    def _process_node(
-        self,
-        node: Node,
-        substitution_defs: dict[str, str],
-        delimiter_pairs: set[tuple[str, str]],
-    ) -> None:
-        """
-        Recursively process nodes to apply substitutions.
-        """
-        if isinstance(node, Element):
-            new_text = node.rawsource
-            for name, replacement in substitution_defs.items():
-                for delimiter_pair in delimiter_pairs:
-                    opening_delimiter, closing_delimiter = delimiter_pair
-                    new_text = new_text.replace(
-                        f"{opening_delimiter}{name}{closing_delimiter}",
-                        replacement,
-                    )
-            node.rawsource = new_text
-            first_child = node.children[0]
-            if isinstance(first_child, Text):
-                node.replace(first_child, Text(data=new_text))
-
-        for child in node.children:
-            self._process_node(
-                node=child,
-                substitution_defs=substitution_defs,
-                delimiter_pairs=delimiter_pairs,
-            )
-
     def run(self) -> list[Node]:
         """
         Replace placeholders with given variables in the included file content.
@@ -262,7 +262,7 @@ class SubstitutionLiteralInclude(LiteralInclude):
         )
 
         for node in nodes_list:
-            self._process_node(
+            _process_node(
                 node=node,
                 substitution_defs=substitution_defs,
                 delimiter_pairs=delimiter_pairs,
