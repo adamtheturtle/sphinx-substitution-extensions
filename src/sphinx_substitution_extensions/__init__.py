@@ -225,8 +225,6 @@ class SubstitutionCodeRole:
             substitution_defs=substitution_defs,
             delimiter_pairs=delimiter_pairs,
         )
-        for name, value in substitution_defs.items():
-            rawtext = rawtext.replace(name, value)
 
         # ``types-docutils`` says that ``code_role`` requires an ``Inliner``
         # for ``inliner``.
