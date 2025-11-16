@@ -128,7 +128,7 @@ def _should_apply_substitutions(
         return False
     if yes_flag in options:
         return True
-    return config.substitutions_default_enabled
+    return bool(config.substitutions_default_enabled)
 
 
 @beartype
