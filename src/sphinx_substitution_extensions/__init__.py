@@ -208,7 +208,6 @@ class SubstitutionCodeRole:
                     f"{opening_delimiter}{name}{closing_delimiter}",
                     value,
                 )
-                rawtext = rawtext.replace(name, value)
 
         # ``types-docutils`` says that ``code_role`` requires an ``Inliner``
         # for ``inliner``.
