@@ -279,7 +279,7 @@ class SubstitutionLiteralInclude(LiteralInclude):
             )
 
             # Apply substitutions to the file path
-            for argument_index, argument in enumerate(self.arguments):
+            for argument_index, argument in enumerate(iterable=self.arguments):
                 self.arguments[argument_index] = _apply_substitutions(
                     text=argument,
                     substitution_defs=substitution_defs,
