@@ -9,6 +9,7 @@ from beartype import beartype
 from docutils.nodes import (
     Element,
     Node,
+    Text,
     substitution_definition,
     system_message,
 )
@@ -232,11 +233,11 @@ class SubstitutionLiteralInclude(LiteralInclude):
             config=self.config,
         )
 
-        # Process each node in the returned list
-        for node in nodes_list:
-            # LiteralInclude returns literal_block nodes or container nodes
-            # We need to find the literal_block node(s) and replace their text
-            if hasattr(node, "rawsource"):
+        def process_node(node: Node) -> None:
+            """
+            Recursively process nodes to apply substitutions.
+            """
+            if isinstance(node, Element) and hasattr(node, "rawsource"):
                 new_text = node.rawsource
                 for name, replacement in substitution_defs.items():
                     for delimiter_pair in delimiter_pairs:
@@ -245,15 +246,18 @@ class SubstitutionLiteralInclude(LiteralInclude):
                             f"{opening_delimiter}{name}{closing_delimiter}",
                             replacement,
                         )
-                # Update both the text content and rawsource
                 if new_text != node.rawsource:
                     node.rawsource = new_text
-                    if len(node.children) > 0:
-                        node.children[0] = node.children[0].__class__(new_text)
-                    else:
-                        node.clear()
-                        new_node = node.__class__(new_text)
-                        node.append(new_node)
+                    first_child = node.children[0]
+                    assert isinstance(first_child, Text)
+                    node.children[0] = Text(data=new_text)
+
+            if isinstance(node, Element):
+                for child in node.children:
+                    process_node(node=child)
+
+        for node in nodes_list:
+            process_node(node=node)
 
         return nodes_list
 
