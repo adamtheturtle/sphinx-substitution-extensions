@@ -563,13 +563,8 @@ def test_substitution_literal_include_in_rest_example(
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
-    """The ``literalinclude`` directive works inside rest-example.
-
-    This test ensures that the node replacement in
-    SubstitutionLiteralInclude properly handles node parent references
-    and doesn't cause AttributeError during docutils transforms. The bug
-    only manifests when literalinclude is used inside certain directives
-    like rest-example that cause additional node processing.
+    """
+    The ``literalinclude`` directive works inside rest-example.
     """
     source_directory = tmp_path / "source"
     source_directory.mkdir()
