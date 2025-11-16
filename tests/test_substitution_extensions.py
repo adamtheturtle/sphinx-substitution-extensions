@@ -559,6 +559,53 @@ def test_substitution_literal_include_with_caption(
     assert content_html == expected_content_html
 
 
+def test_substitution_literal_include_in_rest_example(
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """The ``literalinclude`` directive works inside rest-example.
+
+    This test ensures that the node replacement in
+    SubstitutionLiteralInclude properly handles node parent references
+    and doesn't cause AttributeError during docutils transforms. The bug
+    only manifests when literalinclude is used inside certain directives
+    like rest-example that cause additional node processing.
+    """
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    source_file = source_directory / "index.rst"
+    (source_directory / "conf.py").touch()
+
+    include_file = source_directory / "example.txt"
+    include_file.write_text(data="Content with |a| placeholder")
+
+    source_file_content = dedent(
+        text="""\
+        .. |a| replace:: example_substitution
+
+        .. rest-example::
+
+           .. literalinclude:: example.txt
+              :substitutions:
+        """,
+    )
+    source_file.write_text(data=source_file_content)
+    app = make_app(
+        srcdir=source_directory,
+        warningiserror=True,
+        confoverrides={
+            "extensions": [
+                "sphinx_substitution_extensions",
+                "sphinx_toolbox.rest_example",
+            ],
+        },
+    )
+    app.build()
+    assert app.statuscode == 0
+    content_html = (app.outdir / "index.html").read_text()
+    assert "example_substitution" in content_html
+
+
 class TestMyst:
     """
     Tests for MyST documents.
