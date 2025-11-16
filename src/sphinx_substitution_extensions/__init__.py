@@ -28,6 +28,9 @@ from sphinx.util.typing import ExtensionMetadata, OptionSpec
 
 from sphinx_substitution_extensions.shared import (
     CONTENT_SUBSTITUTION_OPTION_NAME,
+    NO_CONTENT_SUBSTITUTION_OPTION_NAME,
+    NO_PATH_SUBSTITUTION_OPTION_NAME,
+    NO_SUBSTITUTION_OPTION_NAME,
     PATH_SUBSTITUTION_OPTION_NAME,
     SUBSTITUTION_OPTION_NAME,
 )
@@ -111,6 +114,23 @@ def _apply_substitutions(
 
 
 @beartype
+def _should_apply_substitutions(
+    options: dict[str, Any],
+    config: Config,
+    yes_flag: str,
+    no_flag: str,
+) -> bool:
+    """
+    Whether substitutions should be applied based on flags and configuration.
+    """
+    if no_flag in options:
+        return False
+    if yes_flag in options:
+        return True
+    return bool(config.substitutions_default_enabled)
+
+
+@beartype
 def _process_node(
     node: Node,
     substitution_defs: dict[str, str],
@@ -146,6 +166,7 @@ class SubstitutionCodeBlock(CodeBlock):
 
     option_spec: ClassVar[OptionSpec] = CodeBlock.option_spec
     option_spec[SUBSTITUTION_OPTION_NAME] = directives.flag
+    option_spec[NO_SUBSTITUTION_OPTION_NAME] = directives.flag
 
     def run(self) -> list[Node]:
         """
@@ -164,9 +185,16 @@ class SubstitutionCodeBlock(CodeBlock):
             config=self.config,
         )
 
+        should_apply_substitutions = _should_apply_substitutions(
+            options=self.options,
+            config=self.config,
+            yes_flag=SUBSTITUTION_OPTION_NAME,
+            no_flag=NO_SUBSTITUTION_OPTION_NAME,
+        )
+
         for item in existing_content:
             new_item = item
-            if SUBSTITUTION_OPTION_NAME in self.options:
+            if should_apply_substitutions:
                 new_item = _apply_substitutions(
                     text=item,
                     substitution_defs=substitution_defs,
@@ -259,13 +287,22 @@ class SubstitutionLiteralInclude(LiteralInclude):
     option_spec: ClassVar[OptionSpec] = LiteralInclude.option_spec.copy()
     option_spec[CONTENT_SUBSTITUTION_OPTION_NAME] = directives.flag
     option_spec[PATH_SUBSTITUTION_OPTION_NAME] = directives.flag
+    option_spec[NO_CONTENT_SUBSTITUTION_OPTION_NAME] = directives.flag
+    option_spec[NO_PATH_SUBSTITUTION_OPTION_NAME] = directives.flag
 
     def run(self) -> list[Node]:
         """
         Replace placeholders with given variables in the file path and/or
         included file content.
         """
-        if PATH_SUBSTITUTION_OPTION_NAME in self.options:
+        should_apply_path_substitutions = _should_apply_substitutions(
+            options=self.options,
+            config=self.config,
+            yes_flag=PATH_SUBSTITUTION_OPTION_NAME,
+            no_flag=NO_PATH_SUBSTITUTION_OPTION_NAME,
+        )
+
+        if should_apply_path_substitutions:
             substitution_defs = _get_substitution_defs(
                 env=self.env,
                 config=self.config,
@@ -286,7 +323,14 @@ class SubstitutionLiteralInclude(LiteralInclude):
 
         nodes_list = super().run()
 
-        if CONTENT_SUBSTITUTION_OPTION_NAME in self.options:
+        should_apply_content_substitutions = _should_apply_substitutions(
+            options=self.options,
+            config=self.config,
+            yes_flag=CONTENT_SUBSTITUTION_OPTION_NAME,
+            no_flag=NO_CONTENT_SUBSTITUTION_OPTION_NAME,
+        )
+
+        if should_apply_content_substitutions:
             substitution_defs = _get_substitution_defs(
                 env=self.env,
                 config=self.config,
@@ -379,6 +423,11 @@ def setup(app: Sphinx) -> ExtensionMetadata:
     Add the custom directives to Sphinx.
     """
     app.add_config_value(name="substitutions", default=[], rebuild="html")
+    app.add_config_value(
+        name="substitutions_default_enabled",
+        default=False,
+        rebuild="html",
+    )
     directives.register_directive(
         name="code-block",
         directive=SubstitutionCodeBlock,

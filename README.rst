@@ -118,6 +118,39 @@ MyST Markdown setup
 
 This will replace ``|release|`` in the new directives with ``0.1``, and ``|author|`` with ``Eleanor``.
 
+Enabling substitutions by default
+----------------------------------
+
+By default, you need to explicitly add the ``:substitutions:`` flag to ``code-block`` directives, and ``:content-substitutions:`` or ``:path-substitutions:`` flags to ``literalinclude`` directives.
+
+If you want substitutions to be applied by default without needing these flags, you can set the following in ``conf.py``:
+
+.. code-block:: python
+
+   """Configuration for Sphinx."""
+
+   substitutions_default_enabled = True
+
+When this is enabled:
+
+- All ``code-block`` directives will have substitutions applied automatically
+- All ``literalinclude`` directives will have both content and path substitutions applied automatically
+
+You can disable substitutions for specific directives when the default is enabled:
+
+.. code-block:: rst
+
+   .. code-block:: shell
+      :nosubstitutions:
+
+      echo "This |will| not be substituted"
+
+   .. literalinclude:: path/to/file.txt
+      :nocontent-substitutions:
+
+   .. literalinclude:: path/to/|literal|_file.txt
+      :nopath-substitutions:
+
 Using substitutions in MyST Markdown
 ------------------------------------
 

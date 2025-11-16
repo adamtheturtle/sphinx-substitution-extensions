@@ -363,6 +363,7 @@ ignore_names = [
     "setup",
     "source_suffix",
     "spelling_word_list_filename",
+    "substitutions_default_enabled",
     "templates_path",
     "warning_is_error",
 ]
