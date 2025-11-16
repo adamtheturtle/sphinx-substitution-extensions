@@ -829,6 +829,240 @@ def test_substitution_literal_include_both_path_and_content(
     assert content_html == expected_content_html
 
 
+def test_default_substitutions_literal_include_content(
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """
+    When ``substitutions_default_enabled`` is True, literalinclude should apply
+    content substitutions by default without requiring the ``:content-
+    substitutions:`` flag.
+    """
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    source_file = source_directory / "index.rst"
+    (source_directory / "conf.py").touch()
+
+    include_file = source_directory / "example.txt"
+    include_file.write_text(data="Content with |a| placeholder")
+
+    source_file_content = dedent(
+        text="""\
+        .. |a| replace:: example_substitution
+
+        .. literalinclude:: example.txt
+        """,
+    )
+    source_file.write_text(data=source_file_content)
+    app = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        confoverrides={
+            "extensions": ["sphinx_substitution_extensions"],
+            "substitutions_default_enabled": True,
+        },
+    )
+    app.build()
+    assert app.statuscode == 0
+    content_html = (app.outdir / "index.html").read_text()
+    app.cleanup()
+
+    include_file.write_text(
+        data="Content with example_substitution placeholder"
+    )
+
+    equivalent_source = dedent(
+        text="""\
+        .. literalinclude:: example.txt
+        """,
+    )
+
+    source_file.write_text(data=equivalent_source)
+    app_expected = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+    )
+    app_expected.build()
+    assert app_expected.statuscode == 0
+
+    expected_content_html = (app_expected.outdir / "index.html").read_text()
+    assert content_html == expected_content_html
+
+
+def test_default_substitutions_literal_include_path(
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """
+    When ``substitutions_default_enabled`` is True, literalinclude should apply
+    path substitutions by default without requiring the ``:path-
+    substitutions:`` flag.
+    """
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    source_file = source_directory / "index.rst"
+    (source_directory / "conf.py").touch()
+
+    include_file = source_directory / "example_substitution.txt"
+    include_file.write_text(data="File content")
+
+    source_file_content = dedent(
+        text="""\
+        .. |a| replace:: example_substitution
+
+        .. literalinclude:: |a|.txt
+        """,
+    )
+    source_file.write_text(data=source_file_content)
+    app = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        confoverrides={
+            "extensions": ["sphinx_substitution_extensions"],
+            "substitutions_default_enabled": True,
+        },
+    )
+    app.build()
+    assert app.statuscode == 0
+    content_html = (app.outdir / "index.html").read_text()
+    app.cleanup()
+
+    equivalent_source = dedent(
+        text="""\
+        .. literalinclude:: example_substitution.txt
+        """,
+    )
+
+    source_file.write_text(data=equivalent_source)
+    app_expected = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+    )
+    app_expected.build()
+    assert app_expected.statuscode == 0
+
+    expected_content_html = (app_expected.outdir / "index.html").read_text()
+    assert content_html == expected_content_html
+
+
+def test_default_substitutions_literal_include_disabled_content(
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """
+    When ``substitutions_default_enabled`` is True but literalinclude has the
+    ``:nocontent-substitutions:`` flag, content substitutions should not be
+    applied.
+    """
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    source_file = source_directory / "index.rst"
+    (source_directory / "conf.py").touch()
+
+    include_file = source_directory / "example.txt"
+    include_file.write_text(data="Content with |a| placeholder")
+
+    source_file_content = dedent(
+        text="""\
+        .. |a| replace:: example_substitution
+
+        .. literalinclude:: example.txt
+           :nocontent-substitutions:
+        """,
+    )
+    source_file.write_text(data=source_file_content)
+    app = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        confoverrides={
+            "extensions": ["sphinx_substitution_extensions"],
+            "substitutions_default_enabled": True,
+        },
+    )
+    app.build()
+    assert app.statuscode == 0
+    content_html = (app.outdir / "index.html").read_text()
+    app.cleanup()
+
+    # Content should NOT be substituted
+    equivalent_source = dedent(
+        text="""\
+        .. literalinclude:: example.txt
+        """,
+    )
+
+    source_file.write_text(data=equivalent_source)
+    app_expected = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        freshenv=True,
+    )
+    app_expected.build()
+    assert app_expected.statuscode == 0
+
+    expected_content_html = (app_expected.outdir / "index.html").read_text()
+    assert content_html == expected_content_html
+
+
+def test_default_substitutions_literal_include_disabled_path(
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """
+    When ``substitutions_default_enabled`` is True but literalinclude has the
+    ``:nopath-substitutions:`` flag, path substitutions should not be applied.
+    """
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    source_file = source_directory / "index.rst"
+    (source_directory / "conf.py").touch()
+
+    # Create a file with literal name "|a|.txt"
+    include_file = source_directory / "|a|.txt"
+    include_file.write_text(data="File content")
+
+    source_file_content = dedent(
+        text="""\
+        .. |a| replace:: example_substitution
+
+        .. literalinclude:: |a|.txt
+           :nopath-substitutions:
+        """,
+    )
+    source_file.write_text(data=source_file_content)
+    app = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        confoverrides={
+            "extensions": ["sphinx_substitution_extensions"],
+            "substitutions_default_enabled": True,
+        },
+    )
+    app.build()
+    assert app.statuscode == 0
+    content_html = (app.outdir / "index.html").read_text()
+    app.cleanup()
+
+    # Path should NOT be substituted
+    equivalent_source = dedent(
+        text="""\
+        .. literalinclude:: |a|.txt
+        """,
+    )
+
+    source_file.write_text(data=equivalent_source)
+    app_expected = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        freshenv=True,
+    )
+    app_expected.build()
+    assert app_expected.statuscode == 0
+
+    expected_content_html = (app_expected.outdir / "index.html").read_text()
+    assert content_html == expected_content_html
+
+
 class TestMyst:
     """
     Tests for MyST documents.

@@ -28,6 +28,8 @@ from sphinx.util.typing import ExtensionMetadata, OptionSpec
 
 from sphinx_substitution_extensions.shared import (
     CONTENT_SUBSTITUTION_OPTION_NAME,
+    NO_CONTENT_SUBSTITUTION_OPTION_NAME,
+    NO_PATH_SUBSTITUTION_OPTION_NAME,
     NO_SUBSTITUTION_OPTION_NAME,
     PATH_SUBSTITUTION_OPTION_NAME,
     SUBSTITUTION_OPTION_NAME,
@@ -281,13 +283,31 @@ class SubstitutionLiteralInclude(LiteralInclude):
     option_spec: ClassVar[OptionSpec] = LiteralInclude.option_spec.copy()
     option_spec[CONTENT_SUBSTITUTION_OPTION_NAME] = directives.flag
     option_spec[PATH_SUBSTITUTION_OPTION_NAME] = directives.flag
+    option_spec[NO_CONTENT_SUBSTITUTION_OPTION_NAME] = directives.flag
+    option_spec[NO_PATH_SUBSTITUTION_OPTION_NAME] = directives.flag
 
     def run(self) -> list[Node]:
         """
         Replace placeholders with given variables in the file path and/or
         included file content.
         """
-        if PATH_SUBSTITUTION_OPTION_NAME in self.options:
+        # Determine if path substitutions should be applied
+        # Priority: explicit no-flag > explicit yes-flag > config default
+        should_apply_path_substitutions = False
+
+        if NO_PATH_SUBSTITUTION_OPTION_NAME in self.options:
+            should_apply_path_substitutions = False
+        elif PATH_SUBSTITUTION_OPTION_NAME in self.options:
+            should_apply_path_substitutions = True
+        else:
+            default_enabled = getattr(
+                self.config,
+                "substitutions_default_enabled",
+                False,
+            )
+            should_apply_path_substitutions = default_enabled
+
+        if should_apply_path_substitutions:
             substitution_defs = _get_substitution_defs(
                 env=self.env,
                 config=self.config,
@@ -308,7 +328,23 @@ class SubstitutionLiteralInclude(LiteralInclude):
 
         nodes_list = super().run()
 
-        if CONTENT_SUBSTITUTION_OPTION_NAME in self.options:
+        # Determine if content substitutions should be applied
+        # Priority: explicit no-flag > explicit yes-flag > config default
+        should_apply_content_substitutions = False
+
+        if NO_CONTENT_SUBSTITUTION_OPTION_NAME in self.options:
+            should_apply_content_substitutions = False
+        elif CONTENT_SUBSTITUTION_OPTION_NAME in self.options:
+            should_apply_content_substitutions = True
+        else:
+            default_enabled = getattr(
+                self.config,
+                "substitutions_default_enabled",
+                False,
+            )
+            should_apply_content_substitutions = default_enabled
+
+        if should_apply_content_substitutions:
             substitution_defs = _get_substitution_defs(
                 env=self.env,
                 config=self.config,

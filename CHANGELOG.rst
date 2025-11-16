@@ -12,9 +12,13 @@ Next
   - ``:content-substitutions:`` - Performs substitutions on the included file content.
   - ``:path-substitutions:`` - Performs substitutions on the file path.
 
-- Add ``substitutions_default_enabled`` configuration option to enable substitutions by default in code blocks.
-  When set to ``True`` in ``conf.py``, substitutions are applied to all code blocks without requiring the ``:substitutions:`` flag.
-  Use the ``:nosubstitutions:`` flag on individual code blocks to disable substitutions when the default is enabled.
+- Add ``substitutions_default_enabled`` configuration option to enable substitutions by default.
+  When set to ``True`` in ``conf.py``:
+
+  - Substitutions are applied to all ``code-block`` directives without requiring the ``:substitutions:`` flag.
+    Use the ``:nosubstitutions:`` flag on individual code blocks to disable substitutions when the default is enabled.
+  - Substitutions are applied to all ``literalinclude`` directives (both content and path) without requiring the ``:content-substitutions:`` or ``:path-substitutions:`` flags.
+    Use the ``:nocontent-substitutions:`` or ``:nopath-substitutions:`` flags on individual literalinclude directives to disable substitutions when the default is enabled.
 
 2025.10.24
 ----------
