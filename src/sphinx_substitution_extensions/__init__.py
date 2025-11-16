@@ -31,6 +31,7 @@ from sphinx_substitution_extensions.shared import (
 )
 
 
+@beartype
 def _get_delimiter_pairs(
     env: BuildEnvironment,
     config: Config,
@@ -60,6 +61,7 @@ def _get_delimiter_pairs(
     return delimiter_pairs
 
 
+@beartype
 def _get_substitution_defs(
     env: BuildEnvironment,
     config: Config,
@@ -86,6 +88,7 @@ def _get_substitution_defs(
     return {}
 
 
+@beartype
 def _apply_substitutions(
     text: str,
     substitution_defs: dict[str, str],
@@ -105,6 +108,7 @@ def _apply_substitutions(
     return new_text
 
 
+@beartype
 def _process_node(
     node: Node,
     substitution_defs: dict[str, str],
@@ -221,7 +225,6 @@ class SubstitutionCodeRole:
             substitution_defs=substitution_defs,
             delimiter_pairs=delimiter_pairs,
         )
-        # Additional rawtext replacement for backward compatibility
         for name, value in substitution_defs.items():
             rawtext = rawtext.replace(name, value)
 
