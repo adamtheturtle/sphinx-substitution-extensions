@@ -834,8 +834,8 @@ def test_default_substitutions_literal_include_content(
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
     """
-    When ``substitutions_default_enabled`` is True, literalinclude should apply
-    content substitutions by default without requiring the ``:content-
+    When ``substitutions_default_enabled`` is True, ``literalinclude`` should
+    apply content substitutions by default without requiring the ``:content-
     substitutions:`` flag.
     """
     source_directory = tmp_path / "source"
@@ -894,8 +894,8 @@ def test_default_substitutions_literal_include_path(
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
     """
-    When ``substitutions_default_enabled`` is True, literalinclude should apply
-    path substitutions by default without requiring the ``:path-
+    When ``substitutions_default_enabled`` is True, ``literalinclude`` should
+    apply path substitutions by default without requiring the ``:path-
     substitutions:`` flag.
     """
     source_directory = tmp_path / "source"
@@ -950,8 +950,8 @@ def test_default_substitutions_literal_include_disabled_content(
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
     """
-    When ``substitutions_default_enabled`` is True but literalinclude has the
-    ``:nocontent-substitutions:`` flag, content substitutions should not be
+    When ``substitutions_default_enabled`` is True but ``literalinclude`` has
+    the ``:nocontent-substitutions:`` flag, content substitutions should not be
     applied.
     """
     source_directory = tmp_path / "source"
@@ -1008,8 +1008,9 @@ def test_default_substitutions_literal_include_disabled_path(
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
     """
-    When ``substitutions_default_enabled`` is True but literalinclude has the
-    ``:nopath-substitutions:`` flag, path substitutions should not be applied.
+    When ``substitutions_default_enabled`` is True but ``literalinclude`` has
+    the ``:nopath-substitutions:`` flag, path substitutions should not be
+    applied.
     """
     source_directory = tmp_path / "source"
     source_directory.mkdir()

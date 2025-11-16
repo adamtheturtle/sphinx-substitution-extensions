@@ -120,9 +120,8 @@ def _should_apply_substitutions(
     yes_flag: str,
     no_flag: str,
 ) -> bool:
-    """Determine if substitutions should be applied based on flags and config.
-
-    Priority: explicit no-flag > explicit yes-flag > config default.
+    """
+    Whether substitutions should be applied based on flags and configuration.
     """
     if no_flag in options:
         return False
