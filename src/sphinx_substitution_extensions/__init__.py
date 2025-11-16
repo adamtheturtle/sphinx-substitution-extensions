@@ -20,7 +20,7 @@ from myst_parser.mocking import MockInliner
 from sphinx import addnodes
 from sphinx.application import Sphinx
 from sphinx.config import Config
-from sphinx.directives.code import CodeBlock
+from sphinx.directives.code import CodeBlock, LiteralInclude
 from sphinx.environment import BuildEnvironment
 from sphinx.roles import XRefRole
 from sphinx.util.typing import ExtensionMetadata, OptionSpec
@@ -202,6 +202,63 @@ class SubstitutionCodeRole:
 
 
 @beartype
+class SubstitutionLiteralInclude(LiteralInclude):
+    """
+    Similar to LiteralInclude but replaces placeholders with variables.
+    """
+
+    option_spec: ClassVar[OptionSpec] = LiteralInclude.option_spec.copy()
+    option_spec["substitutions"] = directives.flag
+
+    def run(self) -> list[Node]:
+        """
+        Replace placeholders with given variables in the included file content.
+        """
+        # First, call the parent run() to get the nodes
+        nodes_list = super().run()
+
+        # Only perform substitutions if the flag is set
+        if SUBSTITUTION_OPTION_NAME not in self.options:
+            return nodes_list
+
+        substitution_defs = _get_substitution_defs(
+            env=self.env,
+            config=self.config,
+            substitution_defs=self.state.document.substitution_defs,
+        )
+
+        delimiter_pairs = _get_delimiter_pairs(
+            env=self.env,
+            config=self.config,
+        )
+
+        # Process each node in the returned list
+        for node in nodes_list:
+            # LiteralInclude returns literal_block nodes or container nodes
+            # We need to find the literal_block node(s) and replace their text
+            if hasattr(node, "rawsource"):
+                new_text = node.rawsource
+                for name, replacement in substitution_defs.items():
+                    for delimiter_pair in delimiter_pairs:
+                        opening_delimiter, closing_delimiter = delimiter_pair
+                        new_text = new_text.replace(
+                            f"{opening_delimiter}{name}{closing_delimiter}",
+                            replacement,
+                        )
+                # Update both the text content and rawsource
+                if new_text != node.rawsource:
+                    node.rawsource = new_text
+                    if len(node.children) > 0:
+                        node.children[0] = node.children[0].__class__(new_text)
+                    else:
+                        node.clear()
+                        new_node = node.__class__(new_text)
+                        node.append(new_node)
+
+        return nodes_list
+
+
+@beartype
 class SubstitutionXRefRole(XRefRole):
     """
     Custom role for XRefs.
@@ -275,6 +332,10 @@ def setup(app: Sphinx) -> ExtensionMetadata:
     directives.register_directive(
         name="code-block",
         directive=SubstitutionCodeBlock,
+    )
+    directives.register_directive(
+        name="literalinclude",
+        directive=SubstitutionLiteralInclude,
     )
     app.add_role(name="substitution-code", role=SubstitutionCodeRole())
     substitution_download_role = SubstitutionXRefRole(

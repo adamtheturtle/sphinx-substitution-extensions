@@ -71,6 +71,17 @@ Inline ``:substitution-code:``
 
    :substitution-download:`|author|'s manuscript <|author|_manuscript.txt>`
 
+``literalinclude``
+~~~~~~~~~~~~~~~~~~
+
+This adds a ``:substitutions:`` option to Sphinx's built-in `literalinclude`_ directive.
+
+.. code-block:: rst
+
+   .. literalinclude:: path/to/file.txt
+      :substitutions:
+
+This will replace substitutions in the content of the included file.
 
 MyST Markdown setup
 -------------------
@@ -133,6 +144,19 @@ Inline ``:substitution-code:``
 
    {substitution-download}`|author|'s manuscript <|author|_manuscript.txt>`
 
+``literalinclude``
+~~~~~~~~~~~~~~~~~~
+
+This adds a ``:substitutions:`` option to Sphinx's built-in `literalinclude`_ directive.
+
+.. code-block:: markdown
+
+   ```{literalinclude} path/to/file.txt
+      :substitutions:
+   ```
+
+This will replace substitutions in the content of the included file.
+
 Credits
 -------
 
@@ -150,6 +174,7 @@ See `CONTRIBUTING.rst <./CONTRIBUTING.rst>`_.
 .. |Build Status| image:: https://github.com/adamtheturtle/sphinx-substitution-extensions/actions/workflows/ci.yml/badge.svg?branch=main
    :target: https://github.com/adamtheturtle/sphinx-substitution-extensions/actions
 .. _code-block: http://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-code-block
+.. _literalinclude: http://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-literalinclude
 .. |PyPI| image:: https://badge.fury.io/py/Sphinx-Substitution-Extensions.svg
    :target: https://badge.fury.io/py/Sphinx-Substitution-Extensions
 .. |minimum-python-version| replace:: 3.10

@@ -41,6 +41,16 @@ Inline ``:download:``
 
    :substitution-download:`Script by |author| <../source/|author|.txt>`.
 
+``literalinclude``
+------------------
+
+.. rest-example::
+
+   .. literalinclude:: sample_include.txt
+
+   .. literalinclude:: sample_include.txt
+      :substitutions:
+
 ..
 
   This is a test of parallel document builds. You need at least 5

@@ -7,6 +7,7 @@ Next
 ----
 
 - Give version in extension metadata.
+- Add ``literalinclude`` directive with ``:substitutions:`` option.
 
 2025.10.24
 ----------
