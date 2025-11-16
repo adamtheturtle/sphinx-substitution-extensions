@@ -352,7 +352,6 @@ def test_no_substitution_literal_include(
     source_file = source_directory / "index.rst"
     (source_directory / "conf.py").touch()
 
-    # Create a file to include
     include_file = source_directory / "example.txt"
     include_file.write_text(data="Content with |a| placeholder")
 
@@ -401,7 +400,6 @@ def test_substitution_literal_include(
     source_file = source_directory / "index.rst"
     (source_directory / "conf.py").touch()
 
-    # Create a file to include
     include_file = source_directory / "example.txt"
     include_file.write_text(data="Content with |a| placeholder")
 
@@ -424,7 +422,6 @@ def test_substitution_literal_include(
     content_html = (app.outdir / "index.html").read_text()
     app.cleanup()
 
-    # Create a file with the substitution already applied
     include_file.write_text(
         data="Content with example_substitution placeholder"
     )
@@ -459,7 +456,6 @@ def test_substitution_literal_include_multiple(
     source_file = source_directory / "index.rst"
     (source_directory / "conf.py").touch()
 
-    # Create a file to include with multiple substitutions
     include_file = source_directory / "example.txt"
     include_file.write_text(data="PRE-|a|-MID-|b|-POST")
 
@@ -483,7 +479,6 @@ def test_substitution_literal_include_multiple(
     content_html = (app.outdir / "index.html").read_text()
     app.cleanup()
 
-    # Create a file with the substitutions already applied
     include_file.write_text(
         data="PRE-first_substitution-MID-second_substitution-POST",
     )
@@ -518,7 +513,6 @@ def test_substitution_literal_include_with_caption(
     source_file = source_directory / "index.rst"
     (source_directory / "conf.py").touch()
 
-    # Create a file to include
     include_file = source_directory / "example.txt"
     include_file.write_text(data="Content with |a| placeholder")
 
@@ -542,7 +536,6 @@ def test_substitution_literal_include_with_caption(
     content_html = (app.outdir / "index.html").read_text()
     app.cleanup()
 
-    # Create a file with the substitution already applied
     include_file.write_text(
         data="Content with example_substitution placeholder"
     )

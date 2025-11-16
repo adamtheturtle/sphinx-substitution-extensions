@@ -215,10 +215,8 @@ class SubstitutionLiteralInclude(LiteralInclude):
         """
         Replace placeholders with given variables in the included file content.
         """
-        # First, call the parent run() to get the nodes
         nodes_list = super().run()
 
-        # Only perform substitutions if the flag is set
         if SUBSTITUTION_OPTION_NAME not in self.options:
             return nodes_list
 
