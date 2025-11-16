@@ -244,10 +244,9 @@ class SubstitutionLiteralInclude(LiteralInclude):
                             f"{opening_delimiter}{name}{closing_delimiter}",
                             replacement,
                         )
-                if new_text != node.rawsource:
-                    node.rawsource = new_text
-                    first_child = node.children[0]
-                    assert isinstance(first_child, Text)
+                node.rawsource = new_text
+                first_child = node.children[0]
+                if isinstance(first_child, Text):
                     node.replace(first_child, Text(data=new_text))
 
             for child in node.children:
