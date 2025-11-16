@@ -175,12 +175,9 @@ class SubstitutionCodeBlock(CodeBlock):
         elif SUBSTITUTION_OPTION_NAME in self.options:
             should_apply_substitutions = True
         else:
-            default_enabled = getattr(
-                self.config,
-                "substitutions_default_enabled",
-                False,
+            should_apply_substitutions = (
+                self.config.substitutions_default_enabled
             )
-            should_apply_substitutions = default_enabled
 
         for item in existing_content:
             new_item = item
@@ -292,12 +289,9 @@ class SubstitutionLiteralInclude(LiteralInclude):
         elif PATH_SUBSTITUTION_OPTION_NAME in self.options:
             should_apply_path_substitutions = True
         else:
-            default_enabled = getattr(
-                self.config,
-                "substitutions_default_enabled",
-                False,
+            should_apply_path_substitutions = (
+                self.config.substitutions_default_enabled
             )
-            should_apply_path_substitutions = default_enabled
 
         if should_apply_path_substitutions:
             substitution_defs = _get_substitution_defs(
@@ -327,12 +321,9 @@ class SubstitutionLiteralInclude(LiteralInclude):
         elif CONTENT_SUBSTITUTION_OPTION_NAME in self.options:
             should_apply_content_substitutions = True
         else:
-            default_enabled = getattr(
-                self.config,
-                "substitutions_default_enabled",
-                False,
+            should_apply_content_substitutions = (
+                self.config.substitutions_default_enabled
             )
-            should_apply_content_substitutions = default_enabled
 
         if should_apply_content_substitutions:
             substitution_defs = _get_substitution_defs(
