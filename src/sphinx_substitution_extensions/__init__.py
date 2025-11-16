@@ -235,7 +235,7 @@ class SubstitutionLiteralInclude(LiteralInclude):
             """
             Recursively process nodes to apply substitutions.
             """
-            if isinstance(node, Element) and hasattr(node, "rawsource"):
+            if isinstance(node, Element):
                 new_text = node.rawsource
                 for name, replacement in substitution_defs.items():
                     for delimiter_pair in delimiter_pairs:
