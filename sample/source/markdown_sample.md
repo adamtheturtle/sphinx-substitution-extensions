@@ -86,29 +86,59 @@ Inline ``:substitution-code:``
 
 {substitution-download}`Script by {{author}} <../source/Eleanor.txt>`
 
-``image``
----------
+``literalinclude``
+------------------
 
-Path substitutions
-~~~~~~~~~~~~~~~~~~
+### Content substitutions
 
 ```{code-block} markdown
 
-   ```{image} sample_image.png
-   :alt: Sample image
-   ```
+    ```{literalinclude} sample_include.txt
+    ```
 
-   ```{image} {{author}}_diagram.png
-   :path-substitutions:
-   :alt: Diagram for {{author}}
-   ```
+    ```{literalinclude} sample_include.txt
+    :content-substitutions:
+    ```
 ```
 
 =>
 
-```{image} sample_image.png
-:alt: Sample image
+```{literalinclude} sample_include.txt
 ```
+
+```{literalinclude} sample_include.txt
+:content-substitutions:
+```
+
+### Path substitutions
+
+```{code-block} markdown
+
+    ```{literalinclude} {{author}}.txt
+    :path-substitutions:
+    ```
+```
+
+=>
+
+```{literalinclude} {{author}}.txt
+:path-substitutions:
+```
+
+``image``
+---------
+
+### Path substitutions
+
+```{code-block} markdown
+
+    ```{image} {{author}}_diagram.png
+    :path-substitutions:
+    :alt: Diagram for {{author}}
+    ```
+```
+
+=>
 
 ```{image} {{author}}_diagram.png
 :path-substitutions:
