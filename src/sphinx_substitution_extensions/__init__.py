@@ -14,6 +14,7 @@ from docutils.nodes import (
     system_message,
 )
 from docutils.parsers.rst import directives
+from docutils.parsers.rst.directives.images import Image
 from docutils.parsers.rst.roles import code_role
 from docutils.parsers.rst.states import Inliner
 from docutils.statemachine import StringList
@@ -353,6 +354,55 @@ class SubstitutionLiteralInclude(LiteralInclude):
 
 
 @beartype
+class SubstitutionImage(Image):
+    """
+    Similar to Image but replaces placeholders with variables in the path.
+    """
+
+    option_spec: ClassVar[OptionSpec] = (
+        Image.option_spec.copy() if Image.option_spec else {}
+    )
+    option_spec[PATH_SUBSTITUTION_OPTION_NAME] = directives.flag
+    option_spec[NO_PATH_SUBSTITUTION_OPTION_NAME] = directives.flag
+
+    def run(self) -> list[Node]:
+        """
+        Replace placeholders with given variables in the image path.
+        """
+        # Image directive needs access to env and config through state
+        env = self.state.document.settings.env
+        config = env.config
+
+        should_apply_path_substitutions = _should_apply_substitutions(
+            options=self.options,
+            config=config,
+            yes_flag=PATH_SUBSTITUTION_OPTION_NAME,
+            no_flag=NO_PATH_SUBSTITUTION_OPTION_NAME,
+        )
+
+        if should_apply_path_substitutions:
+            substitution_defs = _get_substitution_defs(
+                env=env,
+                config=config,
+                substitution_defs=self.state.document.substitution_defs,
+            )
+
+            delimiter_pairs = _get_delimiter_pairs(
+                env=env,
+                config=config,
+            )
+
+            for argument_index, argument in enumerate(iterable=self.arguments):
+                self.arguments[argument_index] = _apply_substitutions(
+                    text=argument,
+                    substitution_defs=substitution_defs,
+                    delimiter_pairs=delimiter_pairs,
+                )
+
+        return list(super().run())
+
+
+@beartype
 class SubstitutionXRefRole(XRefRole):
     """
     Custom role for XRefs.
@@ -435,6 +485,10 @@ def setup(app: Sphinx) -> ExtensionMetadata:
     directives.register_directive(
         name="literalinclude",
         directive=SubstitutionLiteralInclude,
+    )
+    directives.register_directive(
+        name="image",
+        directive=SubstitutionImage,
     )
     app.add_role(name="substitution-code", role=SubstitutionCodeRole())
     substitution_download_role = SubstitutionXRefRole(

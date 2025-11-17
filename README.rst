@@ -90,6 +90,19 @@ Replace substitutions in the file path:
    .. literalinclude:: path/to/|author|_file.txt
       :path-substitutions:
 
+``image``
+~~~~~~~~~
+
+This adds a ``:path-substitutions:`` option to Sphinx's built-in `image`_ directive.
+
+Replace substitutions in the image path:
+
+.. code-block:: rst
+
+   .. image:: path/to/|author|_diagram.png
+      :path-substitutions:
+      :alt: Diagram
+
 MyST Markdown setup
 -------------------
 
@@ -205,6 +218,20 @@ Replace substitutions in the file path:
       :path-substitutions:
    ```
 
+``image``
+~~~~~~~~~
+
+This adds a ``:path-substitutions:`` option to Sphinx's built-in `image`_ directive.
+
+Replace substitutions in the image path:
+
+.. code-block:: markdown
+
+   ```{image} path/to/|author|_diagram.png
+      :path-substitutions:
+      :alt: Diagram
+   ```
+
 Credits
 -------
 
@@ -223,6 +250,7 @@ See `CONTRIBUTING.rst <./CONTRIBUTING.rst>`_.
    :target: https://github.com/adamtheturtle/sphinx-substitution-extensions/actions
 .. _code-block: http://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-code-block
 .. _literalinclude: http://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-literalinclude
+.. _image: http://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-image
 .. |PyPI| image:: https://badge.fury.io/py/Sphinx-Substitution-Extensions.svg
    :target: https://badge.fury.io/py/Sphinx-Substitution-Extensions
 .. |minimum-python-version| replace:: 3.10
