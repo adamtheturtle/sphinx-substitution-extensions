@@ -62,6 +62,15 @@ Path substitutions
    .. literalinclude:: |author|.txt
       :path-substitutions:
 
+``include``
+-----------
+
+Path substitutions
+~~~~~~~~~~~~~~~~~~
+
+.. include:: |author|.txt
+   :path-substitutions:
+
 ``image``
 ---------
 
