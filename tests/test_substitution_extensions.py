@@ -1315,9 +1315,7 @@ def test_no_substitution_image(
     source_file = source_directory / "index.rst"
     (source_directory / "conf.py").touch()
 
-    # Create a simple image file (1x1 transparent PNG)
     image_file = source_directory / "test_image.png"
-    # Minimal valid PNG file (1x1 transparent pixel)
     png_data = (
         b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00"
         b"\x00\x01\x08\x06\x00\x00\x00\x1f\x15\xc4\x89\x00\x00\x00\nIDATx"

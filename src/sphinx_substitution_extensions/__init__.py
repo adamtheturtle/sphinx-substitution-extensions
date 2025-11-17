@@ -368,7 +368,6 @@ class SubstitutionImage(Image):
         """
         Replace placeholders with given variables in the image path.
         """
-        # Image directive needs access to env and config through state
         env = self.state.document.settings.env
         config = env.config
 
