@@ -12,6 +12,10 @@ Next
   - ``:content-substitutions:`` - Performs substitutions on the included file content.
   - ``:path-substitutions:`` - Performs substitutions on the file path.
 
+- ``image`` directive now supports the following option:
+
+  - ``:path-substitutions:`` - Performs substitutions on the image file path.
+
 - Add ``substitutions_default_enabled`` configuration option to enable substitutions by default.
   When set to ``True`` in ``conf.py``:
 
@@ -19,6 +23,8 @@ Next
     Use the ``:nosubstitutions:`` flag on individual code blocks to disable substitutions when the default is enabled.
   - Substitutions are applied to all ``literalinclude`` directives (both content and path) without requiring the ``:content-substitutions:`` or ``:path-substitutions:`` flags.
     Use the ``:nocontent-substitutions:`` or ``:nopath-substitutions:`` flags on individual literalinclude directives to disable substitutions when the default is enabled.
+  - Substitutions are applied to all ``image`` directives (path) without requiring the ``:path-substitutions:`` flag.
+    Use the ``:nopath-substitutions:`` flag on individual image directives to disable substitutions when the default is enabled.
 
 2025.10.24
 ----------

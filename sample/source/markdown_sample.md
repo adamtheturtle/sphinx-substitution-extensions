@@ -85,3 +85,32 @@ Inline ``:substitution-code:``
 =>
 
 {substitution-download}`Script by {{author}} <../source/Eleanor.txt>`
+
+``image``
+---------
+
+Path substitutions
+~~~~~~~~~~~~~~~~~~
+
+```{code-block} markdown
+
+   ```{image} sample_image.png
+   :alt: Sample image
+   ```
+
+   ```{image} {{author}}_diagram.png
+   :path-substitutions:
+   :alt: Diagram for {{author}}
+   ```
+```
+
+=>
+
+```{image} sample_image.png
+:alt: Sample image
+```
+
+```{image} {{author}}_diagram.png
+:path-substitutions:
+:alt: Diagram for {{author}}
+```
