@@ -59,8 +59,6 @@ Path substitutions
 
 .. rest-example::
 
-   .. literalinclude:: sample_include.txt
-
    .. literalinclude:: |author|.txt
       :path-substitutions:
 
@@ -72,18 +70,14 @@ Path substitutions
 
 .. rest-example::
 
-   .. image:: sample_image.png
-      :alt: Sample image
-
    .. image:: |author|_diagram.png
       :path-substitutions:
       :alt: Diagram for |author|
 
 ..
-
-  This is a test of parallel document builds. You need at least 5
-  documents. See:
-  https://github.com/adamtheturtle/sphinx-substitution-extensions/pull/173
+   This is a test of parallel document builds. You need at least 5
+   documents. See:
+   https://github.com/adamtheturtle/sphinx-substitution-extensions/pull/173
 
 .. toctree::
    :hidden:
