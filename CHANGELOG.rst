@@ -6,6 +6,9 @@ Changelog
 Next
 ----
 
+2025.11.17
+----------
+
 - Give version in extension metadata.
 - ``literalinclude`` directive now supports the following options:
 
