@@ -64,6 +64,21 @@ Path substitutions
    .. literalinclude:: |author|.txt
       :path-substitutions:
 
+``image``
+---------
+
+Path substitutions
+~~~~~~~~~~~~~~~~~~
+
+.. rest-example::
+
+   .. image:: sample_image.png
+      :alt: Sample image
+
+   .. image:: |author|_diagram.png
+      :path-substitutions:
+      :alt: Diagram for |author|
+
 ..
 
   This is a test of parallel document builds. You need at least 5
