@@ -90,6 +90,18 @@ Replace substitutions in the file path:
    .. literalinclude:: path/to/|author|_file.txt
       :path-substitutions:
 
+``include``
+~~~~~~~~~~~
+
+This adds a ``:path-substitutions:`` option to docutils' built-in `include`_ directive.
+
+Replace substitutions in the file path:
+
+.. code-block:: rst
+
+   .. include:: path/to/|author|_file.txt
+      :path-substitutions:
+
 ``image``
 ~~~~~~~~~
 
@@ -134,7 +146,7 @@ This will replace ``|release|`` in the new directives with ``0.1``, and ``|autho
 Enabling substitutions by default
 ----------------------------------
 
-By default, you need to explicitly add the ``:substitutions:`` flag to ``code-block`` directives, and ``:content-substitutions:`` or ``:path-substitutions:`` flags to ``literalinclude`` directives.
+By default, you need to explicitly add the ``:substitutions:`` flag to ``code-block`` directives, and ``:path-substitutions:`` flags to ``literalinclude``, ``include``, and ``image`` directives (or ``:content-substitutions:`` for ``literalinclude``).
 
 If you want substitutions to be applied by default without needing these flags, you can set the following in ``conf.py``:
 
@@ -148,6 +160,8 @@ When this is enabled:
 
 - All ``code-block`` directives will have substitutions applied automatically
 - All ``literalinclude`` directives will have both content and path substitutions applied automatically
+- All ``include`` directives will have path substitutions applied automatically
+- All ``image`` directives will have path substitutions applied automatically
 
 You can disable substitutions for specific directives when the default is enabled:
 
@@ -162,6 +176,12 @@ You can disable substitutions for specific directives when the default is enable
       :nocontent-substitutions:
 
    .. literalinclude:: path/to/|literal|_file.txt
+      :nopath-substitutions:
+
+   .. include:: path/to/|literal|_file.txt
+      :nopath-substitutions:
+
+   .. image:: path/to/|literal|_diagram.png
       :nopath-substitutions:
 
 Using substitutions in MyST Markdown
@@ -218,6 +238,19 @@ Replace substitutions in the file path:
       :path-substitutions:
    ```
 
+``include``
+~~~~~~~~~~~
+
+This adds a ``:path-substitutions:`` option to docutils' built-in `include`_ directive.
+
+Replace substitutions in the file path:
+
+.. code-block:: markdown
+
+   ```{include} path/to/|author|_file.txt
+      :path-substitutions:
+   ```
+
 ``image``
 ~~~~~~~~~
 
@@ -250,6 +283,7 @@ See `CONTRIBUTING.rst <./CONTRIBUTING.rst>`_.
    :target: https://github.com/adamtheturtle/sphinx-substitution-extensions/actions
 .. _code-block: http://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-code-block
 .. _literalinclude: http://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-literalinclude
+.. _include: https://docutils.sourceforge.io/docs/ref/rst/directives.html#including-an-external-document-fragment
 .. _image: http://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-image
 .. |PyPI| image:: https://badge.fury.io/py/Sphinx-Substitution-Extensions.svg
    :target: https://badge.fury.io/py/Sphinx-Substitution-Extensions
