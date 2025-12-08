@@ -55,6 +55,7 @@ jobs:
           echo "underline=${underline}" >> "$GITHUB_OUTPUT"
 
       - name: Update changelog
+        id: update_changelog
         uses: jacobtomlinson/gha-find-replace@v3
         with:
           find: "Next\n----"
@@ -63,6 +64,12 @@ jobs:
           include: CHANGELOG.rst
           regex: false
 
+      - name: Check Update changelog was modified
+        run: |
+          if [ "${{ steps.update_changelog.outputs.modifiedFiles }}" = "0" ]; then
+            echo "Error: No files were modified when updating changelog"
+            exit 1
+          fi
       - uses: stefanzweifel/git-auto-commit-action@v7
         id: commit
         with:
