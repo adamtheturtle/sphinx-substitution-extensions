@@ -54,7 +54,7 @@ optional-dependencies.dev = [
     "pylint[spelling]==4.0.4",
     "pyproject-fmt==2.11.1",
     "pyright==1.1.407",
-    "pyroma==5.0",
+    "pyroma==5.0.1",
     "pytest==9.0.2",
     "pytest-cov==7.0.0",
     "ruff==0.14.8",
