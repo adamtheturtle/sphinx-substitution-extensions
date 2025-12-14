@@ -552,6 +552,59 @@ def test_substitution_literal_include(
     assert content_html == expected_content_html
 
 
+def test_substitution_literal_include_empty_file(
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """
+    The ``literalinclude`` directive handles empty files without crashing.
+    """
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    source_file = source_directory / "index.rst"
+    (source_directory / "conf.py").touch()
+
+    # Create an empty file
+    include_file = source_directory / "empty.txt"
+    include_file.write_text(data="")
+
+    source_file_content = dedent(
+        text="""\
+        .. |a| replace:: example_substitution
+
+        .. literalinclude:: empty.txt
+           :content-substitutions:
+        """,
+    )
+    source_file.write_text(data=source_file_content)
+    app = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        confoverrides={"extensions": ["sphinx_substitution_extensions"]},
+    )
+    app.build()
+    assert app.statuscode == 0
+    content_html = (app.outdir / "index.html").read_text()
+    app.cleanup()
+
+    equivalent_source = dedent(
+        text="""\
+        .. literalinclude:: empty.txt
+        """,
+    )
+
+    source_file.write_text(data=equivalent_source)
+    app_expected = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+    )
+    app_expected.build()
+    assert app_expected.statuscode == 0
+
+    expected_content_html = (app_expected.outdir / "index.html").read_text()
+    assert content_html == expected_content_html
+
+
 def test_substitution_literal_include_multiple(
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
