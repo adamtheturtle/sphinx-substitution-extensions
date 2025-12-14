@@ -556,10 +556,8 @@ def test_substitution_literal_include_empty_file(
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
-    """The ``literalinclude`` directive handles empty files without crashing.
-
-    Regression test for
-    https://github.com/adamtheturtle/sphinx-substitution-extensions/issues/1287
+    """
+    The ``literalinclude`` directive handles empty files without crashing.
     """
     source_directory = tmp_path / "source"
     source_directory.mkdir()
