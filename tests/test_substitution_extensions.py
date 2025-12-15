@@ -281,6 +281,15 @@ def test_default_substitutions_disabled_with_flag(
     content_html = (app.outdir / "index.html").read_text()
     app.cleanup()
 
+    equivalent_source = dedent(
+        text="""\
+        .. code-block:: shell
+
+            $ PRE-|a|-POST
+        """,
+    )
+
+    source_file.write_text(data=equivalent_source)
     app_expected = make_app(
         srcdir=source_directory,
         exception_on_warning=True,

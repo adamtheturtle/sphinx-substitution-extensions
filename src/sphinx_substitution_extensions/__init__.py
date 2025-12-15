@@ -166,7 +166,9 @@ class SubstitutionCodeBlock(CodeBlock):
     Similar to CodeBlock but replaces placeholders with variables.
     """
 
-    option_spec: ClassVar[OptionSpec] = CodeBlock.option_spec
+    option_spec: ClassVar[OptionSpec] = (
+        CodeBlock.option_spec.copy() if CodeBlock.option_spec else {}
+    )
     option_spec[SUBSTITUTION_OPTION_NAME] = directives.flag
     option_spec[NO_SUBSTITUTION_OPTION_NAME] = directives.flag
 
@@ -286,7 +288,9 @@ class SubstitutionLiteralInclude(LiteralInclude):
     Similar to LiteralInclude but replaces placeholders with variables.
     """
 
-    option_spec: ClassVar[OptionSpec] = LiteralInclude.option_spec.copy()
+    option_spec: ClassVar[OptionSpec] = (
+        LiteralInclude.option_spec.copy() if LiteralInclude.option_spec else {}
+    )
     option_spec[CONTENT_SUBSTITUTION_OPTION_NAME] = directives.flag
     option_spec[PATH_SUBSTITUTION_OPTION_NAME] = directives.flag
     option_spec[NO_CONTENT_SUBSTITUTION_OPTION_NAME] = directives.flag
