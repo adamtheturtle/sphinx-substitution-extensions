@@ -166,7 +166,7 @@ class SubstitutionCodeBlock(CodeBlock):
     Similar to CodeBlock but replaces placeholders with variables.
     """
 
-    option_spec: ClassVar[OptionSpec] = CodeBlock.option_spec
+    option_spec: ClassVar[OptionSpec] = CodeBlock.option_spec.copy()
     option_spec[SUBSTITUTION_OPTION_NAME] = directives.flag
     option_spec[NO_SUBSTITUTION_OPTION_NAME] = directives.flag
 
