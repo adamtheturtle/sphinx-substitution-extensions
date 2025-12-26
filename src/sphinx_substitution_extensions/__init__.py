@@ -364,9 +364,11 @@ class SubstitutionImage(Image):
     Similar to Image but replaces placeholders with variables in the path.
     """
 
-    option_spec = Image.option_spec.copy() if Image.option_spec else {}
-    option_spec[PATH_SUBSTITUTION_OPTION_NAME] = directives.flag
-    option_spec[NO_PATH_SUBSTITUTION_OPTION_NAME] = directives.flag
+    option_spec: ClassVar[OptionSpec | None] = {
+        **(Image.option_spec if Image.option_spec else {}),
+        PATH_SUBSTITUTION_OPTION_NAME: directives.flag,
+        NO_PATH_SUBSTITUTION_OPTION_NAME: directives.flag,
+    }
 
     def run(self) -> list[Node]:
         """
