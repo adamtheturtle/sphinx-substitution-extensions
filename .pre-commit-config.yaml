@@ -34,6 +34,8 @@ ci:
     - vulture
     - vulture-docs
     - yamlfix
+    - pyrefly
+    - pyrefly-docs
 
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
@@ -334,3 +336,21 @@ repos:
         types_or: [rst]
         additional_dependencies: [uv==0.9.5]
         stages: [pre-commit]
+
+      - id: pyrefly
+        name: pyrefly
+        stages: [pre-push]
+        entry: uv run --extra=dev pyrefly check
+        language: python
+        types_or: [python, toml]
+        pass_filenames: false
+        additional_dependencies: [uv==0.9.5]
+
+      - id: pyrefly-docs
+        name: pyrefly-docs
+        stages: [pre-push]
+        entry: uv run --extra=dev doccmd --no-write-to-file --example-workers 0 --language=python
+          --command="pyrefly check"
+        language: python
+        types_or: [markdown, rst]
+        additional_dependencies: [uv==0.9.5]
