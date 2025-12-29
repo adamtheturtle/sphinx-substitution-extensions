@@ -11,6 +11,8 @@ on:
     # Run at 1:00 every day
     - cron: 0 1 * * *
 
+permissions: {}
+
 jobs:
   build:
     strategy:
@@ -24,6 +26,8 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
+        with:
+          persist-credentials: false
       - name: Install uv
         uses: astral-sh/setup-uv@v7
         with:
