@@ -23,7 +23,6 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-          persist-credentials: false
           # See
           # https://github.com/stefanzweifel/git-auto-commit-action?tab=readme-ov-file#push-to-protected-branches
           token: ${{ secrets.RELEASE_PAT }}
