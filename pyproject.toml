@@ -270,6 +270,7 @@ ignore = [
     "tests-pylintrc",
     "tests/**",
     "lint.mk",
+    "zizmor.yml",
 ]
 
 [tool.deptry]
