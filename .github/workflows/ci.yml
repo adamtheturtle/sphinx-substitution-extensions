@@ -36,12 +36,14 @@ jobs:
 
       - name: Lint
         run: |
-          uv run --extra=dev pre-commit run --all-files --hook-stage pre-commit --verbose
-          uv run --extra=dev pre-commit run --all-files --hook-stage pre-push --verbose
-          uv run --extra=dev pre-commit run --all-files --hook-stage manual --verbose
+          # pre-commit is the only hook stage
+          uv run --extra=dev prek run --all-files --hook-stage pre-commit --verbose
         env:
           UV_PYTHON: ${{ matrix.python-version }}
-          UV_RESOLUTION: ${{ matrix.uv-resolution }}
+          # UV_RESOLUTION is intentionally not set here. prek uses uv to
+          # install hooks, and uv inherits UV_RESOLUTION. With lowest-direct,
+          # this causes hook dependencies to resolve to ancient versions that
+          # don't build on modern Python.
 
       - name: Freeze for debugging
         run: |
