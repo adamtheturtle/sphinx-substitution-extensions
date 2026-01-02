@@ -31,7 +31,7 @@ Install ``pre-commit`` hooks:
 
 .. code-block:: shell
 
-   pre-commit install
+   prek install
 
 Linting
 -------
@@ -40,9 +40,9 @@ Run lint tools either by committing, or with:
 
 .. code-block:: shell
 
-   pre-commit run --all-files --hook-stage pre-commit --verbose
-   pre-commit run --all-files --hook-stage pre-push --verbose
-   pre-commit run --all-files --hook-stage manual --verbose
+   prek run --all-files --hook-stage pre-commit --verbose
+   prek run --all-files --hook-stage pre-push --verbose
+   prek run --all-files --hook-stage manual --verbose
 
 .. _Homebrew: https://brew.sh
 

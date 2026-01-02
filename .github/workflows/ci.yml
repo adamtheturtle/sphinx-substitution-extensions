@@ -36,9 +36,9 @@ jobs:
 
       - name: Lint
         run: |
-          uv run --extra=dev pre-commit run --all-files --hook-stage pre-commit --verbose
-          uv run --extra=dev pre-commit run --all-files --hook-stage pre-push --verbose
-          uv run --extra=dev pre-commit run --all-files --hook-stage manual --verbose
+          uv run --extra=dev prek run --all-files --hook-stage pre-commit --verbose
+          uv run --extra=dev prek run --all-files --hook-stage pre-push --verbose
+          uv run --extra=dev prek run --all-files --hook-stage manual --verbose
         env:
           UV_PYTHON: ${{ matrix.python-version }}
           UV_RESOLUTION: ${{ matrix.uv-resolution }}
