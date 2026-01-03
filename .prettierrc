@@ -3,7 +3,8 @@
     {
       "files": ["*.yaml", "*.yml"],
       "options": {
-        "singleQuote": true
+        "singleQuote": true,
+        "printWidth": 100
       }
     }
   ]
