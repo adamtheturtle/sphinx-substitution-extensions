@@ -1,5 +1,4 @@
 ---
-
 name: Release
 
 on: workflow_dispatch
@@ -59,8 +58,8 @@ jobs:
         uses: jacobtomlinson/gha-find-replace@v3
         with:
           find: "Next\n----"
-          replace: "Next\n----\n\n${{ steps.calver.outputs.release }}\n${{ steps.changelog_underline.outputs.underline\
-            \ }}"
+          replace: |-
+            Next\n----\n\n${{ steps.calver.outputs.release }}\n${{ steps.changelog_underline.outputs.underline }}\n
           include: CHANGELOG.rst
           regex: false
 
