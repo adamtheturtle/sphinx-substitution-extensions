@@ -118,8 +118,7 @@ repos:
 
       - id: shellcheck-docs
         name: shellcheck-docs
-        entry:
-          uv run --extra=dev doccmd --no-write-to-file --example-workers 0 --language=shell
+        entry: uv run --extra=dev doccmd --no-write-to-file --example-workers 0 --language=shell
           --language=console --command="shellcheck --shell=bash"
         language: python
         types_or: [markdown, rst]
@@ -136,8 +135,7 @@ repos:
 
       - id: shfmt-docs
         name: shfmt-docs
-        entry:
-          uv run --extra=dev doccmd --language=shell --language=console --skip-marker=shfmt
+        entry: uv run --extra=dev doccmd --language=shell --language=console --skip-marker=shfmt
           --no-pad-file --command="shfmt --write --space-redirects --indent=4"
         language: python
         types_or: [markdown, rst]
@@ -156,8 +154,7 @@ repos:
       - id: mypy-docs
         name: mypy-docs
         stages: [pre-push]
-        entry:
-          uv run --extra=dev doccmd --no-write-to-file --example-workers 0 --language=python
+        entry: uv run --extra=dev doccmd --no-write-to-file --example-workers 0 --language=python
           --command="mypy"
         language: python
         types_or: [markdown, rst]
@@ -182,8 +179,7 @@ repos:
       - id: pyright-docs
         name: pyright-docs
         stages: [pre-push]
-        entry:
-          uv run --extra=dev doccmd --no-write-to-file --example-workers 0 --language=python
+        entry: uv run --extra=dev doccmd --no-write-to-file --example-workers 0 --language=python
           --command="pyright"
         language: python
         types_or: [markdown, rst]
@@ -211,8 +207,7 @@ repos:
       - id: ty-docs
         name: ty-docs
         stages: [pre-push]
-        entry:
-          uv run --extra=dev doccmd --no-write-to-file --example-workers 0 --language=python
+        entry: uv run --extra=dev doccmd --no-write-to-file --example-workers 0 --language=python
           --command="ty check"
         language: python
         types_or: [markdown, rst]
@@ -229,8 +224,7 @@ repos:
 
       - id: vulture-docs
         name: vulture docs
-        entry:
-          uv run --extra=dev doccmd --no-write-to-file --example-workers 0 --language=python
+        entry: uv run --extra=dev doccmd --no-write-to-file --example-workers 0 --language=python
           --command="vulture"
         language: python
         types_or: [markdown, rst]
@@ -288,8 +282,7 @@ repos:
 
       - id: ruff-format-fix-docs
         name: Ruff format docs
-        entry:
-          uv run --extra=dev doccmd --language=python --no-pad-file --command="ruff
+        entry: uv run --extra=dev doccmd --language=python --no-pad-file --command="ruff
           format"
         language: python
         types_or: [markdown, rst]
@@ -314,8 +307,7 @@ repos:
 
       - id: interrogate-docs
         name: interrogate docs
-        entry:
-          uv run --extra=dev doccmd --no-write-to-file --example-workers 0 --language=python
+        entry: uv run --extra=dev doccmd --no-write-to-file --example-workers 0 --language=python
           --command="interrogate"
         language: python
         types_or: [markdown, rst]
@@ -367,8 +359,7 @@ repos:
       - id: pyrefly-docs
         name: pyrefly-docs
         stages: [pre-push]
-        entry:
-          uv run --extra=dev doccmd --no-write-to-file --example-workers 0 --language=python
+        entry: uv run --extra=dev doccmd --no-write-to-file --example-workers 0 --language=python
           --command="pyrefly check"
         language: python
         types_or: [markdown, rst]
