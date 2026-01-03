@@ -332,7 +332,7 @@ repos:
 
       - id: zizmor
         name: zizmor
-        entry: uv run --extra=dev zizmor .github
+        entry: uv run --extra=dev zizmor --strict-collection .github
         language: python
         pass_filenames: false
         types_or: [yaml]
