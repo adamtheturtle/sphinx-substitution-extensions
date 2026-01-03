@@ -58,8 +58,12 @@ jobs:
         uses: jacobtomlinson/gha-find-replace@v3
         with:
           find: "Next\n----"
-          replace: "Next\n----\n\n${{ steps.calver.outputs.release }}\n${{ steps.changelog_underline.outputs.underline\
-            \ }}\n"
+          replace: |
+            Next
+            ----
+
+            ${{ steps.calver.outputs.release }}
+            ${{ steps.changelog_underline.outputs.underline }}
           include: CHANGELOG.rst
           regex: false
 
