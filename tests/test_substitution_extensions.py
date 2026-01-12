@@ -1410,7 +1410,34 @@ def test_xref_role_class_prefix_removal(
     content_html = (app.outdir / "index.html").read_text()
     app.cleanup()
 
-    assert "my-substitution-download" in content_html
+    conf_file.write_text(
+        data=dedent(
+            text="""\
+            from sphinx import addnodes
+            from sphinx.roles import XRefRole
+
+            def setup(app):
+                role = XRefRole(nodeclass=addnodes.download_reference)
+                app.add_role("my-substitution-download", role)
+            """,
+        ),
+    )
+
+    equivalent_source = dedent(
+        text="""\
+        :my-substitution-download:`Download <example.py>`
+        """,
+    )
+    source_file.write_text(data=equivalent_source)
+    app_expected = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+    )
+    app_expected.build()
+    assert app_expected.statuscode == 0
+
+    expected_content_html = (app_expected.outdir / "index.html").read_text()
+    assert content_html == expected_content_html
 
 
 def test_no_substitution_image(
