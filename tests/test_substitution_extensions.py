@@ -1379,9 +1379,6 @@ def test_xref_role_class_prefix_removal(
     downloadable_file = source_directory / "example.py"
     downloadable_file.write_text(data="Sample")
 
-    # Register a role with "substitution-" appearing twice in the name.
-    # This triggers the bug: the class should become
-    # "my-substitution-download" but with .replace() it becomes "my-download".
     conf_file.write_text(
         data=dedent(
             text="""\
@@ -1413,8 +1410,6 @@ def test_xref_role_class_prefix_removal(
     content_html = (app.outdir / "index.html").read_text()
     app.cleanup()
 
-    # The class should be "my-substitution-download" (only prefix removed).
-    # The bug causes it to be "my-download" (all occurrences removed).
     assert "my-substitution-download" in content_html
 
 
