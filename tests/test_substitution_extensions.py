@@ -1367,17 +1367,9 @@ def test_xref_role_class_prefix_removal(
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
-    """The ``SubstitutionXRefRole`` should only remove the "substitution-"
-    prefix from CSS classes, not all occurrences of "substitution-" in the
-    class name.
-
-    This is a regression test for:
-    https://github.com/adamtheturtle/sphinx-substitution-extensions/issues/1328
-
-    The bug was that using ``str.replace("substitution-", "")`` removes ALL
-    occurrences of the substring, not just the prefix. For example, a class
-    like "substitution-my-substitution-class" would become "my-class" instead
-    of "my-substitution-class".
+    """
+    The ``SubstitutionXRefRole`` should only remove the "substitution-" prefix
+    from CSS classes, not all occurrences of "substitution-" in the class name.
     """
     source_directory = tmp_path / "source"
     source_directory.mkdir()
