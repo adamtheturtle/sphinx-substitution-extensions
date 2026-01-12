@@ -1363,6 +1363,69 @@ class TestMyst:
         assert content_html == expected_content_html
 
 
+def test_xref_role_class_prefix_removal(
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """The ``SubstitutionXRefRole`` should only remove the "substitution-"
+    prefix from CSS classes, not all occurrences of "substitution-" in the
+    class name.
+
+    This is a regression test for:
+    https://github.com/adamtheturtle/sphinx-substitution-extensions/issues/1328
+
+    The bug was that using ``str.replace("substitution-", "")`` removes ALL
+    occurrences of the substring, not just the prefix. For example, a class
+    like "substitution-my-substitution-class" would become "my-class" instead
+    of "my-substitution-class".
+    """
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    source_file = source_directory / "index.rst"
+    conf_file = source_directory / "conf.py"
+
+    downloadable_file = source_directory / "example.py"
+    downloadable_file.write_text(data="Sample")
+
+    # Register a role with "substitution-" appearing twice in the name.
+    # This triggers the bug: the class should become
+    # "my-substitution-download" but with .replace() it becomes "my-download".
+    conf_file.write_text(
+        data=dedent(
+            text="""\
+            from sphinx import addnodes
+            from sphinx_substitution_extensions import SubstitutionXRefRole
+
+            def setup(app):
+                role = SubstitutionXRefRole(
+                    nodeclass=addnodes.download_reference,
+                )
+                app.add_role("substitution-my-substitution-download", role)
+            """,
+        ),
+    )
+
+    source_file_content = dedent(
+        text="""\
+        :substitution-my-substitution-download:`Download <example.py>`
+        """,
+    )
+    source_file.write_text(data=source_file_content)
+    app = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        confoverrides={"extensions": ["sphinx_substitution_extensions"]},
+    )
+    app.build()
+    assert app.statuscode == 0
+    content_html = (app.outdir / "index.html").read_text()
+    app.cleanup()
+
+    # The class should be "my-substitution-download" (only prefix removed).
+    # The bug causes it to be "my-download" (all occurrences removed).
+    assert "my-substitution-download" in content_html
+
+
 def test_no_substitution_image(
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
