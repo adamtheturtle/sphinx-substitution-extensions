@@ -420,7 +420,7 @@ class SubstitutionXRefRole(XRefRole):
         the `substitution-`.
         """
         for index, class_name in enumerate(iterable=self.classes):
-            self.classes[index] = class_name.replace("substitution-", "")
+            self.classes[index] = class_name.removeprefix("substitution-")
 
         return super().create_xref_node()
 

@@ -1363,6 +1363,83 @@ class TestMyst:
         assert content_html == expected_content_html
 
 
+def test_xref_role_class_prefix_removal(
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """
+    The ``SubstitutionXRefRole`` should only remove the "substitution-" prefix
+    from CSS classes, not all occurrences of "substitution-" in the class name.
+    """
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    source_file = source_directory / "index.rst"
+    conf_file = source_directory / "conf.py"
+
+    downloadable_file = source_directory / "example.py"
+    downloadable_file.write_text(data="Sample")
+
+    conf_file.write_text(
+        data=dedent(
+            text="""\
+            from sphinx import addnodes
+            from sphinx_substitution_extensions import SubstitutionXRefRole
+
+            def setup(app):
+                role = SubstitutionXRefRole(
+                    nodeclass=addnodes.download_reference,
+                )
+                app.add_role("substitution-my-substitution-download", role)
+            """,
+        ),
+    )
+
+    source_file_content = dedent(
+        text="""\
+        :substitution-my-substitution-download:`Download <example.py>`
+        """,
+    )
+    source_file.write_text(data=source_file_content)
+    app = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        confoverrides={"extensions": ["sphinx_substitution_extensions"]},
+    )
+    app.build()
+    assert app.statuscode == 0
+    content_html = (app.outdir / "index.html").read_text()
+    app.cleanup()
+
+    conf_file.write_text(
+        data=dedent(
+            text="""\
+            from sphinx import addnodes
+            from sphinx.roles import XRefRole
+
+            def setup(app):
+                role = XRefRole(nodeclass=addnodes.download_reference)
+                app.add_role("my-substitution-download", role)
+            """,
+        ),
+    )
+
+    equivalent_source = dedent(
+        text="""\
+        :my-substitution-download:`Download <example.py>`
+        """,
+    )
+    source_file.write_text(data=equivalent_source)
+    app_expected = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+    )
+    app_expected.build()
+    assert app_expected.statuscode == 0
+
+    expected_content_html = (app_expected.outdir / "index.html").read_text()
+    assert content_html == expected_content_html
+
+
 def test_no_substitution_image(
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],

@@ -6,6 +6,8 @@ Changelog
 Next
 ----
 
+- Fix bug where ``SubstitutionXRefRole`` removed all occurrences of "substitution-" from CSS class names instead of only the prefix.
+
 2025.12.15
 ----------
 
