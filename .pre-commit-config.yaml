@@ -154,8 +154,7 @@ repos:
       - id: mypy-docs
         name: mypy-docs
         stages: [pre-push]
-        entry: uv run --extra=dev doccmd --no-write-to-file --language=python
-          --command="mypy"
+        entry: uv run --extra=dev doccmd --no-write-to-file --language=python --command="mypy"
         language: python
         types_or: [markdown, rst]
 
