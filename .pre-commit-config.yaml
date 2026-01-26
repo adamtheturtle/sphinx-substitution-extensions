@@ -151,6 +151,7 @@ repos:
         pass_filenames: false
         additional_dependencies: [uv==0.9.5]
 
+      # We do not use --example-workers 0 due to https://github.com/python/mypy/issues/18283
       - id: mypy-docs
         name: mypy-docs
         stages: [pre-push]
