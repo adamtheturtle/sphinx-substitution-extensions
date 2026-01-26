@@ -1,6 +1,4 @@
-"""
-Tests for Sphinx extensions.
-"""
+"""Tests for Sphinx extensions."""
 
 from collections.abc import Callable
 from importlib.metadata import version
@@ -16,9 +14,7 @@ def test_setup(
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
-    """
-    Test that the setup function returns the expected metadata.
-    """
+    """Test that the setup function returns the expected metadata."""
     source_directory = tmp_path / "source"
     source_directory.mkdir()
     (source_directory / "conf.py").touch()
@@ -38,9 +34,7 @@ def test_no_substitution_code_block(
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
-    """
-    The ``code-block`` directive does not replace placeholders.
-    """
+    """The ``code-block`` directive does not replace placeholders."""
     source_directory = tmp_path / "source"
     source_directory.mkdir()
     source_file = source_directory / "index.rst"
@@ -139,7 +133,8 @@ def test_substitution_code_block_case_preserving(
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
     """
-    The ``code-block`` directive respects the original case of replacements.
+    The ``code-block`` directive respects the original case of
+    replacements.
     """
     source_directory = tmp_path / "source"
     source_directory.mkdir()
@@ -192,7 +187,8 @@ def test_default_substitutions_enabled(
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
     """
-    When ``substitutions_default_enabled`` is set to True in conf.py, code
+    When ``substitutions_default_enabled`` is set to True in conf.py,
+    code
     blocks should apply substitutions by default without needing the
     ``:substitutions:`` flag.
     """
@@ -249,7 +245,8 @@ def test_default_substitutions_disabled_with_flag(
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
     """
-    When ``substitutions_default_enabled`` is True but a code block has the
+    When ``substitutions_default_enabled`` is True but a code block has
+    the
     ``:nosubstitutions:`` flag, substitutions should not be applied.
     """
     source_directory = tmp_path / "source"
@@ -358,7 +355,8 @@ def test_substitution_inline_case_preserving(
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
     """
-    The ``substitution-code`` role respects the original case of replacements.
+    The ``substitution-code`` role respects the original case of
+    replacements.
     """
     source_directory = tmp_path / "source"
     source_directory.mkdir()
@@ -406,8 +404,10 @@ def test_substitution_download(
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
     """
-    The ``substitution-download`` role replaces the placeholders defined in
-    ``conf.py`` as specified in both the download text and the download target.
+    The ``substitution-download`` role replaces the placeholders defined
+    in
+    ``conf.py`` as specified in both the download text and the download
+    target.
     """
     source_directory = tmp_path / "source"
     source_directory.mkdir()
@@ -461,9 +461,7 @@ def test_no_substitution_literal_include(
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
-    """
-    The ``literalinclude`` directive does not replace placeholders.
-    """
+    """The ``literalinclude`` directive does not replace placeholders."""
     source_directory = tmp_path / "source"
     source_directory.mkdir()
     source_file = source_directory / "index.rst"
@@ -509,8 +507,10 @@ def test_substitution_literal_include(
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
     """
-    The ``literalinclude`` directive replaces the placeholders defined in
-    ``conf.py`` as specified when the `:content-substitutions:` flag is set.
+    The ``literalinclude`` directive replaces the placeholders defined
+    in
+    ``conf.py`` as specified when the `:content-substitutions:` flag is
+    set.
     """
     source_directory = tmp_path / "source"
     source_directory.mkdir()
@@ -566,7 +566,8 @@ def test_substitution_literal_include_empty_file(
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
     """
-    The ``literalinclude`` directive handles empty files without crashing.
+    The ``literalinclude`` directive handles empty files without
+    crashing.
     """
     source_directory = tmp_path / "source"
     source_directory.mkdir()
@@ -618,9 +619,7 @@ def test_substitution_literal_include_multiple(
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
-    """
-    The ``literalinclude`` directive replaces multiple placeholders.
-    """
+    """The ``literalinclude`` directive replaces multiple placeholders."""
     source_directory = tmp_path / "source"
     source_directory.mkdir()
     source_file = source_directory / "index.rst"
@@ -675,9 +674,7 @@ def test_substitution_literal_include_with_caption(
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
-    """
-    The ``literalinclude`` directive works with captions.
-    """
+    """The ``literalinclude`` directive works with captions."""
     source_directory = tmp_path / "source"
     source_directory.mkdir()
     source_file = source_directory / "index.rst"
@@ -733,9 +730,7 @@ def test_substitution_literal_include_in_rest_example(
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
-    """
-    The ``literalinclude`` directive works inside rest-example.
-    """
+    """The ``literalinclude`` directive works inside rest-example."""
     source_directory = tmp_path / "source"
     source_directory.mkdir()
     source_file = source_directory / "index.rst"
@@ -776,7 +771,8 @@ def test_substitution_literal_include_path(
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
     """
-    The ``literalinclude`` directive replaces placeholders in the file path
+    The ``literalinclude`` directive replaces placeholders in the file
+    path
     when the `:path-substitutions:` flag is set.
     """
     source_directory = tmp_path / "source"
@@ -896,8 +892,10 @@ def test_default_substitutions_literal_include_content(
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
     """
-    When ``substitutions_default_enabled`` is True, ``literalinclude`` should
-    apply content substitutions by default without requiring the ``:content-
+    When ``substitutions_default_enabled`` is True, ``literalinclude``
+    should
+    apply content substitutions by default without requiring the
+    ``:content-
     substitutions:`` flag.
     """
     source_directory = tmp_path / "source"
@@ -956,7 +954,8 @@ def test_default_substitutions_literal_include_path(
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
     """
-    When ``substitutions_default_enabled`` is True, ``literalinclude`` should
+    When ``substitutions_default_enabled`` is True, ``literalinclude``
+    should
     apply path substitutions by default without requiring the ``:path-
     substitutions:`` flag.
     """
@@ -1012,8 +1011,10 @@ def test_default_substitutions_literal_include_disabled_content(
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
     """
-    When ``substitutions_default_enabled`` is True but ``literalinclude`` has
-    the ``:nocontent-substitutions:`` flag, content substitutions should not be
+    When ``substitutions_default_enabled`` is True but
+    ``literalinclude`` has
+    the ``:nocontent-substitutions:`` flag, content substitutions should
+    not be
     applied.
     """
     source_directory = tmp_path / "source"
@@ -1069,8 +1070,10 @@ def test_default_substitutions_literal_include_disabled_path(
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
-    """When ``substitutions_default_enabled`` is True but ``literalinclude``
-    has the ``:nopath-substitutions:`` flag, path substitutions should not be
+    """When ``substitutions_default_enabled`` is True but
+    ``literalinclude``
+    has the ``:nopath-substitutions:`` flag, path substitutions should not
+    be
     applied.
 
     Note: This test uses MyST format with custom delimiters because the `|`
@@ -1152,9 +1155,7 @@ def test_default_substitutions_literal_include_disabled_path(
 
 
 class TestMyst:
-    """
-    Tests for MyST documents.
-    """
+    """Tests for MyST documents."""
 
     @staticmethod
     def test_myst_substitutions_ignored_given_rst_definition(
@@ -1162,7 +1163,8 @@ class TestMyst:
         make_app: Callable[..., SphinxTestApp],
     ) -> None:
         """
-        MyST substitutions are ignored in rST documents with a rST substitution
+        MyST substitutions are ignored in rST documents with a rST
+        substitution
         definition.
         """
         source_directory = tmp_path / "source"
@@ -1289,9 +1291,7 @@ class TestMyst:
         tmp_path: Path,
         make_app: Callable[..., SphinxTestApp],
     ) -> None:
-        """
-        MyST substitutions are respected in MyST documents.
-        """
+        """MyST substitutions are respected in MyST documents."""
         source_directory = tmp_path / "source"
         source_directory.mkdir()
         index_source_file = source_directory / "index.rst"
@@ -1368,8 +1368,10 @@ def test_xref_role_class_prefix_removal(
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
     """
-    The ``SubstitutionXRefRole`` should only remove the "substitution-" prefix
-    from CSS classes, not all occurrences of "substitution-" in the class name.
+    The ``SubstitutionXRefRole`` should only remove the "substitution-"
+    prefix
+    from CSS classes, not all occurrences of "substitution-" in the class
+    name.
     """
     source_directory = tmp_path / "source"
     source_directory.mkdir()
@@ -1444,7 +1446,8 @@ def test_no_substitution_image(
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
-    """The ``image`` directive does not replace custom placeholders by default.
+    """The ``image`` directive does not replace custom placeholders by
+    default.
 
     Note: reST by default processes |substitutions| in image paths, but
     our extension adds the ability to use custom delimiters like {{var}}.
@@ -1501,7 +1504,8 @@ def test_substitution_image_path(
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
     """
-    The ``image`` directive replaces placeholders in the file path when the
+    The ``image`` directive replaces placeholders in the file path when
+    the
     ``:path-substitutions:`` flag is set.
     """
     source_directory = tmp_path / "source"
@@ -1561,7 +1565,8 @@ def test_substitution_image_path_multiple(
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
     """
-    The ``image`` directive replaces multiple placeholders in the file path.
+    The ``image`` directive replaces multiple placeholders in the file
+    path.
     """
     source_directory = tmp_path / "source"
     source_directory.mkdir()
@@ -1620,9 +1625,7 @@ def test_substitution_image_with_options(
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
-    """
-    The ``image`` directive works with standard image options.
-    """
+    """The ``image`` directive works with standard image options."""
     source_directory = tmp_path / "source"
     source_directory.mkdir()
     source_file = source_directory / "index.rst"
@@ -1682,7 +1685,8 @@ def test_default_substitutions_image_path(
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
     """
-    When ``substitutions_default_enabled`` is True, ``image`` should apply path
+    When ``substitutions_default_enabled`` is True, ``image`` should
+    apply path
     substitutions by default without requiring the ``:path-substitutions:``
     flag.
     """
@@ -1743,7 +1747,8 @@ def test_default_substitutions_image_disabled_path(
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
     """When ``substitutions_default_enabled`` is True but ``image`` has the
-    ``:nopath-substitutions:`` flag, path substitutions should not be applied.
+    ``:nopath-substitutions:`` flag, path substitutions should not be
+    applied.
 
     Note: This test uses MyST format with custom delimiters because the `|`
     character cannot be used in Windows file paths.
@@ -1828,9 +1833,7 @@ def test_default_substitutions_image_disabled_path(
 
 
 class TestImageMyst:
-    """
-    Tests for image directive with MyST documents.
-    """
+    """Tests for image directive with MyST documents."""
 
     @staticmethod
     def test_myst_substitutions_image(
@@ -1838,7 +1841,8 @@ class TestImageMyst:
         make_app: Callable[..., SphinxTestApp],
     ) -> None:
         """
-        MyST substitutions are respected in image paths in MyST documents.
+        MyST substitutions are respected in image paths in MyST
+        documents.
         """
         source_directory = tmp_path / "source"
         source_directory.mkdir()
@@ -1922,7 +1926,8 @@ class TestImageMyst:
         make_app: Callable[..., SphinxTestApp],
     ) -> None:
         """
-        The default MyST substitution delimiters {{}} are respected for images.
+        The default MyST substitution delimiters {{}} are respected for
+        images.
         """
         source_directory = tmp_path / "source"
         source_directory.mkdir()
@@ -2082,9 +2087,7 @@ class TestImageMyst:
         tmp_path: Path,
         make_app: Callable[..., SphinxTestApp],
     ) -> None:
-        """
-        Custom markdown suffixes are respected in MyST documents.
-        """
+        """Custom markdown suffixes are respected in MyST documents."""
         source_directory = tmp_path / "source"
         source_directory.mkdir()
         index_source_file = source_directory / "index.rst"
@@ -2170,9 +2173,7 @@ class TestImageMyst:
         tmp_path: Path,
         make_app: Callable[..., SphinxTestApp],
     ) -> None:
-        """
-        The default MyST substitution delimiters are respected.
-        """
+        """The default MyST substitution delimiters are respected."""
         source_directory = tmp_path / "source"
         source_directory.mkdir()
         index_source_file = source_directory / "index.rst"
@@ -2248,9 +2249,7 @@ class TestImageMyst:
         tmp_path: Path,
         make_app: Callable[..., SphinxTestApp],
     ) -> None:
-        """
-        Custom MyST substitution delimiters are respected.
-        """
+        """Custom MyST substitution delimiters are respected."""
         source_directory = tmp_path / "source"
         source_directory.mkdir()
         index_source_file = source_directory / "index.rst"
@@ -2328,7 +2327,8 @@ class TestImageMyst:
         make_app: Callable[..., SphinxTestApp],
     ) -> None:
         """
-        The ``substitution-code`` role replaces the placeholders defined in
+        The ``substitution-code`` role replaces the placeholders defined
+        in
         ``conf.py`` as specified.
         """
         source_directory = tmp_path / "source"
@@ -2400,7 +2400,8 @@ class TestImageMyst:
         make_app: Callable[..., SphinxTestApp],
     ) -> None:
         """
-        The ``substitution-download`` role replaces the placeholders defined in
+        The ``substitution-download`` role replaces the placeholders
+        defined in
         ``conf.py`` as specified.
         """
         source_directory = tmp_path / "source"

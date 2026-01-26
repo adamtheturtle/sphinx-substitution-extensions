@@ -1,3 +1,1 @@
-"""
-Tests for the substitution extension.
-"""
+"""Tests for the substitution extension."""

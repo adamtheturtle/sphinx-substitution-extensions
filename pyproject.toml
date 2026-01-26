@@ -46,11 +46,11 @@ optional-dependencies.dev = [
     "deptry==0.24.0",
     "doc8==2.0.0",
     "doccmd==2026.1.22.1",
-    "docformatter==1.7.7",
     "interrogate==1.7.0",
     "mypy[faster-cache]==1.19.1",
     "mypy-strict-kwargs==2026.1.12",
     "prek==0.3.0",
+    "pydocstringformatter==0.7.3",
     "pylint[spelling]==4.0.4",
     "pyproject-fmt==2.11.1",
     "pyrefly==0.49.0",
@@ -109,8 +109,8 @@ lint.select = [
 lint.ignore = [
     # Ruff warns that this conflicts with the formatter.
     "COM812",
-    # Allow our chosen docstring line-style - no one-line summary.
-    "D200",
+    # Allow our chosen docstring line-style - pydocstringformatter handles formatting
+    # but doesn't enforce D205 (blank line after summary) or D212 (summary on first line).
     "D205",
     "D212",
     "D415",
@@ -121,6 +121,12 @@ lint.ignore = [
     "PLR0913",
     # Allow 'assert' as we use it for tests.
     "S101",
+]
+
+lint.per-file-ignores."doccmd_*.py" = [
+    # Allow our chosen docstring line-style - pydocstringformatter handles
+    # formatting but docstrings in docs may not match this style.
+    "D200",
 ]
 
 # Do not automatically remove commented out code.
@@ -241,9 +247,6 @@ spelling-private-dict-file = 'spelling_private_dict.txt'
 # --spelling-private-dict-file option instead of raising a message.
 spelling-store-unknown-words = 'no'
 
-[tool.docformatter]
-make-summary-multi-line = true
-
 [tool.check-manifest]
 
 ignore = [
@@ -312,6 +315,12 @@ plugins = [
 enableTypeIgnoreComments = false
 reportUnnecessaryTypeIgnoreComment = true
 typeCheckingMode = "strict"
+
+[tool.pydocstringformatter]
+write = true
+split-summary-body = false
+max-line-length = 75
+linewrap-full-docstring = true
 
 [tool.interrogate]
 fail-under = 100

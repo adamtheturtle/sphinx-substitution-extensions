@@ -1,6 +1,4 @@
-"""
-Sample ``conf.py``.
-"""
+"""Sample ``conf.py``."""
 
 extensions = [
     "myst_parser",
