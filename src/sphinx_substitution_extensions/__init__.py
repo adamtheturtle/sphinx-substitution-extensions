@@ -351,7 +351,7 @@ class SubstitutionImage(Image):
     """
 
     option_spec: ClassVar[OptionSpec | None] = {
-        **(Image.option_spec if Image.option_spec else {}),
+        **(Image.option_spec or {}),
         PATH_SUBSTITUTION_OPTION_NAME: directives.flag,
         NO_PATH_SUBSTITUTION_OPTION_NAME: directives.flag,
     }
