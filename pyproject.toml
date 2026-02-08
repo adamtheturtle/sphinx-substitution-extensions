@@ -117,7 +117,7 @@ lint.ignore = [
     "D415",
     # Ruff warns that this conflicts with the formatter.
     "ISC001",
-    # Ignore "too-many-*" errors as they seem to get in the way more than
+    # Ignore 'too-many-*' errors as they seem to get in the way more than
     # helping.
     "PLR0913",
     # Allow 'assert' as we use it for tests.
@@ -163,21 +163,21 @@ jobs = 0
 # - pylint.extensions.while_used
 # as they seemed to get in the way.
 load-plugins = [
-    'pylint.extensions.bad_builtin',
-    'pylint.extensions.comparison_placement',
-    'pylint.extensions.consider_refactoring_into_while_condition',
-    'pylint.extensions.docparams',
-    'pylint.extensions.dunder',
-    'pylint.extensions.eq_without_hash',
-    'pylint.extensions.for_any_all',
-    'pylint.extensions.mccabe',
-    'pylint.extensions.no_self_use',
-    'pylint.extensions.overlapping_exceptions',
-    'pylint.extensions.private_import',
-    'pylint.extensions.redefined_loop_name',
-    'pylint.extensions.redefined_variable_type',
-    'pylint.extensions.set_membership',
-    'pylint.extensions.typing',
+    "pylint.extensions.bad_builtin",
+    "pylint.extensions.comparison_placement",
+    "pylint.extensions.consider_refactoring_into_while_condition",
+    "pylint.extensions.docparams",
+    "pylint.extensions.dunder",
+    "pylint.extensions.eq_without_hash",
+    "pylint.extensions.for_any_all",
+    "pylint.extensions.mccabe",
+    "pylint.extensions.no_self_use",
+    "pylint.extensions.overlapping_exceptions",
+    "pylint.extensions.private_import",
+    "pylint.extensions.redefined_loop_name",
+    "pylint.extensions.redefined_variable_type",
+    "pylint.extensions.set_membership",
+    "pylint.extensions.typing",
 ]
 
 # Allow loading of arbitrary C extensions. Extensions are imported into the
@@ -191,12 +191,12 @@ unsafe-load-any-extension = false
 # multiple time (only on the command line, not in the configuration file where
 # it should appear only once). See also the "--disable" option for examples.
 enable = [
-    'bad-inline-option',
-    'deprecated-pragma',
-    'file-ignored',
-    'spelling',
-    'use-symbolic-message-instead',
-    'useless-suppression',
+    "bad-inline-option",
+    "deprecated-pragma",
+    "file-ignored",
+    "spelling",
+    "use-symbolic-message-instead",
+    "useless-suppression",
 ]
 
 # Disable the message, report, category or checker with the given id(s). You
@@ -210,29 +210,29 @@ enable = [
 # --disable=W"
 
 disable = [
-    'too-few-public-methods',
-    'too-many-positional-arguments',
-    'too-many-locals',
-    'too-many-arguments',
-    'too-many-instance-attributes',
-    'too-many-return-statements',
-    'too-many-lines',
-    'locally-disabled',
+    "too-few-public-methods",
+    "too-many-positional-arguments",
+    "too-many-locals",
+    "too-many-arguments",
+    "too-many-instance-attributes",
+    "too-many-return-statements",
+    "too-many-lines",
+    "locally-disabled",
     # Let flake8 handle long lines
-    'line-too-long',
+    "line-too-long",
     # Let ruff handle unused imports
-    'unused-import',
+    "unused-import",
     # Let ruff deal with sorting
-    'ungrouped-imports',
+    "ungrouped-imports",
     # We don't need everything to be documented because of mypy
-    'missing-type-doc',
-    'missing-return-type-doc',
+    "missing-type-doc",
+    "missing-return-type-doc",
     # Too difficult to please
-    'duplicate-code',
+    "duplicate-code",
     # Let ruff handle imports
-    'wrong-import-order',
+    "wrong-import-order",
     # Let ruff find protected member access.
-    'protected-access',
+    "protected-access",
 ]
 
 [tool.pylint.'SPELLING']
