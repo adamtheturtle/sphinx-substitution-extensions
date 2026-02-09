@@ -53,23 +53,23 @@ optional-dependencies.dev = [
     "prek==0.3.1",
     "pydocstringformatter==0.7.5",
     "pylint[spelling]==4.0.4",
-    "pyproject-fmt==2.14.0",
+    "pyproject-fmt==2.14.2",
     "pyrefly==0.51.1",
     "pyright==1.1.408",
     "pyroma==5.0.1",
     "pytest==9.0.2",
     "pytest-cov==7.0.0",
     "ruff==0.15.0",
+    # We add shellcheck-py not only for shell scripts and shell code blocks,
+    # but also because having it installed means that ``actionlint-py`` will
+    # use it to lint shell commands in GitHub workflow files.
+    "shellcheck-py==0.11.0.1",
     "shfmt-py==3.12.0.2",
     "sphinx-lint==1.0.2",
     "sphinx-toolbox==4.1.2",
     "ty==0.0.15",
     "types-docutils==0.22.3.20251115",
     "vulture==2.14",
-    # We add shellcheck-py not only for shell scripts and shell code blocks,
-    # but also because having it installed means that ``actionlint-py`` will
-    # use it to lint shell commands in GitHub workflow files.
-    "shellcheck-py==0.11.0.1",
     "yamlfix==1.19.1",
     "zizmor==1.22.0",
 ]
@@ -102,20 +102,20 @@ lint.select = [
     "ALL",
 ]
 lint.ignore = [
-    # Allow 'assert' as we use it for tests.
-    "S101",
+    # Ruff warns that this conflicts with the formatter.
+    "COM812",
     # Allow our chosen docstring line-style - pydocstringformatter handles formatting
     # but doesn't enforce D205 (blank line after summary) or D212 (summary on first line).
     "D205",
+    "D212",
+    "D415",
+    # Ruff warns that this conflicts with the formatter.
+    "ISC001",
     # Ignore 'too-many-*' errors as they seem to get in the way more than
     # helping.
     "PLR0913",
-    # Ruff warns that this conflicts with the formatter.
-    "COM812",
-    # Ruff warns that this conflicts with the formatter.
-    "ISC001",
-    "D212",
-    "D415",
+    # Allow 'assert' as we use it for tests.
+    "S101",
 ]
 lint.per-file-ignores."doccmd_*.py" = [
     # Allow our chosen docstring line-style - pydocstringformatter handles
