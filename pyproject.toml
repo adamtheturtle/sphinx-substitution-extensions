@@ -279,6 +279,9 @@ plugins = [
     "mypy_strict_kwargs",
 ]
 
+[tool.pyrefly]
+errors.non-exhaustive-match = "error"
+
 [tool.pyright]
 enableTypeIgnoreComments = false
 reportUnnecessaryTypeIgnoreComment = true
