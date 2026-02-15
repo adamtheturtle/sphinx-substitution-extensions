@@ -358,3 +358,6 @@ exclude = [ ".venv" ]
 [tool.yamlfix]
 section_whitelines = 1
 whitelines = 1
+
+[tool.pyrefly]
+errors.non-exhaustive-match = "error"
