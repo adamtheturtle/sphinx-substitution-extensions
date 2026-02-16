@@ -42,7 +42,7 @@ dependencies = [
     "sphinx>=8.1.0",
 ]
 optional-dependencies.dev = [
-    "actionlint-py==1.7.10.24",
+    "actionlint-py==1.7.11.24",
     "check-manifest==0.51",
     "deptry==0.24.0",
     "doc8==2.0.0",
