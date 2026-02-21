@@ -37,6 +37,7 @@ from sphinx_substitution_extensions.shared import (
 
 @beartype
 def _get_delimiter_pairs(
+    *,
     env: BuildEnvironment,
     config: Config,
 ) -> set[tuple[str, str]]:
@@ -65,6 +66,7 @@ def _get_delimiter_pairs(
 
 @beartype
 def _get_substitution_defs(
+    *,
     env: BuildEnvironment,
     config: Config,
     substitution_defs: dict[str, substitution_definition],
@@ -90,6 +92,7 @@ def _get_substitution_defs(
 
 @beartype
 def _apply_substitutions(
+    *,
     text: str,
     substitution_defs: dict[str, str],
     delimiter_pairs: set[tuple[str, str]],
@@ -108,6 +111,7 @@ def _apply_substitutions(
 
 @beartype
 def _should_apply_substitutions(
+    *,
     options: dict[str, Any],
     config: Config,
     yes_flag: str,
@@ -126,6 +130,7 @@ def _should_apply_substitutions(
 
 @beartype
 def _process_node(
+    *,
     node: Node,
     substitution_defs: dict[str, str],
     delimiter_pairs: set[tuple[str, str]],
