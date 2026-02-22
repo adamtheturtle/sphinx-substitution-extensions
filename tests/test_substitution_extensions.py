@@ -11,6 +11,7 @@ import sphinx_substitution_extensions
 
 
 def test_setup(
+    *,
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
@@ -31,6 +32,7 @@ def test_setup(
 
 
 def test_no_substitution_code_block(
+    *,
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
@@ -75,6 +77,7 @@ def test_no_substitution_code_block(
 
 
 def test_substitution_code_block(
+    *,
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
@@ -129,6 +132,7 @@ def test_substitution_code_block(
 
 
 def test_substitution_code_block_case_preserving(
+    *,
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
@@ -183,6 +187,7 @@ def test_substitution_code_block_case_preserving(
 
 
 def test_default_substitutions_enabled(
+    *,
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
@@ -241,6 +246,7 @@ def test_default_substitutions_enabled(
 
 
 def test_default_substitutions_disabled_with_flag(
+    *,
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
@@ -302,6 +308,7 @@ def test_default_substitutions_disabled_with_flag(
 
 
 def test_substitution_inline(
+    *,
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
@@ -351,6 +358,7 @@ def test_substitution_inline(
 
 
 def test_substitution_inline_case_preserving(
+    *,
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
@@ -400,6 +408,7 @@ def test_substitution_inline_case_preserving(
 
 
 def test_substitution_download(
+    *,
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
@@ -458,6 +467,7 @@ def test_substitution_download(
 
 
 def test_no_substitution_literal_include(
+    *,
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
@@ -503,6 +513,7 @@ def test_no_substitution_literal_include(
 
 
 def test_substitution_literal_include(
+    *,
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
@@ -562,6 +573,7 @@ def test_substitution_literal_include(
 
 
 def test_substitution_literal_include_empty_file(
+    *,
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
@@ -616,6 +628,7 @@ def test_substitution_literal_include_empty_file(
 
 
 def test_substitution_literal_include_multiple(
+    *,
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
@@ -671,6 +684,7 @@ def test_substitution_literal_include_multiple(
 
 
 def test_substitution_literal_include_with_caption(
+    *,
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
@@ -727,6 +741,7 @@ def test_substitution_literal_include_with_caption(
 
 
 def test_substitution_literal_include_in_rest_example(
+    *,
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
@@ -767,6 +782,7 @@ def test_substitution_literal_include_in_rest_example(
 
 
 def test_substitution_literal_include_path(
+    *,
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
@@ -823,6 +839,7 @@ def test_substitution_literal_include_path(
 
 
 def test_substitution_literal_include_both_path_and_content(
+    *,
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
@@ -888,6 +905,7 @@ def test_substitution_literal_include_both_path_and_content(
 
 
 def test_default_substitutions_literal_include_content(
+    *,
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
@@ -950,6 +968,7 @@ def test_default_substitutions_literal_include_content(
 
 
 def test_default_substitutions_literal_include_path(
+    *,
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
@@ -1007,6 +1026,7 @@ def test_default_substitutions_literal_include_path(
 
 
 def test_default_substitutions_literal_include_disabled_content(
+    *,
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
@@ -1067,6 +1087,7 @@ def test_default_substitutions_literal_include_disabled_content(
 
 
 def test_default_substitutions_literal_include_disabled_path(
+    *,
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
@@ -1159,6 +1180,7 @@ class TestMyst:
 
     @staticmethod
     def test_myst_substitutions_ignored_given_rst_definition(
+        *,
         tmp_path: Path,
         make_app: Callable[..., SphinxTestApp],
     ) -> None:
@@ -1225,6 +1247,7 @@ class TestMyst:
 
     @staticmethod
     def test_myst_substitutions_ignored_without_rst_definition(
+        *,
         tmp_path: Path,
         make_app: Callable[..., SphinxTestApp],
     ) -> None:
@@ -1288,6 +1311,7 @@ class TestMyst:
 
     @staticmethod
     def test_myst_substitutions(
+        *,
         tmp_path: Path,
         make_app: Callable[..., SphinxTestApp],
     ) -> None:
@@ -1364,6 +1388,7 @@ class TestMyst:
 
 
 def test_xref_role_class_prefix_removal(
+    *,
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
@@ -1443,6 +1468,7 @@ def test_xref_role_class_prefix_removal(
 
 
 def test_no_substitution_image(
+    *,
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
@@ -1500,6 +1526,7 @@ def test_no_substitution_image(
 
 
 def test_substitution_image_path(
+    *,
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
@@ -1561,6 +1588,7 @@ def test_substitution_image_path(
 
 
 def test_substitution_image_path_multiple(
+    *,
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
@@ -1622,6 +1650,7 @@ def test_substitution_image_path_multiple(
 
 
 def test_substitution_image_with_options(
+    *,
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
@@ -1681,6 +1710,7 @@ def test_substitution_image_with_options(
 
 
 def test_default_substitutions_image_path(
+    *,
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
@@ -1743,6 +1773,7 @@ def test_default_substitutions_image_path(
 
 
 def test_default_substitutions_image_disabled_path(
+    *,
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
 ) -> None:
@@ -1837,6 +1868,7 @@ class TestImageMyst:
 
     @staticmethod
     def test_myst_substitutions_image(
+        *,
         tmp_path: Path,
         make_app: Callable[..., SphinxTestApp],
     ) -> None:
@@ -1922,6 +1954,7 @@ class TestImageMyst:
 
     @staticmethod
     def test_myst_substitutions_image_default_delimiters(
+        *,
         tmp_path: Path,
         make_app: Callable[..., SphinxTestApp],
     ) -> None:
@@ -2006,6 +2039,7 @@ class TestImageMyst:
 
     @staticmethod
     def test_myst_substitutions_not_enabled(
+        *,
         tmp_path: Path,
         make_app: Callable[..., SphinxTestApp],
     ) -> None:
@@ -2084,6 +2118,7 @@ class TestImageMyst:
 
     @staticmethod
     def test_myst_substitutions_custom_markdown_suffix(
+        *,
         tmp_path: Path,
         make_app: Callable[..., SphinxTestApp],
     ) -> None:
@@ -2170,6 +2205,7 @@ class TestImageMyst:
 
     @staticmethod
     def test_default_myst_sub_delimiters_code_block(
+        *,
         tmp_path: Path,
         make_app: Callable[..., SphinxTestApp],
     ) -> None:
@@ -2246,6 +2282,7 @@ class TestImageMyst:
 
     @staticmethod
     def test_custom_myst_sub_delimiters_code_block(
+        *,
         tmp_path: Path,
         make_app: Callable[..., SphinxTestApp],
     ) -> None:
@@ -2323,6 +2360,7 @@ class TestImageMyst:
 
     @staticmethod
     def test_substitution_code_role(
+        *,
         tmp_path: Path,
         make_app: Callable[..., SphinxTestApp],
     ) -> None:
@@ -2396,6 +2434,7 @@ class TestImageMyst:
 
     @staticmethod
     def test_substitution_download(
+        *,
         tmp_path: Path,
         make_app: Callable[..., SphinxTestApp],
     ) -> None:
