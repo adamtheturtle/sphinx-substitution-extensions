@@ -18,7 +18,7 @@ license = "MIT"
 authors = [
     { name = "Adam Dangoor", email = "adamdangoor@gmail.com" },
 ]
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Environment :: Web Environment",
@@ -26,7 +26,6 @@ classifiers = [
     "Operating System :: Microsoft :: Windows",
     "Operating System :: POSIX",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
@@ -46,7 +45,7 @@ optional-dependencies.dev = [
     "check-manifest==0.51",
     "deptry==0.24.0",
     "doc8==2.0.0",
-    "doccmd==2026.2.27",
+    "doccmd==2026.3.1",
     "interrogate==1.7.0",
     "mypy[faster-cache]==1.19.1",
     "mypy-strict-kwargs==2026.1.12",

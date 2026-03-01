@@ -6,6 +6,8 @@ Changelog
 Next
 ----
 
+- Drop Python 3.10 support (requires Python >=3.11).
+
 2026.01.12
 ----------
 
