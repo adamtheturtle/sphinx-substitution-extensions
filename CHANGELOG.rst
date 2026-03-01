@@ -6,6 +6,8 @@ Changelog
 Next
 ----
 
+- Pin Sphinx to <9 for sphinx_toolbox compatibility in sample project.
+
 2026.01.12
 ----------
 
