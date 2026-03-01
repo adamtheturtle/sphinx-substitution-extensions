@@ -253,4 +253,4 @@ See `CONTRIBUTING.rst <./CONTRIBUTING.rst>`_.
 .. _image: http://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-image
 .. |PyPI| image:: https://badge.fury.io/py/Sphinx-Substitution-Extensions.svg
    :target: https://badge.fury.io/py/Sphinx-Substitution-Extensions
-.. |minimum-python-version| replace:: 3.10
+.. |minimum-python-version| replace:: 3.11
