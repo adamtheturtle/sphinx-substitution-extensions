@@ -38,7 +38,7 @@ dependencies = [
     "beartype>=0.22.9",
     "docutils>=0.19",
     "myst-parser>=4.0.0",
-    "sphinx>=8.1.0",
+    "sphinx>=8.1.0,<9",
 ]
 optional-dependencies.dev = [
     "actionlint-py==1.7.11.24",
@@ -58,7 +58,7 @@ optional-dependencies.dev = [
     "pyroma==5.0.1",
     "pytest==9.0.2",
     "pytest-cov==7.0.0",
-    "ruff==0.15.2",
+    "ruff==0.15.4",
     # We add shellcheck-py not only for shell scripts and shell code blocks,
     # but also because having it installed means that ``actionlint-py`` will
     # use it to lint shell commands in GitHub workflow files.
