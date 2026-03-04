@@ -135,11 +135,11 @@ lint.pydocstyle.convention = "google"
 [tool.pylint]
 # Allow the body of an if to be on the same line as the test if there is no
 # else.
-"FORMAT".single-line-if-stmt = false
+FORMAT.single-line-if-stmt = false
 # Pickle collected data for later comparisons.
-"MASTER".persistent = true
+MASTER.persistent = true
 # Use multiple processes to speed up Pylint.
-"MASTER".jobs = 0
+MASTER.jobs = 0
 # List of plugins (as comma separated values of python modules names) to load,
 # usually to register additional checkers.
 # See https://chezsoi.org/lucas/blog/pylint-strict-base-configuration.html.
@@ -148,7 +148,7 @@ lint.pydocstyle.convention = "google"
 # - pylint.extensions.magic_value
 # - pylint.extensions.while_used
 # as they seemed to get in the way.
-"MASTER".load-plugins = [
+MASTER.load-plugins = [
     "pylint.extensions.bad_builtin",
     "pylint.extensions.comparison_placement",
     "pylint.extensions.consider_refactoring_into_while_condition",
@@ -167,7 +167,7 @@ lint.pydocstyle.convention = "google"
 ]
 # Allow loading of arbitrary C extensions. Extensions are imported into the
 # active Python interpreter and may run arbitrary code.
-"MASTER".unsafe-load-any-extension = false
+MASTER.unsafe-load-any-extension = false
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
 # multiple time (only on the command line, not in the configuration file where
@@ -216,12 +216,12 @@ lint.pydocstyle.convention = "google"
 ]
 # Spelling dictionary name. Available dictionaries: none. To make it working
 # install python-enchant package.
-"SPELLING".spelling-dict = "en_US"
+SPELLING.spelling-dict = "en_US"
 # A path to a file that contains private dictionary; one word per line.
-"SPELLING".spelling-private-dict-file = "spelling_private_dict.txt"
+SPELLING.spelling-private-dict-file = "spelling_private_dict.txt"
 # Tells whether to store unknown words to indicated private dictionary in
 # --spelling-private-dict-file option instead of raising a message.
-"SPELLING".spelling-store-unknown-words = "no"
+SPELLING.spelling-store-unknown-words = "no"
 
 [tool.check-manifest]
 ignore = [
