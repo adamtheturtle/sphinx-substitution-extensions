@@ -71,7 +71,7 @@ optional-dependencies.dev = [
     "sphinx-toolbox==4.1.2",
     "ty==0.0.20",
     "types-docutils==0.22.3.20260223",
-    "vulture==2.14",
+    "vulture==2.15",
     "yamlfix==1.19.1",
     "zizmor==1.22.0",
 ]
