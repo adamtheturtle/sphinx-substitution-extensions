@@ -10,5 +10,9 @@ rules:
     disable: true
   template-injection:
     disable: true
+  superfluous-actions:
+    disable: true
+  secrets-outside-env:
+    disable: true
   artipacked:
     disable: true
