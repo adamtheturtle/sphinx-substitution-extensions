@@ -1,5 +1,5 @@
 ---
-name: CI
+name: Lint
 
 on:
   push:
@@ -10,6 +10,7 @@ on:
     # * is a special character in YAML so you have to quote this string
     # Run at 1:00 every day
     - cron: 0 1 * * *
+  workflow_dispatch: {}
 
 permissions: {}
 
@@ -17,49 +18,41 @@ jobs:
   build:
     strategy:
       matrix:
-        python-version: ['3.11', '3.12', '3.13', '3.14']
-        uv-resolution: [highest, lowest-direct]
+        python-version: ['3.13']
         platform: [ubuntu-latest, windows-latest]
+        hook-stage: [pre-commit, pre-push, manual]
 
     runs-on: ${{ matrix.platform }}
 
     steps:
       - uses: actions/checkout@v6
-
         with:
           persist-credentials: false
+
       - name: Install uv
         uses: astral-sh/setup-uv@v7
         with:
           enable-cache: true
           cache-dependency-glob: '**/pyproject.toml'
 
-      - name: Freeze for debugging
+      - name: Lint
+        # Use bash to ensure the step fails if any command fails.
+        # PowerShell does not fail on intermediate command failures by default.
+        shell: bash
         run: |
-          uv pip freeze
-
-      - name: Build sample
-        run: |
-          uv run --extra=dev sphinx-build -W -b html sample/source sample/build
+          # pre-commit is the only hook stage
+          uv run --extra=dev prek run --all-files --hook-stage ${{ matrix.hook-stage }} --verbose
         env:
           UV_PYTHON: ${{ matrix.python-version }}
-          UV_RESOLUTION: ${{ matrix.uv-resolution }}
+          # UV_RESOLUTION is intentionally not set here. prek uses uv to
+          # install hooks, and uv inherits UV_RESOLUTION. With lowest-direct,
+          # this causes hook dependencies to resolve to ancient versions that
+          # don't build on modern Python.
 
-      - name: Build sample parallel
-        run: |
-          uv run --extra=dev sphinx-build -j 2 -W -b html sample/source sample/build
-        env:
-          UV_PYTHON: ${{ matrix.python-version }}
-          UV_RESOLUTION: ${{ matrix.uv-resolution }}
+      - uses: pre-commit-ci/lite-action@v1.1.0
+        if: always()
 
-      - name: Run tests
-        run: |
-          uv run --extra=dev pytest -s -vvv --cov-fail-under 100 --cov=src/ --cov=tests .
-        env:
-          UV_PYTHON: ${{ matrix.python-version }}
-          UV_RESOLUTION: ${{ matrix.uv-resolution }}
-
-  completion-ci:
+  completion-lint:
     needs: build
     runs-on: ubuntu-latest
     if: always()
