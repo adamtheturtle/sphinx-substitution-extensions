@@ -76,7 +76,7 @@ jobs:
       - uses: pre-commit-ci/lite-action@v1.1.0
         if: always()
 
-  completion-ci:
+  completion-lint:
     needs: build
     runs-on: ubuntu-latest
     if: always()  # Run even if one matrix job fails
