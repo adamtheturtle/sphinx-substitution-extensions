@@ -34,7 +34,7 @@ _safe_replacement_values = text(
 )
 
 _delimiter_pairs = frozensets(
-    tuples(just("|"), just("|")),
+    elements=tuples(just(value="|"), just(value="|")),
     min_size=1,
     max_size=1,
 )
@@ -100,7 +100,9 @@ class TestApplySubstitutionsProperties:
     ) -> None:
         """Text without any delimited keys is unchanged."""
         assume(
-            not any(f"|{name}|" in input_text for name in substitution_defs)
+            condition=not any(
+                f"|{name}|" in input_text for name in substitution_defs
+            ),
         )
 
         result = _apply_substitutions(
