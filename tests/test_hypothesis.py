@@ -16,7 +16,9 @@ from hypothesis.strategies import (
 )
 from sphinx.testing.util import SphinxTestApp
 
-from sphinx_substitution_extensions import _apply_substitutions
+from sphinx_substitution_extensions import (
+    _apply_substitutions,  # pyright: ignore[reportPrivateUsage]
+)
 
 # Strategy for placeholder names: non-empty text without pipe characters
 # to avoid ambiguous delimiter overlap.
