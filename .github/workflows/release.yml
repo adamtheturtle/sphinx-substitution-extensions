@@ -49,8 +49,10 @@ jobs:
 
       - name: Get the changelog underline
         id: changelog_underline
+        env:
+          RELEASE: ${{ steps.calver.outputs.release }}
         run: |
-          underline="$(echo "${{ steps.calver.outputs.release }}" | tr -c '\n' '-')"
+          underline="$(echo "$RELEASE" | tr -c '\n' '-')"
           echo "underline=${underline}" >> "$GITHUB_OUTPUT"
 
       - name: Update changelog
@@ -99,9 +101,11 @@ jobs:
           body: ${{ steps.tag_version.outputs.changelog }}
 
       - name: Build a binary wheel and a source tarball
+        env:
+          NEW_TAG: ${{ steps.tag_version.outputs.new_tag }}
         run: |
           git fetch --tags
-          git checkout ${{ steps.tag_version.outputs.new_tag }}
+          git checkout "$NEW_TAG"
           uv build --sdist --wheel --out-dir dist/
           uv run --extra=release check-wheel-contents dist/*.whl
 
