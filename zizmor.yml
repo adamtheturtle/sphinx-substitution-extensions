@@ -8,8 +8,6 @@ rules:
     disable: true
   dependabot-cooldown:
     disable: true
-  template-injection:
-    disable: true
   superfluous-actions:
     disable: true
   artipacked:

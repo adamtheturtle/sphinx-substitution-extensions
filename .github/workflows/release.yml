@@ -70,8 +70,10 @@ jobs:
           regex: false
 
       - name: Check Update changelog was modified
+        env:
+          MODIFIED_FILES: ${{ steps.update_changelog.outputs.modifiedFiles }}
         run: |
-          if [ "${{ steps.update_changelog.outputs.modifiedFiles }}" = "0" ]; then
+          if [ "$MODIFIED_FILES" = "0" ]; then
             echo "Error: No files were modified when updating changelog"
             exit 1
           fi
