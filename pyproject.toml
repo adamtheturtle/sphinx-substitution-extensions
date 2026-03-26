@@ -262,17 +262,6 @@ indent = 4
 keep_full_version = true
 max_supported_python = "3.14"
 
-[tool.pytest]
-xfail_strict = true
-log_cli = true
-
-[tool.coverage]
-run.branch = true
-report.exclude_also = [
-    "if TYPE_CHECKING:",
-]
-report.show_missing = true
-
 [tool.mypy]
 strict = true
 files = [ "." ]
@@ -293,6 +282,17 @@ typeCheckingMode = "strict"
 [tool.ty]
 analysis.respect-type-ignore-comments = false
 terminal.error-on-warning = true
+
+[tool.pytest]
+xfail_strict = true
+log_cli = true
+
+[tool.coverage]
+run.branch = true
+report.exclude_also = [
+    "if TYPE_CHECKING:",
+]
+report.show_missing = true
 
 [tool.pydocstringformatter]
 write = true
