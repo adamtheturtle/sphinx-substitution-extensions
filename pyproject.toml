@@ -56,7 +56,7 @@ optional-dependencies.dev = [
     "pyrefly==0.60.0",
     "pyright==1.1.408",
     "pyroma==5.0.1",
-    "pytest==9.0.2",
+    "pytest==9.0.3",
     "pytest-cov==7.1.0",
     "ruff==0.15.8",
     # We add shellcheck-py not only for shell scripts and shell code blocks,
