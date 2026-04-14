@@ -73,7 +73,7 @@ optional-dependencies.dev = [
     "types-docutils==0.22.3.20260408",
     "vulture==2.16",
     "yamlfix==1.19.1",
-    "zizmor==1.24.0",
+    "zizmor==1.24.1",
 ]
 optional-dependencies.release = [ "check-wheel-contents==0.6.3" ]
 urls.Source = "https://github.com/adamtheturtle/sphinx-substitution-extensions"
