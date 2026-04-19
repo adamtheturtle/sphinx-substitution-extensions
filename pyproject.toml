@@ -252,7 +252,7 @@ ignore = [
 ]
 
 [tool.deptry]
-pep621_dev_dependency_groups = [
+optional_dependencies_dev_groups = [
     "dev",
     "release",
 ]
