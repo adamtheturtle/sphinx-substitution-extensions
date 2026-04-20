@@ -102,8 +102,6 @@ bdist_wheel.universal = true
 # Code to match this is in ``conf.py``.
 version_scheme = "post-release"
 
-[tool.uv]
-
 [tool.ruff]
 line-length = 79
 lint.select = [
