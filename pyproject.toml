@@ -57,7 +57,7 @@ optional-dependencies.dev = [
     "pyright==1.1.408",
     "pyroma==5.0.1",
     "pytest==9.0.3",
-    "pytest-beartype-tests",
+    "pytest-beartype-tests==2026.4.20",
     "pytest-cov==7.1.0",
     "ruff==0.15.11",
     # We add shellcheck-py not only for shell scripts and shell code blocks,
@@ -101,9 +101,6 @@ bdist_wheel.universal = true
 #
 # Code to match this is in ``conf.py``.
 version_scheme = "post-release"
-
-[tool.uv]
-sources.pytest-beartype-tests = { git = "https://github.com/adamtheturtle/pytest-beartype-tests.git", rev = "bc81d99" }
 
 [tool.ruff]
 line-length = 79
