@@ -1,7 +1,7 @@
 ---
 fail_fast: true
 
-.uv_version: &uv_version uv==0.9.5
+.uv_version: &uv_version uv==0.11.7
 
 # We use system Python, with required dependencies specified in pyproject.toml.
 # We therefore cannot use those dependencies in pre-commit CI.
