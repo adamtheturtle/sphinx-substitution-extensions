@@ -65,11 +65,9 @@ optional-dependencies.dev = [
     # use it to lint shell commands in GitHub workflow files.
     "shellcheck-py==0.11.0.1",
     "shfmt-py==3.12.0.2",
-    # Pin Sphinx <9 for sphinx_toolbox compatibility in sample project.
-    # See https://github.com/sphinx-toolbox/sphinx-toolbox/issues/201
-    "sphinx>=8.1.0,<9",
+    "sphinx>=9,<10",
     "sphinx-lint==1.0.2",
-    "sphinx-toolbox==4.1.2",
+    "sphinx-toolbox==4.2.0rc1",
     "ty==0.0.33",
     "types-docutils==0.22.3.20260408",
     "vulture==2.16",
