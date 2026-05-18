@@ -314,7 +314,6 @@ repos:
           - *uv_version
         stages: [pre-commit]
 
-
       - id: strict-kwargs-fix
         name: strict-kwargs
         entry: uv run --extra=dev strict-kwargs fix
