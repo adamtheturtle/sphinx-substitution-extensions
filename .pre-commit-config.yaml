@@ -9,6 +9,7 @@ ci:
   skip:
     - actionlint
     - sphinx-lint
+    - strict-kwargs-fix
     - check-manifest
     - deptry
     - doc8
@@ -312,6 +313,16 @@ repos:
         additional_dependencies:
           - *uv_version
         stages: [pre-commit]
+
+      - id: strict-kwargs-fix
+        name: strict-kwargs
+        entry: uv run --extra=dev strict-kwargs fix
+        language: python
+        types_or: [python]
+        additional_dependencies:
+          - *uv_version
+        stages: [pre-commit]
+        require_serial: true
 
       - id: doc8
         name: doc8
