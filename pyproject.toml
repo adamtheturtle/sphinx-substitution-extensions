@@ -68,7 +68,7 @@ optional-dependencies.dev = [
     "sphinx>=9,<10",
     "sphinx-lint==1.0.2",
     "sphinx-toolbox==4.2.0rc1",
-    "strict-kwargs==2026.5.18",
+    "strict-kwargs==2026.5.18.post1",
     "ty==0.0.36",
     "types-docutils==0.22.3.20260508",
     "vulture==2.16",
