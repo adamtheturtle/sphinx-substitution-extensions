@@ -48,7 +48,7 @@ optional-dependencies.dev = [
     "doccmd==2026.5.19",
     "interrogate==1.7.0",
     "mypy[faster-cache]==2.1.0",
-    "mypy-strict-kwargs==2026.1.12",
+    "mypy-strict-kwargs==2026.5.19",
     "prek==0.4.0",
     "pydocstringformatter==0.7.5",
     "pylint[spelling]==4.0.5",
