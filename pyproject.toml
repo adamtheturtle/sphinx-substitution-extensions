@@ -172,6 +172,10 @@ MASTER.load-plugins = [
 # Allow loading of arbitrary C extensions. Extensions are imported into the
 # active Python interpreter and may run arbitrary code.
 MASTER.unsafe-load-any-extension = false
+# Return non-zero exit code if useless-suppression is emitted.
+MAIN.fail-on = [
+    "useless-suppression",
+]
 DEPRECATED_BUILTINS.bad-functions = [
     # Use Pylint until Ruff can ban bare builtin calls, or until custom rules
     # make this removable:
