@@ -47,41 +47,27 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Get the changelog underline
-        id: changelog_underline
+      # towncrier writes the rendered notes to stdout (informational
+      # chatter goes to stderr), so this is the curated release body for
+      # this version, not github-tag-action's commit-derived changelog.
+      - name: Generate the GitHub release notes
         env:
           RELEASE: ${{ steps.calver.outputs.release }}
-        run: |
-          underline="$(echo "$RELEASE" | tr -c '\n' '-')"
-          echo "underline=${underline}" >> "$GITHUB_OUTPUT"
+        run: uv run --extra=release towncrier build --draft --version "$RELEASE" >
+          release-notes.md
 
-      - name: Update changelog
-        id: update_changelog
-        uses: jacobtomlinson/gha-find-replace@v3
-        with:
-          find: "Next\n----"
-          replace: |
-            Next
-            ----
-
-            ${{ steps.calver.outputs.release }}
-            ${{ steps.changelog_underline.outputs.underline }}
-          include: CHANGELOG.rst
-          regex: false
-
-      - name: Check Update changelog was modified
+      # Assemble the same fragments into CHANGELOG.rst under a new
+      # ``$RELEASE`` section and delete the consumed fragment files.
+      - name: Update the changelog
         env:
-          MODIFIED_FILES: ${{ steps.update_changelog.outputs.modifiedFiles }}
-        run: |
-          if [ "$MODIFIED_FILES" = "0" ]; then
-            echo "Error: No files were modified when updating changelog"
-            exit 1
-          fi
+          RELEASE: ${{ steps.calver.outputs.release }}
+        run: uv run --extra=release towncrier build --yes --version "$RELEASE"
+
       - uses: stefanzweifel/git-auto-commit-action@v7
         id: commit
         with:
           commit_message: Bump CHANGELOG
-          file_pattern: CHANGELOG.rst
+          file_pattern: CHANGELOG.rst newsfragments
           # Error if there are no changes.
           skip_dirty_check: true
 
@@ -100,7 +86,7 @@ jobs:
           tag: ${{ steps.tag_version.outputs.new_tag }}
           makeLatest: true
           name: Release ${{ steps.tag_version.outputs.new_tag }}
-          body: ${{ steps.tag_version.outputs.changelog }}
+          bodyFile: release-notes.md
 
       - name: Build a binary wheel and a source tarball
         env:

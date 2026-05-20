@@ -1,0 +1,14 @@
+
+{% for section_name, section in sections.items() %}
+{% if section %}
+{% for category, entries in section.items() %}
+{% for text, _ in entries.items() %}
+- {{ text }}
+
+{% endfor %}
+{% endfor %}
+{% else %}
+No significant changes.
+
+{% endif %}
+{% endfor %}
