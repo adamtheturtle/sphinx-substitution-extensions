@@ -67,7 +67,7 @@ optional-dependencies.dev = [
     "shfmt-py==4.0.0",
     "sphinx>=9,<10",
     "sphinx-lint==1.0.2",
-    "sphinx-toolbox==4.2.0rc1",
+    "sphinx-toolbox==4.2.0",
     "strict-kwargs==2026.5.20",
     "towncrier==25.8.0",
     "ty==0.0.38",
