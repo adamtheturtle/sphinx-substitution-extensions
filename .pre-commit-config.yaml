@@ -316,7 +316,7 @@ repos:
 
       - id: strict-kwargs-fix
         name: strict-kwargs
-        entry: uv run --extra=dev strict-kwargs fix --diff
+        entry: uv run --extra=dev strict-kwargs check --diff
         language: python
         types_or: [python]
         additional_dependencies:
