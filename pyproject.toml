@@ -51,7 +51,7 @@ optional-dependencies.dev = [
     "mypy-strict-kwargs==2026.5.20.1",
     "prek==0.4.4",
     "pydocstringformatter==0.7.5",
-    "pylint[spelling]==4.0.5",
+    "pylint[spelling]==4.0.6",
     "pyproject-fmt==2.24.0",
     "pyrefly==1.0.0",
     "pyright==1.1.410",
