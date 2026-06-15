@@ -1,7 +1,7 @@
 """Custom Sphinx extensions."""
 
 from importlib.metadata import version
-from typing import Any, ClassVar
+from typing import Any, ClassVar, TypeAlias
 
 from beartype import beartype
 from docutils.nodes import (
@@ -33,6 +33,34 @@ from sphinx_substitution_extensions.shared import (
     PATH_SUBSTITUTION_OPTION_NAME,
     SUBSTITUTION_OPTION_NAME,
 )
+
+SubstitutionValue: TypeAlias = str | dict[str, "SubstitutionValue"]
+Substitutions: TypeAlias = dict[str, SubstitutionValue]
+
+
+@beartype
+def _flatten_substitutions(
+    substitutions: Substitutions,
+    prefix: str = "",
+) -> dict[str, str]:
+    """Flatten nested substitutions dictionary.
+
+    Example:
+        {'a': {'b': {'c': 'value'}}} -> {'a.b.c': 'value'}
+    """
+    result: dict[str, str] = {}
+    stack: list[tuple[str, Substitutions]] = [(prefix, substitutions)]
+
+    while stack:
+        current_prefix, current_dict = stack.pop()
+        for key, value in current_dict.items():
+            new_key = f"{current_prefix}.{key}" if current_prefix else key
+            if isinstance(value, dict):
+                stack.append((new_key, value))
+            else:
+                result[new_key] = value
+
+    return result
 
 
 @beartype
@@ -81,7 +109,9 @@ def _get_substitution_defs(
     parser_supported_formats = set(env.parser.supported)
     if parser_supported_formats.intersection(markdown_suffixes):
         if "substitution" in config.myst_enable_extensions:
-            return dict(config.myst_substitutions)
+            return _flatten_substitutions(
+                substitutions=dict(config.myst_substitutions),
+            )
     else:
         return {
             key: value.astext() for key, value in substitution_defs.items()

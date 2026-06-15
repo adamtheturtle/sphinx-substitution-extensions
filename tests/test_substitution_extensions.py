@@ -1386,6 +1386,113 @@ class TestMyst:
         ).read_text()
         assert content_html == expected_content_html
 
+    @staticmethod
+    def test_myst_nested_substitutions(
+        *,
+        tmp_path: Path,
+        make_app: Callable[..., SphinxTestApp],
+    ) -> None:
+        """MyST nested substitutions are flattened and applied
+        correctly.
+        """
+        source_directory = tmp_path / "source"
+        source_directory.mkdir()
+        index_source_file = source_directory / "index.rst"
+        markdown_source_file = source_directory / "markdown_document.md"
+        (source_directory / "conf.py").touch()
+        index_source_file_content = dedent(
+            text="""\
+            .. toctree::
+
+               markdown_document
+            """,
+        )
+        markdown_source_file_content = dedent(
+            text="""\
+            # Title
+
+            ```{code-block}
+            :substitutions:
+
+            $ PRE-|a|-POST
+            ```
+
+            ```{code-block}
+            :substitutions:
+
+            $ PRE-|b.c|-POST
+            ```
+
+            ```{code-block}
+            :substitutions:
+
+            $ PRE-|b.d.e|-POST
+            ```
+            """,
+        )
+        index_source_file.write_text(data=index_source_file_content)
+        markdown_source_file.write_text(data=markdown_source_file_content)
+
+        app = make_app(
+            srcdir=source_directory,
+            exception_on_warning=True,
+            confoverrides={
+                "extensions": [
+                    "myst_parser",
+                    "sphinx_substitution_extensions",
+                ],
+                "myst_enable_extensions": ["substitution"],
+                "myst_substitutions": {
+                    "a": "value_a",
+                    "b": {
+                        "c": "value_b_c",
+                        "d": {
+                            "e": "value_b_d_e",
+                        },
+                    },
+                },
+            },
+        )
+        app.build()
+        assert app.statuscode == 0
+        content_html = (app.outdir / "markdown_document.html").read_text()
+        app.cleanup()
+
+        equivalent_source = dedent(
+            text="""\
+            # Title
+
+            ```{code-block}
+
+            $ PRE-value_a-POST
+            ```
+
+            ```{code-block}
+
+            $ PRE-value_b_c-POST
+            ```
+
+            ```{code-block}
+
+            $ PRE-value_b_d_e-POST
+            ```
+            """,
+        )
+
+        markdown_source_file.write_text(data=equivalent_source)
+        app_expected = make_app(
+            srcdir=source_directory,
+            exception_on_warning=True,
+            confoverrides={"extensions": ["myst_parser"]},
+        )
+        app_expected.build()
+        assert app_expected.statuscode == 0
+
+        expected_content_html = (
+            app_expected.outdir / "markdown_document.html"
+        ).read_text()
+        assert content_html == expected_content_html
+
 
 def test_xref_role_class_prefix_removal(
     *,
