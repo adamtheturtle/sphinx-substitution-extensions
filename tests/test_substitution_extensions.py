@@ -1702,7 +1702,7 @@ class TestMyst:
         tmp_path: Path,
         make_app: Callable[..., SphinxTestApp],
     ) -> None:
-        """MyST empty containers (lists and dicts) do not create keys
+        """MyST empty containers (lists and dictionaries) do not create keys
         and do not break the build.
         """
         source_directory = tmp_path / "source"
