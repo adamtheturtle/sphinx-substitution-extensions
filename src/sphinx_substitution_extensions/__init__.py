@@ -34,11 +34,16 @@ from sphinx_substitution_extensions.shared import (
     SUBSTITUTION_OPTION_NAME,
 )
 
-SubstitutionValue: TypeAlias = str | dict[str, "SubstitutionValue"]
+SubstitutionValue: TypeAlias = (
+    str
+    | int
+    | float
+    | list["SubstitutionValue"]
+    | dict[str, "SubstitutionValue"]
+)
 Substitutions: TypeAlias = dict[str, SubstitutionValue]
 
 
-@beartype
 def _flatten_substitutions(
     substitutions: Substitutions,
     prefix: str = "",
@@ -47,18 +52,24 @@ def _flatten_substitutions(
 
     Example:
         {'a': {'b': {'c': 'value'}}} -> {'a.b.c': 'value'}
+        {'items': [{'name': 'a'}]} -> {'items.0.name': 'a'}
     """
     result: dict[str, str] = {}
-    stack: list[tuple[str, Substitutions]] = [(prefix, substitutions)]
+    stack: list[tuple[str, SubstitutionValue]] = [(prefix, substitutions)]
 
     while stack:
-        current_prefix, current_dict = stack.pop()
-        for key, value in current_dict.items():
-            new_key = f"{current_prefix}.{key}" if current_prefix else key
-            if isinstance(value, dict):
+        current_key, current_value = stack.pop()
+
+        if isinstance(current_value, dict):
+            for key, value in current_value.items():
+                new_key = f"{current_key}.{key}" if current_key else key
                 stack.append((new_key, value))
-            else:
-                result[new_key] = value
+        elif isinstance(current_value, list):
+            for idx, item in enumerate(current_value):  # type: ignore[misc]
+                new_key = f"{current_key}.{idx}" if current_key else str(idx)  # type: ignore[call-overload]
+                stack.append((new_key, item))
+        else:
+            result[current_key] = str(current_value)  # type: ignore[call-overload]
 
     return result
 
