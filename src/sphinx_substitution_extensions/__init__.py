@@ -44,6 +44,9 @@ SubstitutionValue: TypeAlias = (
 Substitutions: TypeAlias = dict[str, SubstitutionValue]
 
 
+# NOTE: beartype is not used here
+# because it throws `beartype.roar.BeartypeCallHintForwardRefException`
+# for recursive type `Substitutions`
 def _flatten_substitutions(
     *,
     substitutions: Substitutions,
