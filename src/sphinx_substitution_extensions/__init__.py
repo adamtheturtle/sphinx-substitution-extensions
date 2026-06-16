@@ -61,18 +61,21 @@ def _flatten_substitutions(
     while stack:
         current_key, current_value = stack.pop()
 
-        if isinstance(current_value, dict):
-            for key, value in current_value.items():
-                new_key = f"{current_key}.{key}" if current_key else key
-                stack.append((new_key, value))
-        elif isinstance(current_value, list):
-            for idx, item in enumerate(iterable=current_value):
-                new_key = (
-                    f"{current_key}.{idx}" if current_key else str(object=idx)
-                )
-                stack.append((new_key, item))
-        else:
-            result[current_key] = str(object=current_value)
+        match current_value:
+            case dict():
+                for key, value in current_value.items():
+                    new_key = f"{current_key}.{key}" if current_key else key
+                    stack.append((new_key, value))
+            case list():
+                for idx, item in enumerate(iterable=current_value):
+                    new_key = (
+                        f"{current_key}.{idx}"
+                        if current_key
+                        else str(object=idx)
+                    )
+                    stack.append((new_key, item))
+            case _:
+                result[current_key] = str(object=current_value)
 
     return result
 
