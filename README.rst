@@ -237,6 +237,8 @@ Nested substitutions
 
 ``myst_substitutions`` supports nested dictionaries and lists, which are flattened using dot notation.
 
+**Important:** Substitution keys cannot contain dots (``.``), as dots are reserved for nested access notation. For example, ``{"key.with.dots": "value"}`` is not allowed, but ``{"key": {"with": {"dots": "value"}}}`` is valid and accessed as ``|key.with.dots|``.
+
 Nested dictionaries:
 
 .. code-block:: python

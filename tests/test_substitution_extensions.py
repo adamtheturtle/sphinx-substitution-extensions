@@ -5,6 +5,8 @@ from importlib.metadata import version
 from pathlib import Path
 from textwrap import dedent
 
+import pytest
+from sphinx.errors import SphinxError
 from sphinx.testing.util import SphinxTestApp
 
 import sphinx_substitution_extensions
@@ -2094,6 +2096,122 @@ class TestMyst:
         ]
         for text in expected_text_in_html:
             assert text in content_html
+
+    @staticmethod
+    def test_myst_substitution_key_with_dot_raises_error(
+        *,
+        tmp_path: Path,
+        make_app: Callable[..., SphinxTestApp],
+    ) -> None:
+        """MyST substitution keys containing dots raise SphinxError.
+
+        Dots are reserved for nested access notation.
+        """
+        source_directory = tmp_path / "source"
+        source_directory.mkdir()
+        index_source_file = source_directory / "index.rst"
+        markdown_source_file = source_directory / "markdown_document.md"
+        (source_directory / "conf.py").touch()
+        index_source_file_content = dedent(
+            text="""\
+            .. toctree::
+
+               markdown_document
+            """,
+        )
+        markdown_source_file_content = dedent(
+            text="""\
+            # Title
+
+            ```{code-block}
+            :substitutions:
+
+            |key.with.dots|
+            ```
+            """,
+        )
+        index_source_file.write_text(data=index_source_file_content)
+        markdown_source_file.write_text(data=markdown_source_file_content)
+
+        app = make_app(
+            srcdir=source_directory,
+            exception_on_warning=True,
+            confoverrides={
+                "extensions": [
+                    "myst_parser",
+                    "sphinx_substitution_extensions",
+                ],
+                "myst_enable_extensions": ["substitution"],
+                "myst_substitutions": {
+                    "key.with.dots": "value",
+                },
+            },
+        )
+
+        with pytest.raises(
+            expected_exception=SphinxError,
+            match=r"Substitution key 'key\.with\.dots' contains a dot",
+        ):
+            app.build()
+
+    @staticmethod
+    def test_myst_nested_substitution_key_with_dot_raises_error(
+        *,
+        tmp_path: Path,
+        make_app: Callable[..., SphinxTestApp],
+    ) -> None:
+        """MyST nested substitution keys containing dots raise SphinxError.
+
+        Dots are reserved for nested access notation.
+        """
+        source_directory = tmp_path / "source"
+        source_directory.mkdir()
+        index_source_file = source_directory / "index.rst"
+        markdown_source_file = source_directory / "markdown_document.md"
+        (source_directory / "conf.py").touch()
+        index_source_file_content = dedent(
+            text="""\
+            .. toctree::
+
+               markdown_document
+            """,
+        )
+        markdown_source_file_content = dedent(
+            text="""\
+            # Title
+
+            ```{code-block}
+            :substitutions:
+
+            |parent.key.with.dots|
+            ```
+            """,
+        )
+        index_source_file.write_text(data=index_source_file_content)
+        markdown_source_file.write_text(data=markdown_source_file_content)
+
+        app = make_app(
+            srcdir=source_directory,
+            exception_on_warning=True,
+            confoverrides={
+                "extensions": [
+                    "myst_parser",
+                    "sphinx_substitution_extensions",
+                ],
+                "myst_enable_extensions": ["substitution"],
+                "myst_substitutions": {
+                    "parent": {
+                        "key.with.dots": "value",
+                    },
+                },
+            },
+        )
+
+        with pytest.raises(
+            expected_exception=SphinxError,
+            match=r"Substitution key 'key\.with\.dots' contains a dot",
+        ):
+            app.build()
 
 
 def test_xref_role_class_prefix_removal(

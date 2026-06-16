@@ -22,6 +22,7 @@ from sphinx.application import Sphinx
 from sphinx.config import Config
 from sphinx.directives.code import CodeBlock, LiteralInclude
 from sphinx.environment import BuildEnvironment
+from sphinx.errors import SphinxError
 from sphinx.roles import XRefRole
 from sphinx.util.typing import ExtensionMetadata, OptionSpec
 
@@ -44,6 +45,30 @@ SubstitutionValue: TypeAlias = (
 Substitutions: TypeAlias = dict[str, SubstitutionValue]
 
 
+@beartype
+def _validate_substitution_key(*, key: str) -> None:
+    """Validate that a substitution key does not contain dots.
+
+    Dots are reserved for nested access notation in flattened keys
+    (e.g., |a.b.c| for nested dictionaries or |items.0| for lists).
+    Allowing dots in user-defined keys would create ambiguity between
+    a literal key name and a path to a nested value.
+
+    Args:
+        key: The substitution key to validate.
+
+    Raises:
+        SphinxError: If the key contains a dot.
+    """
+    if "." in key:
+        message = (
+            f"Substitution key {key!r} contains a dot ('.'). "
+            "Dots are reserved for nested access notation "
+            "(e.g., |a.b.c| for nested dictionaries or |items.0| for lists)."
+        )
+        raise SphinxError(message)
+
+
 # NOTE: beartype is not used here
 # because it throws `beartype.roar.BeartypeCallHintForwardRefException`
 # for recursive type `Substitutions`
@@ -51,11 +76,37 @@ def _flatten_substitutions(
     *,
     substitutions: Substitutions,
 ) -> dict[str, str]:
-    """Flatten nested substitutions dictionary.
+    """Flatten nested substitutions dictionary using dot notation.
 
-    Example:
-        {'a': {'b': {'c': 'value'}}} -> {'a.b.c': 'value'}
-        {'items': [{'name': 'a'}]} -> {'items.0.name': 'a'}
+    Recursively processes nested dictionaries and lists, converting them
+    to a flat dictionary where keys represent the path to each value using
+    dot notation.
+
+    Examples:
+        Nested dictionaries::
+
+            {'a': {'b': {'c': 'value'}}} -> {'a.b.c': 'value'}
+
+        Lists with index access::
+
+            {'items': [{'name': 'a'}]} -> {'items.0.name': 'a'}
+
+        Mixed structures::
+
+            {
+                'app': {'version': '1.0'},
+                'contributors': [{'name': 'Alice'}]
+            }
+            -> {'app.version': '1.0', 'contributors.0.name': 'Alice'}
+
+    Args:
+        substitutions: The nested substitutions dictionary to flatten.
+
+    Returns:
+        A flat dictionary mapping dot-notation keys to string values.
+
+    Raises:
+        SphinxError: If any key in the nested structure contains a dot.
     """
     result: dict[str, str] = {}
     stack: list[tuple[str, SubstitutionValue]] = [("", substitutions)]
@@ -66,6 +117,7 @@ def _flatten_substitutions(
         match current_value:
             case dict():
                 for key, value in current_value.items():
+                    _validate_substitution_key(key=key)
                     new_key = f"{current_key}.{key}" if current_key else key
                     stack.append((new_key, value))
             case list():
