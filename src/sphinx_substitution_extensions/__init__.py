@@ -66,11 +66,13 @@ def _flatten_substitutions(
                 new_key = f"{current_key}.{key}" if current_key else key
                 stack.append((new_key, value))
         elif isinstance(current_value, list):
-            for idx, item in enumerate(current_value):  # type: ignore[misc]
-                new_key = f"{current_key}.{idx}" if current_key else str(idx)  # type: ignore[call-overload]
+            for idx, item in enumerate(iterable=current_value):
+                new_key = (
+                    f"{current_key}.{idx}" if current_key else str(object=idx)
+                )
                 stack.append((new_key, item))
         else:
-            result[current_key] = str(current_value)  # type: ignore[call-overload]
+            result[current_key] = str(object=current_value)
 
     return result
 
