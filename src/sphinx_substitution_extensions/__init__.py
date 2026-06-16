@@ -50,7 +50,6 @@ Substitutions: TypeAlias = dict[str, SubstitutionValue]
 def _flatten_substitutions(
     *,
     substitutions: Substitutions,
-    prefix: str,
 ) -> dict[str, str]:
     """Flatten nested substitutions dictionary.
 
@@ -59,7 +58,7 @@ def _flatten_substitutions(
         {'items': [{'name': 'a'}]} -> {'items.0.name': 'a'}
     """
     result: dict[str, str] = {}
-    stack: list[tuple[str, SubstitutionValue]] = [(prefix, substitutions)]
+    stack: list[tuple[str, SubstitutionValue]] = [("", substitutions)]
 
     while stack:
         current_key, current_value = stack.pop()
@@ -131,7 +130,6 @@ def _get_substitution_defs(
         if "substitution" in config.myst_enable_extensions:
             return _flatten_substitutions(
                 substitutions=dict(config.myst_substitutions),
-                prefix="",
             )
     else:
         return {
