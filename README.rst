@@ -232,6 +232,107 @@ Replace substitutions in the image path:
       :alt: Diagram
    ```
 
+Nested substitutions
+~~~~~~~~~~~~~~~~~~~~
+
+``myst_substitutions`` supports nested dictionaries and lists, which are flattened using dot notation.
+
+Nested dictionaries:
+
+.. code-block:: python
+
+   """Configuration for Sphinx."""
+
+   myst_substitutions = {
+       "app": {
+           "name": "MyApp",
+           "version": "1.0.0",
+       },
+   }
+
+Usage in Markdown:
+
+.. code-block:: markdown
+
+   ```{code-block} bash
+      :substitutions:
+
+      echo "Application: |app.name| version |app.version|"
+   ```
+
+Lists with index access:
+
+.. code-block:: python
+
+   """Configuration for Sphinx."""
+
+   myst_substitutions = {
+       "platforms": ["Linux", "Windows", "macOS"],
+   }
+
+Usage:
+
+.. code-block:: markdown
+
+   ```{code-block} bash
+      :substitutions:
+
+      echo "First platform: |platforms.0|"
+      echo "Second platform: |platforms.1|"
+   ```
+
+Nested lists of dictionaries:
+
+.. code-block:: python
+
+   """Configuration for Sphinx."""
+
+   myst_substitutions = {
+       "releases": [
+           {"version": "1.0", "codename": "Alpha"},
+           {"version": "2.0", "codename": "Beta"},
+       ],
+   }
+
+Usage:
+
+.. code-block:: markdown
+
+   ```{code-block} bash
+      :substitutions:
+
+      echo "First release: |releases.0.version| (|releases.0.codename|)"
+      echo "Second release: |releases.1.version| (|releases.1.codename|)"
+   ```
+
+Complex nested structures:
+
+.. code-block:: python
+
+   """Configuration for Sphinx."""
+
+   myst_substitutions = {
+       "project": {
+           "name": "MyProject",
+           "contributors": [
+               {"name": "Alice", "role": "dev"},
+               {"name": "Bob", "role": "docs"},
+           ],
+       },
+   }
+
+Usage:
+
+.. code-block:: markdown
+
+   ```{code-block} bash
+      :substitutions:
+
+      echo "Project: |project.name|"
+      echo "Developer: |project.contributors.0.name|"
+      echo "Documentation: |project.contributors.1.name|"
+   ```
+
 Credits
 -------
 
