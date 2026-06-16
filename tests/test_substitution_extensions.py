@@ -1609,6 +1609,491 @@ class TestMyst:
         ).read_text()
         assert content_html == expected_content_html
 
+    @staticmethod
+    def test_myst_deep_nesting(
+        *,
+        tmp_path: Path,
+        make_app: Callable[..., SphinxTestApp],
+    ) -> None:
+        """MyST deeply nested substitutions (5 levels) are flattened
+        correctly.
+        """
+        source_directory = tmp_path / "source"
+        source_directory.mkdir()
+        index_source_file = source_directory / "index.rst"
+        markdown_source_file = source_directory / "markdown_document.md"
+        (source_directory / "conf.py").touch()
+        index_source_file_content = dedent(
+            text="""\
+            .. toctree::
+
+               markdown_document
+            """,
+        )
+        markdown_source_file_content = dedent(
+            text="""\
+            # Title
+
+            ```{code-block}
+            :substitutions:
+
+            $ PRE-|level1.level2.level3.level4.level5|-POST
+            ```
+            """,
+        )
+        index_source_file.write_text(data=index_source_file_content)
+        markdown_source_file.write_text(data=markdown_source_file_content)
+
+        app = make_app(
+            srcdir=source_directory,
+            exception_on_warning=True,
+            confoverrides={
+                "extensions": [
+                    "myst_parser",
+                    "sphinx_substitution_extensions",
+                ],
+                "myst_enable_extensions": ["substitution"],
+                "myst_substitutions": {
+                    "level1": {
+                        "level2": {
+                            "level3": {
+                                "level4": {
+                                    "level5": "deep_value",
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        )
+        app.build()
+        assert app.statuscode == 0
+        content_html = (app.outdir / "markdown_document.html").read_text()
+        app.cleanup()
+
+        equivalent_source = dedent(
+            text="""\
+            # Title
+
+            ```{code-block}
+
+            $ PRE-deep_value-POST
+            ```
+            """,
+        )
+
+        markdown_source_file.write_text(data=equivalent_source)
+        app_expected = make_app(
+            srcdir=source_directory,
+            exception_on_warning=True,
+            confoverrides={"extensions": ["myst_parser"]},
+        )
+        app_expected.build()
+        assert app_expected.statuscode == 0
+
+        expected_content_html = (
+            app_expected.outdir / "markdown_document.html"
+        ).read_text()
+        assert content_html == expected_content_html
+
+    @staticmethod
+    def test_myst_empty_containers(
+        *,
+        tmp_path: Path,
+        make_app: Callable[..., SphinxTestApp],
+    ) -> None:
+        """MyST empty containers (lists and dicts) do not create keys
+        and do not break the build.
+        """
+        source_directory = tmp_path / "source"
+        source_directory.mkdir()
+        index_source_file = source_directory / "index.rst"
+        markdown_source_file = source_directory / "markdown_document.md"
+        (source_directory / "conf.py").touch()
+        index_source_file_content = dedent(
+            text="""\
+            .. toctree::
+
+               markdown_document
+            """,
+        )
+        markdown_source_file_content = dedent(
+            text="""\
+            # Title
+
+            ```{code-block}
+            :substitutions:
+
+            $ PRE-|normal|-POST
+            ```
+
+            ```{code-block}
+            :substitutions:
+
+            $ PRE-|mixed.normal|-POST
+            ```
+            """,
+        )
+        index_source_file.write_text(data=index_source_file_content)
+        markdown_source_file.write_text(data=markdown_source_file_content)
+
+        app = make_app(
+            srcdir=source_directory,
+            exception_on_warning=True,
+            confoverrides={
+                "extensions": [
+                    "myst_parser",
+                    "sphinx_substitution_extensions",
+                ],
+                "myst_enable_extensions": ["substitution"],
+                "myst_substitutions": {
+                    "empty_list": [],
+                    "empty_dict": {},
+                    "mixed": {
+                        "empty_nested_list": [],
+                        "empty_nested_dict": {},
+                        "normal": "value",
+                    },
+                    "normal": "normal_value",
+                },
+            },
+        )
+        app.build()
+        assert app.statuscode == 0
+        content_html = (app.outdir / "markdown_document.html").read_text()
+        app.cleanup()
+
+        equivalent_source = dedent(
+            text="""\
+            # Title
+
+            ```{code-block}
+
+            $ PRE-normal_value-POST
+            ```
+
+            ```{code-block}
+
+            $ PRE-value-POST
+            ```
+            """,
+        )
+
+        markdown_source_file.write_text(data=equivalent_source)
+        app_expected = make_app(
+            srcdir=source_directory,
+            exception_on_warning=True,
+            confoverrides={"extensions": ["myst_parser"]},
+        )
+        app_expected.build()
+        assert app_expected.statuscode == 0
+
+        expected_content_html = (
+            app_expected.outdir / "markdown_document.html"
+        ).read_text()
+        assert content_html == expected_content_html
+
+    @staticmethod
+    def test_myst_mixed_types_in_list(
+        *,
+        tmp_path: Path,
+        make_app: Callable[..., SphinxTestApp],
+    ) -> None:
+        """MyST mixed types in lists are converted to strings
+        correctly.
+        """
+        source_directory = tmp_path / "source"
+        source_directory.mkdir()
+        index_source_file = source_directory / "index.rst"
+        markdown_source_file = source_directory / "markdown_document.md"
+        (source_directory / "conf.py").touch()
+        index_source_file_content = dedent(
+            text="""\
+            .. toctree::
+
+               markdown_document
+            """,
+        )
+        markdown_source_file_content = dedent(
+            text="""\
+            # Title
+
+            ```{code-block}
+            :substitutions:
+
+            $ PRE-|mixed.0|-POST
+            ```
+
+            ```{code-block}
+            :substitutions:
+
+            $ PRE-|mixed.1|-POST
+            ```
+
+            ```{code-block}
+            :substitutions:
+
+            $ PRE-|mixed.2|-POST
+            ```
+
+            ```{code-block}
+            :substitutions:
+
+            $ PRE-|mixed.3|-POST
+            ```
+
+            ```{code-block}
+            :substitutions:
+
+            $ PRE-|mixed.4|-POST
+            ```
+            """,
+        )
+        index_source_file.write_text(data=index_source_file_content)
+        markdown_source_file.write_text(data=markdown_source_file_content)
+
+        app = make_app(
+            srcdir=source_directory,
+            exception_on_warning=True,
+            confoverrides={
+                "extensions": [
+                    "myst_parser",
+                    "sphinx_substitution_extensions",
+                ],
+                "myst_enable_extensions": ["substitution"],
+                "myst_substitutions": {
+                    "mixed": [1, "text", 3.14, -42, 0],
+                },
+            },
+        )
+        app.build()
+        assert app.statuscode == 0
+        content_html = (app.outdir / "markdown_document.html").read_text()
+        app.cleanup()
+
+        equivalent_source = dedent(
+            text="""\
+            # Title
+
+            ```{code-block}
+
+            $ PRE-1-POST
+            ```
+
+            ```{code-block}
+
+            $ PRE-text-POST
+            ```
+
+            ```{code-block}
+
+            $ PRE-3.14-POST
+            ```
+
+            ```{code-block}
+
+            $ PRE--42-POST
+            ```
+
+            ```{code-block}
+
+            $ PRE-0-POST
+            ```
+            """,
+        )
+
+        markdown_source_file.write_text(data=equivalent_source)
+        app_expected = make_app(
+            srcdir=source_directory,
+            exception_on_warning=True,
+            confoverrides={"extensions": ["myst_parser"]},
+        )
+        app_expected.build()
+        assert app_expected.statuscode == 0
+
+        expected_content_html = (
+            app_expected.outdir / "markdown_document.html"
+        ).read_text()
+        assert content_html == expected_content_html
+
+    @staticmethod
+    def test_myst_nested_lists(
+        *,
+        tmp_path: Path,
+        make_app: Callable[..., SphinxTestApp],
+    ) -> None:
+        """MyST nested lists are flattened with multi-index notation."""
+        source_directory = tmp_path / "source"
+        source_directory.mkdir()
+        index_source_file = source_directory / "index.rst"
+        markdown_source_file = source_directory / "markdown_document.md"
+        (source_directory / "conf.py").touch()
+        index_source_file_content = dedent(
+            text="""\
+            .. toctree::
+
+               markdown_document
+            """,
+        )
+        markdown_source_file_content = dedent(
+            text="""\
+            # Title
+
+            ```{code-block}
+            :substitutions:
+
+            $ PRE-|matrix.0.0|-POST
+            ```
+
+            ```{code-block}
+            :substitutions:
+
+            $ PRE-|matrix.0.1|-POST
+            ```
+
+            ```{code-block}
+            :substitutions:
+
+            $ PRE-|matrix.1.0|-POST
+            ```
+
+            ```{code-block}
+            :substitutions:
+
+            $ PRE-|matrix.1.1|-POST
+            ```
+            """,
+        )
+        index_source_file.write_text(data=index_source_file_content)
+        markdown_source_file.write_text(data=markdown_source_file_content)
+
+        app = make_app(
+            srcdir=source_directory,
+            exception_on_warning=True,
+            confoverrides={
+                "extensions": [
+                    "myst_parser",
+                    "sphinx_substitution_extensions",
+                ],
+                "myst_enable_extensions": ["substitution"],
+                "myst_substitutions": {
+                    "matrix": [
+                        [1, 2],
+                        [3, 4],
+                    ],
+                },
+            },
+        )
+        app.build()
+        assert app.statuscode == 0
+        content_html = (app.outdir / "markdown_document.html").read_text()
+        app.cleanup()
+
+        equivalent_source = dedent(
+            text="""\
+            # Title
+
+            ```{code-block}
+
+            $ PRE-1-POST
+            ```
+
+            ```{code-block}
+
+            $ PRE-2-POST
+            ```
+
+            ```{code-block}
+
+            $ PRE-3-POST
+            ```
+
+            ```{code-block}
+
+            $ PRE-4-POST
+            ```
+            """,
+        )
+
+        markdown_source_file.write_text(data=equivalent_source)
+        app_expected = make_app(
+            srcdir=source_directory,
+            exception_on_warning=True,
+            confoverrides={"extensions": ["myst_parser"]},
+        )
+        app_expected.build()
+        assert app_expected.statuscode == 0
+
+        expected_content_html = (
+            app_expected.outdir / "markdown_document.html"
+        ).read_text()
+        assert content_html == expected_content_html
+
+    @staticmethod
+    def test_myst_invalid_substitution_access(
+        *,
+        tmp_path: Path,
+        make_app: Callable[..., SphinxTestApp],
+    ) -> None:
+        """MyST invalid substitution access does not break the build."""
+        source_directory = tmp_path / "source"
+        source_directory.mkdir()
+        index_source_file = source_directory / "index.rst"
+        markdown_source_file = source_directory / "markdown_document.md"
+        (source_directory / "conf.py").touch()
+        index_source_file_content = dedent(
+            text="""\
+            .. toctree::
+
+               markdown_document
+            """,
+        )
+        markdown_source_file_content = dedent(
+            text="""\
+            # Title
+
+            ```{code-block}
+            :substitutions:
+
+            $ PRE-|items.99|-POST
+            ```
+
+            ```{code-block}
+            :substitutions:
+
+            $ PRE-|nonexistent.key|-POST
+            ```
+            """,
+        )
+        index_source_file.write_text(data=index_source_file_content)
+        markdown_source_file.write_text(data=markdown_source_file_content)
+
+        app = make_app(
+            srcdir=source_directory,
+            exception_on_warning=False,
+            confoverrides={
+                "extensions": [
+                    "myst_parser",
+                    "sphinx_substitution_extensions",
+                ],
+                "myst_enable_extensions": ["substitution"],
+                "myst_substitutions": {
+                    "items": ["a", "b"],
+                },
+            },
+        )
+        app.build()
+        assert app.statuscode == 0
+        content_html = (app.outdir / "markdown_document.html").read_text()
+        app.cleanup()
+
+        expected_text_in_html = [
+            "$ PRE-|items.99|-POST",
+            "$ PRE-|nonexistent.key|-POST",
+        ]
+        for text in expected_text_in_html:
+            assert text in content_html
+
 
 def test_xref_role_class_prefix_removal(
     *,
