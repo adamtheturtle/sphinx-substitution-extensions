@@ -233,7 +233,7 @@ Replace substitutions in the image path:
    ```
 
 Nested substitutions
-~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
 
 ``myst_substitutions`` supports nested dictionaries and lists, which are flattened using dot notation.
 

@@ -54,11 +54,7 @@ def _validate_substitution_key(*, key: str) -> None:
     Allowing dots in user-defined keys would create ambiguity between
     a literal key name and a path to a nested value.
 
-    Args:
-        key: The substitution key to validate.
-
-    Raises:
-        SphinxError: If the key contains a dot.
+    A :class:`~sphinx.errors.SphinxError` is raised if the key contains a dot.
     """
     if "." in key:
         message = (
@@ -80,33 +76,13 @@ def _flatten_substitutions(
 
     Recursively processes nested dictionaries and lists, converting them
     to a flat dictionary where keys represent the path to each value using
-    dot notation.
+    dot notation. For example::
 
-    Examples:
-        Nested dictionaries::
+        {'a': {'b': {'c': 'value'}}} -> {'a.b.c': 'value'}
+        {'items': [{'name': 'a'}]} -> {'items.0.name': 'a'}
 
-            {'a': {'b': {'c': 'value'}}} -> {'a.b.c': 'value'}
-
-        Lists with index access::
-
-            {'items': [{'name': 'a'}]} -> {'items.0.name': 'a'}
-
-        Mixed structures::
-
-            {
-                'app': {'version': '1.0'},
-                'contributors': [{'name': 'Alice'}]
-            }
-            -> {'app.version': '1.0', 'contributors.0.name': 'Alice'}
-
-    Args:
-        substitutions: The nested substitutions dictionary to flatten.
-
-    Returns:
-        A flat dictionary mapping dot-notation keys to string values.
-
-    Raises:
-        SphinxError: If any key in the nested structure contains a dot.
+    A :class:`~sphinx.errors.SphinxError` is raised if any key in the nested
+    structure contains a dot.
     """
     result: dict[str, str] = {}
     stack: list[tuple[str, SubstitutionValue]] = [("", substitutions)]
