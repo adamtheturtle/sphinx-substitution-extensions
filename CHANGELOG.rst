@@ -5,6 +5,13 @@ Changelog
 
 .. towncrier release notes start
 
+2026.06.17
+----------
+
+- Drop Python 3.10 support (requires Python >=3.11).
+
+- Pin Sphinx to <9 in dev dependencies for sphinx_toolbox compatibility in sample project.
+
 2026.01.12
 ----------
 
