@@ -2213,6 +2213,67 @@ class TestMyst:
         ):
             app.build()
 
+    @staticmethod
+    def test_rst_substitution_key_with_dot_does_not_raise_error(
+        *,
+        tmp_path: Path,
+        make_app: Callable[..., SphinxTestApp],
+    ) -> None:
+        """Substitution names with dots do not raise SphinxError in reST.
+
+        The dot validation applies only to flattened MyST substitutions, so
+        a refactoring that leaked it into the reST path would be caught here.
+        """
+        source_directory = tmp_path / "source"
+        source_directory.mkdir()
+        source_file = source_directory / "index.rst"
+        (source_directory / "conf.py").touch()
+
+        source_file_content = dedent(
+            text="""\
+            .. |key.with.dots| replace:: example_substitution
+
+            .. code-block:: shell
+               :substitutions:
+
+               $ PRE-|key.with.dots|-POST
+            """,
+        )
+        source_file.write_text(data=source_file_content)
+        app = make_app(
+            srcdir=source_directory,
+            exception_on_warning=True,
+            confoverrides={
+                "extensions": ["sphinx_substitution_extensions"],
+            },
+        )
+        app.build()
+        assert app.statuscode == 0
+        content_html = (app.outdir / "index.html").read_text()
+        app.cleanup()
+
+        equivalent_source = dedent(
+            text="""\
+            .. code-block:: shell
+
+                $ PRE-example_substitution-POST
+            """,
+        )
+
+        source_file.write_text(data=equivalent_source)
+        app_expected = make_app(
+            srcdir=source_directory,
+            exception_on_warning=True,
+            freshenv=True,
+        )
+        app_expected.build()
+        assert app_expected.statuscode == 0
+
+        expected_content_html = (
+            app_expected.outdir / "index.html"
+        ).read_text()
+        assert content_html == expected_content_html
+
 
 def test_xref_role_class_prefix_removal(
     *,
