@@ -53,7 +53,7 @@ optional-dependencies.dev = [
     "pydocstringformatter==0.7.5",
     "pylint[spelling]==4.0.6",
     "pyproject-fmt==2.24.1",
-    "pyrefly==1.0.0",
+    "pyrefly==1.1.0",
     "pyright==1.1.410",
     "pyroma==5.0.1",
     "pytest==9.1.0",
