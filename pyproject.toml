@@ -91,9 +91,6 @@ package-data.sphinx_substitution_extensions = [
 ]
 zip-safe = false
 
-[tool.distutils]
-bdist_wheel.universal = true
-
 [tool.setuptools_scm]
 # This keeps the start of the version the same as the last release.
 # This is useful for our documentation to include e.g. binary links
