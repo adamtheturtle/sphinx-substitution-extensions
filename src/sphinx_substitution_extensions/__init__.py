@@ -296,6 +296,7 @@ class SubstitutionCodeRole:
         text: str,
         lineno: int,
         inliner: Inliner | MockInliner,
+        *,
         # We allow mutable defaults as the Sphinx implementation requires it.
         options: dict[Any, Any] = {},  # noqa: B006
         content: list[str] = [],  # noqa: B006
