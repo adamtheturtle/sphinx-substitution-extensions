@@ -398,6 +398,8 @@ linewrap-full-docstring = true
 max_line_length = 2000
 ignore-messages = [
     '''Error in "include" directive:
+unknown option: "content-substitutions".''',
+    '''Error in "include" directive:
 unknown option: "path-substitutions".''',
 ]
 ignore_path = [

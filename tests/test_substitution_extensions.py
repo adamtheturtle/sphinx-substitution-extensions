@@ -2434,6 +2434,192 @@ def test_substitution_include_path(
     assert "Included content" in (app.outdir / "index.html").read_text()
 
 
+def test_substitution_include_content(
+    *,
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """Replace placeholders in included source content when requested."""
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    (source_directory / "conf.py").touch()
+    include_file = source_directory / "upgrade-guide.txt"
+    include_file.write_text(
+        data=dedent(
+            text="""\
+            .. code-block:: shell
+
+               upgrade --from |SRC_VERSION| --to |NEW_VERSION|
+            """,
+        ),
+    )
+    source_file = source_directory / "index.rst"
+    source_file.write_text(
+        data=dedent(
+            text="""\
+            .. |SRC_VERSION| replace:: 4.0
+            .. |NEW_VERSION| replace:: 4.1
+
+            .. include:: upgrade-guide.txt
+               :content-substitutions:
+            """,
+        ),
+    )
+
+    app = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        confoverrides={"extensions": ["sphinx_substitution_extensions"]},
+    )
+    app.build()
+    assert app.statuscode == 0
+    content_html = (app.outdir / "index.html").read_text()
+    app.cleanup()
+
+    include_file.write_text(
+        data=dedent(
+            text="""\
+            .. code-block:: shell
+
+               upgrade --from 4.0 --to 4.1
+            """,
+        ),
+    )
+    source_file.write_text(data=".. include:: upgrade-guide.txt\n")
+
+    app_expected = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+    )
+    app_expected.build()
+    assert app_expected.statuscode == 0
+
+    expected_content_html = (app_expected.outdir / "index.html").read_text()
+    assert content_html == expected_content_html
+
+
+def test_substitution_include_path_and_content(
+    *,
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """Replace placeholders in an include path and its source content."""
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    (source_directory / "conf.py").touch()
+    include_file = source_directory / "upgrade-guide.txt"
+    include_file.write_text(
+        data=dedent(
+            text="""\
+            .. code-block:: text
+
+               Upgrade to |version|.
+            """,
+        ),
+    )
+    source_file = source_directory / "index.rst"
+    source_file.write_text(
+        data=dedent(
+            text="""\
+            .. |document| replace:: upgrade-guide
+            .. |version| replace:: 4.1
+
+            .. include:: |document|.txt
+               :path-substitutions:
+               :content-substitutions:
+            """,
+        ),
+    )
+
+    app = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        confoverrides={"extensions": ["sphinx_substitution_extensions"]},
+    )
+    app.build()
+    assert app.statuscode == 0
+    content_html = (app.outdir / "index.html").read_text()
+    app.cleanup()
+
+    include_file.write_text(
+        data=dedent(
+            text="""\
+            .. code-block:: text
+
+               Upgrade to 4.1.
+            """,
+        ),
+    )
+    source_file.write_text(data=".. include:: upgrade-guide.txt\n")
+
+    app_expected = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+    )
+    app_expected.build()
+    assert app_expected.statuscode == 0
+
+    expected_content_html = (app_expected.outdir / "index.html").read_text()
+    assert content_html == expected_content_html
+
+
+def test_substitution_include_literal_content(
+    *,
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """Replace placeholders when ``include`` returns a literal node."""
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    (source_directory / "conf.py").touch()
+    include_file = source_directory / "example.txt"
+    include_file.write_text(
+        data="Content with |name| placeholder",
+    )
+    source_file = source_directory / "index.rst"
+    source_file.write_text(
+        data=dedent(
+            text="""\
+            .. |name| replace:: example
+
+            .. include:: example.txt
+               :literal:
+               :content-substitutions:
+            """,
+        ),
+    )
+
+    app = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        confoverrides={"extensions": ["sphinx_substitution_extensions"]},
+    )
+    app.build()
+    assert app.statuscode == 0
+    content_html = (app.outdir / "index.html").read_text()
+    app.cleanup()
+
+    include_file.write_text(data="Content with example placeholder")
+    source_file.write_text(
+        data=dedent(
+            text="""\
+            .. include:: example.txt
+               :literal:
+            """,
+        ),
+    )
+
+    app_expected = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+    )
+    app_expected.build()
+    assert app_expected.statuscode == 0
+
+    expected_content_html = (app_expected.outdir / "index.html").read_text()
+    assert content_html == expected_content_html
+
+
 def test_default_substitution_include_path(
     *,
     tmp_path: Path,
@@ -2466,6 +2652,130 @@ def test_default_substitution_include_path(
 
     assert app.statuscode == 0
     assert "Included content" in (app.outdir / "index.html").read_text()
+
+
+def test_default_substitution_include_content(
+    *,
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """Replace include content when substitutions are enabled by
+    default.
+    """
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    (source_directory / "conf.py").touch()
+    include_file = source_directory / "example.txt"
+    include_file.write_text(
+        data=dedent(
+            text="""\
+            Included literal content::
+
+               Content with |name| placeholder
+            """,
+        ),
+    )
+    source_file = source_directory / "index.rst"
+    source_file.write_text(
+        data=dedent(
+            text="""\
+            .. |name| replace:: example
+
+            .. include:: example.txt
+            """,
+        ),
+    )
+
+    app = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        confoverrides={
+            "extensions": ["sphinx_substitution_extensions"],
+            "substitutions_default_enabled": True,
+        },
+    )
+    app.build()
+    assert app.statuscode == 0
+    content_html = (app.outdir / "index.html").read_text()
+    app.cleanup()
+
+    include_file.write_text(
+        data=dedent(
+            text="""\
+            Included literal content::
+
+               Content with example placeholder
+            """,
+        ),
+    )
+    source_file.write_text(data=".. include:: example.txt\n")
+
+    app_expected = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+    )
+    app_expected.build()
+    assert app_expected.statuscode == 0
+
+    expected_content_html = (app_expected.outdir / "index.html").read_text()
+    assert content_html == expected_content_html
+
+
+def test_default_substitution_include_disabled_content(
+    *,
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """Respect ``:nocontent-substitutions:`` when defaults are enabled."""
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    (source_directory / "conf.py").touch()
+    include_file = source_directory / "example.txt"
+    include_file.write_text(
+        data=dedent(
+            text="""\
+            Included literal content::
+
+               Content with |name| placeholder
+            """,
+        ),
+    )
+    source_file = source_directory / "index.rst"
+    source_file.write_text(
+        data=dedent(
+            text="""\
+            .. |name| replace:: example
+
+            .. include:: example.txt
+               :nocontent-substitutions:
+            """,
+        ),
+    )
+
+    app = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        confoverrides={
+            "extensions": ["sphinx_substitution_extensions"],
+            "substitutions_default_enabled": True,
+        },
+    )
+    app.build()
+    assert app.statuscode == 0
+    content_html = (app.outdir / "index.html").read_text()
+    app.cleanup()
+
+    source_file.write_text(data=".. include:: example.txt\n")
+
+    app_expected = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+    )
+    app_expected.build()
+    assert app_expected.statuscode == 0
+
+    expected_content_html = (app_expected.outdir / "index.html").read_text()
+    assert content_html == expected_content_html
 
 
 def test_default_substitution_include_disabled(

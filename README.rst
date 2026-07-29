@@ -93,7 +93,15 @@ Replace substitutions in the file path:
 ``include``
 ~~~~~~~~~~~
 
-This adds a ``:path-substitutions:`` option to docutils' built-in `include`_ directive.
+This adds ``:content-substitutions:`` and ``:path-substitutions:`` options to
+docutils' built-in `include`_ directive.
+
+Replace substitutions in the included source content before it is parsed:
+
+.. code-block:: rst
+
+   .. include:: path/to/file.rst
+      :content-substitutions:
 
 Replace substitutions in the file path:
 
@@ -146,7 +154,10 @@ This will replace ``|release|`` in the new directives with ``0.1``, and ``|autho
 Enabling substitutions by default
 ----------------------------------
 
-By default, you need to explicitly add the ``:substitutions:`` flag to ``code-block`` directives, and ``:path-substitutions:`` flags to ``literalinclude``, ``include``, and ``image`` directives (or ``:content-substitutions:`` for ``literalinclude``).
+By default, you need to explicitly add the ``:substitutions:`` flag to
+``code-block`` directives, ``:content-substitutions:`` or
+``:path-substitutions:`` flags to ``literalinclude`` and ``include``
+directives, and ``:path-substitutions:`` to ``image`` directives.
 
 If you want substitutions to be applied by default without needing these flags, you can set the following in ``conf.py``:
 
@@ -160,7 +171,7 @@ When this is enabled:
 
 - All ``code-block`` directives will have substitutions applied automatically
 - All ``literalinclude`` directives will have both content and path substitutions applied automatically
-- All ``include`` directives will have path substitutions applied automatically
+- All ``include`` directives will have both content and path substitutions applied automatically
 - All ``image`` directives will have path substitutions applied automatically
 
 You can disable substitutions for specific directives when the default is enabled:
@@ -179,6 +190,7 @@ You can disable substitutions for specific directives when the default is enable
       :nopath-substitutions:
 
    .. include:: path/to/|literal|_file.txt
+      :nocontent-substitutions:
       :nopath-substitutions:
 
    .. image:: path/to/|literal|_diagram.png
