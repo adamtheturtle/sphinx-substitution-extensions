@@ -511,6 +511,8 @@ class SubstitutionInclude(Include):
                 source=source,
             )
 
+        # ``Include.run`` only queues these lines.  Nested includes are parsed
+        # after it returns, when this patch has already been removed.
         with patch.object(
             target=self.state_machine,
             attribute="insert_input",
