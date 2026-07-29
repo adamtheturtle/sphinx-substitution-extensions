@@ -360,9 +360,12 @@ class SubstitutionInclude(Include):
     Similar to Include but replaces placeholders with variables in the path.
     """
 
-    option_spec: ClassVar[OptionSpec] = Include.option_spec.copy()
-    option_spec[PATH_SUBSTITUTION_OPTION_NAME] = directives.flag
-    option_spec[NO_PATH_SUBSTITUTION_OPTION_NAME] = directives.flag
+    _new_option_spec = (
+        Include.option_spec.copy() if Include.option_spec else {}
+    )
+    _new_option_spec[PATH_SUBSTITUTION_OPTION_NAME] = directives.flag
+    _new_option_spec[NO_PATH_SUBSTITUTION_OPTION_NAME] = directives.flag
+    option_spec: ClassVar[OptionSpec | None] = _new_option_spec
 
     def run(self) -> list[Node]:
         """

@@ -44,7 +44,14 @@ Run lint tools either by committing, or with:
    pre-commit run --all-files --hook-stage pre-push --verbose
    pre-commit run --all-files --hook-stage manual --verbose
 
+The doc8 configuration uses `doc8-custom-ignores`_ to ignore the diagnostic
+for ``include``'s ``:path-substitutions:`` option. Plain docutils does not know
+about that option, but this extension adds it when Sphinx builds the
+documentation. Keep this as an exact-message ignore so other ``D000``
+diagnostics remain visible.
+
 .. _Homebrew: https://brew.sh
+.. _doc8-custom-ignores: https://adamtheturtle.github.io/doc8-custom-ignores/
 
 Running tests
 -------------

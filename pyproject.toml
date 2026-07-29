@@ -45,6 +45,7 @@ optional-dependencies.dev = [
     "check-manifest==0.51",
     "deptry==0.24.0",
     "doc8==2.0.0",
+    "doc8-custom-ignores==2026.7.29.1",
     "doccmd==2025.11.8.1",
     "docformatter==1.7.7",
     "interrogate==1.7.0",
@@ -64,7 +65,7 @@ optional-dependencies.dev = [
     "shellcheck-py==0.11.0.1",
     "shfmt-py==3.12.0.2",
     "sphinx-lint==1.0.1",
-    "sphinx-toolbox==4.0.0",
+    "sphinx-toolbox==4.2.0",
     "types-docutils==0.22.2.20251006",
     "vulture==2.14",
     "yamlfix==1.19.0",
@@ -316,6 +317,10 @@ verbose = 2
 [tool.doc8]
 
 max_line_length = 2000
+ignore-messages = [
+    """Error in "include" directive:
+unknown option: "path-substitutions".""",
+]
 ignore_path = [
     "./.eggs",
     "./docs/build",
