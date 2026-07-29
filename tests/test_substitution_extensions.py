@@ -2383,7 +2383,7 @@ def test_no_substitution_include(
 
 
 def test_include_without_sphinx_environment(tmp_path: Path) -> None:
-    """Support docutils documents which have no Sphinx environment."""
+    """Support documents which have no Sphinx environment."""
     source_file = tmp_path / "index.rst"
     source_file.write_text(data=".. include:: included.rst\n")
     (tmp_path / "included.rst").write_text(data="Included content")
