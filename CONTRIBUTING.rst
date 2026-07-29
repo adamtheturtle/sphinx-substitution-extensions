@@ -53,13 +53,16 @@ discovered automatically by doc8 and reads additional ignores from
    [tool.doc8]
    ignore-messages = [
        """Error in "include" directive:
+   unknown option: "content-substitutions".""",
+       """Error in "include" directive:
    unknown option: "path-substitutions".""",
    ]
 
-This ignores the diagnostic for ``include``'s ``:path-substitutions:`` option.
-Plain docutils does not know about that option, but this extension adds it when
-Sphinx builds the documentation. Keep this as an exact-message ignore so other
-``D000`` diagnostics remain visible.
+This ignores diagnostics for ``include``'s ``:content-substitutions:`` and
+``:path-substitutions:`` options. Plain docutils does not know about those
+options, but this extension adds them when Sphinx builds the documentation.
+Keep these as exact-message ignores so other ``D000`` diagnostics remain
+visible.
 
 .. _Homebrew: https://brew.sh
 .. _doc8-custom-ignores: https://adamtheturtle.github.io/doc8-custom-ignores/

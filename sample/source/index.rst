@@ -65,6 +65,12 @@ Path substitutions
 ``include``
 -----------
 
+Content substitutions
+~~~~~~~~~~~~~~~~~~~~~
+
+.. include:: sample_content_include.txt
+   :content-substitutions:
+
 Path substitutions
 ~~~~~~~~~~~~~~~~~~
 

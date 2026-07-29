@@ -2434,6 +2434,128 @@ def test_substitution_include_path(
     assert "Included content" in (app.outdir / "index.html").read_text()
 
 
+def test_substitution_include_content(
+    *,
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """Replace placeholders in included source content when requested."""
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    (source_directory / "conf.py").touch()
+    (source_directory / "upgrade-guide.txt").write_text(
+        data=dedent(
+            text="""\
+            .. code-block:: shell
+
+               upgrade --from |SRC_VERSION| --to |NEW_VERSION|
+            """,
+        ),
+    )
+    (source_directory / "index.rst").write_text(
+        data=dedent(
+            text="""\
+            .. |SRC_VERSION| replace:: 4.0
+            .. |NEW_VERSION| replace:: 4.1
+
+            .. include:: upgrade-guide.txt
+               :content-substitutions:
+            """,
+        ),
+    )
+
+    app = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        confoverrides={"extensions": ["sphinx_substitution_extensions"]},
+    )
+    app.build()
+
+    output = app.env.get_doctree(docname="index").astext()
+    assert "upgrade --from 4.0 --to 4.1" in output
+    assert "|SRC_VERSION|" not in output
+    assert "|NEW_VERSION|" not in output
+
+
+def test_substitution_include_path_and_content(
+    *,
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """Replace placeholders in an include path and its source content."""
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    (source_directory / "conf.py").touch()
+    (source_directory / "upgrade-guide.txt").write_text(
+        data=dedent(
+            text="""\
+            .. code-block:: text
+
+               Upgrade to |version|.
+            """,
+        ),
+    )
+    (source_directory / "index.rst").write_text(
+        data=dedent(
+            text="""\
+            .. |document| replace:: upgrade-guide
+            .. |version| replace:: 4.1
+
+            .. include:: |document|.txt
+               :path-substitutions:
+               :content-substitutions:
+            """,
+        ),
+    )
+
+    app = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        confoverrides={"extensions": ["sphinx_substitution_extensions"]},
+    )
+    app.build()
+
+    output = app.env.get_doctree(docname="index").astext()
+    assert "Upgrade to 4.1." in output
+    assert "|version|" not in output
+
+
+def test_substitution_include_literal_content(
+    *,
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """Replace placeholders when ``include`` returns a literal node."""
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    (source_directory / "conf.py").touch()
+    (source_directory / "example.txt").write_text(
+        data="Content with |name| placeholder",
+    )
+    (source_directory / "index.rst").write_text(
+        data=dedent(
+            text="""\
+            .. |name| replace:: example
+
+            .. include:: example.txt
+               :literal:
+               :content-substitutions:
+            """,
+        ),
+    )
+
+    app = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        confoverrides={"extensions": ["sphinx_substitution_extensions"]},
+    )
+    app.build()
+
+    output = app.env.get_doctree(docname="index").astext()
+    assert "Content with example placeholder" in output
+    assert "|name|" not in output
+
+
 def test_default_substitution_include_path(
     *,
     tmp_path: Path,
@@ -2466,6 +2588,94 @@ def test_default_substitution_include_path(
 
     assert app.statuscode == 0
     assert "Included content" in (app.outdir / "index.html").read_text()
+
+
+def test_default_substitution_include_content(
+    *,
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """Replace include content when substitutions are enabled by
+    default.
+    """
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    (source_directory / "conf.py").touch()
+    (source_directory / "example.txt").write_text(
+        data=dedent(
+            text="""\
+            Included literal content::
+
+               Content with |name| placeholder
+            """,
+        ),
+    )
+    (source_directory / "index.rst").write_text(
+        data=dedent(
+            text="""\
+            .. |name| replace:: example
+
+            .. include:: example.txt
+            """,
+        ),
+    )
+
+    app = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        confoverrides={
+            "extensions": ["sphinx_substitution_extensions"],
+            "substitutions_default_enabled": True,
+        },
+    )
+    app.build()
+
+    output = app.env.get_doctree(docname="index").astext()
+    assert "Content with example placeholder" in output
+    assert "|name|" not in output
+
+
+def test_default_substitution_include_disabled_content(
+    *,
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """Respect ``:nocontent-substitutions:`` when defaults are enabled."""
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    (source_directory / "conf.py").touch()
+    (source_directory / "example.txt").write_text(
+        data=dedent(
+            text="""\
+            Included literal content::
+
+               Content with |name| placeholder
+            """,
+        ),
+    )
+    (source_directory / "index.rst").write_text(
+        data=dedent(
+            text="""\
+            .. |name| replace:: example
+
+            .. include:: example.txt
+               :nocontent-substitutions:
+            """,
+        ),
+    )
+
+    app = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        confoverrides={
+            "extensions": ["sphinx_substitution_extensions"],
+            "substitutions_default_enabled": True,
+        },
+    )
+    app.build()
+
+    output = app.env.get_doctree(docname="index").astext()
+    assert "Content with |name| placeholder" in output
 
 
 def test_default_substitution_include_disabled(

@@ -2,6 +2,7 @@
 
 from importlib.metadata import version
 from typing import Any, ClassVar, TypeAlias
+from unittest.mock import patch
 
 from beartype import beartype
 from docutils.nodes import (
@@ -436,46 +437,95 @@ class SubstitutionInclude(Include):
 
     option_spec: ClassVar[OptionSpec | None] = {
         **(Include.option_spec or {}),
+        CONTENT_SUBSTITUTION_OPTION_NAME: directives.flag,
         PATH_SUBSTITUTION_OPTION_NAME: directives.flag,
+        NO_CONTENT_SUBSTITUTION_OPTION_NAME: directives.flag,
         NO_PATH_SUBSTITUTION_OPTION_NAME: directives.flag,
     }
 
     def run(self) -> list[Node]:
-        """Replace placeholders with given variables in the file path."""
+        """Replace placeholders in the path and/or included content."""
         env = self.state.document.settings.env
 
-        if env is not None:
-            config = env.config
+        if env is None:
+            return list(super().run())
 
-            should_apply_path_substitutions = _should_apply_substitutions(
-                options=self.options,
-                config=config,
-                yes_flag=PATH_SUBSTITUTION_OPTION_NAME,
-                no_flag=NO_PATH_SUBSTITUTION_OPTION_NAME,
+        config = env.config
+        should_apply_path_substitutions = _should_apply_substitutions(
+            options=self.options,
+            config=config,
+            yes_flag=PATH_SUBSTITUTION_OPTION_NAME,
+            no_flag=NO_PATH_SUBSTITUTION_OPTION_NAME,
+        )
+        should_apply_content_substitutions = _should_apply_substitutions(
+            options=self.options,
+            config=config,
+            yes_flag=CONTENT_SUBSTITUTION_OPTION_NAME,
+            no_flag=NO_CONTENT_SUBSTITUTION_OPTION_NAME,
+        )
+
+        if not (
+            should_apply_path_substitutions
+            or should_apply_content_substitutions
+        ):
+            return list(super().run())
+
+        substitution_defs = _get_substitution_defs(
+            env=env,
+            config=config,
+            substitution_defs=self.state.document.substitution_defs,
+        )
+        delimiter_pairs = _get_delimiter_pairs(
+            env=env,
+            config=config,
+        )
+
+        if should_apply_path_substitutions:
+            for argument_index, argument in enumerate(iterable=self.arguments):
+                self.arguments[argument_index] = _apply_substitutions(
+                    text=argument,
+                    substitution_defs=substitution_defs,
+                    delimiter_pairs=delimiter_pairs,
+                )
+
+        if not should_apply_content_substitutions:
+            return list(super().run())
+
+        original_insert_input = self.state_machine.insert_input
+
+        def insert_substituted_input(
+            input_lines: list[str],
+            source: str,
+        ) -> None:
+            """Insert included lines after applying substitutions."""
+            substituted_lines = [
+                _apply_substitutions(
+                    text=line,
+                    substitution_defs=substitution_defs,
+                    delimiter_pairs=delimiter_pairs,
+                )
+                for line in input_lines
+            ]
+            original_insert_input(
+                input_lines=substituted_lines,
+                source=source,
             )
 
-            if should_apply_path_substitutions:
-                substitution_defs = _get_substitution_defs(
-                    env=env,
-                    config=config,
-                    substitution_defs=self.state.document.substitution_defs,
-                )
+        with patch.object(
+            target=self.state_machine,
+            attribute="insert_input",
+            new=insert_substituted_input,
+        ):
+            nodes_list = list(super().run())
 
-                delimiter_pairs = _get_delimiter_pairs(
-                    env=env,
-                    config=config,
-                )
+        for node in nodes_list:
+            _process_node(
+                node=node,
+                substitution_defs=substitution_defs,
+                delimiter_pairs=delimiter_pairs,
+            )
 
-                for argument_index, argument in enumerate(
-                    iterable=self.arguments
-                ):
-                    self.arguments[argument_index] = _apply_substitutions(
-                        text=argument,
-                        substitution_defs=substitution_defs,
-                        delimiter_pairs=delimiter_pairs,
-                    )
-
-        return list(super().run())
+        return nodes_list
 
 
 @beartype
