@@ -6,6 +6,8 @@ from pathlib import Path
 from textwrap import dedent
 
 import pytest
+from docutils import core, nodes
+from docutils.parsers.rst import directives
 from sphinx.errors import SphinxError
 from sphinx.testing.util import SphinxTestApp
 
@@ -2378,6 +2380,26 @@ def test_no_substitution_include(
 
     assert app.statuscode == 0
     assert "Included content" in (app.outdir / "index.html").read_text()
+
+
+def test_include_without_sphinx_environment(tmp_path: Path) -> None:
+    """Support docutils documents which have no Sphinx environment."""
+    source_file = tmp_path / "index.rst"
+    source_file.write_text(data=".. include:: included.rst\n")
+    (tmp_path / "included.rst").write_text(data="Included content")
+    directives.register_directive(
+        name="include",
+        directive=sphinx_substitution_extensions.SubstitutionInclude,
+    )
+
+    publish_doctree: Callable[..., nodes.document] = core.publish_doctree  # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
+    document = publish_doctree(
+        source=source_file.read_text(),
+        source_path=source_file.as_posix(),
+        settings_overrides={"env": None},
+    )
+
+    assert "Included content" in document.astext()
 
 
 def test_substitution_include_path(
