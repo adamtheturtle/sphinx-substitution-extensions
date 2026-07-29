@@ -3,8 +3,26 @@ Changelog
 
 .. contents::
 
-Next
-----
+.. towncrier release notes start
+
+2026.06.17
+----------
+
+- Drop Python 3.10 support (requires Python >=3.11).
+
+- Pin Sphinx to <9 in dev dependencies for sphinx_toolbox compatibility in sample project.
+
+2026.01.12
+----------
+
+
+- Fix bug where ``SubstitutionXRefRole`` removed all occurrences of "substitution-" from CSS class names instead of only the prefix.
+
+2025.12.15
+----------
+
+2025.11.17
+----------
 
 - Give version in extension metadata.
 - ``literalinclude`` directive now supports the following options:
