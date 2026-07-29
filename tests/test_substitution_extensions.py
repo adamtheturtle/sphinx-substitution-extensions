@@ -2527,7 +2527,8 @@ def test_substitution_include_content_does_not_leak_to_nested_includes(
             """,
         ),
     )
-    (source_directory / "outer.txt").write_text(
+    outer_file = source_directory / "outer.txt"
+    outer_file.write_text(
         data=dedent(
             text="""\
             .. include:: nested-default.txt
@@ -2537,7 +2538,8 @@ def test_substitution_include_content_does_not_leak_to_nested_includes(
             """,
         ),
     )
-    (source_directory / "index.rst").write_text(
+    source_file = source_directory / "index.rst"
+    source_file.write_text(
         data=dedent(
             text="""\
             .. |name| replace:: example
@@ -2557,8 +2559,28 @@ def test_substitution_include_content_does_not_leak_to_nested_includes(
 
     assert app.statuscode == 0
     content_html = (app.outdir / "index.html").read_text()
-    assert "Default nested content with |name| placeholder" in content_html
-    assert "Disabled nested content with |name| placeholder" in content_html
+    app.cleanup()
+
+    outer_file.write_text(
+        data=dedent(
+            text="""\
+            .. include:: nested-default.txt
+
+            .. include:: nested-disabled.txt
+            """,
+        ),
+    )
+    source_file.write_text(data=".. include:: outer.txt\n")
+
+    app_expected = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+    )
+    app_expected.build()
+    assert app_expected.statuscode == 0
+
+    expected_content_html = (app_expected.outdir / "index.html").read_text()
+    assert content_html == expected_content_html
 
 
 def test_substitution_include_path_and_content(
