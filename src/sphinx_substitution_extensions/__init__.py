@@ -430,20 +430,18 @@ class SubstitutionLiteralInclude(LiteralInclude):
 @beartype
 class SubstitutionInclude(Include):
     """
-    Similar to Include but replaces placeholders with variables in the path.
+    Similar to Include but replaces placeholders with variables in the
+    path.
     """
 
-    _new_option_spec = (
-        Include.option_spec.copy() if Include.option_spec else {}
-    )
-    _new_option_spec[PATH_SUBSTITUTION_OPTION_NAME] = directives.flag
-    _new_option_spec[NO_PATH_SUBSTITUTION_OPTION_NAME] = directives.flag
-    option_spec: ClassVar[OptionSpec | None] = _new_option_spec
+    option_spec: ClassVar[OptionSpec | None] = {
+        **(Include.option_spec or {}),
+        PATH_SUBSTITUTION_OPTION_NAME: directives.flag,
+        NO_PATH_SUBSTITUTION_OPTION_NAME: directives.flag,
+    }
 
     def run(self) -> list[Node]:
-        """
-        Replace placeholders with given variables in the file path.
-        """
+        """Replace placeholders with given variables in the file path."""
         env = self.state.document.settings.env
 
         if env is not None:

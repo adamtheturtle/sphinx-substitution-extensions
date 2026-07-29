@@ -2355,6 +2355,148 @@ def test_xref_role_class_prefix_removal(
     assert content_html == expected_content_html
 
 
+def test_no_substitution_include(
+    *,
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """Leave an ``include`` path unchanged by default."""
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    (source_directory / "conf.py").touch()
+    (source_directory / "example.txt").write_text(data="Included content")
+    (source_directory / "index.rst").write_text(
+        data=".. include:: example.txt\n",
+    )
+
+    app = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        confoverrides={"extensions": ["sphinx_substitution_extensions"]},
+    )
+    app.build()
+
+    assert app.statuscode == 0
+    assert "Included content" in (app.outdir / "index.html").read_text()
+
+
+def test_substitution_include_path(
+    *,
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """Replace placeholders in an ``include`` path when requested."""
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    (source_directory / "conf.py").touch()
+    (source_directory / "example.txt").write_text(data="Included content")
+    (source_directory / "index.rst").write_text(
+        data=dedent(
+            text="""\
+            .. |name| replace:: example
+
+            .. include:: |name|.txt
+               :path-substitutions:
+            """,
+        ),
+    )
+
+    app = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        confoverrides={"extensions": ["sphinx_substitution_extensions"]},
+    )
+    app.build()
+
+    assert app.statuscode == 0
+    assert "Included content" in (app.outdir / "index.html").read_text()
+
+
+def test_default_substitution_include_path(
+    *,
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """Replace ``include`` path placeholders when defaults are enabled."""
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    (source_directory / "conf.py").touch()
+    (source_directory / "example.txt").write_text(data="Included content")
+    (source_directory / "index.rst").write_text(
+        data=dedent(
+            text="""\
+            .. |name| replace:: example
+
+            .. include:: |name|.txt
+            """,
+        ),
+    )
+
+    app = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        confoverrides={
+            "extensions": ["sphinx_substitution_extensions"],
+            "substitutions_default_enabled": True,
+        },
+    )
+    app.build()
+
+    assert app.statuscode == 0
+    assert "Included content" in (app.outdir / "index.html").read_text()
+
+
+def test_default_substitution_include_disabled(
+    *,
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """Respect ``:nopath-substitutions:`` when defaults are enabled."""
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    (source_directory / "conf.py").touch()
+    (source_directory / "[[name]].txt").write_text(data="Included content")
+    (source_directory / "index.rst").write_text(
+        data=dedent(
+            text="""\
+            .. toctree::
+
+               document
+            """,
+        ),
+    )
+    (source_directory / "document.md").write_text(
+        data=dedent(
+            text="""\
+            # Document
+
+            ```{include} [[name]].txt
+            :nopath-substitutions:
+            ```
+            """,
+        ),
+    )
+
+    app = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        confoverrides={
+            "extensions": [
+                "myst_parser",
+                "sphinx_substitution_extensions",
+            ],
+            "myst_enable_extensions": ["substitution"],
+            "myst_sub_delimiters": ("[", "]"),
+            "myst_substitutions": {"name": "example"},
+            "substitutions_default_enabled": True,
+        },
+    )
+    app.build()
+
+    assert app.statuscode == 0
+    assert "Included content" in (app.outdir / "document.html").read_text()
+
+
 def test_no_substitution_image(
     *,
     tmp_path: Path,
