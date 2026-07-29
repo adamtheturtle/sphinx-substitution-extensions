@@ -2498,6 +2498,69 @@ def test_substitution_include_content(
     assert content_html == expected_content_html
 
 
+def test_substitution_include_content_does_not_leak_to_nested_includes(
+    *,
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """Apply content substitutions only to the include that requests
+    them.
+    """
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    (source_directory / "conf.py").touch()
+    (source_directory / "nested-default.txt").write_text(
+        data=dedent(
+            text="""\
+            .. code-block:: text
+
+               Default nested content with |name| placeholder
+            """,
+        ),
+    )
+    (source_directory / "nested-disabled.txt").write_text(
+        data=dedent(
+            text="""\
+            .. code-block:: text
+
+               Disabled nested content with |name| placeholder
+            """,
+        ),
+    )
+    (source_directory / "outer.txt").write_text(
+        data=dedent(
+            text="""\
+            .. include:: nested-default.txt
+
+            .. include:: nested-disabled.txt
+               :nocontent-substitutions:
+            """,
+        ),
+    )
+    (source_directory / "index.rst").write_text(
+        data=dedent(
+            text="""\
+            .. |name| replace:: example
+
+            .. include:: outer.txt
+               :content-substitutions:
+            """,
+        ),
+    )
+
+    app = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        confoverrides={"extensions": ["sphinx_substitution_extensions"]},
+    )
+    app.build()
+
+    assert app.statuscode == 0
+    content_html = (app.outdir / "index.html").read_text()
+    assert "Default nested content with |name| placeholder" in content_html
+    assert "Disabled nested content with |name| placeholder" in content_html
+
+
 def test_substitution_include_path_and_content(
     *,
     tmp_path: Path,
