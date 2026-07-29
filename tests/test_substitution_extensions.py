@@ -2443,7 +2443,8 @@ def test_substitution_include_content(
     source_directory = tmp_path / "source"
     source_directory.mkdir()
     (source_directory / "conf.py").touch()
-    (source_directory / "upgrade-guide.txt").write_text(
+    include_file = source_directory / "upgrade-guide.txt"
+    include_file.write_text(
         data=dedent(
             text="""\
             .. code-block:: shell
@@ -2452,7 +2453,8 @@ def test_substitution_include_content(
             """,
         ),
     )
-    (source_directory / "index.rst").write_text(
+    source_file = source_directory / "index.rst"
+    source_file.write_text(
         data=dedent(
             text="""\
             .. |SRC_VERSION| replace:: 4.0
@@ -2470,11 +2472,30 @@ def test_substitution_include_content(
         confoverrides={"extensions": ["sphinx_substitution_extensions"]},
     )
     app.build()
+    assert app.statuscode == 0
+    content_html = (app.outdir / "index.html").read_text()
+    app.cleanup()
 
-    output = app.env.get_doctree(docname="index").astext()
-    assert "upgrade --from 4.0 --to 4.1" in output
-    assert "|SRC_VERSION|" not in output
-    assert "|NEW_VERSION|" not in output
+    include_file.write_text(
+        data=dedent(
+            text="""\
+            .. code-block:: shell
+
+               upgrade --from 4.0 --to 4.1
+            """,
+        ),
+    )
+    source_file.write_text(data=".. include:: upgrade-guide.txt\n")
+
+    app_expected = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+    )
+    app_expected.build()
+    assert app_expected.statuscode == 0
+
+    expected_content_html = (app_expected.outdir / "index.html").read_text()
+    assert content_html == expected_content_html
 
 
 def test_substitution_include_path_and_content(
@@ -2486,7 +2507,8 @@ def test_substitution_include_path_and_content(
     source_directory = tmp_path / "source"
     source_directory.mkdir()
     (source_directory / "conf.py").touch()
-    (source_directory / "upgrade-guide.txt").write_text(
+    include_file = source_directory / "upgrade-guide.txt"
+    include_file.write_text(
         data=dedent(
             text="""\
             .. code-block:: text
@@ -2495,7 +2517,8 @@ def test_substitution_include_path_and_content(
             """,
         ),
     )
-    (source_directory / "index.rst").write_text(
+    source_file = source_directory / "index.rst"
+    source_file.write_text(
         data=dedent(
             text="""\
             .. |document| replace:: upgrade-guide
@@ -2514,10 +2537,30 @@ def test_substitution_include_path_and_content(
         confoverrides={"extensions": ["sphinx_substitution_extensions"]},
     )
     app.build()
+    assert app.statuscode == 0
+    content_html = (app.outdir / "index.html").read_text()
+    app.cleanup()
 
-    output = app.env.get_doctree(docname="index").astext()
-    assert "Upgrade to 4.1." in output
-    assert "|version|" not in output
+    include_file.write_text(
+        data=dedent(
+            text="""\
+            .. code-block:: text
+
+               Upgrade to 4.1.
+            """,
+        ),
+    )
+    source_file.write_text(data=".. include:: upgrade-guide.txt\n")
+
+    app_expected = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+    )
+    app_expected.build()
+    assert app_expected.statuscode == 0
+
+    expected_content_html = (app_expected.outdir / "index.html").read_text()
+    assert content_html == expected_content_html
 
 
 def test_substitution_include_literal_content(
@@ -2529,10 +2572,12 @@ def test_substitution_include_literal_content(
     source_directory = tmp_path / "source"
     source_directory.mkdir()
     (source_directory / "conf.py").touch()
-    (source_directory / "example.txt").write_text(
+    include_file = source_directory / "example.txt"
+    include_file.write_text(
         data="Content with |name| placeholder",
     )
-    (source_directory / "index.rst").write_text(
+    source_file = source_directory / "index.rst"
+    source_file.write_text(
         data=dedent(
             text="""\
             .. |name| replace:: example
@@ -2550,10 +2595,29 @@ def test_substitution_include_literal_content(
         confoverrides={"extensions": ["sphinx_substitution_extensions"]},
     )
     app.build()
+    assert app.statuscode == 0
+    content_html = (app.outdir / "index.html").read_text()
+    app.cleanup()
 
-    output = app.env.get_doctree(docname="index").astext()
-    assert "Content with example placeholder" in output
-    assert "|name|" not in output
+    include_file.write_text(data="Content with example placeholder")
+    source_file.write_text(
+        data=dedent(
+            text="""\
+            .. include:: example.txt
+               :literal:
+            """,
+        ),
+    )
+
+    app_expected = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+    )
+    app_expected.build()
+    assert app_expected.statuscode == 0
+
+    expected_content_html = (app_expected.outdir / "index.html").read_text()
+    assert content_html == expected_content_html
 
 
 def test_default_substitution_include_path(
@@ -2601,7 +2665,8 @@ def test_default_substitution_include_content(
     source_directory = tmp_path / "source"
     source_directory.mkdir()
     (source_directory / "conf.py").touch()
-    (source_directory / "example.txt").write_text(
+    include_file = source_directory / "example.txt"
+    include_file.write_text(
         data=dedent(
             text="""\
             Included literal content::
@@ -2610,7 +2675,8 @@ def test_default_substitution_include_content(
             """,
         ),
     )
-    (source_directory / "index.rst").write_text(
+    source_file = source_directory / "index.rst"
+    source_file.write_text(
         data=dedent(
             text="""\
             .. |name| replace:: example
@@ -2629,10 +2695,30 @@ def test_default_substitution_include_content(
         },
     )
     app.build()
+    assert app.statuscode == 0
+    content_html = (app.outdir / "index.html").read_text()
+    app.cleanup()
 
-    output = app.env.get_doctree(docname="index").astext()
-    assert "Content with example placeholder" in output
-    assert "|name|" not in output
+    include_file.write_text(
+        data=dedent(
+            text="""\
+            Included literal content::
+
+               Content with example placeholder
+            """,
+        ),
+    )
+    source_file.write_text(data=".. include:: example.txt\n")
+
+    app_expected = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+    )
+    app_expected.build()
+    assert app_expected.statuscode == 0
+
+    expected_content_html = (app_expected.outdir / "index.html").read_text()
+    assert content_html == expected_content_html
 
 
 def test_default_substitution_include_disabled_content(
@@ -2644,7 +2730,8 @@ def test_default_substitution_include_disabled_content(
     source_directory = tmp_path / "source"
     source_directory.mkdir()
     (source_directory / "conf.py").touch()
-    (source_directory / "example.txt").write_text(
+    include_file = source_directory / "example.txt"
+    include_file.write_text(
         data=dedent(
             text="""\
             Included literal content::
@@ -2653,7 +2740,8 @@ def test_default_substitution_include_disabled_content(
             """,
         ),
     )
-    (source_directory / "index.rst").write_text(
+    source_file = source_directory / "index.rst"
+    source_file.write_text(
         data=dedent(
             text="""\
             .. |name| replace:: example
@@ -2673,9 +2761,21 @@ def test_default_substitution_include_disabled_content(
         },
     )
     app.build()
+    assert app.statuscode == 0
+    content_html = (app.outdir / "index.html").read_text()
+    app.cleanup()
 
-    output = app.env.get_doctree(docname="index").astext()
-    assert "Content with |name| placeholder" in output
+    source_file.write_text(data=".. include:: example.txt\n")
+
+    app_expected = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+    )
+    app_expected.build()
+    assert app_expected.statuscode == 0
+
+    expected_content_html = (app_expected.outdir / "index.html").read_text()
+    assert content_html == expected_content_html
 
 
 def test_default_substitution_include_disabled(
