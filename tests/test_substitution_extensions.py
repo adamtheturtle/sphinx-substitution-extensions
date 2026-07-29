@@ -6,6 +6,8 @@ from pathlib import Path
 from textwrap import dedent
 
 import pytest
+from docutils import core, nodes
+from docutils.parsers.rst import directives
 from sphinx.errors import SphinxError
 from sphinx.testing.util import SphinxTestApp
 
@@ -2353,6 +2355,168 @@ def test_xref_role_class_prefix_removal(
 
     expected_content_html = (app_expected.outdir / "index.html").read_text()
     assert content_html == expected_content_html
+
+
+def test_no_substitution_include(
+    *,
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """Leave an ``include`` path unchanged by default."""
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    (source_directory / "conf.py").touch()
+    (source_directory / "example.txt").write_text(data="Included content")
+    (source_directory / "index.rst").write_text(
+        data=".. include:: example.txt\n",
+    )
+
+    app = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        confoverrides={"extensions": ["sphinx_substitution_extensions"]},
+    )
+    app.build()
+
+    assert app.statuscode == 0
+    assert "Included content" in (app.outdir / "index.html").read_text()
+
+
+def test_include_without_sphinx_environment(tmp_path: Path) -> None:
+    """Support documents which have no Sphinx environment."""
+    source_file = tmp_path / "index.rst"
+    source_file.write_text(data=".. include:: included.rst\n")
+    (tmp_path / "included.rst").write_text(data="Included content")
+    directives.register_directive(
+        name="include",
+        directive=sphinx_substitution_extensions.SubstitutionInclude,
+    )
+
+    publish_doctree: Callable[..., nodes.document] = core.publish_doctree  # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
+    document = publish_doctree(
+        source=source_file.read_text(),
+        source_path=source_file.as_posix(),
+        settings_overrides={"env": None},
+    )
+
+    assert "Included content" in document.astext()
+
+
+def test_substitution_include_path(
+    *,
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """Replace placeholders in an ``include`` path when requested."""
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    (source_directory / "conf.py").touch()
+    (source_directory / "example.txt").write_text(data="Included content")
+    (source_directory / "index.rst").write_text(
+        data=dedent(
+            text="""\
+            .. |name| replace:: example
+
+            .. include:: |name|.txt
+               :path-substitutions:
+            """,
+        ),
+    )
+
+    app = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        confoverrides={"extensions": ["sphinx_substitution_extensions"]},
+    )
+    app.build()
+
+    assert app.statuscode == 0
+    assert "Included content" in (app.outdir / "index.html").read_text()
+
+
+def test_default_substitution_include_path(
+    *,
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """Replace ``include`` path placeholders when defaults are enabled."""
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    (source_directory / "conf.py").touch()
+    (source_directory / "example.txt").write_text(data="Included content")
+    (source_directory / "index.rst").write_text(
+        data=dedent(
+            text="""\
+            .. |name| replace:: example
+
+            .. include:: |name|.txt
+            """,
+        ),
+    )
+
+    app = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        confoverrides={
+            "extensions": ["sphinx_substitution_extensions"],
+            "substitutions_default_enabled": True,
+        },
+    )
+    app.build()
+
+    assert app.statuscode == 0
+    assert "Included content" in (app.outdir / "index.html").read_text()
+
+
+def test_default_substitution_include_disabled(
+    *,
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """Respect ``:nopath-substitutions:`` when defaults are enabled."""
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    (source_directory / "conf.py").touch()
+    (source_directory / "[[name]].txt").write_text(data="Included content")
+    (source_directory / "index.rst").write_text(
+        data=dedent(
+            text="""\
+            .. toctree::
+
+               document
+            """,
+        ),
+    )
+    (source_directory / "document.md").write_text(
+        data=dedent(
+            text="""\
+            # Document
+
+            ```{include} [[name]].txt
+            :nopath-substitutions:
+            ```
+            """,
+        ),
+    )
+
+    app = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        confoverrides={
+            "extensions": [
+                "myst_parser",
+                "sphinx_substitution_extensions",
+            ],
+            "myst_enable_extensions": ["substitution"],
+            "myst_sub_delimiters": ("[", "]"),
+            "myst_substitutions": {"name": "example"},
+            "substitutions_default_enabled": True,
+        },
+    )
+    app.build()
+
+    assert app.statuscode == 0
+    assert "Included content" in (app.outdir / "document.html").read_text()
 
 
 def test_no_substitution_image(

@@ -45,6 +45,7 @@ optional-dependencies.dev = [
     "check-manifest==0.51",
     "deptry==0.25.1",
     "doc8==2.0.0",
+    "doc8-custom-ignores==2026.7.29.1",
     "doccmd==2026.7.19",
     "interrogate==1.7.0",
     "mypy[faster-cache]==2.3.0",
@@ -395,6 +396,10 @@ linewrap-full-docstring = true
 
 [tool.doc8]
 max_line_length = 2000
+ignore-messages = [
+    '''Error in "include" directive:
+unknown option: "path-substitutions".''',
+]
 ignore_path = [
     "./.eggs",
     "./docs/build",

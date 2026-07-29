@@ -125,6 +125,27 @@ Inline ``:substitution-code:``
 :path-substitutions:
 ```
 
+``include``
+-----------
+
+### Path substitutions
+
+```{code-block} markdown
+
+    ```{include} {{author}}.txt
+    :path-substitutions:
+    ```
+```
+
+<!-- Note: The actual include directive example is commented out due to
+issues with MyST parsing contexts. See the rST sample for a working example. -->
+
+<!--
+```{include} {{author}}.txt
+:path-substitutions:
+```
+-->
+
 ``image``
 ---------
 

@@ -13,6 +13,7 @@ from docutils.nodes import (
 )
 from docutils.parsers.rst import directives
 from docutils.parsers.rst.directives.images import Image
+from docutils.parsers.rst.directives.misc import Include
 from docutils.parsers.rst.roles import code_role
 from docutils.parsers.rst.states import Inliner
 from docutils.statemachine import StringList
@@ -427,6 +428,57 @@ class SubstitutionLiteralInclude(LiteralInclude):
 
 
 @beartype
+class SubstitutionInclude(Include):
+    """
+    Similar to Include but replaces placeholders with variables in the
+    path.
+    """
+
+    option_spec: ClassVar[OptionSpec | None] = {
+        **(Include.option_spec or {}),
+        PATH_SUBSTITUTION_OPTION_NAME: directives.flag,
+        NO_PATH_SUBSTITUTION_OPTION_NAME: directives.flag,
+    }
+
+    def run(self) -> list[Node]:
+        """Replace placeholders with given variables in the file path."""
+        env = self.state.document.settings.env
+
+        if env is not None:
+            config = env.config
+
+            should_apply_path_substitutions = _should_apply_substitutions(
+                options=self.options,
+                config=config,
+                yes_flag=PATH_SUBSTITUTION_OPTION_NAME,
+                no_flag=NO_PATH_SUBSTITUTION_OPTION_NAME,
+            )
+
+            if should_apply_path_substitutions:
+                substitution_defs = _get_substitution_defs(
+                    env=env,
+                    config=config,
+                    substitution_defs=self.state.document.substitution_defs,
+                )
+
+                delimiter_pairs = _get_delimiter_pairs(
+                    env=env,
+                    config=config,
+                )
+
+                for argument_index, argument in enumerate(
+                    iterable=self.arguments
+                ):
+                    self.arguments[argument_index] = _apply_substitutions(
+                        text=argument,
+                        substitution_defs=substitution_defs,
+                        delimiter_pairs=delimiter_pairs,
+                    )
+
+        return list(super().run())
+
+
+@beartype
 class SubstitutionImage(Image):
     """
     Similar to Image but replaces placeholders with variables in the
@@ -553,6 +605,10 @@ def setup(app: Sphinx) -> ExtensionMetadata:
     directives.register_directive(
         name="literalinclude",
         directive=SubstitutionLiteralInclude,
+    )
+    directives.register_directive(
+        name="include",
+        directive=SubstitutionInclude,
     )
     directives.register_directive(
         name="image",
