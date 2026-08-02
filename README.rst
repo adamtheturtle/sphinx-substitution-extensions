@@ -71,6 +71,25 @@ Inline ``:substitution-code:``
 
    :substitution-download:`|author|'s manuscript <|author|_manuscript.txt>`
 
+External hyperlinks
+~~~~~~~~~~~~~~~~~~~
+
+Enable substitutions in external hyperlink targets in ``conf.py``:
+
+.. code-block:: python
+
+   """Configuration for Sphinx."""
+
+   substitutions_hyperlink_targets_enabled = True
+
+Then substitutions are applied to hyperlink targets:
+
+.. code-block:: rst
+
+   Download version |release| from the tarball_.
+
+   .. _tarball: https://example.com/releases/v|release|.tar.gz
+
 ``literalinclude``
 ~~~~~~~~~~~~~~~~~~
 
