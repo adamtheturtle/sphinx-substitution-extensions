@@ -470,6 +470,112 @@ def test_substitution_download(
     assert content_html == expected_content_html
 
 
+def test_no_substitution_hyperlink_target(
+    *,
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """Leave placeholders in hyperlink targets unchanged by default."""
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    source_file = source_directory / "index.rst"
+    (source_directory / "conf.py").touch()
+
+    source_file.write_text(
+        data=dedent(
+            text="""\
+            .. |ver| replace:: 0.8.5
+
+            Download the tarball_
+
+            .. _tarball: https://example.com/releases/v|ver|.tar.gz
+            """,
+        ),
+    )
+    app = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        confoverrides={"extensions": ["sphinx_substitution_extensions"]},
+    )
+    app.build()
+    assert app.statuscode == 0
+    content_html = (app.outdir / "index.html").read_text()
+    app.cleanup()
+
+    app_expected = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+    )
+    app_expected.build()
+    assert app_expected.statuscode == 0
+
+    expected_content_html = (app_expected.outdir / "index.html").read_text()
+    assert content_html == expected_content_html
+
+
+def test_substitution_hyperlink_target(
+    *,
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """Replace placeholders in external hyperlink targets."""
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    source_file = source_directory / "index.rst"
+    (source_directory / "conf.py").touch()
+
+    source_file.write_text(
+        data=dedent(
+            text="""\
+            Download the tarball_
+
+            .. _tarball: https://example.com/releases/v|ver|.tar.gz
+
+            See the `internal section`_.
+
+            Internal section
+            ----------------
+            """,
+        ),
+    )
+    app = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        confoverrides={
+            "extensions": ["sphinx_substitution_extensions"],
+            "rst_prolog": ".. |ver| replace:: 0.8.5",
+            "substitutions_hyperlink_targets_enabled": True,
+        },
+    )
+    app.build()
+    assert app.statuscode == 0
+    content_html = (app.outdir / "index.html").read_text()
+    app.cleanup()
+
+    equivalent_source = dedent(
+        text="""\
+        Download the tarball_
+
+        .. _tarball: https://example.com/releases/v0.8.5.tar.gz
+
+        See the `internal section`_.
+
+        Internal section
+        ----------------
+        """,
+    )
+    source_file.write_text(data=equivalent_source)
+    app_expected = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+    )
+    app_expected.build()
+    assert app_expected.statuscode == 0
+
+    expected_content_html = (app_expected.outdir / "index.html").read_text()
+    assert content_html == expected_content_html
+
+
 def test_no_substitution_literal_include(
     *,
     tmp_path: Path,

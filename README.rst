@@ -71,6 +71,42 @@ Inline ``:substitution-code:``
 
    :substitution-download:`|author|'s manuscript <|author|_manuscript.txt>`
 
+External hyperlinks
+~~~~~~~~~~~~~~~~~~~
+
+Enable substitutions in external hyperlink targets in ``conf.py``:
+
+.. code-block:: python
+
+   """Configuration for Sphinx."""
+
+   substitutions_hyperlink_targets_enabled = True
+
+Then substitutions are applied to hyperlink targets:
+
+.. code-block:: rst
+
+   Download version |release| from the tarball_.
+
+   .. _tarball: https://example.com/releases/v|release|.tar.gz
+
+The setting enables hyperlink-target substitutions throughout the project,
+but only targets containing a defined substitution are changed. To limit a
+substitution to one page, define it in that page instead of in
+``rst_prolog``:
+
+.. code-block:: rst
+
+   .. |tarball-release| replace:: 0.8.5
+
+   Download the tarball_.
+
+   .. _tarball: https://example.com/releases/v|tarball-release|.tar.gz
+
+To limit the substitution to one link on that page, use a unique substitution
+name, such as ``tarball-release`` above, only in that link's target. Other
+hyperlink targets are left unchanged.
+
 ``literalinclude``
 ~~~~~~~~~~~~~~~~~~
 

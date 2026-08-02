@@ -323,6 +323,7 @@ ignore_names = [
     "source_suffix",
     "spelling_word_list_filename",
     "substitutions_default_enabled",
+    "substitutions_hyperlink_targets_enabled",
     "templates_path",
     "warning_is_error",
 ]

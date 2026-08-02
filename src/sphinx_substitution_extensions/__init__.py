@@ -9,9 +9,12 @@ from docutils.nodes import (
     Element,
     Node,
     Text,
+    document,
+    reference,
     substitution_definition,
     system_message,
 )
+from docutils.nodes import target as target_node
 from docutils.parsers.rst import directives
 from docutils.parsers.rst.directives.images import Image
 from docutils.parsers.rst.directives.misc import Include
@@ -233,6 +236,38 @@ def _process_node(
             substitution_defs=substitution_defs,
             delimiter_pairs=delimiter_pairs,
         )
+
+
+@beartype
+def _substitute_hyperlink_targets(
+    app: Sphinx,
+    doctree: document,
+) -> None:
+    """Replace placeholders in hyperlink targets."""
+    if not app.config.substitutions_hyperlink_targets_enabled:
+        return
+
+    substitution_defs = _get_substitution_defs(
+        env=app.env,
+        config=app.config,
+        substitution_defs=doctree.substitution_defs,
+    )
+    delimiter_pairs = _get_delimiter_pairs(
+        env=app.env,
+        config=app.config,
+    )
+
+    for node in doctree.findall():
+        if not isinstance(node, (reference, target_node)):
+            continue
+
+        refuri = node.attributes.get("refuri")
+        if isinstance(refuri, str):
+            node["refuri"] = _apply_substitutions(
+                text=refuri,
+                substitution_defs=substitution_defs,
+                delimiter_pairs=delimiter_pairs,
+            )
 
 
 @beartype
@@ -646,6 +681,11 @@ def setup(app: Sphinx) -> ExtensionMetadata:
     """Add the custom directives to Sphinx."""
     app.add_config_value(name="substitutions", default=[], rebuild="html")
     app.add_config_value(
+        name="substitutions_hyperlink_targets_enabled",
+        default=False,
+        rebuild="html",
+    )
+    app.add_config_value(
         name="substitutions_default_enabled",
         default=False,
         rebuild="html",
@@ -671,6 +711,10 @@ def setup(app: Sphinx) -> ExtensionMetadata:
         nodeclass=addnodes.download_reference,
     )
     app.add_role(name="substitution-download", role=substitution_download_role)
+    app.connect(
+        event="doctree-read",
+        callback=_substitute_hyperlink_targets,
+    )
     return {
         "parallel_read_safe": True,
         "version": version(distribution_name="sphinx-substitution-extensions"),
