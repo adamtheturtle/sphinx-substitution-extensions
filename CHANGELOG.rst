@@ -5,6 +5,13 @@ Changelog
 
 .. towncrier release notes start
 
+2026.08.02
+----------
+
+- Add content substitutions to the ``include`` directive with ``:content-substitutions:`` and ``:nocontent-substitutions:`` options.
+
+- Add an option to apply substitutions to external hyperlink targets.
+
 2026.06.17
 ----------
 

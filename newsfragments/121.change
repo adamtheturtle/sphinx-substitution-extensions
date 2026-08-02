@@ -1,1 +1,0 @@
-Add content substitutions to the ``include`` directive with ``:content-substitutions:`` and ``:nocontent-substitutions:`` options.
