@@ -5,6 +5,11 @@ Changelog
 
 .. towncrier release notes start
 
+2026.08.05
+----------
+
+No significant changes.
+
 2026.08.02
 ----------
 
