@@ -369,3 +369,9 @@ repos:
         types_or: [markdown, rst]
         additional_dependencies:
           - *uv_version
+
+  - repo: https://github.com/adamtheturtle/no-defaults
+    rev: v1.0.0
+    hooks:
+      - id: no-defaults
+        stages: [pre-commit]
