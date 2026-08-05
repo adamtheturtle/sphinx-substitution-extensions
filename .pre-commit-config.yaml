@@ -3,44 +3,6 @@ fail_fast: true
 
 .uv_version: &uv_version uv==0.11.7
 
-# We use system Python, with required dependencies specified in pyproject.toml.
-# We therefore cannot use those dependencies in pre-commit CI.
-ci:
-  skip:
-    - actionlint
-    - sphinx-lint
-    - strict-kwargs-fix
-    - check-manifest
-    - deptry
-    - doc8
-    - interrogate
-    - interrogate-docs
-    - mypy
-    - mypy-docs
-    - pylint
-    - pyproject-fmt-fix
-    - pyright
-    - pyright-docs
-    - pyright-verifytypes
-    - ty
-    - ty-docs
-    - pyroma
-    - ruff-check-fix
-    - ruff-check-fix-docs
-    - ruff-format-fix
-    - ruff-format-fix-docs
-    - pydocstringformatter
-    - shellcheck
-    - shellcheck-docs
-    - shfmt
-    - shfmt-docs
-    - vulture
-    - vulture-docs
-    - yamlfix
-    - zizmor
-    - pyrefly
-    - pyrefly-docs
-
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
 default_install_hook_types: [pre-commit, pre-push]
@@ -134,7 +96,7 @@ repos:
 
       - id: shfmt
         name: shfmt
-        entry: shfmt --write --space-redirects --indent=4
+        entry: uv run --extra=dev shfmt --write --space-redirects --indent=4
         language: python
         types_or: [shell]
         additional_dependencies:
