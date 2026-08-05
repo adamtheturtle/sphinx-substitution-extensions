@@ -1,0 +1,1 @@
+Support MyST substitutions defined in document frontmatter.

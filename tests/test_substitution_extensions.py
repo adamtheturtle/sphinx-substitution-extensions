@@ -576,6 +576,70 @@ def test_substitution_hyperlink_target(
     assert content_html == expected_content_html
 
 
+def test_myst_substitution_hyperlink_target(
+    *,
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """Replace global MyST substitutions in external hyperlink targets."""
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    source_file = source_directory / "index.md"
+    (source_directory / "conf.py").touch()
+    source_file.write_text(
+        data=dedent(
+            text="""\
+            ```{eval-rst}
+            Download the tarball_
+
+            .. _tarball: https://example.com/releases/v|ver|.tar.gz
+            ```
+            """,
+        ),
+    )
+
+    app = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        confoverrides={
+            "extensions": [
+                "myst_parser",
+                "sphinx_substitution_extensions",
+            ],
+            "myst_enable_extensions": ["substitution"],
+            "myst_substitutions": {"ver": "0.8.5"},
+            "substitutions_hyperlink_targets_enabled": True,
+        },
+    )
+    app.build()
+    assert app.statuscode == 0
+    content_html = (app.outdir / "index.html").read_text()
+    app.cleanup()
+
+    source_file.write_text(
+        data=dedent(
+            text="""\
+            ```{eval-rst}
+            Download the tarball_
+
+            .. _tarball: https://example.com/releases/v0.8.5.tar.gz
+            ```
+            """,
+        ),
+    )
+    app_expected = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        freshenv=True,
+        confoverrides={"extensions": ["myst_parser"]},
+    )
+    app_expected.build()
+    assert app_expected.statuscode == 0
+    expected_content_html = (app_expected.outdir / "index.html").read_text()
+
+    assert content_html == expected_content_html
+
+
 def test_no_substitution_literal_include(
     *,
     tmp_path: Path,
@@ -1494,6 +1558,95 @@ class TestMyst:
         expected_content_html = (
             app_expected.outdir / "markdown_document.html"
         ).read_text()
+        assert content_html == expected_content_html
+
+    @staticmethod
+    def test_myst_frontmatter_substitutions(
+        *,
+        tmp_path: Path,
+        make_app: Callable[..., SphinxTestApp],
+    ) -> None:
+        """MyST front matter substitutions are respected in code
+        blocks.
+        """
+        source_directory = tmp_path / "source"
+        source_directory.mkdir()
+        index_source_file = source_directory / "index.rst"
+        markdown_source_file = source_directory / "markdown_document.md"
+        (source_directory / "conf.py").touch()
+        index_source_file.write_text(
+            data=dedent(
+                text="""\
+                .. toctree::
+
+                   markdown_document
+                """,
+            ),
+        )
+        markdown_source_file.write_text(
+            data=dedent(
+                text="""\
+                ---
+                myst:
+                  substitutions:
+                    local:
+                      nested: local_value
+                ---
+
+                # Title
+
+                ```{code-block} shell
+                :substitutions:
+
+                $ PRE-|global|-|local.nested|-POST
+                ```
+                """,
+            ),
+        )
+
+        app = make_app(
+            srcdir=source_directory,
+            exception_on_warning=True,
+            confoverrides={
+                "extensions": [
+                    "myst_parser",
+                    "sphinx_substitution_extensions",
+                ],
+                "myst_enable_extensions": ["substitution"],
+                "myst_substitutions": {
+                    "global": "global_value",
+                },
+            },
+        )
+        app.build()
+        assert app.statuscode == 0
+        content_html = (app.outdir / "markdown_document.html").read_text()
+        app.cleanup()
+
+        markdown_source_file.write_text(
+            data=dedent(
+                text="""\
+                # Title
+
+                ```{code-block} shell
+
+                $ PRE-global_value-local_value-POST
+                ```
+                """,
+            ),
+        )
+        app_expected = make_app(
+            srcdir=source_directory,
+            exception_on_warning=True,
+            freshenv=True,
+            confoverrides={"extensions": ["myst_parser"]},
+        )
+        app_expected.build()
+        assert app_expected.statuscode == 0
+        expected_content_html = (
+            app_expected.outdir / "markdown_document.html"
+        ).read_text()
+
         assert content_html == expected_content_html
 
     @staticmethod

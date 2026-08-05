@@ -21,7 +21,9 @@ from docutils.parsers.rst.directives.misc import Include
 from docutils.parsers.rst.roles import code_role
 from docutils.parsers.rst.states import Inliner
 from docutils.statemachine import StringList
-from myst_parser.mocking import MockInliner
+from myst_parser.config.main import MdParserConfig
+from myst_parser.mdit_to_docutils.base import DocutilsRenderer
+from myst_parser.mocking import MockInliner, MockState
 from sphinx import addnodes
 from sphinx.application import Sphinx
 from sphinx.config import Config
@@ -48,6 +50,24 @@ SubstitutionValue: TypeAlias = (
     | dict[str, "SubstitutionValue"]
 )
 Substitutions: TypeAlias = dict[str, SubstitutionValue]
+
+
+@beartype
+def _get_myst_config(*, context: object) -> MdParserConfig | None:
+    """Get the effective MyST configuration from a parsing context."""
+    if isinstance(context, (MockInliner, MockState)):
+        # MyST merges front matter into a document-local configuration before
+        # it creates these parsing contexts. The Sphinx configuration only
+        # contains the global ``conf.py`` values.
+        # https://github.com/executablebooks/MyST-Parser/issues/680 tracks
+        # substitutions inside directives, but its proposed PR registers them
+        # only after directives have run:
+        # https://github.com/executablebooks/MyST-Parser/pull/966
+        renderer = vars(context)["_renderer"]
+        assert isinstance(renderer, DocutilsRenderer)
+        return renderer.md_config
+
+    return None
 
 
 @beartype
@@ -120,6 +140,7 @@ def _get_delimiter_pairs(
     *,
     env: BuildEnvironment,
     config: Config,
+    myst_config: MdParserConfig | None,
 ) -> set[tuple[str, str]]:
     """Get the delimiter pairs for substitution."""
     markdown_suffixes = {
@@ -134,7 +155,10 @@ def _get_delimiter_pairs(
     delimiter_pairs = {("|", "|")}
     parser_supported_formats = set(env.parser.supported)
     if parser_supported_formats.intersection(markdown_suffixes):
-        opening_delimiter, closing_delimiter = config.myst_sub_delimiters
+        if myst_config is None:
+            opening_delimiter, closing_delimiter = config.myst_sub_delimiters
+        else:
+            opening_delimiter, closing_delimiter = myst_config.sub_delimiters
         new_delimiter_pair = (
             opening_delimiter + opening_delimiter,
             closing_delimiter + closing_delimiter,
@@ -150,6 +174,7 @@ def _get_substitution_defs(
     env: BuildEnvironment,
     config: Config,
     substitution_defs: dict[str, substitution_definition],
+    myst_config: MdParserConfig | None,
 ) -> dict[str, str]:
     """Get the substitution definitions from the environment."""
     markdown_suffixes = {
@@ -160,9 +185,16 @@ def _get_substitution_defs(
 
     parser_supported_formats = set(env.parser.supported)
     if parser_supported_formats.intersection(markdown_suffixes):
-        if "substitution" in config.myst_enable_extensions:
+        if myst_config is None:
+            enable_extensions = config.myst_enable_extensions
+            substitutions = dict(config.myst_substitutions)
+        else:
+            enable_extensions = myst_config.enable_extensions
+            substitutions = dict(myst_config.substitutions)
+
+        if "substitution" in enable_extensions:
             return _flatten_substitutions(
-                substitutions=dict(config.myst_substitutions),
+                substitutions=substitutions,
             )
     else:
         return {
@@ -251,10 +283,12 @@ def _substitute_hyperlink_targets(
         env=app.env,
         config=app.config,
         substitution_defs=doctree.substitution_defs,
+        myst_config=None,
     )
     delimiter_pairs = _get_delimiter_pairs(
         env=app.env,
         config=app.config,
+        myst_config=None,
     )
 
     for node in doctree.findall():
@@ -284,15 +318,18 @@ class SubstitutionCodeBlock(CodeBlock):
         """Replace placeholders with given variables."""
         new_content = StringList()
         existing_content = self.content
+        myst_config = _get_myst_config(context=self.state)
         substitution_defs = _get_substitution_defs(
             env=self.env,
             config=self.config,
             substitution_defs=self.state.document.substitution_defs,
+            myst_config=myst_config,
         )
 
         delimiter_pairs = _get_delimiter_pairs(
             env=self.env,
             config=self.config,
+            myst_config=myst_config,
         )
 
         should_apply_substitutions = _should_apply_substitutions(
@@ -341,15 +378,18 @@ class SubstitutionCodeRole:
         """Replace placeholders with given variables."""
         settings = inliner.document.settings
         env = settings.env
+        myst_config = _get_myst_config(context=inliner)
         substitution_defs = _get_substitution_defs(
             env=env,
             config=env.config,
             substitution_defs=inliner.document.substitution_defs,
+            myst_config=myst_config,
         )
 
         delimiter_pairs = _get_delimiter_pairs(
             env=env,
             config=env.config,
+            myst_config=myst_config,
         )
 
         text = _apply_substitutions(
@@ -406,6 +446,7 @@ class SubstitutionLiteralInclude(LiteralInclude):
         and/or
         included file content.
         """
+        myst_config = _get_myst_config(context=self.state)
         should_apply_path_substitutions = _should_apply_substitutions(
             options=self.options,
             config=self.config,
@@ -418,11 +459,13 @@ class SubstitutionLiteralInclude(LiteralInclude):
                 env=self.env,
                 config=self.config,
                 substitution_defs=self.state.document.substitution_defs,
+                myst_config=myst_config,
             )
 
             delimiter_pairs = _get_delimiter_pairs(
                 env=self.env,
                 config=self.config,
+                myst_config=myst_config,
             )
 
             for argument_index, argument in enumerate(iterable=self.arguments):
@@ -446,11 +489,13 @@ class SubstitutionLiteralInclude(LiteralInclude):
                 env=self.env,
                 config=self.config,
                 substitution_defs=self.state.document.substitution_defs,
+                myst_config=myst_config,
             )
 
             delimiter_pairs = _get_delimiter_pairs(
                 env=self.env,
                 config=self.config,
+                myst_config=myst_config,
             )
 
             for node in nodes_list:
@@ -486,6 +531,7 @@ class SubstitutionInclude(Include):
             return list(super().run())
 
         config = env.config
+        myst_config = _get_myst_config(context=self.state)
         should_apply_path_substitutions = _should_apply_substitutions(
             options=self.options,
             config=config,
@@ -509,10 +555,12 @@ class SubstitutionInclude(Include):
             env=env,
             config=config,
             substitution_defs=self.state.document.substitution_defs,
+            myst_config=myst_config,
         )
         delimiter_pairs = _get_delimiter_pairs(
             env=env,
             config=config,
+            myst_config=myst_config,
         )
 
         if should_apply_path_substitutions:
@@ -582,6 +630,7 @@ class SubstitutionImage(Image):
         """Replace placeholders with given variables in the image path."""
         env = self.state.document.settings.env
         config = env.config
+        myst_config = _get_myst_config(context=self.state)
 
         should_apply_path_substitutions = _should_apply_substitutions(
             options=self.options,
@@ -595,11 +644,13 @@ class SubstitutionImage(Image):
                 env=env,
                 config=config,
                 substitution_defs=self.state.document.substitution_defs,
+                myst_config=myst_config,
             )
 
             delimiter_pairs = _get_delimiter_pairs(
                 env=env,
                 config=config,
+                myst_config=myst_config,
             )
 
             for argument_index, argument in enumerate(iterable=self.arguments):
@@ -643,15 +694,18 @@ class SubstitutionXRefRole(XRefRole):
         variables.
         """
         assert isinstance(env, BuildEnvironment)
+        myst_config = _get_myst_config(context=self.inliner)
         substitution_defs = _get_substitution_defs(
             env=env,
             config=env.config,
             substitution_defs=self.inliner.document.substitution_defs,
+            myst_config=myst_config,
         )
 
         delimiter_pairs = _get_delimiter_pairs(
             env=env,
             config=env.config,
+            myst_config=myst_config,
         )
 
         title = _apply_substitutions(
