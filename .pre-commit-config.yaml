@@ -134,7 +134,7 @@ repos:
 
       - id: shfmt
         name: shfmt
-        entry: shfmt --write --space-redirects --indent=4
+        entry: uv run --extra=dev shfmt --write --space-redirects --indent=4
         language: python
         types_or: [shell]
         additional_dependencies:
