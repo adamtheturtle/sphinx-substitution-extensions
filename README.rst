@@ -187,6 +187,25 @@ MyST Markdown setup
 
 This will replace ``|release|`` in the new directives with ``0.1``, and ``|author|`` with ``Eleanor``.
 
+Substitutions can also be defined or overridden for an individual Markdown
+document in its frontmatter:
+
+.. code-block:: markdown
+
+   ---
+   myst:
+     substitutions:
+       release: "0.2"
+       author:
+         name: Talya
+   ---
+
+   ```{code-block} shell
+      :substitutions:
+
+      echo "|author.name| released version |release|"
+   ```
+
 Enabling substitutions by default
 ----------------------------------
 
