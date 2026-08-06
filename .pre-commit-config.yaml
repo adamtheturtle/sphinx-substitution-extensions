@@ -286,6 +286,16 @@ repos:
         stages: [pre-commit]
         require_serial: true
 
+      - id: no-defaults
+        name: no-defaults
+        entry: uv run --extra=dev no-defaults
+        language: python
+        types_or: [python]
+        additional_dependencies:
+          - *uv_version
+        stages: [pre-commit]
+        require_serial: true
+
       - id: doc8
         name: doc8
         entry: uv run --extra=dev -m doc8
@@ -369,9 +379,3 @@ repos:
         types_or: [markdown, rst]
         additional_dependencies:
           - *uv_version
-
-  - repo: https://github.com/adamtheturtle/no-defaults
-    rev: v1.0.1
-    hooks:
-      - id: no-defaults
-        stages: [pre-commit]
