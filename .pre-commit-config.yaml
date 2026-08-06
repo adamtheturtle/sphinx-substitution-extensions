@@ -303,12 +303,15 @@ repos:
       # directory.
       # Vale needs ``rst2html`` from Docutils on the ``PATH`` to parse
       # reStructuredText.
+      # ``vale sync`` also runs when ``.vale.ini`` changes, so a package
+      # bump takes effect without waiting for the next reStructuredText
+      # change.
       - id: vale-sync
         name: vale sync
         entry: uv run --extra=dev vale sync
         language: python
         pass_filenames: false
-        types_or: [rst]
+        files: (\.rst$|^\.vale\.ini$)
         additional_dependencies:
           - *uv_version
         stages: [pre-commit]
