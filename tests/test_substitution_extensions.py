@@ -3046,12 +3046,22 @@ def test_substitution_include_path_and_content(
     assert content_html == expected_content_html
 
 
-def test_substitution_include_literal_content(
+@pytest.mark.parametrize(
+    argnames="include_options",
+    argvalues=[":literal:", ":code: text", ":parser: rst"],
+)
+@pytest.mark.parametrize(
+    argnames="has_include_read_listener",
+    argvalues=[False, True],
+)
+def test_substitution_include_returned_content(
     *,
     tmp_path: Path,
     make_app: Callable[..., SphinxTestApp],
+    include_options: str,
+    has_include_read_listener: bool,
 ) -> None:
-    """Replace placeholders when ``include`` returns a literal node."""
+    """Replace placeholders when ``include`` returns content nodes."""
     source_directory = tmp_path / "source"
     source_directory.mkdir()
     (source_directory / "conf.py").touch()
@@ -3062,21 +3072,31 @@ def test_substitution_include_literal_content(
     source_file = source_directory / "index.rst"
     source_file.write_text(
         data=dedent(
-            text="""\
+            text=f"""\
             .. |name| replace:: example
 
             .. include:: example.txt
-               :literal:
+               {include_options}
                :content-substitutions:
             """,
         ),
     )
+
+    def on_include_read(
+        _app: Sphinx,
+        _relative_path: Path,
+        _parent_docname: str,
+        _content: list[str],
+    ) -> None:
+        """Register an include-read listener without changing content."""
 
     app = make_app(
         srcdir=source_directory,
         exception_on_warning=True,
         confoverrides={"extensions": ["sphinx_substitution_extensions"]},
     )
+    if has_include_read_listener:
+        app.connect(event="include-read", callback=on_include_read)
     app.build()
     assert app.statuscode == 0
     content_html = (app.outdir / "index.html").read_text()
@@ -3085,13 +3105,95 @@ def test_substitution_include_literal_content(
     include_file.write_text(data="Content with example placeholder")
     source_file.write_text(
         data=dedent(
-            text="""\
+            text=f"""\
             .. include:: example.txt
-               :literal:
+               {include_options}
             """,
         ),
     )
 
+    app_expected = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+    )
+    app_expected.build()
+    assert app_expected.statuscode == 0
+
+    expected_content_html = (app_expected.outdir / "index.html").read_text()
+    assert content_html == expected_content_html
+
+
+def test_substitution_parser_include_with_nested_include_read(
+    *,
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """Ignore nested include-read events when processing returned
+    nodes.
+    """
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    (source_directory / "conf.py").touch()
+    (source_directory / "nested.txt").write_text(data="Nested content")
+    outer_file = source_directory / "outer.txt"
+    outer_file.write_text(
+        data=dedent(
+            text="""\
+            Outer |name| content
+
+            .. include:: nested.txt
+            """,
+        ),
+    )
+    source_file = source_directory / "index.rst"
+    source_file.write_text(
+        data=dedent(
+            text="""\
+            .. |name| replace:: example
+
+            .. include:: outer.txt
+               :parser: rst
+               :content-substitutions:
+            """,
+        ),
+    )
+
+    def on_include_read(
+        _app: Sphinx,
+        _relative_path: Path,
+        _parent_docname: str,
+        _content: list[str],
+    ) -> None:
+        """Register an include-read listener without changing content."""
+
+    app = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        confoverrides={"extensions": ["sphinx_substitution_extensions"]},
+    )
+    app.connect(event="include-read", callback=on_include_read)
+    app.build()
+    assert app.statuscode == 0
+    content_html = (app.outdir / "index.html").read_text()
+    app.cleanup()
+
+    outer_file.write_text(
+        data=dedent(
+            text="""\
+            Outer example content
+
+            .. include:: nested.txt
+            """,
+        ),
+    )
+    source_file.write_text(
+        data=dedent(
+            text="""\
+            .. include:: outer.txt
+               :parser: rst
+            """,
+        ),
+    )
     app_expected = make_app(
         srcdir=source_directory,
         exception_on_warning=True,

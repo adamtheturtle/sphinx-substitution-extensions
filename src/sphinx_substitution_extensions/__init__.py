@@ -247,29 +247,36 @@ def _should_apply_substitutions(
 @beartype
 def _process_node(
     *,
-    node: Node,
+    node: Element,
     substitution_defs: dict[str, str],
     delimiter_pairs: set[tuple[str, str]],
 ) -> None:
     """Recursively process nodes to apply substitutions."""
-    if isinstance(node, Element):
-        new_text = _apply_substitutions(
-            text=node.rawsource,
-            substitution_defs=substitution_defs,
-            delimiter_pairs=delimiter_pairs,
-        )
-        node.rawsource = new_text
-        if node.children:
-            first_child = node.children[0]
-            if isinstance(first_child, Text):
-                node.replace(old=first_child, new=Text(data=new_text))
+    node.rawsource = _apply_substitutions(
+        text=node.rawsource,
+        substitution_defs=substitution_defs,
+        delimiter_pairs=delimiter_pairs,
+    )
 
-    for child in node.children:
-        _process_node(
-            node=child,
-            substitution_defs=substitution_defs,
-            delimiter_pairs=delimiter_pairs,
-        )
+    for child in list(node.children):
+        if isinstance(child, Text):
+            node.replace(
+                old=child,
+                new=Text(
+                    data=_apply_substitutions(
+                        text=child.astext(),
+                        substitution_defs=substitution_defs,
+                        delimiter_pairs=delimiter_pairs,
+                    ),
+                ),
+            )
+        else:
+            assert isinstance(child, Element)
+            _process_node(
+                node=child,
+                substitution_defs=substitution_defs,
+                delimiter_pairs=delimiter_pairs,
+            )
 
 
 @beartype
@@ -501,6 +508,7 @@ class SubstitutionLiteralInclude(LiteralInclude):
             )
 
             for node in nodes_list:
+                assert isinstance(node, Element)
                 _process_node(
                     node=node,
                     substitution_defs=substitution_defs,
@@ -533,14 +541,22 @@ class SubstitutionInclude(Include):
         delimiter_pairs: set[tuple[str, str]],
     ) -> list[Node]:
         """Apply substitutions after existing include-read listeners."""
+        include_read_emitted = False
 
         def substitute_include_content(
             _app: Sphinx,
-            _relative_path: Path,
+            relative_path: Path,
             _parent_docname: str,
             content: list[str],
         ) -> None:
             """Substitute content changed by earlier listeners."""
+            included_path = (env.srcdir / relative_path).resolve()
+            current_include_path = Path(self.arguments[0]).resolve()
+            if included_path != current_include_path:
+                return
+
+            nonlocal include_read_emitted
+            include_read_emitted = True
             content[0] = _apply_substitutions(
                 text=content[0],
                 substitution_defs=substitution_defs,
@@ -553,9 +569,20 @@ class SubstitutionInclude(Include):
             priority=999,
         )
         try:
-            return list(super().run())
+            nodes_list = list(super().run())
         finally:
             env.events.disconnect(listener_id=listener_id)
+
+        if not include_read_emitted:
+            for node in nodes_list:
+                assert isinstance(node, Element)
+                _process_node(
+                    node=node,
+                    substitution_defs=substitution_defs,
+                    delimiter_pairs=delimiter_pairs,
+                )
+
+        return nodes_list
 
     def run(self) -> list[Node]:
         """Replace placeholders in the path and/or included content."""
@@ -645,6 +672,7 @@ class SubstitutionInclude(Include):
             nodes_list = list(super().run())
 
         for node in nodes_list:
+            assert isinstance(node, Element)
             _process_node(
                 node=node,
                 substitution_defs=substitution_defs,
