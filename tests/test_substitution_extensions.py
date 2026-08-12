@@ -2738,7 +2738,8 @@ def test_include_path_is_relative_to_source_directory(
     fragments_directory = source_directory / "fragments"
     fragments_directory.mkdir()
     (fragments_directory / "example.txt").write_text(data="Included content")
-    (source_directory / "index.rst").write_text(
+    source_file = source_directory / "index.rst"
+    source_file.write_text(
         data=(
             ".. |name| replace:: example\n\n"
             f".. include:: {include_path}\n"
@@ -2754,7 +2755,19 @@ def test_include_path_is_relative_to_source_directory(
     app.build()
 
     assert app.statuscode == 0
-    assert "Included content" in (app.outdir / "index.html").read_text()
+    content_html = (app.outdir / "index.html").read_text()
+    app.cleanup()
+
+    source_file.write_text(data=".. include:: /fragments/example.txt\n")
+    app_expected = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+    )
+    app_expected.build()
+    assert app_expected.statuscode == 0
+
+    expected_content_html = (app_expected.outdir / "index.html").read_text()
+    assert content_html == expected_content_html
 
 
 def test_substitution_include_content(
