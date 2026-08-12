@@ -340,6 +340,7 @@ max_supported_python = "3.14"
 [tool.mypy]
 files = [ "." ]
 exclude = [ "build" ]
+exclude_gitignore = true
 follow_untyped_imports = true
 strict = true
 plugins = [
