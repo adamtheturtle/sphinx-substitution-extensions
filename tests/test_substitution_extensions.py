@@ -2844,10 +2844,12 @@ def test_include_read_event_with_content_substitutions(
     source_directory = tmp_path / "source"
     source_directory.mkdir()
     (source_directory / "conf.py").touch()
-    (source_directory / "example.txt").write_text(
+    include_file = source_directory / "example.txt"
+    include_file.write_text(
         data="Included |name| content",
     )
-    (source_directory / "index.rst").write_text(
+    source_file = source_directory / "index.rst"
+    source_file.write_text(
         data=dedent(
             text="""\
             .. |name| replace:: original
@@ -2878,9 +2880,20 @@ def test_include_read_event_with_content_substitutions(
     app.build()
 
     assert observed_content == ["Included |name| content"]
-    assert (
-        "Observed original content" in (app.outdir / "index.html").read_text()
+    content_html = (app.outdir / "index.html").read_text()
+    app.cleanup()
+
+    include_file.write_text(data="Observed original content")
+    source_file.write_text(data=".. include:: example.txt\n")
+    app_expected = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
     )
+    app_expected.build()
+    assert app_expected.statuscode == 0
+
+    expected_content_html = (app_expected.outdir / "index.html").read_text()
+    assert content_html == expected_content_html
 
 
 def test_substitution_include_content_does_not_leak_to_nested_includes(
