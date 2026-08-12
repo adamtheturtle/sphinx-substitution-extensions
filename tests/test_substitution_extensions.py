@@ -2717,6 +2717,46 @@ def test_substitution_include_path(
     assert "Included content" in (app.outdir / "index.html").read_text()
 
 
+@pytest.mark.parametrize(
+    argnames=("include_path", "options"),
+    argvalues=[
+        ("/fragments/example.txt", ""),
+        ("/fragments/|name|.txt", "   :path-substitutions:\n"),
+    ],
+)
+def test_include_path_is_relative_to_source_directory(
+    *,
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+    include_path: str,
+    options: str,
+) -> None:
+    """Resolve slash-prefixed include paths from Sphinx's source root."""
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    (source_directory / "conf.py").touch()
+    fragments_directory = source_directory / "fragments"
+    fragments_directory.mkdir()
+    (fragments_directory / "example.txt").write_text(data="Included content")
+    (source_directory / "index.rst").write_text(
+        data=(
+            ".. |name| replace:: example\n\n"
+            f".. include:: {include_path}\n"
+            f"{options}"
+        ),
+    )
+
+    app = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        confoverrides={"extensions": ["sphinx_substitution_extensions"]},
+    )
+    app.build()
+
+    assert app.statuscode == 0
+    assert "Included content" in (app.outdir / "index.html").read_text()
+
+
 def test_substitution_include_content(
     *,
     tmp_path: Path,
