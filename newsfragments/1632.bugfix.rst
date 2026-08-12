@@ -1,0 +1,1 @@
+Preserve Sphinx's tracking of files consumed by the ``include`` directive.
