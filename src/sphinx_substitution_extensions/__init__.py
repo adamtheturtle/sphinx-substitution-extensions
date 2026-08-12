@@ -17,7 +17,7 @@ from docutils.nodes import (
 from docutils.nodes import target as target_node
 from docutils.parsers.rst import directives
 from docutils.parsers.rst.directives.images import Image
-from docutils.parsers.rst.directives.misc import Include
+from docutils.parsers.rst.directives.misc import Include as DocutilsInclude
 from docutils.parsers.rst.roles import code_role
 from docutils.parsers.rst.states import Inliner
 from docutils.statemachine import StringList
@@ -28,6 +28,7 @@ from sphinx import addnodes
 from sphinx.application import Sphinx
 from sphinx.config import Config
 from sphinx.directives.code import CodeBlock, LiteralInclude
+from sphinx.directives.other import Include
 from sphinx.environment import BuildEnvironment
 from sphinx.errors import SphinxError
 from sphinx.roles import XRefRole
@@ -528,7 +529,7 @@ class SubstitutionInclude(Include):
         env = self.state.document.settings.env
 
         if env is None:
-            return list(super().run())
+            return list(DocutilsInclude.run(self=self))
 
         config = env.config
         myst_config = _get_myst_config(context=self.state)

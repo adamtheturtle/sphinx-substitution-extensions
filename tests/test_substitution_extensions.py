@@ -2641,6 +2641,30 @@ def test_no_substitution_include(
     assert "Included content" in (app.outdir / "index.html").read_text()
 
 
+def test_include_fragment_is_not_reported_as_unreferenced(
+    *,
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """Register included documents with the Sphinx environment."""
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    (source_directory / "conf.py").touch()
+    (source_directory / "fragment.rst").write_text(data="Included content")
+    (source_directory / "index.rst").write_text(
+        data=".. include:: fragment.rst\n",
+    )
+
+    app = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        confoverrides={"extensions": ["sphinx_substitution_extensions"]},
+    )
+    app.build()
+
+    assert app.statuscode == 0
+
+
 def test_include_without_sphinx_environment(tmp_path: Path) -> None:
     """Support documents which have no Sphinx environment."""
     source_file = tmp_path / "index.rst"
