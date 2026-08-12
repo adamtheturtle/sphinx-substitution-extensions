@@ -8,6 +8,7 @@ from textwrap import dedent
 import pytest
 from docutils import core, nodes
 from docutils.parsers.rst import directives
+from sphinx.application import Sphinx
 from sphinx.errors import SphinxError
 from sphinx.testing.util import SphinxTestApp
 
@@ -2823,6 +2824,67 @@ def test_substitution_include_content(
     )
     source_file.write_text(data=".. include:: upgrade-guide.txt\n")
 
+    app_expected = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+    )
+    app_expected.build()
+    assert app_expected.statuscode == 0
+
+    expected_content_html = (app_expected.outdir / "index.html").read_text()
+    assert content_html == expected_content_html
+
+
+def test_include_read_event_with_content_substitutions(
+    *,
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """Emit include-read and then substitute the listener's content."""
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    (source_directory / "conf.py").touch()
+    include_file = source_directory / "example.txt"
+    include_file.write_text(
+        data="Included |name| content",
+    )
+    source_file = source_directory / "index.rst"
+    source_file.write_text(
+        data=dedent(
+            text="""\
+            .. |name| replace:: original
+
+            .. include:: example.txt
+               :content-substitutions:
+            """,
+        ),
+    )
+    observed_content: list[str] = []
+
+    def on_include_read(
+        _app: Sphinx,
+        _relative_path: Path,
+        _parent_docname: str,
+        content: list[str],
+    ) -> None:
+        """Record and transform the included source."""
+        observed_content.append(content[0])
+        content[0] = content[0].replace("Included", "Observed")
+
+    app = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        confoverrides={"extensions": ["sphinx_substitution_extensions"]},
+    )
+    app.connect(event="include-read", callback=on_include_read)
+    app.build()
+
+    assert observed_content == ["Included |name| content"]
+    content_html = (app.outdir / "index.html").read_text()
+    app.cleanup()
+
+    include_file.write_text(data="Observed original content")
+    source_file.write_text(data=".. include:: example.txt\n")
     app_expected = make_app(
         srcdir=source_directory,
         exception_on_warning=True,
