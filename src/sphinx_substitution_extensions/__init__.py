@@ -525,6 +525,38 @@ class SubstitutionInclude(Include):
         NO_PATH_SUBSTITUTION_OPTION_NAME: directives.flag,
     }
 
+    def _run_with_include_read(
+        self,
+        *,
+        env: BuildEnvironment,
+        substitution_defs: dict[str, str],
+        delimiter_pairs: set[tuple[str, str]],
+    ) -> list[Node]:
+        """Apply substitutions after existing include-read listeners."""
+
+        def substitute_include_content(
+            _app: Sphinx,
+            _relative_path: Path,
+            _parent_docname: str,
+            content: list[str],
+        ) -> None:
+            """Substitute content changed by earlier listeners."""
+            content[0] = _apply_substitutions(
+                text=content[0],
+                substitution_defs=substitution_defs,
+                delimiter_pairs=delimiter_pairs,
+            )
+
+        listener_id = env.events.connect(
+            name="include-read",
+            callback=substitute_include_content,
+            priority=999,
+        )
+        try:
+            return list(super().run())
+        finally:
+            env.events.disconnect(listener_id=listener_id)
+
     def run(self) -> list[Node]:
         """Replace placeholders in the path and/or included content."""
         env = self.state.document.settings.env
@@ -577,29 +609,11 @@ class SubstitutionInclude(Include):
             return list(super().run())
 
         if env.events.listeners.get("include-read"):
-
-            def substitute_include_content(
-                _app: Sphinx,
-                _relative_path: Path,
-                _parent_docname: str,
-                content: list[str],
-            ) -> None:
-                """Substitute after existing include-read listeners."""
-                content[0] = _apply_substitutions(
-                    text=content[0],
-                    substitution_defs=substitution_defs,
-                    delimiter_pairs=delimiter_pairs,
-                )
-
-            listener_id = env.events.connect(
-                "include-read",
-                substitute_include_content,
-                priority=999,
+            return self._run_with_include_read(
+                env=env,
+                substitution_defs=substitution_defs,
+                delimiter_pairs=delimiter_pairs,
             )
-            try:
-                return list(super().run())
-            finally:
-                env.events.disconnect(listener_id)
 
         original_insert_input = self.state_machine.insert_input
 
