@@ -1,6 +1,7 @@
 """Custom Sphinx extensions."""
 
 from importlib.metadata import version
+from pathlib import Path
 from typing import Any, ClassVar, TypeAlias
 from unittest.mock import patch
 
@@ -574,6 +575,31 @@ class SubstitutionInclude(Include):
 
         if not should_apply_content_substitutions:
             return list(super().run())
+
+        if env.events.listeners.get("include-read"):
+
+            def substitute_include_content(
+                _app: Sphinx,
+                _relative_path: Path,
+                _parent_docname: str,
+                content: list[str],
+            ) -> None:
+                """Substitute after existing include-read listeners."""
+                content[0] = _apply_substitutions(
+                    text=content[0],
+                    substitution_defs=substitution_defs,
+                    delimiter_pairs=delimiter_pairs,
+                )
+
+            listener_id = env.events.connect(
+                "include-read",
+                substitute_include_content,
+                priority=999,
+            )
+            try:
+                return list(super().run())
+            finally:
+                env.events.disconnect(listener_id)
 
         original_insert_input = self.state_machine.insert_input
 

@@ -8,6 +8,7 @@ from textwrap import dedent
 import pytest
 from docutils import core, nodes
 from docutils.parsers.rst import directives
+from sphinx.application import Sphinx
 from sphinx.errors import SphinxError
 from sphinx.testing.util import SphinxTestApp
 
@@ -2832,6 +2833,54 @@ def test_substitution_include_content(
 
     expected_content_html = (app_expected.outdir / "index.html").read_text()
     assert content_html == expected_content_html
+
+
+def test_include_read_event_with_content_substitutions(
+    *,
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+) -> None:
+    """Emit include-read and then substitute the listener's content."""
+    source_directory = tmp_path / "source"
+    source_directory.mkdir()
+    (source_directory / "conf.py").touch()
+    (source_directory / "example.txt").write_text(
+        data="Included |name| content",
+    )
+    (source_directory / "index.rst").write_text(
+        data=dedent(
+            text="""\
+            .. |name| replace:: original
+
+            .. include:: example.txt
+               :content-substitutions:
+            """,
+        ),
+    )
+    observed_content: list[str] = []
+
+    def on_include_read(
+        _app: Sphinx,
+        _relative_path: Path,
+        _parent_docname: str,
+        content: list[str],
+    ) -> None:
+        """Record and transform the included source."""
+        observed_content.append(content[0])
+        content[0] = content[0].replace("Included", "Observed")
+
+    app = make_app(
+        srcdir=source_directory,
+        exception_on_warning=True,
+        confoverrides={"extensions": ["sphinx_substitution_extensions"]},
+    )
+    app.connect(event="include-read", callback=on_include_read)
+    app.build()
+
+    assert observed_content == ["Included |name| content"]
+    assert (
+        "Observed original content" in (app.outdir / "index.html").read_text()
+    )
 
 
 def test_substitution_include_content_does_not_leak_to_nested_includes(
