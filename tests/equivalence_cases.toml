@@ -1,0 +1,2710 @@
+# Declarative Sphinx build-equivalence cases.
+# Each case builds `actual`, builds its hand-expanded `expected` form,
+# and compares the selected HTML output byte-for-byte.
+schema_version = 1
+
+[[cases]]
+id = "custom_myst_sub_delimiters_code_block"
+description = "Custom MyST substitution delimiters are respected."
+output = "markdown_document.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["myst_parser", "sphinx_substitution_extensions"]
+"myst_enable_extensions" = ["substitution"]
+"myst_substitutions" = { "a" = "example_substitution" }
+"myst_sub_delimiters" = ["[", "]"]
+
+[cases.actual.files]
+"conf.py" = ""
+"index.rst" = '''
+.. toctree::
+
+   markdown_document
+'''
+"markdown_document.md" = '''
+# Title
+
+```{code-block}
+:substitutions:
+
+$ PRE-[[a]]-POST
+```
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+"extensions" = ["myst_parser"]
+
+[cases.expected.files]
+"conf.py" = ""
+"index.rst" = '''
+.. toctree::
+
+   markdown_document
+'''
+"markdown_document.md" = '''
+# Title
+
+```{code-block}
+
+$ PRE-example_substitution-POST
+```
+'''
+
+[[cases]]
+id = "default_myst_sub_delimiters_code_block"
+description = "The default MyST substitution delimiters are respected."
+output = "markdown_document.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["myst_parser", "sphinx_substitution_extensions"]
+"myst_enable_extensions" = ["substitution"]
+"myst_substitutions" = { "a" = "example_substitution" }
+
+[cases.actual.files]
+"conf.py" = ""
+"index.rst" = '''
+.. toctree::
+
+   markdown_document
+'''
+"markdown_document.md" = '''
+# Title
+
+```{code-block}
+:substitutions:
+
+$ PRE-{{a}}-POST
+```
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+"extensions" = ["myst_parser"]
+
+[cases.expected.files]
+"conf.py" = ""
+"index.rst" = '''
+.. toctree::
+
+   markdown_document
+'''
+"markdown_document.md" = '''
+# Title
+
+```{code-block}
+
+$ PRE-example_substitution-POST
+```
+'''
+
+[[cases]]
+id = "default_substitution_include_content"
+description = "Replace include content when substitutions are enabled by\ndefault."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+"substitutions_default_enabled" = true
+
+[cases.actual.files]
+"conf.py" = ""
+"example.txt" = '''
+Included literal content::
+
+   Content with |name| placeholder
+'''
+"index.rst" = '''
+.. |name| replace:: example
+
+.. include:: example.txt
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = ""
+"example.txt" = '''
+Included literal content::
+
+   Content with example placeholder
+'''
+"index.rst" = '''
+.. include:: example.txt
+'''
+
+[[cases]]
+id = "default_substitution_include_disabled_content"
+description = "Respect ``:nocontent-substitutions:`` when defaults are enabled."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+"substitutions_default_enabled" = true
+
+[cases.actual.files]
+"conf.py" = ""
+"example.txt" = '''
+Included literal content::
+
+   Content with |name| placeholder
+'''
+"index.rst" = '''
+.. |name| replace:: example
+
+.. include:: example.txt
+   :nocontent-substitutions:
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = ""
+"example.txt" = '''
+Included literal content::
+
+   Content with |name| placeholder
+'''
+"index.rst" = '''
+.. include:: example.txt
+'''
+
+[[cases]]
+id = "default_substitutions_disabled_with_flag"
+description = "When ``substitutions_default_enabled`` is True but a code block has\nthe\n``:nosubstitutions:`` flag, substitutions should not be applied."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+"substitutions_default_enabled" = true
+
+[cases.actual.files]
+"conf.py" = ""
+"index.rst" = '''
+.. |a| replace:: example_substitution
+
+.. code-block:: shell
+   :nosubstitutions:
+
+   $ PRE-|a|-POST
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = ""
+"index.rst" = '''
+.. code-block:: shell
+
+    $ PRE-|a|-POST
+'''
+
+[[cases]]
+id = "default_substitutions_enabled"
+description = "When ``substitutions_default_enabled`` is set to True in conf.py,\ncode\nblocks should apply substitutions by default without needing the\n``:substitutions:`` flag."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+"substitutions_default_enabled" = true
+
+[cases.actual.files]
+"conf.py" = ""
+"index.rst" = '''
+.. |a| replace:: example_substitution
+
+.. code-block:: shell
+
+   $ PRE-|a|-POST
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = ""
+"index.rst" = '''
+.. code-block:: shell
+
+    $ PRE-example_substitution-POST
+'''
+
+[[cases]]
+id = "default_substitutions_image_disabled_path"
+description = "When ``substitutions_default_enabled`` is True but ``image`` has the\n``:nopath-substitutions:`` flag, path substitutions should not be\napplied.\n\nNote: This test uses MyST format with custom delimiters because the `|`\ncharacter cannot be used in Windows file paths."
+output = "markdown_document.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["myst_parser", "sphinx_substitution_extensions"]
+"myst_enable_extensions" = ["substitution"]
+"myst_substitutions" = { "a" = "example_substitution" }
+"myst_sub_delimiters" = ["[", "]"]
+"substitutions_default_enabled" = true
+
+[cases.actual.files]
+"conf.py" = ""
+"index.rst" = '''
+.. toctree::
+
+   markdown_document
+'''
+"markdown_document.md" = '''
+# Title
+
+```{image} [[a]].png
+:nopath-substitutions:
+```
+'''
+
+[cases.actual.binary_files]
+"[[a]].png" = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+"extensions" = ["myst_parser"]
+
+[cases.expected.files]
+"conf.py" = ""
+"index.rst" = '''
+.. toctree::
+
+   markdown_document
+'''
+"markdown_document.md" = '''
+# Title
+
+```{image} [[a]].png
+```
+'''
+
+[cases.expected.binary_files]
+"[[a]].png" = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
+
+[[cases]]
+id = "default_substitutions_image_path"
+description = "When ``substitutions_default_enabled`` is True, ``image`` should\napply path\nsubstitutions by default without requiring the ``:path-substitutions:``\nflag."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+"substitutions_default_enabled" = true
+
+[cases.actual.files]
+"conf.py" = ""
+"index.rst" = '''
+.. |a| replace:: test_image
+
+.. image:: |a|.png
+'''
+
+[cases.actual.binary_files]
+"test_image.png" = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = ""
+"index.rst" = '''
+.. image:: test_image.png
+'''
+
+[cases.expected.binary_files]
+"test_image.png" = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
+
+[[cases]]
+id = "default_substitutions_literal_include_content"
+description = "When ``substitutions_default_enabled`` is True, ``literalinclude``\nshould\napply content substitutions by default without requiring the\n``:content-\nsubstitutions:`` flag."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+"substitutions_default_enabled" = true
+
+[cases.actual.files]
+"conf.py" = ""
+"example.txt" = '''
+Content with |a| placeholder'''
+"index.rst" = '''
+.. |a| replace:: example_substitution
+
+.. literalinclude:: example.txt
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = ""
+"example.txt" = '''
+Content with example_substitution placeholder'''
+"index.rst" = '''
+.. literalinclude:: example.txt
+'''
+
+[[cases]]
+id = "default_substitutions_literal_include_disabled_content"
+description = "When ``substitutions_default_enabled`` is True but\n``literalinclude`` has\nthe ``:nocontent-substitutions:`` flag, content substitutions should\nnot be\napplied."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+"substitutions_default_enabled" = true
+
+[cases.actual.files]
+"conf.py" = ""
+"example.txt" = '''
+Content with |a| placeholder'''
+"index.rst" = '''
+.. |a| replace:: example_substitution
+
+.. literalinclude:: example.txt
+   :nocontent-substitutions:
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = ""
+"example.txt" = '''
+Content with |a| placeholder'''
+"index.rst" = '''
+.. literalinclude:: example.txt
+'''
+
+[[cases]]
+id = "default_substitutions_literal_include_disabled_path"
+description = "When ``substitutions_default_enabled`` is True but\n``literalinclude``\nhas the ``:nopath-substitutions:`` flag, path substitutions should not\nbe\napplied.\n\nNote: This test uses MyST format with custom delimiters because the `|`\ncharacter cannot be used in Windows file paths."
+output = "markdown_document.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["myst_parser", "sphinx_substitution_extensions"]
+"myst_enable_extensions" = ["substitution"]
+"myst_substitutions" = { "a" = "example_substitution" }
+"myst_sub_delimiters" = ["[", "]"]
+"substitutions_default_enabled" = true
+
+[cases.actual.files]
+"[[a]].txt" = '''
+File content'''
+"conf.py" = ""
+"index.rst" = '''
+.. toctree::
+
+   markdown_document
+'''
+"markdown_document.md" = '''
+# Title
+
+```{literalinclude} [[a]].txt
+:nopath-substitutions:
+```
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+"extensions" = ["myst_parser"]
+
+[cases.expected.files]
+"[[a]].txt" = '''
+File content'''
+"conf.py" = ""
+"index.rst" = '''
+.. toctree::
+
+   markdown_document
+'''
+"markdown_document.md" = '''
+# Title
+
+```{literalinclude} [[a]].txt
+```
+'''
+
+[[cases]]
+id = "default_substitutions_literal_include_path"
+description = "When ``substitutions_default_enabled`` is True, ``literalinclude``\nshould\napply path substitutions by default without requiring the ``:path-\nsubstitutions:`` flag."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+"substitutions_default_enabled" = true
+
+[cases.actual.files]
+"conf.py" = ""
+"example_substitution.txt" = '''
+File content'''
+"index.rst" = '''
+.. |a| replace:: example_substitution
+
+.. literalinclude:: |a|.txt
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = ""
+"example_substitution.txt" = '''
+File content'''
+"index.rst" = '''
+.. literalinclude:: example_substitution.txt
+'''
+
+[[cases]]
+id = "include_path_is_relative_to_source_directory[literal]"
+description = "Resolve slash-prefixed include paths from Sphinx's source root."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+
+[cases.actual.files]
+"conf.py" = ""
+"fragments/example.txt" = '''
+Included content'''
+"index.rst" = '''
+.. |name| replace:: example
+
+.. include:: /fragments/example.txt
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = ""
+"fragments/example.txt" = '''
+Included content'''
+"index.rst" = '''
+.. include:: /fragments/example.txt
+'''
+
+[[cases]]
+id = "include_path_is_relative_to_source_directory[substitution]"
+description = "Resolve slash-prefixed include paths from Sphinx's source root."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+
+[cases.actual.files]
+"conf.py" = ""
+"fragments/example.txt" = '''
+Included content'''
+"index.rst" = '''
+.. |name| replace:: example
+
+.. include:: /fragments/|name|.txt
+   :path-substitutions:
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = ""
+"fragments/example.txt" = '''
+Included content'''
+"index.rst" = '''
+.. include:: /fragments/example.txt
+'''
+
+[[cases]]
+id = "myst_deep_nesting"
+description = "MyST deeply nested substitutions (5 levels) are flattened\ncorrectly."
+output = "markdown_document.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["myst_parser", "sphinx_substitution_extensions"]
+"myst_enable_extensions" = ["substitution"]
+"myst_substitutions" = { "level1" = { "level2" = { "level3" = { "level4" = { "level5" = "deep_value" } } } } }
+
+[cases.actual.files]
+"conf.py" = ""
+"index.rst" = '''
+.. toctree::
+
+   markdown_document
+'''
+"markdown_document.md" = '''
+# Title
+
+```{code-block}
+:substitutions:
+
+$ PRE-|level1.level2.level3.level4.level5|-POST
+```
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+"extensions" = ["myst_parser"]
+
+[cases.expected.files]
+"conf.py" = ""
+"index.rst" = '''
+.. toctree::
+
+   markdown_document
+'''
+"markdown_document.md" = '''
+# Title
+
+```{code-block}
+
+$ PRE-deep_value-POST
+```
+'''
+
+[[cases]]
+id = "myst_empty_containers"
+description = "MyST empty containers (lists and dictionaries) do not create\nkeys\nand do not break the build."
+output = "markdown_document.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["myst_parser", "sphinx_substitution_extensions"]
+"myst_enable_extensions" = ["substitution"]
+"myst_substitutions" = { "empty_list" = [], "empty_dict" = {  }, "mixed" = { "empty_nested_list" = [], "empty_nested_dict" = {  }, "normal" = "value" }, "normal" = "normal_value" }
+
+[cases.actual.files]
+"conf.py" = ""
+"index.rst" = '''
+.. toctree::
+
+   markdown_document
+'''
+"markdown_document.md" = '''
+# Title
+
+```{code-block}
+:substitutions:
+
+$ PRE-|normal|-POST
+```
+
+```{code-block}
+:substitutions:
+
+$ PRE-|mixed.normal|-POST
+```
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+"extensions" = ["myst_parser"]
+
+[cases.expected.files]
+"conf.py" = ""
+"index.rst" = '''
+.. toctree::
+
+   markdown_document
+'''
+"markdown_document.md" = '''
+# Title
+
+```{code-block}
+
+$ PRE-normal_value-POST
+```
+
+```{code-block}
+
+$ PRE-value-POST
+```
+'''
+
+[[cases]]
+id = "myst_frontmatter_substitutions"
+description = "MyST front matter substitutions are respected in code\nblocks."
+output = "markdown_document.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["myst_parser", "sphinx_substitution_extensions"]
+"myst_enable_extensions" = ["substitution"]
+"myst_substitutions" = { "global" = "global_value" }
+
+[cases.actual.files]
+"conf.py" = ""
+"index.rst" = '''
+.. toctree::
+
+   markdown_document
+'''
+"markdown_document.md" = '''
+---
+myst:
+  substitutions:
+    local:
+      nested: local_value
+---
+
+# Title
+
+```{code-block} shell
+:substitutions:
+
+$ PRE-|global|-|local.nested|-POST
+```
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+"extensions" = ["myst_parser"]
+
+[cases.expected.files]
+"conf.py" = ""
+"index.rst" = '''
+.. toctree::
+
+   markdown_document
+'''
+"markdown_document.md" = '''
+# Title
+
+```{code-block} shell
+
+$ PRE-global_value-local_value-POST
+```
+'''
+
+[[cases]]
+id = "myst_mixed_types_in_list"
+description = "MyST mixed types in lists are converted to strings\ncorrectly."
+output = "markdown_document.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["myst_parser", "sphinx_substitution_extensions"]
+"myst_enable_extensions" = ["substitution"]
+"myst_substitutions" = { "mixed" = [1, "text", 3.14, -42, 0] }
+
+[cases.actual.files]
+"conf.py" = ""
+"index.rst" = '''
+.. toctree::
+
+   markdown_document
+'''
+"markdown_document.md" = '''
+# Title
+
+```{code-block}
+:substitutions:
+
+$ PRE-|mixed.0|-POST
+```
+
+```{code-block}
+:substitutions:
+
+$ PRE-|mixed.1|-POST
+```
+
+```{code-block}
+:substitutions:
+
+$ PRE-|mixed.2|-POST
+```
+
+```{code-block}
+:substitutions:
+
+$ PRE-|mixed.3|-POST
+```
+
+```{code-block}
+:substitutions:
+
+$ PRE-|mixed.4|-POST
+```
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+"extensions" = ["myst_parser"]
+
+[cases.expected.files]
+"conf.py" = ""
+"index.rst" = '''
+.. toctree::
+
+   markdown_document
+'''
+"markdown_document.md" = '''
+# Title
+
+```{code-block}
+
+$ PRE-1-POST
+```
+
+```{code-block}
+
+$ PRE-text-POST
+```
+
+```{code-block}
+
+$ PRE-3.14-POST
+```
+
+```{code-block}
+
+$ PRE--42-POST
+```
+
+```{code-block}
+
+$ PRE-0-POST
+```
+'''
+
+[[cases]]
+id = "myst_nested_lists"
+description = "MyST nested lists are flattened with multi-index notation."
+output = "markdown_document.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["myst_parser", "sphinx_substitution_extensions"]
+"myst_enable_extensions" = ["substitution"]
+"myst_substitutions" = { "matrix" = [[1, 2], [3, 4]] }
+
+[cases.actual.files]
+"conf.py" = ""
+"index.rst" = '''
+.. toctree::
+
+   markdown_document
+'''
+"markdown_document.md" = '''
+# Title
+
+```{code-block}
+:substitutions:
+
+$ PRE-|matrix.0.0|-POST
+```
+
+```{code-block}
+:substitutions:
+
+$ PRE-|matrix.0.1|-POST
+```
+
+```{code-block}
+:substitutions:
+
+$ PRE-|matrix.1.0|-POST
+```
+
+```{code-block}
+:substitutions:
+
+$ PRE-|matrix.1.1|-POST
+```
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+"extensions" = ["myst_parser"]
+
+[cases.expected.files]
+"conf.py" = ""
+"index.rst" = '''
+.. toctree::
+
+   markdown_document
+'''
+"markdown_document.md" = '''
+# Title
+
+```{code-block}
+
+$ PRE-1-POST
+```
+
+```{code-block}
+
+$ PRE-2-POST
+```
+
+```{code-block}
+
+$ PRE-3-POST
+```
+
+```{code-block}
+
+$ PRE-4-POST
+```
+'''
+
+[[cases]]
+id = "myst_nested_substitutions"
+description = "MyST nested substitutions are flattened and applied\ncorrectly."
+output = "markdown_document.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["myst_parser", "sphinx_substitution_extensions"]
+"myst_enable_extensions" = ["substitution"]
+"myst_substitutions" = { "a" = "value_a", "b" = { "c" = "value_b_c", "d" = { "e" = "value_b_d_e" } } }
+
+[cases.actual.files]
+"conf.py" = ""
+"index.rst" = '''
+.. toctree::
+
+   markdown_document
+'''
+"markdown_document.md" = '''
+# Title
+
+```{code-block}
+:substitutions:
+
+$ PRE-|a|-POST
+```
+
+```{code-block}
+:substitutions:
+
+$ PRE-|b.c|-POST
+```
+
+```{code-block}
+:substitutions:
+
+$ PRE-|b.d.e|-POST
+```
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+"extensions" = ["myst_parser"]
+
+[cases.expected.files]
+"conf.py" = ""
+"index.rst" = '''
+.. toctree::
+
+   markdown_document
+'''
+"markdown_document.md" = '''
+# Title
+
+```{code-block}
+
+$ PRE-value_a-POST
+```
+
+```{code-block}
+
+$ PRE-value_b_c-POST
+```
+
+```{code-block}
+
+$ PRE-value_b_d_e-POST
+```
+'''
+
+[[cases]]
+id = "myst_nested_substitutions_with_lists"
+description = "MyST nested substitutions with lists are flattened and\napplied correctly."
+output = "markdown_document.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["myst_parser", "sphinx_substitution_extensions"]
+"myst_enable_extensions" = ["substitution"]
+"myst_substitutions" = { "items" = ["first", "second"], "nested" = [{ "name" = "a", "value" = "1" }, { "name" = "b", "value" = "2" }] }
+
+[cases.actual.files]
+"conf.py" = ""
+"index.rst" = '''
+.. toctree::
+
+   markdown_document
+'''
+"markdown_document.md" = '''
+# Title
+
+```{code-block}
+:substitutions:
+
+$ PRE-|items.0|-POST
+```
+
+```{code-block}
+:substitutions:
+
+$ PRE-|items.1|-POST
+```
+
+```{code-block}
+:substitutions:
+
+$ PRE-|nested.0.name|-POST
+```
+
+```{code-block}
+:substitutions:
+
+$ PRE-|nested.1.value|-POST
+```
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+"extensions" = ["myst_parser"]
+
+[cases.expected.files]
+"conf.py" = ""
+"index.rst" = '''
+.. toctree::
+
+   markdown_document
+'''
+"markdown_document.md" = '''
+# Title
+
+```{code-block}
+
+$ PRE-first-POST
+```
+
+```{code-block}
+
+$ PRE-second-POST
+```
+
+```{code-block}
+
+$ PRE-a-POST
+```
+
+```{code-block}
+
+$ PRE-2-POST
+```
+'''
+
+[[cases]]
+id = "myst_substitution_code_role"
+description = "The ``substitution-code`` role replaces the placeholders defined\nin\n``conf.py`` as specified."
+output = "markdown_document.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["myst_parser", "sphinx_substitution_extensions"]
+"myst_enable_extensions" = ["substitution"]
+"myst_substitutions" = { "a" = "example_substitution" }
+
+[cases.actual.files]
+"conf.py" = ""
+"index.rst" = '''
+.. toctree::
+
+   markdown_document
+'''
+"markdown_document.md" = '''
+# Title
+
+Example {substitution-code}`PRE-|a|-POST`
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+"extensions" = ["myst_parser"]
+
+[cases.expected.files]
+"conf.py" = ""
+"index.rst" = '''
+.. toctree::
+
+   markdown_document
+'''
+"markdown_document.md" = '''
+# Title
+
+Example {code}`PRE-example_substitution-POST`
+'''
+
+[[cases]]
+id = "myst_substitution_download"
+description = "The ``substitution-download`` role replaces the placeholders\ndefined in\n``conf.py`` as specified."
+output = "markdown_document.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["myst_parser", "sphinx_substitution_extensions"]
+"myst_enable_extensions" = ["substitution"]
+"myst_substitutions" = { "a" = "example_substitution" }
+
+[cases.actual.files]
+"conf.py" = ""
+"index.rst" = '''
+.. toctree::
+
+   markdown_document
+'''
+"markdown_document.md" = '''
+# Title
+
+{substitution-download}`txt_pre-|a|-txt_post <tgt_pre-|a|-tgt_post	.py>`
+'''
+"tgt_pre-example_substitution-tgt_post .py" = '''
+Sample'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+"extensions" = ["myst_parser"]
+
+[cases.expected.files]
+"conf.py" = ""
+"index.rst" = '''
+.. toctree::
+
+   markdown_document
+'''
+"markdown_document.md" = '''
+# Title
+
+{download}`txt_pre-example_substitution-txt_post <tgt_pre-example_substitution-tgt_post	.py>`
+'''
+"tgt_pre-example_substitution-tgt_post .py" = '''
+Sample'''
+
+[[cases]]
+id = "myst_substitution_hyperlink_target"
+description = "Replace global MyST substitutions in external hyperlink targets."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["myst_parser", "sphinx_substitution_extensions"]
+"myst_enable_extensions" = ["substitution"]
+"myst_substitutions" = { "ver" = "0.8.5" }
+"substitutions_hyperlink_targets_enabled" = true
+
+[cases.actual.files]
+"conf.py" = ""
+"index.md" = '''
+```{eval-rst}
+Download the tarball_
+
+.. _tarball: https://example.com/releases/v|ver|.tar.gz
+```
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+"extensions" = ["myst_parser"]
+
+[cases.expected.files]
+"conf.py" = ""
+"index.md" = '''
+```{eval-rst}
+Download the tarball_
+
+.. _tarball: https://example.com/releases/v0.8.5.tar.gz
+```
+'''
+
+[[cases]]
+id = "myst_substitutions"
+description = "MyST substitutions are respected in MyST documents."
+output = "markdown_document.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["myst_parser", "sphinx_substitution_extensions"]
+"myst_enable_extensions" = ["substitution"]
+"myst_substitutions" = { "a" = "example_substitution" }
+
+[cases.actual.files]
+"conf.py" = ""
+"index.rst" = '''
+.. toctree::
+
+   markdown_document
+'''
+"markdown_document.md" = '''
+# Title
+
+```{code-block}
+:substitutions:
+
+$ PRE-|a|-POST
+```
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+"extensions" = ["myst_parser"]
+
+[cases.expected.files]
+"conf.py" = ""
+"index.rst" = '''
+.. toctree::
+
+   markdown_document
+'''
+"markdown_document.md" = '''
+# Title
+
+```{code-block}
+
+$ PRE-example_substitution-POST
+```
+'''
+
+[[cases]]
+id = "myst_substitutions_custom_markdown_suffix"
+description = "Custom markdown suffixes are respected in MyST documents."
+output = "markdown_document.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["myst_parser", "sphinx_substitution_extensions"]
+"myst_enable_extensions" = ["substitution"]
+"myst_substitutions" = { "a" = "example_substitution" }
+"source_suffix" = { ".rst" = "restructuredtext", ".txt" = "markdown" }
+
+[cases.actual.files]
+"conf.py" = ""
+"index.rst" = '''
+.. toctree::
+
+    markdown_document
+'''
+"markdown_document.txt" = '''
+# Title
+
+```{code-block}
+:substitutions:
+
+$ PRE-|a|-POST
+```
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+"extensions" = ["myst_parser"]
+"source_suffix" = { ".rst" = "restructuredtext", ".txt" = "markdown" }
+
+[cases.expected.files]
+"conf.py" = ""
+"index.rst" = '''
+.. toctree::
+
+    markdown_document
+'''
+"markdown_document.txt" = '''
+# Title
+
+```{code-block}
+
+$ PRE-example_substitution-POST
+```
+'''
+
+[[cases]]
+id = "myst_substitutions_ignored_given_rst_definition"
+description = "MyST substitutions are ignored in rST documents with a rST\nsubstitution\ndefinition."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["myst_parser", "sphinx_substitution_extensions"]
+"myst_enable_extensions" = ["substitution"]
+"myst_substitutions" = { "a" = "myst_substitution" }
+
+[cases.actual.files]
+"conf.py" = ""
+"index.rst" = '''
+.. |a| replace:: rst_prolog_substitution
+
+.. code-block:: shell
+   :substitutions:
+
+   $ PRE-|a|-POST
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = ""
+"index.rst" = '''
+.. code-block:: shell
+
+   $ PRE-rst_prolog_substitution-POST
+'''
+
+[[cases]]
+id = "myst_substitutions_ignored_without_rst_definition"
+description = "MyST substitutions are ignored in rST documents without a rST\nsubstitution definition."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["myst_parser", "sphinx_substitution_extensions"]
+"myst_enable_extensions" = ["substitution"]
+"myst_substitutions" = { "a" = "myst_substitution" }
+
+[cases.actual.files]
+"conf.py" = ""
+"index.rst" = '''
+.. code-block:: shell
+   :substitutions:
+
+   $ PRE-|a|-POST
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = ""
+"index.rst" = '''
+.. code-block:: shell
+
+   $ PRE-|a|-POST
+'''
+
+[[cases]]
+id = "myst_substitutions_image"
+description = "MyST substitutions are respected in image paths in MyST\ndocuments."
+output = "markdown_document.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["myst_parser", "sphinx_substitution_extensions"]
+"myst_enable_extensions" = ["substitution"]
+"myst_substitutions" = { "a" = "test_image" }
+
+[cases.actual.files]
+"conf.py" = ""
+"index.rst" = '''
+.. toctree::
+
+   markdown_document
+'''
+"markdown_document.md" = '''
+# Title
+
+```{image} |a|.png
+:path-substitutions:
+```
+'''
+
+[cases.actual.binary_files]
+"test_image.png" = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+"extensions" = ["myst_parser"]
+
+[cases.expected.files]
+"conf.py" = ""
+"index.rst" = '''
+.. toctree::
+
+   markdown_document
+'''
+"markdown_document.md" = '''
+# Title
+
+```{image} test_image.png
+```
+'''
+
+[cases.expected.binary_files]
+"test_image.png" = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
+
+[[cases]]
+id = "myst_substitutions_image_default_delimiters"
+description = "The default MyST substitution delimiters {{}} are respected for\nimages."
+output = "markdown_document.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["myst_parser", "sphinx_substitution_extensions"]
+"myst_enable_extensions" = ["substitution"]
+"myst_substitutions" = { "a" = "test_image" }
+
+[cases.actual.files]
+"conf.py" = ""
+"index.rst" = '''
+.. toctree::
+
+   markdown_document
+'''
+"markdown_document.md" = '''
+# Title
+
+```{image} {{a}}.png
+:path-substitutions:
+```
+'''
+
+[cases.actual.binary_files]
+"test_image.png" = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+"extensions" = ["myst_parser"]
+
+[cases.expected.files]
+"conf.py" = ""
+"index.rst" = '''
+.. toctree::
+
+   markdown_document
+'''
+"markdown_document.md" = '''
+# Title
+
+```{image} test_image.png
+```
+'''
+
+[cases.expected.binary_files]
+"test_image.png" = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
+
+[[cases]]
+id = "myst_substitutions_not_enabled"
+description = "MyST substitutions are not respected in MyST documents when\n``myst_enable_extensions`` does not contain ``substitutions``."
+output = "markdown_document.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["myst_parser", "sphinx_substitution_extensions"]
+"myst_substitutions" = { "a" = "example_substitution" }
+
+[cases.actual.files]
+"conf.py" = ""
+"index.rst" = '''
+.. toctree::
+
+   markdown_document
+'''
+"markdown_document.md" = '''
+# Title
+
+```{code-block}
+:substitutions:
+
+$ PRE-|a|-POST
+```
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+"extensions" = ["myst_parser"]
+
+[cases.expected.files]
+"conf.py" = ""
+"index.rst" = '''
+.. toctree::
+
+   markdown_document
+'''
+"markdown_document.md" = '''
+# Title
+
+```{code-block}
+
+$ PRE-|a|-POST
+```
+'''
+
+[[cases]]
+id = "no_substitution_code_block"
+description = "The ``code-block`` directive does not replace placeholders."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+
+[cases.actual.files]
+"conf.py" = ""
+"index.rst" = '''
+.. |a| replace:: example_substitution
+
+.. code-block:: shell
+
+   $ PRE-|a|-POST
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = ""
+"index.rst" = '''
+.. |a| replace:: example_substitution
+
+.. code-block:: shell
+
+   $ PRE-|a|-POST
+'''
+
+[[cases]]
+id = "no_substitution_hyperlink_target"
+description = "Leave placeholders in hyperlink targets unchanged by default."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+
+[cases.actual.files]
+"conf.py" = ""
+"index.rst" = '''
+.. |ver| replace:: 0.8.5
+
+Download the tarball_
+
+.. _tarball: https://example.com/releases/v|ver|.tar.gz
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = ""
+"index.rst" = '''
+.. |ver| replace:: 0.8.5
+
+Download the tarball_
+
+.. _tarball: https://example.com/releases/v|ver|.tar.gz
+'''
+
+[[cases]]
+id = "no_substitution_image"
+description = "The ``image`` directive does not replace custom placeholders by\ndefault.\n\nNote: reST by default processes |substitutions| in image paths, but\nour extension adds the ability to use custom delimiters like {{var}}."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+
+[cases.actual.files]
+"conf.py" = ""
+"index.rst" = '''
+.. |a| replace:: test_image
+
+.. image:: test_image.png
+'''
+
+[cases.actual.binary_files]
+"test_image.png" = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = ""
+"index.rst" = '''
+.. |a| replace:: test_image
+
+.. image:: test_image.png
+'''
+
+[cases.expected.binary_files]
+"test_image.png" = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
+
+[[cases]]
+id = "no_substitution_literal_include"
+description = "The ``literalinclude`` directive does not replace placeholders."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+
+[cases.actual.files]
+"conf.py" = ""
+"example.txt" = '''
+Content with |a| placeholder'''
+"index.rst" = '''
+.. |a| replace:: example_substitution
+
+.. literalinclude:: example.txt
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = ""
+"example.txt" = '''
+Content with |a| placeholder'''
+"index.rst" = '''
+.. |a| replace:: example_substitution
+
+.. literalinclude:: example.txt
+'''
+
+[[cases]]
+id = "rst_substitution_key_with_dot_does_not_raise_error"
+description = "Substitution names with dots do not raise SphinxError in reST.\n\nThe dot validation applies only to flattened MyST substitutions, so\na refactoring that leaked it into the reST path would be caught here."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+
+[cases.actual.files]
+"conf.py" = ""
+"index.rst" = '''
+.. |key.with.dots| replace:: example_substitution
+
+.. code-block:: shell
+   :substitutions:
+
+   $ PRE-|key.with.dots|-POST
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = ""
+"index.rst" = '''
+.. code-block:: shell
+
+    $ PRE-example_substitution-POST
+'''
+
+[[cases]]
+id = "substitution_code_block"
+description = "The ``code-block`` directive replaces the placeholders defined in\n``conf.py`` as specified."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+
+[cases.actual.files]
+"conf.py" = ""
+"index.rst" = '''
+.. |a| replace:: example_substitution
+
+.. code-block:: shell
+   :substitutions:
+
+   $ PRE-|a|-POST
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = ""
+"index.rst" = '''
+.. code-block:: shell
+
+    $ PRE-example_substitution-POST
+'''
+
+[[cases]]
+id = "substitution_code_block_case_preserving"
+description = "The ``code-block`` directive respects the original case of\nreplacements."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+
+[cases.actual.files]
+"conf.py" = ""
+"index.rst" = '''
+.. |aBcD_eFgH| replace:: example_substitution
+
+.. code-block:: shell
+   :substitutions:
+
+   $ PRE-|aBcD_eFgH|-POST
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = ""
+"index.rst" = '''
+.. code-block:: shell
+
+    $ PRE-example_substitution-POST
+'''
+
+[[cases]]
+id = "substitution_download"
+description = "The ``substitution-download`` role replaces the placeholders defined\nin\n``conf.py`` as specified in both the download text and the download\ntarget."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+
+[cases.actual.files]
+"conf.py" = ""
+"index.rst" = '''
+.. |a| replace:: example_substitution
+
+:substitution-download:`txt_pre-|a|-txt_post <tgt_pre-|a|-tgt_post	.py>`
+'''
+"tgt_pre-example_substitution-tgt_post .py" = '''
+Sample'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = ""
+"index.rst" = '''
+:download:`txt_pre-example_substitution-txt_post <tgt_pre-example_substitution-tgt_post	.py>`
+'''
+"tgt_pre-example_substitution-tgt_post .py" = '''
+Sample'''
+
+[[cases]]
+id = "substitution_hyperlink_target"
+description = "Replace placeholders in external hyperlink targets."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+"rst_prolog" = ".. |ver| replace:: 0.8.5"
+"substitutions_hyperlink_targets_enabled" = true
+
+[cases.actual.files]
+"conf.py" = ""
+"index.rst" = '''
+Download the tarball_
+
+.. _tarball: https://example.com/releases/v|ver|.tar.gz
+
+See the `internal section`_.
+
+Internal section
+----------------
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = ""
+"index.rst" = '''
+Download the tarball_
+
+.. _tarball: https://example.com/releases/v0.8.5.tar.gz
+
+See the `internal section`_.
+
+Internal section
+----------------
+'''
+
+[[cases]]
+id = "substitution_image_path"
+description = "The ``image`` directive replaces placeholders in the file path when\nthe\n``:path-substitutions:`` flag is set."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+
+[cases.actual.files]
+"conf.py" = ""
+"index.rst" = '''
+.. |a| replace:: test_image
+
+.. image:: |a|.png
+   :path-substitutions:
+'''
+
+[cases.actual.binary_files]
+"test_image.png" = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = ""
+"index.rst" = '''
+.. image:: test_image.png
+'''
+
+[cases.expected.binary_files]
+"test_image.png" = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
+
+[[cases]]
+id = "substitution_image_path_multiple"
+description = "The ``image`` directive replaces multiple placeholders in the file\npath."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+
+[cases.actual.files]
+"conf.py" = ""
+"index.rst" = '''
+.. |a| replace:: test
+.. |b| replace:: image
+
+.. image:: pre_|a|_mid_|b|_post.png
+   :path-substitutions:
+'''
+
+[cases.actual.binary_files]
+"pre_test_mid_image_post.png" = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = ""
+"index.rst" = '''
+.. image:: pre_test_mid_image_post.png
+'''
+
+[cases.expected.binary_files]
+"pre_test_mid_image_post.png" = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
+
+[[cases]]
+id = "substitution_image_with_options"
+description = "The ``image`` directive works with standard image options."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+
+[cases.actual.files]
+"conf.py" = ""
+"index.rst" = '''
+.. |a| replace:: test_image
+
+.. image:: |a|.png
+   :path-substitutions:
+   :alt: Test image alt text
+   :width: 100px
+'''
+
+[cases.actual.binary_files]
+"test_image.png" = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = ""
+"index.rst" = '''
+.. image:: test_image.png
+   :alt: Test image alt text
+   :width: 100px
+'''
+
+[cases.expected.binary_files]
+"test_image.png" = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
+
+[[cases]]
+id = "substitution_include_content"
+description = "Replace placeholders in included source content when requested."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+
+[cases.actual.files]
+"conf.py" = ""
+"index.rst" = '''
+.. |SRC_VERSION| replace:: 4.0
+.. |NEW_VERSION| replace:: 4.1
+
+.. include:: upgrade-guide.txt
+   :content-substitutions:
+'''
+"upgrade-guide.txt" = '''
+.. code-block:: shell
+
+   upgrade --from |SRC_VERSION| --to |NEW_VERSION|
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = ""
+"index.rst" = '''
+.. include:: upgrade-guide.txt
+'''
+"upgrade-guide.txt" = '''
+.. code-block:: shell
+
+   upgrade --from 4.0 --to 4.1
+'''
+
+[[cases]]
+id = "substitution_include_content_does_not_leak_to_nested_includes"
+description = "Apply content substitutions only to the include that requests\nthem."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+
+[cases.actual.files]
+"conf.py" = ""
+"index.rst" = '''
+.. |name| replace:: example
+
+.. include:: outer.txt
+   :content-substitutions:
+'''
+"nested-default.txt" = '''
+.. code-block:: text
+
+   Default nested content with |name| placeholder
+'''
+"nested-disabled.txt" = '''
+.. code-block:: text
+
+   Disabled nested content with |name| placeholder
+'''
+"outer.txt" = '''
+.. include:: nested-default.txt
+
+.. include:: nested-disabled.txt
+   :nocontent-substitutions:
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = ""
+"index.rst" = '''
+.. include:: outer.txt
+'''
+"nested-default.txt" = '''
+.. code-block:: text
+
+   Default nested content with |name| placeholder
+'''
+"nested-disabled.txt" = '''
+.. code-block:: text
+
+   Disabled nested content with |name| placeholder
+'''
+"outer.txt" = '''
+.. include:: nested-default.txt
+
+.. include:: nested-disabled.txt
+'''
+
+[[cases]]
+id = "substitution_include_literal_content"
+description = "Replace placeholders when ``include`` returns a literal node."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+
+[cases.actual.files]
+"conf.py" = ""
+"example.txt" = '''
+Content with |name| placeholder'''
+"index.rst" = '''
+.. |name| replace:: example
+
+.. include:: example.txt
+   :literal:
+   :content-substitutions:
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = ""
+"example.txt" = '''
+Content with example placeholder'''
+"index.rst" = '''
+.. include:: example.txt
+   :literal:
+'''
+
+[[cases]]
+id = "substitution_include_literal_content_with_include_read"
+description = "Replace placeholders in returned literal nodes with an include-read listener."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+
+[cases.actual.files]
+"conf.py" = '''
+def on_include_read(app, relative_path, parent_docname, content):
+    pass
+
+def setup(app):
+    app.connect("include-read", on_include_read)
+'''
+"example.txt" = '''
+Content with |name| placeholder'''
+"index.rst" = '''
+.. |name| replace:: example
+
+.. include:: example.txt
+   :literal:
+   :content-substitutions:
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = ""
+"example.txt" = '''
+Content with example placeholder'''
+"index.rst" = '''
+.. include:: example.txt
+   :literal:
+'''
+
+[[cases]]
+id = "substitution_include_code_content_with_include_read"
+description = "Replace placeholders in returned code nodes with an include-read listener."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+
+[cases.actual.files]
+"conf.py" = '''
+def on_include_read(app, relative_path, parent_docname, content):
+    pass
+
+def setup(app):
+    app.connect("include-read", on_include_read)
+'''
+"example.txt" = '''
+Content with |name| placeholder'''
+"index.rst" = '''
+.. |name| replace:: example
+
+.. include:: example.txt
+   :code: text
+   :content-substitutions:
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = ""
+"example.txt" = '''
+Content with example placeholder'''
+"index.rst" = '''
+.. include:: example.txt
+   :code: text
+'''
+
+[[cases]]
+id = "substitution_include_parser_content_with_include_read"
+description = "Replace placeholders in returned parser nodes with an include-read listener."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+
+[cases.actual.files]
+"conf.py" = '''
+def on_include_read(app, relative_path, parent_docname, content):
+    pass
+
+def setup(app):
+    app.connect("include-read", on_include_read)
+'''
+"example.txt" = '''
+Content with |name| placeholder'''
+"index.rst" = '''
+.. |name| replace:: example
+
+.. include:: example.txt
+   :parser: rst
+   :content-substitutions:
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = ""
+"example.txt" = '''
+Content with example placeholder'''
+"index.rst" = '''
+.. include:: example.txt
+   :parser: rst
+'''
+
+[[cases]]
+id = "substitution_parser_include_with_nested_include_read"
+description = "Apply substitutions only to outer parser nodes when a nested include emits include-read."
+output = "guide/index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+"root_doc" = "guide/index"
+
+[cases.actual.files]
+"conf.py" = '''
+def on_include_read(app, relative_path, parent_docname, content):
+    pass
+
+def setup(app):
+    app.connect("include-read", on_include_read)
+'''
+"guide/index.rst" = '''
+.. |name| replace:: example
+
+.. include:: outer.txt
+   :parser: rst
+   :content-substitutions:
+'''
+"guide/nested.txt" = '''
+.. code-block:: text
+
+   Nested |name| content
+'''
+"guide/outer.txt" = '''
+Outer |name| content
+
+.. include:: nested.txt
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+"root_doc" = "guide/index"
+
+[cases.expected.files]
+"conf.py" = ""
+"guide/index.rst" = '''
+.. include:: outer.txt
+   :parser: rst
+'''
+"guide/nested.txt" = '''
+.. code-block:: text
+
+   Nested |name| content
+'''
+"guide/outer.txt" = '''
+Outer example content
+
+.. include:: nested.txt
+'''
+
+[[cases]]
+id = "substitution_include_path_and_content"
+description = "Replace placeholders in an include path and its source content."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+
+[cases.actual.files]
+"conf.py" = ""
+"index.rst" = '''
+.. |document| replace:: upgrade-guide
+.. |version| replace:: 4.1
+
+.. include:: |document|.txt
+   :path-substitutions:
+   :content-substitutions:
+'''
+"upgrade-guide.txt" = '''
+.. code-block:: text
+
+   Upgrade to |version|.
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = ""
+"index.rst" = '''
+.. include:: upgrade-guide.txt
+'''
+"upgrade-guide.txt" = '''
+.. code-block:: text
+
+   Upgrade to 4.1.
+'''
+
+[[cases]]
+id = "substitution_inline"
+description = "The ``substitution-code`` role replaces the placeholders defined in\n``conf.py`` as specified."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+
+[cases.actual.files]
+"conf.py" = ""
+"index.rst" = '''
+.. |a| replace:: example_substitution
+
+Example :substitution-code:`PRE-|a|-POST`
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = ""
+"index.rst" = '''
+Example :code:`PRE-example_substitution-POST`
+'''
+
+[[cases]]
+id = "substitution_inline_case_preserving"
+description = "The ``substitution-code`` role respects the original case of\nreplacements."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+
+[cases.actual.files]
+"conf.py" = ""
+"index.rst" = '''
+.. |aBcD_eFgH| replace:: example_substitution
+
+Example :substitution-code:`PRE-|aBcD_eFgH|-POST`
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = ""
+"index.rst" = '''
+Example :code:`PRE-example_substitution-POST`
+'''
+
+[[cases]]
+id = "substitution_literal_include"
+description = "The ``literalinclude`` directive replaces the placeholders defined\nin\n``conf.py`` as specified when the `:content-substitutions:` flag is\nset."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+
+[cases.actual.files]
+"conf.py" = ""
+"example.txt" = '''
+Content with |a| placeholder'''
+"index.rst" = '''
+.. |a| replace:: example_substitution
+
+.. literalinclude:: example.txt
+   :content-substitutions:
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = ""
+"example.txt" = '''
+Content with example_substitution placeholder'''
+"index.rst" = '''
+.. literalinclude:: example.txt
+'''
+
+[[cases]]
+id = "substitution_literal_include_both_path_and_content"
+description = "The ``literalinclude`` directive can use both path and content\nsubstitutions at the same time."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+
+[cases.actual.files]
+"conf.py" = ""
+"example_substitution.txt" = '''
+Content with |b| placeholder'''
+"index.rst" = '''
+.. |a| replace:: example_substitution
+.. |b| replace:: test_value
+
+.. literalinclude:: |a|.txt
+   :path-substitutions:
+   :content-substitutions:
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = ""
+"example_substitution.txt" = '''
+Content with test_value placeholder'''
+"index.rst" = '''
+.. literalinclude:: example_substitution.txt
+'''
+
+[[cases]]
+id = "substitution_literal_include_empty_file"
+description = "The ``literalinclude`` directive handles empty files without\ncrashing."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+
+[cases.actual.files]
+"conf.py" = ""
+"empty.txt" = ""
+"index.rst" = '''
+.. |a| replace:: example_substitution
+
+.. literalinclude:: empty.txt
+   :content-substitutions:
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = ""
+"empty.txt" = ""
+"index.rst" = '''
+.. literalinclude:: empty.txt
+'''
+
+[[cases]]
+id = "substitution_literal_include_multiple"
+description = "The ``literalinclude`` directive replaces multiple placeholders."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+
+[cases.actual.files]
+"conf.py" = ""
+"example.txt" = '''
+PRE-|a|-MID-|b|-POST'''
+"index.rst" = '''
+.. |a| replace:: first_substitution
+.. |b| replace:: second_substitution
+
+.. literalinclude:: example.txt
+   :content-substitutions:
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = ""
+"example.txt" = '''
+PRE-first_substitution-MID-second_substitution-POST'''
+"index.rst" = '''
+.. literalinclude:: example.txt
+'''
+
+[[cases]]
+id = "substitution_literal_include_path"
+description = "The ``literalinclude`` directive replaces placeholders in the file\npath\nwhen the `:path-substitutions:` flag is set."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+
+[cases.actual.files]
+"conf.py" = ""
+"example_substitution.txt" = '''
+File content'''
+"index.rst" = '''
+.. |a| replace:: example_substitution
+
+.. literalinclude:: |a|.txt
+   :path-substitutions:
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = ""
+"example_substitution.txt" = '''
+File content'''
+"index.rst" = '''
+.. literalinclude:: example_substitution.txt
+'''
+
+[[cases]]
+id = "substitution_literal_include_with_caption"
+description = "The ``literalinclude`` directive works with captions."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+
+[cases.actual.files]
+"conf.py" = ""
+"example.txt" = '''
+Content with |a| placeholder'''
+"index.rst" = '''
+.. |a| replace:: example_substitution
+
+.. literalinclude:: example.txt
+   :caption: Example caption
+   :content-substitutions:
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = ""
+"example.txt" = '''
+Content with example_substitution placeholder'''
+"index.rst" = '''
+.. literalinclude:: example.txt
+   :caption: Example caption
+'''
+
+[[cases]]
+id = "xref_role_class_prefix_removal"
+description = "The ``SubstitutionXRefRole`` should only remove the \"substitution-\"\nprefix\nfrom CSS classes, not all occurrences of \"substitution-\" in the class\nname."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+
+[cases.actual.files]
+"conf.py" = '''
+from sphinx import addnodes
+from sphinx_substitution_extensions import SubstitutionXRefRole
+
+def setup(app):
+    role = SubstitutionXRefRole(
+        nodeclass=addnodes.download_reference,
+    )
+    app.add_role("substitution-my-substitution-download", role)
+'''
+"example.py" = '''
+Sample'''
+"index.rst" = '''
+:substitution-my-substitution-download:`Download <example.py>`
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = '''
+from sphinx import addnodes
+from sphinx.roles import XRefRole
+
+def setup(app):
+    role = XRefRole(nodeclass=addnodes.download_reference)
+    app.add_role("my-substitution-download", role)
+'''
+"example.py" = '''
+Sample'''
+"index.rst" = '''
+:my-substitution-download:`Download <example.py>`
+'''
