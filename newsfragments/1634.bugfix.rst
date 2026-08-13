@@ -1,3 +1,4 @@
 Restore Sphinx's ``include-read`` event for the ``include`` directive and
 compose listener changes with content substitutions, including for parsed and
-literal include content.
+literal include content, while preserving nested includes' substitution
+settings.
