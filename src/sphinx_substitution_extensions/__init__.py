@@ -552,6 +552,10 @@ class SubstitutionInclude(Include):
     ) -> list[Node]:
         """Apply substitutions after existing include-read listeners."""
         include_read_emitted = False
+        _relative_path, absolute_path = env.relfn2path(
+            filename=self.arguments[0],
+        )
+        current_include_path = Path(absolute_path).resolve()
 
         def substitute_include_content(
             _app: Sphinx,
@@ -561,7 +565,6 @@ class SubstitutionInclude(Include):
         ) -> None:
             """Substitute content changed by earlier listeners."""
             included_path = (env.srcdir / relative_path).resolve()
-            current_include_path = Path(self.arguments[0]).resolve()
             if included_path != current_include_path:
                 return
 
@@ -588,7 +591,7 @@ class SubstitutionInclude(Include):
                 assert isinstance(node, Element)
                 _process_node(
                     node=node,
-                    source_path=Path(self.arguments[0]).resolve(),
+                    source_path=current_include_path,
                     substitution_defs=substitution_defs,
                     delimiter_pairs=delimiter_pairs,
                 )

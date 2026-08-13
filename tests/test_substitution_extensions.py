@@ -3134,7 +3134,9 @@ def test_substitution_parser_include_with_nested_include_read(
     source_directory = tmp_path / "source"
     source_directory.mkdir()
     (source_directory / "conf.py").touch()
-    (source_directory / "nested.txt").write_text(
+    guide_directory = source_directory / "guide"
+    guide_directory.mkdir()
+    (guide_directory / "nested.txt").write_text(
         data=dedent(
             text="""\
             .. code-block:: text
@@ -3143,7 +3145,7 @@ def test_substitution_parser_include_with_nested_include_read(
             """,
         ),
     )
-    outer_file = source_directory / "outer.txt"
+    outer_file = guide_directory / "outer.txt"
     outer_file.write_text(
         data=dedent(
             text="""\
@@ -3153,7 +3155,7 @@ def test_substitution_parser_include_with_nested_include_read(
             """,
         ),
     )
-    source_file = source_directory / "index.rst"
+    source_file = guide_directory / "index.rst"
     source_file.write_text(
         data=dedent(
             text="""\
@@ -3177,12 +3179,15 @@ def test_substitution_parser_include_with_nested_include_read(
     app = make_app(
         srcdir=source_directory,
         exception_on_warning=True,
-        confoverrides={"extensions": ["sphinx_substitution_extensions"]},
+        confoverrides={
+            "extensions": ["sphinx_substitution_extensions"],
+            "root_doc": "guide/index",
+        },
     )
     app.connect(event="include-read", callback=on_include_read)
     app.build()
     assert app.statuscode == 0
-    content_html = (app.outdir / "index.html").read_text()
+    content_html = (app.outdir / "guide" / "index.html").read_text()
     app.cleanup()
 
     outer_file.write_text(
@@ -3205,11 +3210,14 @@ def test_substitution_parser_include_with_nested_include_read(
     app_expected = make_app(
         srcdir=source_directory,
         exception_on_warning=True,
+        confoverrides={"root_doc": "guide/index"},
     )
     app_expected.build()
     assert app_expected.statuscode == 0
 
-    expected_content_html = (app_expected.outdir / "index.html").read_text()
+    expected_content_html = (
+        app_expected.outdir / "guide" / "index.html"
+    ).read_text()
     assert content_html == expected_content_html
 
 
