@@ -2156,6 +2156,196 @@ Content with example placeholder'''
 '''
 
 [[cases]]
+id = "substitution_include_literal_content_with_include_read"
+description = "Replace placeholders in returned literal nodes with an include-read listener."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+
+[cases.actual.files]
+"conf.py" = '''
+def on_include_read(app, relative_path, parent_docname, content):
+    pass
+
+def setup(app):
+    app.connect("include-read", on_include_read)
+'''
+"example.txt" = '''
+Content with |name| placeholder'''
+"index.rst" = '''
+.. |name| replace:: example
+
+.. include:: example.txt
+   :literal:
+   :content-substitutions:
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = ""
+"example.txt" = '''
+Content with example placeholder'''
+"index.rst" = '''
+.. include:: example.txt
+   :literal:
+'''
+
+[[cases]]
+id = "substitution_include_code_content_with_include_read"
+description = "Replace placeholders in returned code nodes with an include-read listener."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+
+[cases.actual.files]
+"conf.py" = '''
+def on_include_read(app, relative_path, parent_docname, content):
+    pass
+
+def setup(app):
+    app.connect("include-read", on_include_read)
+'''
+"example.txt" = '''
+Content with |name| placeholder'''
+"index.rst" = '''
+.. |name| replace:: example
+
+.. include:: example.txt
+   :code: text
+   :content-substitutions:
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = ""
+"example.txt" = '''
+Content with example placeholder'''
+"index.rst" = '''
+.. include:: example.txt
+   :code: text
+'''
+
+[[cases]]
+id = "substitution_include_parser_content_with_include_read"
+description = "Replace placeholders in returned parser nodes with an include-read listener."
+output = "index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+
+[cases.actual.files]
+"conf.py" = '''
+def on_include_read(app, relative_path, parent_docname, content):
+    pass
+
+def setup(app):
+    app.connect("include-read", on_include_read)
+'''
+"example.txt" = '''
+Content with |name| placeholder'''
+"index.rst" = '''
+.. |name| replace:: example
+
+.. include:: example.txt
+   :parser: rst
+   :content-substitutions:
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+
+[cases.expected.files]
+"conf.py" = ""
+"example.txt" = '''
+Content with example placeholder'''
+"index.rst" = '''
+.. include:: example.txt
+   :parser: rst
+'''
+
+[[cases]]
+id = "substitution_parser_include_with_nested_include_read"
+description = "Apply substitutions only to outer parser nodes when a nested include emits include-read."
+output = "guide/index.html"
+
+[cases.actual]
+exception_on_warning = true
+
+[cases.actual.confoverrides]
+"extensions" = ["sphinx_substitution_extensions"]
+"root_doc" = "guide/index"
+
+[cases.actual.files]
+"conf.py" = '''
+def on_include_read(app, relative_path, parent_docname, content):
+    pass
+
+def setup(app):
+    app.connect("include-read", on_include_read)
+'''
+"guide/index.rst" = '''
+.. |name| replace:: example
+
+.. include:: outer.txt
+   :parser: rst
+   :content-substitutions:
+'''
+"guide/nested.txt" = '''
+.. code-block:: text
+
+   Nested |name| content
+'''
+"guide/outer.txt" = '''
+Outer |name| content
+
+.. include:: nested.txt
+'''
+
+[cases.expected]
+exception_on_warning = true
+
+[cases.expected.confoverrides]
+"root_doc" = "guide/index"
+
+[cases.expected.files]
+"conf.py" = ""
+"guide/index.rst" = '''
+.. include:: outer.txt
+   :parser: rst
+'''
+"guide/nested.txt" = '''
+.. code-block:: text
+
+   Nested |name| content
+'''
+"guide/outer.txt" = '''
+Outer example content
+
+.. include:: nested.txt
+'''
+
+[[cases]]
 id = "substitution_include_path_and_content"
 description = "Replace placeholders in an include path and its source content."
 output = "index.html"
