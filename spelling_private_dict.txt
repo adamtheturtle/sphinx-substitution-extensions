@@ -5,13 +5,16 @@ conf
 hardcoded
 inline
 linters
+pragma
 py
 pyright
 pytest
+reportUnknownArgumentType
 reportUnknownMemberType
 reportUnknownParameterType
 reportUnknownVariableType
 rst
 str
 tuple
+untyped
 whitespace
