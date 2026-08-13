@@ -3134,7 +3134,15 @@ def test_substitution_parser_include_with_nested_include_read(
     source_directory = tmp_path / "source"
     source_directory.mkdir()
     (source_directory / "conf.py").touch()
-    (source_directory / "nested.txt").write_text(data="Nested content")
+    (source_directory / "nested.txt").write_text(
+        data=dedent(
+            text="""\
+            .. code-block:: text
+
+               Nested |name| content
+            """,
+        ),
+    )
     outer_file = source_directory / "outer.txt"
     outer_file.write_text(
         data=dedent(

@@ -248,10 +248,18 @@ def _should_apply_substitutions(
 def _process_node(
     *,
     node: Element,
+    source_path: Path | None,
     substitution_defs: dict[str, str],
     delimiter_pairs: set[tuple[str, str]],
 ) -> None:
     """Recursively process nodes to apply substitutions."""
+    if (
+        source_path is not None
+        and node.source is not None
+        and Path(node.source).resolve() != source_path
+    ):
+        return
+
     node.rawsource = _apply_substitutions(
         text=node.rawsource,
         substitution_defs=substitution_defs,
@@ -274,6 +282,7 @@ def _process_node(
             assert isinstance(child, Element)
             _process_node(
                 node=child,
+                source_path=source_path,
                 substitution_defs=substitution_defs,
                 delimiter_pairs=delimiter_pairs,
             )
@@ -511,6 +520,7 @@ class SubstitutionLiteralInclude(LiteralInclude):
                 assert isinstance(node, Element)
                 _process_node(
                     node=node,
+                    source_path=None,
                     substitution_defs=substitution_defs,
                     delimiter_pairs=delimiter_pairs,
                 )
@@ -578,6 +588,7 @@ class SubstitutionInclude(Include):
                 assert isinstance(node, Element)
                 _process_node(
                     node=node,
+                    source_path=Path(self.arguments[0]).resolve(),
                     substitution_defs=substitution_defs,
                     delimiter_pairs=delimiter_pairs,
                 )
@@ -675,6 +686,7 @@ class SubstitutionInclude(Include):
             assert isinstance(node, Element)
             _process_node(
                 node=node,
+                source_path=None,
                 substitution_defs=substitution_defs,
                 delimiter_pairs=delimiter_pairs,
             )
