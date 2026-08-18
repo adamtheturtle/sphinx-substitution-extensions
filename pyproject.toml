@@ -48,7 +48,7 @@ optional-dependencies.dev = [
     "doc8-custom-ignores==2026.7.29.1",
     "doccmd==2026.8.16",
     "interrogate==1.7.0",
-    "mypy[faster-cache]==2.3.0",
+    "mypy[faster-cache]==2.3.1",
     "mypy-strict-kwargs==2026.7.19.1",
     "no-defaults==2.1.0",
     "prek==0.4.13",
