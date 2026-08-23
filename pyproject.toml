@@ -256,7 +256,7 @@ ignore = [
     "*.enc",
     ".checkmake-config.ini",
     ".git_archival.txt",
-    ".pre-commit-config.yaml",
+    "prek.toml",
     ".prettierrc",
     ".vale.ini",
     ".yamlfmt",
