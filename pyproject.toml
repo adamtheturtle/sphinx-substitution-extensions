@@ -61,7 +61,7 @@ optional-dependencies.dev = [
     "pytest==9.1.1",
     "pytest-beartype-tests==2026.8.16",
     "pytest-cov==7.1.0",
-    "ruff==0.16.3",
+    "ruff==0.16.4",
     # We add shellcheck-py not only for shell scripts and shell code blocks,
     # but also because having it installed means that ``actionlint-py`` will
     # use it to lint shell commands in GitHub workflow files.
