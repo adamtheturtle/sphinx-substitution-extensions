@@ -387,6 +387,11 @@ issue_format = "#{issue}"
 # version such as ``2026.05.18`` underlined with ``-`` matches every
 # pre-towncrier entry in CHANGELOG.rst.
 underlines = [ "-", "~", "^" ]
+# Setting ``ignore`` makes ``towncrier build`` fail on any file in
+# the fragment directory whose suffix is not a declared fragment
+# type, instead of silently dropping it.  Only the listed
+# non-fragment files are allowed through.
+ignore = [ ".gitkeep" ]
 type = [
     # A single, unnamed fragment type keeps the assembled output as one
     # flat bullet list, matching the historical changelog (which never
