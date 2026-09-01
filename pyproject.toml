@@ -399,6 +399,15 @@ type = [
     { directory = "change", name = "", showcontent = true },
 ]
 
+[tool.mypy_strict_kwargs]
+# The runtime parameter is named ``role``, while types-docutils names it
+# ``role_name``. A positional argument is the only spelling compatible with
+# both signatures.
+ignore_names = [ "docutils.parsers.rst.roles.code_role" ]
+
+[tool.strict_kwargs]
+ignore_names = [ "docutils.parsers.rst.roles.code_role" ]
+
 [tool.pydocstringformatter]
 write = true
 split-summary-body = false
