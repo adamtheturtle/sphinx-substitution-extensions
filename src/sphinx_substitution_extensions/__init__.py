@@ -433,7 +433,7 @@ class SubstitutionCodeRole:
             inliner = new_inliner
 
         return code_role(
-            role=typ,
+            typ,
             rawtext=rawtext,
             text=text,
             lineno=lineno,
