@@ -72,7 +72,7 @@ optional-dependencies.dev = [
     "sphinx-toolbox==4.3.0",
     "strict-kwargs==2026.8.28.post2",
     "towncrier==25.8.0",
-    "ty==0.0.75",
+    "ty==0.0.77",
     "types-docutils==0.23.0.20260827",
     "vale==3.19.0.0",
     "vulture==2.16",
