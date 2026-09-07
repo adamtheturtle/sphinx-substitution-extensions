@@ -39,6 +39,7 @@ dependencies = [
     "docutils>=0.19",
     "myst-parser>=4.0.0",
     "sphinx>=8.1.0",
+    "typing-extensions>=4.4.0",
 ]
 optional-dependencies.dev = [
     "actionlint-py==1.7.12.24",
@@ -351,6 +352,7 @@ plugins = [
 
 [tool.pyrefly]
 errors.non-exhaustive-match = "error"
+preset = "strict"
 
 [tool.pyright]
 typeCheckingMode = "strict"

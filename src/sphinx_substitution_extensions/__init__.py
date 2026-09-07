@@ -34,6 +34,7 @@ from sphinx.environment import BuildEnvironment
 from sphinx.errors import SphinxError
 from sphinx.roles import XRefRole
 from sphinx.util.typing import ExtensionMetadata, OptionSpec
+from typing_extensions import override
 
 from sphinx_substitution_extensions.shared import (
     CONTENT_SUBSTITUTION_OPTION_NAME,
@@ -332,6 +333,7 @@ class SubstitutionCodeBlock(CodeBlock):
     option_spec[SUBSTITUTION_OPTION_NAME] = directives.flag
     option_spec[NO_SUBSTITUTION_OPTION_NAME] = directives.flag
 
+    @override
     def run(self) -> list[Node]:
         """Replace placeholders with given variables."""
         new_content = StringList()
@@ -458,6 +460,7 @@ class SubstitutionLiteralInclude(LiteralInclude):
     option_spec[NO_CONTENT_SUBSTITUTION_OPTION_NAME] = directives.flag
     option_spec[NO_PATH_SUBSTITUTION_OPTION_NAME] = directives.flag
 
+    @override
     def run(self) -> list[Node]:
         """
         Replace placeholders with given variables in the file path
@@ -598,6 +601,7 @@ class SubstitutionInclude(Include):
 
         return nodes_list
 
+    @override
     def run(self) -> list[Node]:
         """Replace placeholders in the path and/or included content."""
         env = self.state.document.settings.env
@@ -710,6 +714,7 @@ class SubstitutionImage(Image):
         NO_PATH_SUBSTITUTION_OPTION_NAME: directives.flag,
     }
 
+    @override
     def run(self) -> list[Node]:
         """Replace placeholders with given variables in the image path."""
         env = self.state.document.settings.env
@@ -751,6 +756,7 @@ class SubstitutionImage(Image):
 class SubstitutionXRefRole(XRefRole):
     """Custom role for XRefs."""
 
+    @override
     def create_xref_node(self) -> tuple[list[Node], list[system_message]]:
         """Override parent method to set classes.
 
@@ -763,13 +769,12 @@ class SubstitutionXRefRole(XRefRole):
 
         return super().create_xref_node()
 
+    @override
     def process_link(
         self,
         env: BuildEnvironment,
         refnode: Element,
-        # We allow a boolean-typed positional argument as we are matching the
-        # method signature of the parent class.
-        has_explicit_title: bool,  # noqa: FBT001
+        has_explicit_title: bool,
         title: str,
         target: str,
     ) -> tuple[str, str]:
