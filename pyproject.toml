@@ -351,6 +351,7 @@ plugins = [
 
 [tool.pyrefly]
 errors.non-exhaustive-match = "error"
+errors.unused-ignore = "error"
 
 [tool.pyright]
 typeCheckingMode = "strict"
