@@ -44,9 +44,8 @@ Run lint tools either by committing, or with:
    prek run --all-files --hook-stage pre-push --verbose
    prek run --all-files --hook-stage manual --verbose
 
-The development dependencies include `doc8-custom-ignores`_. The plugin is
-discovered automatically by doc8 and reads additional ignores from
-``pyproject.toml``:
+The development dependencies include `doc8-custom-ignores`_.
+The plugin is discovered automatically by doc8 and reads additional ignores from ``pyproject.toml``:
 
 .. code-block:: toml
 
@@ -58,11 +57,9 @@ discovered automatically by doc8 and reads additional ignores from
    unknown option: "path-substitutions".""",
    ]
 
-This ignores diagnostics for ``include``'s ``:content-substitutions:`` and
-``:path-substitutions:`` options. Plain docutils does not know about those
-options, but this extension adds them when Sphinx builds the documentation.
-Keep these as exact-message ignores so other ``D000`` diagnostics remain
-visible.
+This ignores diagnostics for ``include``'s ``:content-substitutions:`` and ``:path-substitutions:`` options.
+Plain docutils does not know about those options, but this extension adds them when Sphinx builds the documentation.
+Keep these as exact-message ignores so other ``D000`` diagnostics remain visible.
 
 .. _Homebrew: https://brew.sh
 .. _doc8-custom-ignores: https://adamtheturtle.github.io/doc8-custom-ignores/

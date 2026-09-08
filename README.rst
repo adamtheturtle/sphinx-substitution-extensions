@@ -90,10 +90,8 @@ Then substitutions are applied to hyperlink targets:
 
    .. _tarball: https://example.com/releases/v|release|.tar.gz
 
-The setting enables hyperlink-target substitutions throughout the project,
-but only targets containing a defined substitution are changed. To limit a
-substitution to one page, define it in that page instead of in
-``rst_prolog``:
+The setting enables hyperlink-target substitutions throughout the project, but only targets containing a defined substitution are changed.
+To limit a substitution to one page, define it in that page instead of in ``rst_prolog``:
 
 .. code-block:: rst
 
@@ -103,9 +101,8 @@ substitution to one page, define it in that page instead of in
 
    .. _tarball: https://example.com/releases/v|tarball-release|.tar.gz
 
-To limit the substitution to one link on that page, use a unique substitution
-name, such as ``tarball-release`` above, only in that link's target. Other
-hyperlink targets are left unchanged.
+To limit the substitution to one link on that page, use a unique substitution name, such as ``tarball-release`` above, only in that link's target.
+Other hyperlink targets are left unchanged.
 
 ``literalinclude``
 ~~~~~~~~~~~~~~~~~~
@@ -129,8 +126,7 @@ Replace substitutions in the file path:
 ``include``
 ~~~~~~~~~~~
 
-This adds ``:content-substitutions:`` and ``:path-substitutions:`` options to
-docutils' built-in `include`_ directive.
+This adds ``:content-substitutions:`` and ``:path-substitutions:`` options to docutils' built-in `include`_ directive.
 
 Replace substitutions in the included source content before it is parsed:
 
@@ -187,8 +183,7 @@ MyST Markdown setup
 
 This will replace ``|release|`` in the new directives with ``0.1``, and ``|author|`` with ``Eleanor``.
 
-Substitutions can also be defined or overridden for an individual Markdown
-document in its frontmatter:
+Substitutions can also be defined or overridden for an individual Markdown document in its frontmatter:
 
 .. code-block:: markdown
 
@@ -209,10 +204,7 @@ document in its frontmatter:
 Enabling substitutions by default
 ----------------------------------
 
-By default, you need to explicitly add the ``:substitutions:`` flag to
-``code-block`` directives, ``:content-substitutions:`` or
-``:path-substitutions:`` flags to ``literalinclude`` and ``include``
-directives, and ``:path-substitutions:`` to ``image`` directives.
+By default, you need to explicitly add the ``:substitutions:`` flag to ``code-block`` directives, ``:content-substitutions:`` or ``:path-substitutions:`` flags to ``literalinclude`` and ``include`` directives, and ``:path-substitutions:`` to ``image`` directives.
 
 If you want substitutions to be applied by default without needing these flags, you can set the following in ``conf.py``:
 
