@@ -3,4 +3,3 @@ ignore = [
   "sample/source/index.rst",
   "sample/source/markdown_sample.md",
 ]
-
