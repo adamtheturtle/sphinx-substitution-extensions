@@ -1,2 +1,1 @@
-Restore Sphinx's source-directory-relative handling of slash-prefixed
-``include`` paths.
+Restore Sphinx's source-directory-relative handling of slash-prefixed ``include`` paths.
