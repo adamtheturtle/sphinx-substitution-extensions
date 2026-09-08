@@ -85,7 +85,7 @@ dev = [
 ]
 release = [ "check-wheel-contents==0.6.3", "towncrier==26.9.0" ]
 snapper = [
-    "snapper-fmt @ git+https://github.com/TurtleTech-ehf/snapper.git@bcd3458e27e4156ce4e0a0b55a227400328fb3b1",
+    "snapper-fmt==0.11.0",
 ]
 
 [tool.setuptools]
