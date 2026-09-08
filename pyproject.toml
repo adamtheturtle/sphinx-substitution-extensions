@@ -71,7 +71,6 @@ dev = [
     # use it to lint shell commands in GitHub workflow files.
     "shellcheck-py==0.11.0.1",
     "shfmt-py==4.1.0",
-    "snapper-fmt @ git+https://github.com/TurtleTech-ehf/snapper.git@bcd3458e27e4156ce4e0a0b55a227400328fb3b1",
     "sphinx>=9,<10",
     "sphinx-lint==1.0.2",
     "sphinx-toolbox==4.3.0",
@@ -85,6 +84,9 @@ dev = [
     "zizmor==1.30.0",
 ]
 release = [ "check-wheel-contents==0.6.3", "towncrier==26.9.0" ]
+snapper = [
+    "snapper-fmt @ git+https://github.com/TurtleTech-ehf/snapper.git@bcd3458e27e4156ce4e0a0b55a227400328fb3b1",
+]
 
 [tool.setuptools]
 packages.find.where = [
