@@ -40,21 +40,21 @@ jobs:
 
       - name: Build sample
         run: |
-          uv run --extra=dev sphinx-build -W -b html sample/source sample/build
+          uv run --group=dev sphinx-build -W -b html sample/source sample/build
         env:
           UV_PYTHON: ${{ matrix.python-version }}
           UV_RESOLUTION: ${{ matrix.uv-resolution }}
 
       - name: Build sample parallel
         run: |
-          uv run --extra=dev sphinx-build -j 2 -W -b html sample/source sample/build
+          uv run --group=dev sphinx-build -j 2 -W -b html sample/source sample/build
         env:
           UV_PYTHON: ${{ matrix.python-version }}
           UV_RESOLUTION: ${{ matrix.uv-resolution }}
 
       - name: Run tests
         run: |
-          uv run --extra=dev pytest -s -vvv --cov-fail-under 100 --cov=src/ --cov=tests .
+          uv run --group=dev pytest -s -vvv --cov-fail-under 100 --cov=src/ --cov=tests .
         env:
           UV_PYTHON: ${{ matrix.python-version }}
           UV_RESOLUTION: ${{ matrix.uv-resolution }}

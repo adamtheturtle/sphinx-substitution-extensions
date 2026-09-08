@@ -53,7 +53,7 @@ jobs:
       - name: Generate the GitHub release notes
         env:
           RELEASE: ${{ steps.calver.outputs.release }}
-        run: uv run --extra=release towncrier build --draft --version "$RELEASE" >
+        run: uv run --group=release towncrier build --draft --version "$RELEASE" >
           release-notes.md
 
       # Assemble the same fragments into CHANGELOG.rst under a new
@@ -61,7 +61,7 @@ jobs:
       - name: Update the changelog
         env:
           RELEASE: ${{ steps.calver.outputs.release }}
-        run: uv run --extra=release towncrier build --yes --version "$RELEASE"
+        run: uv run --group=release towncrier build --yes --version "$RELEASE"
 
       - uses: stefanzweifel/git-auto-commit-action@v7
         id: commit
@@ -95,7 +95,7 @@ jobs:
           git fetch --tags
           git checkout "$NEW_TAG"
           uv build --sdist --wheel --out-dir dist/
-          uv run --extra=release check-wheel-contents dist/*.whl
+          uv run --group=release check-wheel-contents dist/*.whl
 
       # We use PyPI trusted publishing rather than a PyPI API token.
       # See https://github.com/pypa/gh-action-pypi-publish/tree/release/v1/?tab=readme-ov-file#trusted-publishing.

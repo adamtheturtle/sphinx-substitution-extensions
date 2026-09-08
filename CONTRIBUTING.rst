@@ -12,7 +12,7 @@ Install Python dependencies in a virtual environment.
 
 .. code-block:: shell
 
-   pip install --editable '.[dev]'
+   pip install --editable . --group dev
 
 Spell checking requires ``enchant``.
 This can be installed on macOS, for example, with `Homebrew`_:
