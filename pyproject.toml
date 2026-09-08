@@ -75,7 +75,7 @@ dev = [
     "sphinx-lint==1.0.2",
     "sphinx-toolbox==4.3.0",
     "strict-kwargs==2026.8.28.post2",
-    "towncrier==25.8.0",
+    "towncrier==26.9.0",
     "ty==0.0.78",
     "types-docutils==0.23.0.20260827",
     "vale==3.20.0.0",
@@ -83,7 +83,7 @@ dev = [
     "yamlfix==1.19.1",
     "zizmor==1.30.0",
 ]
-release = [ "check-wheel-contents==0.6.3", "towncrier==25.8.0" ]
+release = [ "check-wheel-contents==0.6.3", "towncrier==26.9.0" ]
 
 [tool.setuptools]
 packages.find.where = [
