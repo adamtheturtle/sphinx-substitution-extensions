@@ -34,12 +34,16 @@ class Case:
     expected: Build
 
 
-def _as_untyped_dict(value: dict[Any, Any]) -> dict[Any, Any]:
+def _as_untyped_dict(
+    value: dict[Any, Any],  # pyrefly: ignore [explicit-any]
+) -> dict[Any, Any]:  # pyrefly: ignore [explicit-any]
     """Expose a parser mapping through its intentionally loose type."""
     return value
 
 
-def _as_untyped_list(value: list[Any]) -> list[Any]:
+def _as_untyped_list(
+    value: list[Any],  # pyrefly: ignore [explicit-any]
+) -> list[Any]:  # pyrefly: ignore [explicit-any]
     """Expose a parser-produced list through its intentionally loose
     type.
     """
@@ -82,7 +86,7 @@ def _string_mapping(value: object, *, context: str) -> dict[str, str]:
 
 def _check_keys(data: dict[str, object], *, context: str) -> None:
     """Reject unknown keys left after parsing a table."""
-    if data:  # pragma: no cover
+    if len(data) > 0:  # pragma: no cover
         unknown_keys = ", ".join(sorted(data))
         msg = f"Unknown keys in {context}: {unknown_keys}"
         raise ValueError(msg)
@@ -186,7 +190,7 @@ def _destination(*, source_directory: Path, relative_path: str) -> Path:
 def _write_build(*, source_directory: Path, build: Build) -> None:
     """Materialize one build's files."""
     overlap = build.files.keys() & build.binary_files.keys()
-    if overlap:  # pragma: no cover
+    if len(overlap) > 0:  # pragma: no cover
         msg = f"Files cannot be both text and binary: {sorted(overlap)}"
         raise ValueError(msg)
     for relative_path, content in build.files.items():
@@ -195,14 +199,14 @@ def _write_build(*, source_directory: Path, build: Build) -> None:
             relative_path=relative_path,
         )
         destination.parent.mkdir(parents=True, exist_ok=True)
-        destination.write_text(data=content)
+        _ = destination.write_text(data=content)
     for relative_path, content in build.binary_files.items():
         destination = _destination(
             source_directory=source_directory,
             relative_path=relative_path,
         )
         destination.parent.mkdir(parents=True, exist_ok=True)
-        destination.write_bytes(
+        _ = destination.write_bytes(
             data=base64.b64decode(s=content, validate=True),
         )
 

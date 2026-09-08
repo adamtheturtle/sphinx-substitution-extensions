@@ -48,7 +48,7 @@ def test_substitution_literal_include_in_rest_example(
     (source_directory / "conf.py").touch()
 
     include_file = source_directory / "example.txt"
-    include_file.write_text(data="Content with |a| placeholder")
+    _ = include_file.write_text(data="Content with |a| placeholder")
 
     source_file_content = dedent(
         text="""\
@@ -60,7 +60,7 @@ def test_substitution_literal_include_in_rest_example(
               :content-substitutions:
         """,
     )
-    source_file.write_text(data=source_file_content)
+    _ = source_file.write_text(data=source_file_content)
     app = make_app(
         srcdir=source_directory,
         warningiserror=True,
@@ -116,8 +116,8 @@ class TestMyst:
             ```
             """,
         )
-        index_source_file.write_text(data=index_source_file_content)
-        markdown_source_file.write_text(data=markdown_source_file_content)
+        _ = index_source_file.write_text(data=index_source_file_content)
+        _ = markdown_source_file.write_text(data=markdown_source_file_content)
 
         app = make_app(
             srcdir=source_directory,
@@ -178,8 +178,8 @@ class TestMyst:
             ```
             """,
         )
-        index_source_file.write_text(data=index_source_file_content)
-        markdown_source_file.write_text(data=markdown_source_file_content)
+        _ = index_source_file.write_text(data=index_source_file_content)
+        _ = markdown_source_file.write_text(data=markdown_source_file_content)
 
         app = make_app(
             srcdir=source_directory,
@@ -235,8 +235,8 @@ class TestMyst:
             ```
             """,
         )
-        index_source_file.write_text(data=index_source_file_content)
-        markdown_source_file.write_text(data=markdown_source_file_content)
+        _ = index_source_file.write_text(data=index_source_file_content)
+        _ = markdown_source_file.write_text(data=markdown_source_file_content)
 
         app = make_app(
             srcdir=source_directory,
@@ -271,8 +271,8 @@ def test_no_substitution_include(
     source_directory = tmp_path / "source"
     source_directory.mkdir()
     (source_directory / "conf.py").touch()
-    (source_directory / "example.txt").write_text(data="Included content")
-    (source_directory / "index.rst").write_text(
+    _ = (source_directory / "example.txt").write_text(data="Included content")
+    _ = (source_directory / "index.rst").write_text(
         data=".. include:: example.txt\n",
     )
 
@@ -296,8 +296,8 @@ def test_include_fragment_is_not_reported_as_unreferenced(
     source_directory = tmp_path / "source"
     source_directory.mkdir()
     (source_directory / "conf.py").touch()
-    (source_directory / "fragment.rst").write_text(data="Included content")
-    (source_directory / "index.rst").write_text(
+    _ = (source_directory / "fragment.rst").write_text(data="Included content")
+    _ = (source_directory / "index.rst").write_text(
         data=".. include:: fragment.rst\n",
     )
 
@@ -314,8 +314,8 @@ def test_include_fragment_is_not_reported_as_unreferenced(
 def test_include_without_sphinx_environment(tmp_path: Path) -> None:
     """Support documents which have no Sphinx environment."""
     source_file = tmp_path / "index.rst"
-    source_file.write_text(data=".. include:: included.rst\n")
-    (tmp_path / "included.rst").write_text(data="Included content")
+    _ = source_file.write_text(data=".. include:: included.rst\n")
+    _ = (tmp_path / "included.rst").write_text(data="Included content")
     directives.register_directive(
         name="include",
         directive=sphinx_substitution_extensions.SubstitutionInclude,
@@ -340,8 +340,8 @@ def test_substitution_include_path(
     source_directory = tmp_path / "source"
     source_directory.mkdir()
     (source_directory / "conf.py").touch()
-    (source_directory / "example.txt").write_text(data="Included content")
-    (source_directory / "index.rst").write_text(
+    _ = (source_directory / "example.txt").write_text(data="Included content")
+    _ = (source_directory / "index.rst").write_text(
         data=dedent(
             text="""\
             .. |name| replace:: example
@@ -373,11 +373,11 @@ def test_include_read_event_with_content_substitutions(
     source_directory.mkdir()
     (source_directory / "conf.py").touch()
     include_file = source_directory / "example.txt"
-    include_file.write_text(
+    _ = include_file.write_text(
         data="Included |name| content",
     )
     source_file = source_directory / "index.rst"
-    source_file.write_text(
+    _ = source_file.write_text(
         data=dedent(
             text="""\
             .. |name| replace:: original
@@ -404,15 +404,15 @@ def test_include_read_event_with_content_substitutions(
         exception_on_warning=True,
         confoverrides={"extensions": ["sphinx_substitution_extensions"]},
     )
-    app.connect(event="include-read", callback=on_include_read)
+    _ = app.connect(event="include-read", callback=on_include_read)
     app.build()
 
     assert observed_content == ["Included |name| content"]
     content_html = (app.outdir / "index.html").read_text()
     app.cleanup()
 
-    include_file.write_text(data="Observed original content")
-    source_file.write_text(data=".. include:: example.txt\n")
+    _ = include_file.write_text(data="Observed original content")
+    _ = source_file.write_text(data=".. include:: example.txt\n")
     app_expected = make_app(
         srcdir=source_directory,
         exception_on_warning=True,
@@ -433,8 +433,8 @@ def test_default_substitution_include_path(
     source_directory = tmp_path / "source"
     source_directory.mkdir()
     (source_directory / "conf.py").touch()
-    (source_directory / "example.txt").write_text(data="Included content")
-    (source_directory / "index.rst").write_text(
+    _ = (source_directory / "example.txt").write_text(data="Included content")
+    _ = (source_directory / "index.rst").write_text(
         data=dedent(
             text="""\
             .. |name| replace:: example
@@ -467,8 +467,8 @@ def test_default_substitution_include_disabled(
     source_directory = tmp_path / "source"
     source_directory.mkdir()
     (source_directory / "conf.py").touch()
-    (source_directory / "[[name]].txt").write_text(data="Included content")
-    (source_directory / "index.rst").write_text(
+    _ = (source_directory / "[[name]].txt").write_text(data="Included content")
+    _ = (source_directory / "index.rst").write_text(
         data=dedent(
             text="""\
             .. toctree::
@@ -477,7 +477,7 @@ def test_default_substitution_include_disabled(
             """,
         ),
     )
-    (source_directory / "document.md").write_text(
+    _ = (source_directory / "document.md").write_text(
         data=dedent(
             text="""\
             # Document
