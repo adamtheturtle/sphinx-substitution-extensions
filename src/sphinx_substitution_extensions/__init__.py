@@ -2,7 +2,7 @@
 
 from importlib.metadata import version
 from pathlib import Path
-from typing import Any, ClassVar, TypeAlias
+from typing import Any, ClassVar, TypeAlias, TypeGuard
 from unittest.mock import patch
 
 from beartype import beartype
@@ -53,6 +53,21 @@ SubstitutionValue: TypeAlias = (
     | dict[str, "SubstitutionValue"]
 )
 Substitutions: TypeAlias = dict[str, SubstitutionValue]
+_PAIR_LENGTH = 2
+
+
+def _is_object_sequence(
+    value: object, /
+) -> TypeGuard[list[object] | tuple[object, ...]]:
+    """Return whether a value is a sequence with unchecked entries."""
+    return isinstance(value, (list, tuple))
+
+
+def _is_object_pair(
+    value: object, /
+) -> TypeGuard[list[object] | tuple[object, ...]]:
+    """Return whether a value is a pair with unchecked entries."""
+    return _is_object_sequence(value) and len(value) == _PAIR_LENGTH
 
 
 @beartype
@@ -161,16 +176,20 @@ def _get_delimiter_pairs(
     parser_supported_formats = set(env.parser.supported)
     if len(parser_supported_formats.intersection(markdown_suffixes)) > 0:
         if myst_config is None:
-            opening_delimiter, closing_delimiter = config.myst_sub_delimiters
+            configured_delimiters: object = config.myst_sub_delimiters
         else:
-            opening_delimiter, closing_delimiter = myst_config.sub_delimiters
+            configured_delimiters = myst_config.sub_delimiters
+        assert _is_object_pair(configured_delimiters)
+        opening_delimiter, closing_delimiter = configured_delimiters
+        assert isinstance(opening_delimiter, str)
+        assert isinstance(closing_delimiter, str)
         new_delimiter_pair = (
             opening_delimiter + opening_delimiter,
             closing_delimiter + closing_delimiter,
         )
         delimiter_pairs = {*delimiter_pairs, new_delimiter_pair}
 
-    return delimiter_pairs  # ty: ignore[unsound-return-statement]
+    return delimiter_pairs
 
 
 @beartype
@@ -399,7 +418,8 @@ class SubstitutionCodeRole:
     ) -> tuple[list[Node], list[system_message]]:
         """Replace placeholders with given variables."""
         settings = inliner.document.settings
-        env: BuildEnvironment = settings.env  # ty: ignore[unsound-assignment]
+        env: object = settings.env
+        assert isinstance(env, BuildEnvironment)
         myst_config = _get_myst_config(context=inliner)
         substitution_defs = _get_substitution_defs(
             env=env,
@@ -606,10 +626,11 @@ class SubstitutionInclude(Include):
     @override
     def run(self) -> list[Node]:
         """Replace placeholders in the path and/or included content."""
-        env: BuildEnvironment | None = self.state.document.settings.env  # ty: ignore[unsound-assignment]
+        env: object = self.state.document.settings.env
 
         if env is None:
             return list(DocutilsInclude.run(self=self))
+        assert isinstance(env, BuildEnvironment)
 
         config: Config = env.config
         myst_config = _get_myst_config(context=self.state)
@@ -720,7 +741,8 @@ class SubstitutionImage(Image):
     @override
     def run(self) -> list[Node]:
         """Replace placeholders with given variables in the image path."""
-        env: BuildEnvironment = self.state.document.settings.env  # ty: ignore[unsound-assignment]
+        env: object = self.state.document.settings.env
+        assert isinstance(env, BuildEnvironment)
         config: Config = env.config
         myst_config = _get_myst_config(context=self.state)
 
