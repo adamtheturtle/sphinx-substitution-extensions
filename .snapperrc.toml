@@ -1,0 +1,4 @@
+# This file contains a markup construct that Snapper 0.11.0 does not yet preserve.
+ignore = [
+  "sample/source/markdown_sample.md",
+]
