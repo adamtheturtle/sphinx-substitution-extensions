@@ -107,6 +107,7 @@ line-length = 79
 lint.select = [
     "ALL",
 ]
+lint.extend-select = [ "ANN", "PGH003", "PYI" ]
 lint.ignore = [
     # Ruff warns that this conflicts with the formatter.
     "COM812",
@@ -125,6 +126,7 @@ lint.ignore = [
     # Allow 'assert' as we use it for tests.
     "S101",
 ]
+lint.explicit-preview-rules = true
 lint.per-file-ignores."doccmd_*.py" = [
     # Allow our chosen docstring line-style - pydocstringformatter handles
     # formatting but docstrings in docs may not match this style.
@@ -141,6 +143,7 @@ lint.flake8-tidy-imports.banned-api."typing.cast".msg = """\
     typing.cast is banned: use explicit type narrowing or a typed variable instead.\
     """
 lint.pydocstyle.convention = "google"
+lint.preview = true
 
 [tool.pylint]
 # Disable the message, report, category or checker with the given id(s). You
@@ -353,8 +356,21 @@ enableTypeIgnoreComments = false
 reportUnnecessaryTypeIgnoreComment = true
 
 [tool.ty]
+rules.blanket-ignore-comment = "error"
+rules.division-by-zero = "warn"
+rules.dynamic-function-decorator-return = "error"
+rules.missing-type-argument = "error"
+rules.possibly-missing-attribute = "warn"
+rules.possibly-missing-import = "warn"
+rules.possibly-unresolved-reference = "warn"
+rules.unsound-assignment = "error"
+rules.unsound-return-statement = "error"
+rules.unsound-yield = "error"
+rules.unsupported-dynamic-base = "warn"
 terminal.error-on-warning = true
 analysis.respect-type-ignore-comments = false
+analysis.strict-equality-semantics = true
+analysis.strict-generic-narrowing = true
 
 [tool.pytest]
 log_cli = true

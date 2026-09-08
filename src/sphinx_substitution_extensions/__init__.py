@@ -170,7 +170,7 @@ def _get_delimiter_pairs(
         )
         delimiter_pairs = {*delimiter_pairs, new_delimiter_pair}
 
-    return delimiter_pairs
+    return delimiter_pairs  # ty: ignore[unsound-return-statement]
 
 
 @beartype
@@ -399,7 +399,7 @@ class SubstitutionCodeRole:
     ) -> tuple[list[Node], list[system_message]]:
         """Replace placeholders with given variables."""
         settings = inliner.document.settings
-        env: BuildEnvironment = settings.env
+        env: BuildEnvironment = settings.env  # ty: ignore[unsound-assignment]
         myst_config = _get_myst_config(context=inliner)
         substitution_defs = _get_substitution_defs(
             env=env,
@@ -606,7 +606,7 @@ class SubstitutionInclude(Include):
     @override
     def run(self) -> list[Node]:
         """Replace placeholders in the path and/or included content."""
-        env: BuildEnvironment | None = self.state.document.settings.env
+        env: BuildEnvironment | None = self.state.document.settings.env  # ty: ignore[unsound-assignment]
 
         if env is None:
             return list(DocutilsInclude.run(self=self))
@@ -720,7 +720,7 @@ class SubstitutionImage(Image):
     @override
     def run(self) -> list[Node]:
         """Replace placeholders with given variables in the image path."""
-        env: BuildEnvironment = self.state.document.settings.env
+        env: BuildEnvironment = self.state.document.settings.env  # ty: ignore[unsound-assignment]
         config: Config = env.config
         myst_config = _get_myst_config(context=self.state)
 
