@@ -115,20 +115,22 @@ def _flatten_substitutions(
     result: dict[str, str] = {}
     stack: list[tuple[str, SubstitutionValue]] = [("", substitutions)]
 
-    while stack:
+    while len(stack) > 0:
         current_key, current_value = stack.pop()
 
         match current_value:
             case dict():
                 for key, value in current_value.items():
                     _validate_substitution_key(key=key)
-                    new_key = f"{current_key}.{key}" if current_key else key
+                    new_key = (
+                        f"{current_key}.{key}" if current_key != "" else key
+                    )
                     stack.append((new_key, value))
             case list():
                 for idx, item in enumerate(iterable=current_value):
                     new_key = (
                         f"{current_key}.{idx}"
-                        if current_key
+                        if current_key != ""
                         else str(object=idx)
                     )
                     stack.append((new_key, item))
@@ -157,7 +159,7 @@ def _get_delimiter_pairs(
     # originally shipped with.
     delimiter_pairs = {("|", "|")}
     parser_supported_formats = set(env.parser.supported)
-    if parser_supported_formats.intersection(markdown_suffixes):
+    if len(parser_supported_formats.intersection(markdown_suffixes)) > 0:
         if myst_config is None:
             opening_delimiter, closing_delimiter = config.myst_sub_delimiters
         else:
@@ -187,7 +189,7 @@ def _get_substitution_defs(
     }
 
     parser_supported_formats = set(env.parser.supported)
-    if parser_supported_formats.intersection(markdown_suffixes):
+    if len(parser_supported_formats.intersection(markdown_suffixes)) > 0:
         if myst_config is None:
             enable_extensions = config.myst_enable_extensions
             substitutions = dict(config.myst_substitutions)
@@ -229,7 +231,7 @@ def _apply_substitutions(
 @beartype
 def _should_apply_substitutions(
     *,
-    options: dict[str, Any],
+    options: dict[str, object],
     config: Config,
     yes_flag: str,
     no_flag: str,
@@ -327,8 +329,8 @@ def _substitute_hyperlink_targets(
 class SubstitutionCodeBlock(CodeBlock):
     """Similar to CodeBlock but replaces placeholders with variables."""
 
-    option_spec: ClassVar[OptionSpec] = (
-        CodeBlock.option_spec.copy() if CodeBlock.option_spec else {}
+    option_spec: ClassVar[OptionSpec] = (  # pyrefly: ignore [explicit-any]
+        CodeBlock.option_spec.copy()
     )
     option_spec[SUBSTITUTION_OPTION_NAME] = directives.flag
     option_spec[NO_SUBSTITUTION_OPTION_NAME] = directives.flag
@@ -378,7 +380,7 @@ class SubstitutionCodeBlock(CodeBlock):
 class SubstitutionCodeRole:
     """Custom role for substitution code."""
 
-    options: ClassVar[dict[str, Any]] = {
+    options: ClassVar[dict[str, object]] = {
         "class": directives.class_option,
         "language": directives.unchanged,
     }
@@ -392,12 +394,12 @@ class SubstitutionCodeRole:
         inliner: Inliner | MockInliner,
         *,
         # We allow mutable defaults as the Sphinx implementation requires it.
-        options: dict[Any, Any] = {},  # noqa: B006
+        options: dict[Any, Any] = {},  # noqa: B006  # pyrefly: ignore [explicit-any]
         content: list[str] = [],  # noqa: B006
     ) -> tuple[list[Node], list[system_message]]:
         """Replace placeholders with given variables."""
         settings = inliner.document.settings
-        env = settings.env
+        env: BuildEnvironment = settings.env
         myst_config = _get_myst_config(context=inliner)
         substitution_defs = _get_substitution_defs(
             env=env,
@@ -452,8 +454,8 @@ class SubstitutionLiteralInclude(LiteralInclude):
     variables.
     """
 
-    option_spec: ClassVar[OptionSpec] = (
-        LiteralInclude.option_spec.copy() if LiteralInclude.option_spec else {}
+    option_spec: ClassVar[OptionSpec] = (  # pyrefly: ignore [explicit-any]
+        LiteralInclude.option_spec.copy()
     )
     option_spec[CONTENT_SUBSTITUTION_OPTION_NAME] = directives.flag
     option_spec[PATH_SUBSTITUTION_OPTION_NAME] = directives.flag
@@ -538,8 +540,8 @@ class SubstitutionInclude(Include):
     path.
     """
 
-    option_spec: ClassVar[OptionSpec | None] = {
-        **(Include.option_spec or {}),
+    option_spec: ClassVar[OptionSpec | None] = {  # pyrefly: ignore [explicit-any]
+        **(Include.option_spec if Include.option_spec is not None else {}),
         CONTENT_SUBSTITUTION_OPTION_NAME: directives.flag,
         PATH_SUBSTITUTION_OPTION_NAME: directives.flag,
         NO_CONTENT_SUBSTITUTION_OPTION_NAME: directives.flag,
@@ -604,12 +606,12 @@ class SubstitutionInclude(Include):
     @override
     def run(self) -> list[Node]:
         """Replace placeholders in the path and/or included content."""
-        env = self.state.document.settings.env
+        env: BuildEnvironment | None = self.state.document.settings.env
 
         if env is None:
             return list(DocutilsInclude.run(self=self))
 
-        config = env.config
+        config: Config = env.config
         myst_config = _get_myst_config(context=self.state)
         should_apply_path_substitutions = _should_apply_substitutions(
             options=self.options,
@@ -644,8 +646,9 @@ class SubstitutionInclude(Include):
 
         if should_apply_path_substitutions:
             for argument_index, argument in enumerate(iterable=self.arguments):
+                argument_text: str = argument
                 self.arguments[argument_index] = _apply_substitutions(
-                    text=argument,
+                    text=argument_text,
                     substitution_defs=substitution_defs,
                     delimiter_pairs=delimiter_pairs,
                 )
@@ -653,7 +656,7 @@ class SubstitutionInclude(Include):
         if not should_apply_content_substitutions:
             return list(super().run())
 
-        if env.events.listeners.get("include-read"):
+        if "include-read" in env.events.listeners:
             return self._run_with_include_read(
                 env=env,
                 substitution_defs=substitution_defs,
@@ -708,8 +711,8 @@ class SubstitutionImage(Image):
     path.
     """
 
-    option_spec: ClassVar[OptionSpec | None] = {
-        **(Image.option_spec or {}),
+    option_spec: ClassVar[OptionSpec | None] = {  # pyrefly: ignore [explicit-any]
+        **(Image.option_spec if Image.option_spec is not None else {}),
         PATH_SUBSTITUTION_OPTION_NAME: directives.flag,
         NO_PATH_SUBSTITUTION_OPTION_NAME: directives.flag,
     }
@@ -717,8 +720,8 @@ class SubstitutionImage(Image):
     @override
     def run(self) -> list[Node]:
         """Replace placeholders with given variables in the image path."""
-        env = self.state.document.settings.env
-        config = env.config
+        env: BuildEnvironment = self.state.document.settings.env
+        config: Config = env.config
         myst_config = _get_myst_config(context=self.state)
 
         should_apply_path_substitutions = _should_apply_substitutions(
@@ -743,8 +746,9 @@ class SubstitutionImage(Image):
             )
 
             for argument_index, argument in enumerate(iterable=self.arguments):
+                argument_text: str = argument
                 self.arguments[argument_index] = _apply_substitutions(
-                    text=argument,
+                    text=argument_text,
                     substitution_defs=substitution_defs,
                     delimiter_pairs=delimiter_pairs,
                 )
@@ -854,7 +858,7 @@ def setup(app: Sphinx) -> ExtensionMetadata:
         nodeclass=addnodes.download_reference,
     )
     app.add_role(name="substitution-download", role=substitution_download_role)
-    app.connect(
+    _ = app.connect(
         event="doctree-read",
         callback=_substitute_hyperlink_targets,
     )

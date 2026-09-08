@@ -7,6 +7,7 @@ inline
 linters
 pragma
 py
+pyrefly
 pyright
 pytest
 reportUnknownArgumentType
