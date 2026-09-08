@@ -348,6 +348,7 @@ plugins = [
 
 [tool.pyrefly]
 errors.non-exhaustive-match = "error"
+enabled-ignores = [ "pyrefly" ]
 preset = "all"
 
 [tool.pyright]
