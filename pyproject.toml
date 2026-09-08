@@ -41,7 +41,10 @@ dependencies = [
     "sphinx>=8.1.0",
     "typing-extensions>=4.4.0",
 ]
-optional-dependencies.dev = [
+urls.Source = "https://github.com/adamtheturtle/sphinx-substitution-extensions"
+
+[dependency-groups]
+dev = [
     "actionlint-py==1.7.12.24",
     "check-manifest==0.51",
     "deptry==0.25.1",
@@ -80,11 +83,7 @@ optional-dependencies.dev = [
     "yamlfix==1.19.1",
     "zizmor==1.30.0",
 ]
-optional-dependencies.release = [ "check-wheel-contents==0.6.3", "towncrier==25.8.0" ]
-urls.Source = "https://github.com/adamtheturtle/sphinx-substitution-extensions"
-
-[dependency-groups]
-dev = []
+release = [ "check-wheel-contents==0.6.3", "towncrier==25.8.0" ]
 
 [tool.setuptools]
 packages.find.where = [
@@ -283,12 +282,6 @@ ignore = [
     "tests-pylintrc",
     "tests/**",
     "zizmor.yml",
-]
-
-[tool.deptry]
-optional_dependencies_dev_groups = [
-    "dev",
-    "release",
 ]
 
 [tool.vulture]

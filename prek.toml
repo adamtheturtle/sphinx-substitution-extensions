@@ -104,7 +104,7 @@ hooks = [
   {
     id = "actionlint",
     name = "actionlint",
-    entry = "uv run --extra=dev actionlint",
+    entry = "uv run --group=dev actionlint",
     language = "python",
     pass_filenames = false,
     types_or = ["yaml"],
@@ -114,7 +114,7 @@ hooks = [
   {
     id = "pydocstringformatter",
     name = "pydocstringformatter",
-    entry = "uv run --extra=dev pydocstringformatter",
+    entry = "uv run --group=dev pydocstringformatter",
     language = "python",
     types_or = ["python"],
     additional_dependencies = ["uv==0.11.7"],
@@ -123,7 +123,7 @@ hooks = [
   {
     id = "shellcheck",
     name = "shellcheck",
-    entry = "uv run --extra=dev shellcheck --shell=bash",
+    entry = "uv run --group=dev shellcheck --shell=bash",
     language = "python",
     types_or = ["shell"],
     additional_dependencies = ["uv==0.11.7"],
@@ -132,7 +132,7 @@ hooks = [
   {
     id = "shellcheck-docs",
     name = "shellcheck-docs",
-    entry = 'uv run --extra=dev doccmd --no-write-to-file --example-workers 0 --language=shell --language=console --command="shellcheck --shell=bash"',
+    entry = 'uv run --group=dev doccmd --no-write-to-file --example-workers 0 --language=shell --language=console --command="shellcheck --shell=bash"',
     language = "python",
     types_or = [
       "markdown",
@@ -144,7 +144,7 @@ hooks = [
   {
     id = "shfmt",
     name = "shfmt",
-    entry = "uv run --extra=dev shfmt --write --space-redirects --indent=4",
+    entry = "uv run --group=dev shfmt --write --space-redirects --indent=4",
     language = "python",
     types_or = ["shell"],
     additional_dependencies = ["uv==0.11.7"],
@@ -153,7 +153,7 @@ hooks = [
   {
     id = "shfmt-docs",
     name = "shfmt-docs",
-    entry = 'uv run --extra=dev doccmd --language=shell --language=console --skip-marker=shfmt --no-pad-file --command="shfmt --write --space-redirects --indent=4"',
+    entry = 'uv run --group=dev doccmd --language=shell --language=console --skip-marker=shfmt --no-pad-file --command="shfmt --write --space-redirects --indent=4"',
     language = "python",
     types_or = [
       "markdown",
@@ -166,7 +166,7 @@ hooks = [
     id = "mypy",
     name = "mypy",
     stages = ["pre-push"],
-    entry = "uv run --extra=dev -m mypy --num-workers=4",
+    entry = "uv run --group=dev -m mypy --num-workers=4",
     language = "python",
     types_or = [
       "python",
@@ -179,7 +179,7 @@ hooks = [
     id = "mypy-docs",
     name = "mypy-docs",
     stages = ["pre-push"],
-    entry = 'uv run --extra=dev doccmd --no-write-to-file --language=python --command="mypy --num-workers=4"',
+    entry = 'uv run --group=dev doccmd --no-write-to-file --language=python --command="mypy --num-workers=4"',
     language = "python",
     types_or = [
       "markdown",
@@ -190,7 +190,7 @@ hooks = [
     id = "check-manifest",
     name = "check-manifest",
     stages = ["pre-push"],
-    entry = "uv run --extra=dev -m check_manifest",
+    entry = "uv run --group=dev -m check_manifest",
     language = "python",
     pass_filenames = false,
     additional_dependencies = ["uv==0.11.7"]
@@ -199,7 +199,7 @@ hooks = [
     id = "pyright",
     name = "pyright",
     stages = ["pre-push"],
-    entry = "uv run --extra=dev -m pyright .",
+    entry = "uv run --group=dev -m pyright .",
     language = "python",
     types_or = [
       "python",
@@ -212,7 +212,7 @@ hooks = [
     id = "pyright-docs",
     name = "pyright-docs",
     stages = ["pre-push"],
-    entry = 'uv run --extra=dev doccmd --no-write-to-file --example-workers 0 --language=python --command="pyright"',
+    entry = 'uv run --group=dev doccmd --no-write-to-file --example-workers 0 --language=python --command="pyright"',
     language = "python",
     types_or = [
       "markdown",
@@ -223,7 +223,7 @@ hooks = [
     id = "pyright-verifytypes",
     name = "pyright-verifytypes",
     stages = ["pre-push"],
-    entry = "uv run --extra=dev -m pyright --ignoreexternal --verifytypes sphinx_substitution_extensions",
+    entry = "uv run --group=dev -m pyright --ignoreexternal --verifytypes sphinx_substitution_extensions",
     language = "python",
     pass_filenames = false,
     types_or = ["python"],
@@ -233,7 +233,7 @@ hooks = [
     id = "ty",
     name = "ty",
     stages = ["pre-push"],
-    entry = "uv run --extra=dev ty check",
+    entry = "uv run --group=dev ty check",
     language = "python",
     types_or = [
       "python",
@@ -246,7 +246,7 @@ hooks = [
     id = "ty-docs",
     name = "ty-docs",
     stages = ["pre-push"],
-    entry = 'uv run --extra=dev doccmd --no-write-to-file --example-workers 0 --language=python --command="ty check"',
+    entry = 'uv run --group=dev doccmd --no-write-to-file --example-workers 0 --language=python --command="ty check"',
     language = "python",
     types_or = [
       "markdown",
@@ -257,7 +257,7 @@ hooks = [
   {
     id = "vulture",
     name = "vulture",
-    entry = "uv run --extra=dev -m vulture .",
+    entry = "uv run --group=dev -m vulture .",
     language = "python",
     types_or = ["python"],
     pass_filenames = false,
@@ -267,7 +267,7 @@ hooks = [
   {
     id = "vulture-docs",
     name = "vulture docs",
-    entry = 'uv run --extra=dev doccmd --no-write-to-file --example-workers 0 --language=python --command="vulture"',
+    entry = 'uv run --group=dev doccmd --no-write-to-file --example-workers 0 --language=python --command="vulture"',
     language = "python",
     types_or = [
       "markdown",
@@ -279,7 +279,7 @@ hooks = [
   {
     id = "pyroma",
     name = "pyroma",
-    entry = "uv run --extra=dev -m pyroma --min 10 .",
+    entry = "uv run --group=dev -m pyroma --min 10 .",
     language = "python",
     pass_filenames = false,
     types_or = ["toml"],
@@ -289,7 +289,7 @@ hooks = [
   {
     id = "deptry",
     name = "deptry",
-    entry = "uv run --extra=dev -m deptry src/",
+    entry = "uv run --group=dev -m deptry src/",
     language = "python",
     pass_filenames = false,
     additional_dependencies = ["uv==0.11.7"],
@@ -298,7 +298,7 @@ hooks = [
   {
     id = "pylint",
     name = "pylint",
-    entry = "uv run --extra=dev -m pylint src/ tests/",
+    entry = "uv run --group=dev -m pylint src/ tests/",
     language = "python",
     stages = ["manual"],
     pass_filenames = false,
@@ -307,7 +307,7 @@ hooks = [
   {
     id = "ruff-check-fix",
     name = "Ruff check fix",
-    entry = "uv run --extra=dev -m ruff check --fix",
+    entry = "uv run --group=dev -m ruff check --fix",
     language = "python",
     types_or = ["python"],
     additional_dependencies = ["uv==0.11.7"],
@@ -316,7 +316,7 @@ hooks = [
   {
     id = "ruff-check-fix-docs",
     name = "Ruff check fix docs",
-    entry = 'uv run --extra=dev doccmd --language=python --command="ruff check --fix"',
+    entry = 'uv run --group=dev doccmd --language=python --command="ruff check --fix"',
     language = "python",
     types_or = [
       "markdown",
@@ -328,7 +328,7 @@ hooks = [
   {
     id = "ruff-format-fix",
     name = "Ruff format",
-    entry = "uv run --extra=dev -m ruff format",
+    entry = "uv run --group=dev -m ruff format",
     language = "python",
     types_or = ["python"],
     additional_dependencies = ["uv==0.11.7"],
@@ -337,7 +337,7 @@ hooks = [
   {
     id = "ruff-format-fix-docs",
     name = "Ruff format docs",
-    entry = 'uv run --extra=dev doccmd --language=python --no-pad-file --command="ruff format"',
+    entry = 'uv run --group=dev doccmd --language=python --no-pad-file --command="ruff format"',
     language = "python",
     types_or = [
       "markdown",
@@ -349,7 +349,7 @@ hooks = [
   {
     id = "strict-kwargs-fix",
     name = "strict-kwargs",
-    entry = "uv run --extra=dev strict-kwargs check --diff",
+    entry = "uv run --group=dev strict-kwargs check --diff",
     language = "python",
     types_or = ["python"],
     additional_dependencies = ["uv==0.11.7"],
@@ -359,7 +359,7 @@ hooks = [
   {
     id = "no-defaults",
     name = "no-defaults",
-    entry = "uv run --extra=dev no-defaults",
+    entry = "uv run --group=dev no-defaults",
     language = "python",
     types_or = ["python"],
     additional_dependencies = ["uv==0.11.7"],
@@ -369,7 +369,7 @@ hooks = [
   {
     id = "vale-sync",
     name = "vale sync",
-    entry = "uv run --extra=dev vale sync",
+    entry = "uv run --group=dev vale sync",
     language = "python",
     pass_filenames = false,
     files = '(\.(rst|md)$|^\.vale\.ini$)',
@@ -379,7 +379,7 @@ hooks = [
   {
     id = "vale",
     name = "vale",
-    entry = "uv run --extra=dev vale",
+    entry = "uv run --group=dev vale",
     language = "python",
     types_or = [
       "rst",
@@ -392,7 +392,7 @@ hooks = [
   {
     id = "doc8",
     name = "doc8",
-    entry = "uv run --extra=dev -m doc8",
+    entry = "uv run --group=dev -m doc8",
     language = "python",
     types_or = ["rst"],
     additional_dependencies = ["uv==0.11.7"],
@@ -401,7 +401,7 @@ hooks = [
   {
     id = "interrogate",
     name = "interrogate",
-    entry = "uv run --extra=dev -m interrogate",
+    entry = "uv run --group=dev -m interrogate",
     language = "python",
     types_or = ["python"],
     additional_dependencies = ["uv==0.11.7"],
@@ -410,7 +410,7 @@ hooks = [
   {
     id = "interrogate-docs",
     name = "interrogate docs",
-    entry = 'uv run --extra=dev doccmd --no-write-to-file --example-workers 0 --language=python --command="interrogate"',
+    entry = 'uv run --group=dev doccmd --no-write-to-file --example-workers 0 --language=python --command="interrogate"',
     language = "python",
     types_or = [
       "markdown",
@@ -422,7 +422,7 @@ hooks = [
   {
     id = "pyproject-fmt-fix",
     name = "pyproject-fmt",
-    entry = "uv run --extra=dev pyproject-fmt",
+    entry = "uv run --group=dev pyproject-fmt",
     language = "python",
     types_or = ["toml"],
     files = "pyproject.toml",
@@ -431,7 +431,7 @@ hooks = [
   {
     id = "yamlfix",
     name = "yamlfix",
-    entry = "uv run --extra=dev yamlfix",
+    entry = "uv run --group=dev yamlfix",
     language = "python",
     types_or = ["yaml"],
     additional_dependencies = ["uv==0.11.7"],
@@ -440,7 +440,7 @@ hooks = [
   {
     id = "zizmor",
     name = "zizmor",
-    entry = "uv run --extra=dev zizmor --strict-collection .github",
+    entry = "uv run --group=dev zizmor --strict-collection .github",
     language = "python",
     pass_filenames = false,
     types_or = ["yaml"],
@@ -450,7 +450,7 @@ hooks = [
   {
     id = "sphinx-lint",
     name = "sphinx-lint",
-    entry = "uv run --extra=dev sphinx-lint --enable=all --disable=line-too-long",
+    entry = "uv run --group=dev sphinx-lint --enable=all --disable=line-too-long",
     language = "python",
     types_or = ["rst"],
     additional_dependencies = ["uv==0.11.7"],
@@ -460,7 +460,7 @@ hooks = [
     id = "pyrefly",
     name = "pyrefly",
     stages = ["pre-push"],
-    entry = "uv run --extra=dev pyrefly check",
+    entry = "uv run --group=dev pyrefly check",
     language = "python",
     types_or = [
       "python",
@@ -473,7 +473,7 @@ hooks = [
     id = "pyrefly-docs",
     name = "pyrefly-docs",
     stages = ["pre-push"],
-    entry = 'uv run --extra=dev doccmd --no-write-to-file --example-workers 0 --language=python --command="pyrefly check"',
+    entry = 'uv run --group=dev doccmd --no-write-to-file --example-workers 0 --language=python --command="pyrefly check"',
     language = "python",
     types_or = [
       "markdown",
