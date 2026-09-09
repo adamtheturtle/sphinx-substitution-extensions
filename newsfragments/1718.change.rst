@@ -1,0 +1,1 @@
+Validate equivalence-case TOML values without untyped pass-through helpers.
