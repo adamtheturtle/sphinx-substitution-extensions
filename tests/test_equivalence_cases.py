@@ -7,10 +7,11 @@ import tomllib
 from collections.abc import Callable  # noqa: TC003
 from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
-from typing import Any
 
 import pytest
+from beartype.door import TypeHint
 from sphinx.testing.util import SphinxTestApp  # noqa: TC002
+from typing_extensions import TypeIs
 
 
 @dataclass(frozen=True, slots=True)
@@ -34,37 +35,22 @@ class Case:
     expected: Build
 
 
-def _as_untyped_dict(
-    value: dict[Any, Any],  # pyrefly: ignore [explicit-any]
-) -> dict[Any, Any]:  # pyrefly: ignore [explicit-any]
-    """Expose a parser mapping through its intentionally loose type."""
-    return value
+def _is_mapping(value: object, /) -> TypeIs[dict[str, object]]:
+    """Return whether a parser value is a string-keyed mapping."""
+    return TypeHint(hint=dict[str, object]).is_bearable(obj=value)
 
 
-def _as_untyped_list(
-    value: list[Any],  # pyrefly: ignore [explicit-any]
-) -> list[Any]:  # pyrefly: ignore [explicit-any]
-    """Expose a parser-produced list through its intentionally loose
-    type.
-    """
-    return value
+def _is_list(value: object, /) -> TypeIs[list[object]]:
+    """Return whether a parser value is a list."""
+    return isinstance(value, list)
 
 
 def _mapping(value: object, *, context: str) -> dict[str, object]:
     """Validate and narrow a TOML table."""
-    if not isinstance(value, dict):  # pragma: no cover
+    if not _is_mapping(value):  # pragma: no cover
         msg = f"{context} must be a table"
         raise TypeError(msg)
-    untyped_value = _as_untyped_dict(
-        value=value,  # pyright: ignore[reportUnknownArgumentType]
-    )
-    result: dict[str, object] = {}
-    for key, item in untyped_value.items():
-        if not isinstance(key, str):  # pragma: no cover
-            msg = f"{context} contains a non-string key"
-            raise TypeError(msg)
-        result[key] = item
-    return result
+    return value
 
 
 def _string(value: object, *, context: str) -> str:
@@ -157,16 +143,13 @@ def _load_cases() -> list[Case]:
         msg = f"Unsupported schema version: {schema_version!r}"
         raise ValueError(msg)
     raw_cases = data.pop("cases", None)
-    if not isinstance(raw_cases, list):  # pragma: no cover
+    if not _is_list(raw_cases):  # pragma: no cover
         msg = "cases must be an array of tables"
         raise TypeError(msg)
-    untyped_cases = _as_untyped_list(
-        value=raw_cases,  # pyright: ignore[reportUnknownArgumentType]
-    )
     _check_keys(data=data, context="root")
     cases = [
         _parse_case(value=raw_case, index=index)
-        for index, raw_case in enumerate(iterable=untyped_cases)
+        for index, raw_case in enumerate(iterable=raw_cases)
     ]
     ids = [case.id for case in cases]
     if len(ids) != len(set(ids)):  # pragma: no cover
