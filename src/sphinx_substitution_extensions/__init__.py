@@ -404,7 +404,7 @@ class SubstitutionCodeRole:
         "language": directives.unchanged,
     }
 
-    def __call__(  # pylint: disable=dangerous-default-value
+    def __call__(
         self,
         typ: str,
         rawtext: str,
@@ -412,9 +412,8 @@ class SubstitutionCodeRole:
         lineno: int,
         inliner: Inliner | MockInliner,
         *,
-        # We allow mutable defaults as the Sphinx implementation requires it.
-        options: dict[Any, Any] = {},  # noqa: B006  # pyrefly: ignore [explicit-any]
-        content: list[str] = [],  # noqa: B006
+        options: dict[Any, Any] | None = None,  # pyrefly: ignore [explicit-any]
+        content: list[str] | None = None,
     ) -> tuple[list[Node], list[system_message]]:
         """Replace placeholders with given variables."""
         settings = inliner.document.settings
@@ -462,8 +461,8 @@ class SubstitutionCodeRole:
             text=text,
             lineno=lineno,
             inliner=inliner,
-            options=options,
-            content=content,
+            options={} if options is None else options,
+            content=[] if content is None else content,
         )
 
 
