@@ -2,7 +2,7 @@
 
 from importlib.metadata import version
 from pathlib import Path
-from typing import Any, ClassVar, TypeAlias, TypeGuard
+from typing import ClassVar, TypeAlias, TypeGuard
 from unittest.mock import patch
 
 from beartype import beartype
@@ -412,7 +412,7 @@ class SubstitutionCodeRole:
         lineno: int,
         inliner: Inliner | MockInliner,
         *,
-        options: dict[Any, Any] | None = None,  # pyrefly: ignore [explicit-any]
+        options: dict[str, object] | None = None,
         content: list[str] | None = None,
     ) -> tuple[list[Node], list[system_message]]:
         """Replace placeholders with given variables."""
