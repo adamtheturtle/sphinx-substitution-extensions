@@ -53,21 +53,25 @@ SubstitutionValue: TypeAlias = (
     | dict[str, "SubstitutionValue"]
 )
 Substitutions: TypeAlias = dict[str, SubstitutionValue]
-_PAIR_LENGTH = 2
 
 
-def _is_object_sequence(
+def _is_delimiter_sequence(
     value: object, /
 ) -> TypeGuard[list[object] | tuple[object, ...]]:
-    """Return whether a value is a sequence with unchecked entries."""
+    """Return whether a delimiter value is a list or tuple."""
     return isinstance(value, (list, tuple))
 
 
-def _is_object_pair(
-    value: object, /
-) -> TypeGuard[list[object] | tuple[object, ...]]:
-    """Return whether a value is a pair with unchecked entries."""
-    return _is_object_sequence(value) and len(value) == _PAIR_LENGTH
+def _delimiter_pair(*, value: object) -> tuple[str, str]:
+    """Return a validated pair of string delimiters."""
+    assert _is_delimiter_sequence(value)
+    pair_length = 2
+    assert len(value) == pair_length
+    opening_delimiter: object = value[0]
+    closing_delimiter: object = value[1]
+    assert isinstance(opening_delimiter, str)
+    assert isinstance(closing_delimiter, str)
+    return opening_delimiter, closing_delimiter
 
 
 @beartype
@@ -179,10 +183,9 @@ def _get_delimiter_pairs(
             configured_delimiters: object = config.myst_sub_delimiters
         else:
             configured_delimiters = myst_config.sub_delimiters
-        assert _is_object_pair(configured_delimiters)
-        opening_delimiter, closing_delimiter = configured_delimiters
-        assert isinstance(opening_delimiter, str)
-        assert isinstance(closing_delimiter, str)
+        opening_delimiter, closing_delimiter = _delimiter_pair(
+            value=configured_delimiters,
+        )
         new_delimiter_pair = (
             opening_delimiter + opening_delimiter,
             closing_delimiter + closing_delimiter,
