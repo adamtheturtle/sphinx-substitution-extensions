@@ -71,7 +71,7 @@ dev = [
     # use it to lint shell commands in GitHub workflow files.
     "shellcheck-py==0.11.0.1",
     "shfmt-py==4.1.0",
-    "snapper-fmt==0.11.0",
+    "snapper-fmt==0.11.1",
     "sphinx>=9,<10",
     "sphinx-lint==1.0.2",
     "sphinx-toolbox==4.3.0",
