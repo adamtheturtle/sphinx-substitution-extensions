@@ -2,7 +2,7 @@
 
 from importlib.metadata import version
 from pathlib import Path
-from typing import ClassVar, TypeAlias, TypeGuard
+from typing import ClassVar, TypeAlias
 from unittest.mock import patch
 
 from beartype import beartype
@@ -55,23 +55,13 @@ SubstitutionValue: TypeAlias = (
 Substitutions: TypeAlias = dict[str, SubstitutionValue]
 
 
-def _is_delimiter_sequence(
-    value: object, /
-) -> TypeGuard[list[object] | tuple[object, ...]]:
-    """Return whether a delimiter value is a list or tuple."""
-    return isinstance(value, (list, tuple))
-
-
 def _delimiter_pair(*, value: object) -> tuple[str, str]:
     """Return a validated pair of string delimiters."""
-    assert _is_delimiter_sequence(value)
-    pair_length = 2
-    assert len(value) == pair_length
-    opening_delimiter: object = value[0]
-    closing_delimiter: object = value[1]
-    assert isinstance(opening_delimiter, str)
-    assert isinstance(closing_delimiter, str)
-    return opening_delimiter, closing_delimiter
+    assert isinstance(value, (list, tuple))
+    assert isinstance(value[0], str)
+    assert isinstance(value[1], str)
+    assert value[2:] == value[:0]
+    return value[0], value[1]
 
 
 @beartype
