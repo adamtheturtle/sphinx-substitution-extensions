@@ -2,7 +2,7 @@
 
 from importlib.metadata import version
 from pathlib import Path
-from typing import ClassVar, TypeAlias, TypeGuard
+from typing import ClassVar, TypeAlias
 from unittest.mock import patch
 
 from beartype import beartype
@@ -53,21 +53,15 @@ SubstitutionValue: TypeAlias = (
     | dict[str, "SubstitutionValue"]
 )
 Substitutions: TypeAlias = dict[str, SubstitutionValue]
-_PAIR_LENGTH = 2
 
 
-def _is_object_sequence(
-    value: object, /
-) -> TypeGuard[list[object] | tuple[object, ...]]:
-    """Return whether a value is a sequence with unchecked entries."""
-    return isinstance(value, (list, tuple))
-
-
-def _is_object_pair(
-    value: object, /
-) -> TypeGuard[list[object] | tuple[object, ...]]:
-    """Return whether a value is a pair with unchecked entries."""
-    return _is_object_sequence(value) and len(value) == _PAIR_LENGTH
+def _delimiter_pair(*, value: object) -> tuple[str, str]:
+    """Return a validated pair of string delimiters."""
+    assert isinstance(value, (list, tuple))
+    assert isinstance(value[0], str)
+    assert isinstance(value[1], str)
+    assert value[2:] == value[:0]
+    return value[0], value[1]
 
 
 @beartype
@@ -179,10 +173,9 @@ def _get_delimiter_pairs(
             configured_delimiters: object = config.myst_sub_delimiters
         else:
             configured_delimiters = myst_config.sub_delimiters
-        assert _is_object_pair(configured_delimiters)
-        opening_delimiter, closing_delimiter = configured_delimiters
-        assert isinstance(opening_delimiter, str)
-        assert isinstance(closing_delimiter, str)
+        opening_delimiter, closing_delimiter = _delimiter_pair(
+            value=configured_delimiters,
+        )
         new_delimiter_pair = (
             opening_delimiter + opening_delimiter,
             closing_delimiter + closing_delimiter,
