@@ -1,5 +1,6 @@
 """Custom Sphinx extensions."""
 
+from collections.abc import Collection
 from importlib.metadata import version
 from pathlib import Path
 from typing import ClassVar, TypeAlias, TypeGuard
@@ -250,7 +251,7 @@ def _apply_substitutions(
 @beartype
 def _should_apply_substitutions(
     *,
-    options: dict[str, object],
+    options: Collection[str],
     config: Config,
     yes_flag: str,
     no_flag: str,
