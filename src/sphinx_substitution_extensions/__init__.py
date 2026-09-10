@@ -21,7 +21,7 @@ from docutils.parsers.rst import directives
 from docutils.parsers.rst.directives.images import Image
 from docutils.parsers.rst.directives.misc import Include as DocutilsInclude
 from docutils.parsers.rst.roles import code_role
-from docutils.parsers.rst.states import Inliner
+from docutils.parsers.rst.states import Inliner, RSTState
 from docutils.statemachine import StringList
 from myst_parser.config.main import MdParserConfig
 from myst_parser.mdit_to_docutils.base import DocutilsRenderer
@@ -66,7 +66,9 @@ def _delimiter_pair(*, value: object) -> tuple[str, str]:
 
 
 @beartype
-def _get_myst_config(*, context: object) -> MdParserConfig | None:
+def _get_myst_config(
+    *, context: Inliner | MockInliner | MockState | RSTState
+) -> MdParserConfig | None:
     """Get the effective MyST configuration from a parsing context."""
     if isinstance(context, (MockInliner, MockState)):
         # MyST merges front matter into a document-local configuration before
