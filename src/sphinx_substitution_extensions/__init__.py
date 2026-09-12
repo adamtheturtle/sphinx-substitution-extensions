@@ -56,6 +56,7 @@ SubstitutionValue: TypeAlias = (
 Substitutions: TypeAlias = dict[str, SubstitutionValue]
 
 
+@beartype
 def _delimiter_pair(*, value: object) -> tuple[str, str]:
     """Return a validated pair of string delimiters."""
     assert isinstance(value, (list, tuple))
