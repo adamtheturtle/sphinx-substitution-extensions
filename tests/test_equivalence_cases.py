@@ -1,16 +1,14 @@
 """Run declarative Sphinx build-equivalence cases."""
 
-from __future__ import annotations
-
 import base64
 import tomllib
-from collections.abc import Callable  # noqa: TC003
+from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
 
 import pytest
 from beartype.door import TypeHint
-from sphinx.testing.util import SphinxTestApp  # noqa: TC002
+from sphinx.testing.util import SphinxTestApp
 from typing_extensions import TypeIs
 
 
