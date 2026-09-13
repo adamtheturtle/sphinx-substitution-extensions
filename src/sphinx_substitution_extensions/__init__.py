@@ -55,6 +55,10 @@ SubstitutionValue: TypeAlias = (
 )
 Substitutions: TypeAlias = dict[str, SubstitutionValue]
 
+# Avoid Any-valued converter results until our minimum Sphinx includes
+# https://github.com/sphinx-doc/sphinx/pull/14672.
+OptionSpec: TypeAlias = dict[str, Callable[[str], object]]
+
 
 def _delimiter_pair(*, value: object) -> tuple[str, str]:
     """Return a validated pair of string delimiters."""
@@ -344,9 +348,7 @@ def _substitute_hyperlink_targets(
 class SubstitutionCodeBlock(CodeBlock):
     """Similar to CodeBlock but replaces placeholders with variables."""
 
-    option_spec: ClassVar[dict[str, Callable[[str], object]]] = dict[
-        str, Callable[[str], object]
-    ](CodeBlock.option_spec)
+    option_spec: ClassVar[OptionSpec] = OptionSpec(CodeBlock.option_spec)
     option_spec[SUBSTITUTION_OPTION_NAME] = directives.flag
     option_spec[NO_SUBSTITUTION_OPTION_NAME] = directives.flag
 
@@ -469,9 +471,7 @@ class SubstitutionLiteralInclude(LiteralInclude):
     variables.
     """
 
-    option_spec: ClassVar[dict[str, Callable[[str], object]]] = dict[
-        str, Callable[[str], object]
-    ](LiteralInclude.option_spec)
+    option_spec: ClassVar[OptionSpec] = OptionSpec(LiteralInclude.option_spec)
     option_spec[CONTENT_SUBSTITUTION_OPTION_NAME] = directives.flag
     option_spec[PATH_SUBSTITUTION_OPTION_NAME] = directives.flag
     option_spec[NO_CONTENT_SUBSTITUTION_OPTION_NAME] = directives.flag
@@ -555,7 +555,7 @@ class SubstitutionInclude(Include):
     path.
     """
 
-    option_spec: ClassVar[dict[str, Callable[[str], object]] | None] = {
+    option_spec: ClassVar[OptionSpec | None] = {
         **(Include.option_spec if Include.option_spec is not None else {}),
         CONTENT_SUBSTITUTION_OPTION_NAME: directives.flag,
         PATH_SUBSTITUTION_OPTION_NAME: directives.flag,
@@ -727,7 +727,7 @@ class SubstitutionImage(Image):
     path.
     """
 
-    option_spec: ClassVar[dict[str, Callable[[str], object]] | None] = {
+    option_spec: ClassVar[OptionSpec | None] = {
         **(Image.option_spec if Image.option_spec is not None else {}),
         PATH_SUBSTITUTION_OPTION_NAME: directives.flag,
         NO_PATH_SUBSTITUTION_OPTION_NAME: directives.flag,
