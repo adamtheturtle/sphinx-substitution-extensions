@@ -265,6 +265,7 @@ ignore = [
     ".git_archival.txt",
     ".prettierrc",
     ".vale.ini",
+    ".vscode/*.json",
     ".yamlfmt",
     "CHANGELOG.rst",
     "ci",
@@ -283,9 +284,11 @@ ignore = [
     "sample",
     "sample/**",
     "spelling_private_dict.txt",
+    "styles/snapper/*.yml",
     "tests",
     "tests-pylintrc",
     "tests/**",
+    "towncrier_template.rst.jinja",
     "zizmor.yml",
 ]
 
