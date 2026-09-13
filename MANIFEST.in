@@ -1,0 +1,3 @@
+include .vscode/*.json
+include styles/snapper/*.yml
+include towncrier_template.rst.jinja
