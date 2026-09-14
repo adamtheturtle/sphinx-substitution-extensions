@@ -60,7 +60,7 @@ dev = [
     "pylint[spelling]==4.0.8",
     "pyproject-fmt==2.29.3",
     "pyrefly==1.2.0",
-    "pyright==1.1.411",
+    "pyright==1.1.414",
     "pyroma==5.0.1",
     "pytest==9.1.1",
     "pytest-beartype-tests==2026.8.16",
