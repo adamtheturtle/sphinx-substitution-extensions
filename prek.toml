@@ -369,6 +369,8 @@ hooks = [
   {
     id = "vale-sync",
     name = "vale sync",
+    # The Python Vale wrapper may fail transiently while downloading its binary; see
+    # https://github.com/daniperez/vale-python-package/issues/77
     entry = "uv run --group=dev vale sync",
     language = "python",
     pass_filenames = false,
