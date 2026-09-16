@@ -325,6 +325,7 @@ ignore_names = [
     "pygments_style",
     # pytest configuration
     "pytest_collect_file",
+    "pytest_plugins",
     "rst_prolog",
     "setup",
     "source_suffix",
