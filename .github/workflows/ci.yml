@@ -56,6 +56,7 @@ jobs:
         run: |
           uv run --group=dev pytest -s -vvv --cov-fail-under 100 --cov=src/ --cov=tests .
         env:
+          PYTEST_PLUGINS: sphinx.testing.fixtures
           UV_PYTHON: ${{ matrix.python-version }}
           UV_RESOLUTION: ${{ matrix.uv-resolution }}
 

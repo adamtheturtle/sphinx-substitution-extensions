@@ -67,11 +67,11 @@ Keep these as exact-message ignores so other ``D000`` diagnostics remain visible
 Running tests
 -------------
 
-Run ``pytest``:
+Run ``pytest`` with the Sphinx test fixtures plugin:
 
 .. code-block:: shell
 
-   pytest
+   PYTEST_PLUGINS=sphinx.testing.fixtures pytest
 
 Continuous integration
 ----------------------
