@@ -45,6 +45,7 @@ def _is_list(value: object, /) -> TypeIs[list[object]]:
 
 def _mapping(value: object, *, context: str) -> dict[str, object]:
     """Validate and narrow a TOML table."""
+    # Only the checked-in, collection-time validated manifest reaches tests.
     if not _is_mapping(value):  # pragma: no cover
         msg = f"{context} must be a table"
         raise TypeError(msg)
@@ -53,6 +54,7 @@ def _mapping(value: object, *, context: str) -> dict[str, object]:
 
 def _string(value: object, *, context: str) -> str:
     """Validate and narrow a TOML string."""
+    # Only the checked-in, collection-time validated manifest reaches tests.
     if not isinstance(value, str):  # pragma: no cover
         msg = f"{context} must be a string"
         raise TypeError(msg)
@@ -70,6 +72,7 @@ def _string_mapping(value: object, *, context: str) -> dict[str, str]:
 
 def _check_keys(data: dict[str, object], *, context: str) -> None:
     """Reject unknown keys left after parsing a table."""
+    # Unknown manifest keys fail during collection, before any test can run.
     if len(data) > 0:  # pragma: no cover
         unknown_keys = ", ".join(sorted(data))
         msg = f"Unknown keys in {context}: {unknown_keys}"
@@ -92,6 +95,8 @@ def _parse_build(value: object, *, context: str) -> Build:
         context=f"{context}.confoverrides",
     )
     exception_on_warning = data.pop("exception_on_warning", False)
+    # The checked-in manifest is validated at collection and contains a
+    # Boolean.
     if not isinstance(exception_on_warning, bool):  # pragma: no cover
         msg = f"{context}.exception_on_warning must be a boolean"
         raise TypeError(msg)
@@ -137,10 +142,12 @@ def _load_cases() -> list[Case]:
     with cases_path.open(mode="rb") as cases_file:
         data = _mapping(value=tomllib.load(cases_file), context="root")
     schema_version = data.pop("schema_version", None)
+    # Tests run only after the checked-in version-one manifest is collected.
     if schema_version != 1:  # pragma: no cover
         msg = f"Unsupported schema version: {schema_version!r}"
         raise ValueError(msg)
     raw_cases = data.pop("cases", None)
+    # The checked-in manifest's cases table is validated during collection.
     if not _is_list(raw_cases):  # pragma: no cover
         msg = "cases must be an array of tables"
         raise TypeError(msg)
@@ -150,6 +157,7 @@ def _load_cases() -> list[Case]:
         for index, raw_case in enumerate(iterable=raw_cases)
     ]
     ids = [case.id for case in cases]
+    # Duplicate IDs are a collection error in the checked-in manifest.
     if len(ids) != len(set(ids)):  # pragma: no cover
         msg = "Equivalence case IDs must be unique"
         raise ValueError(msg)
@@ -159,6 +167,7 @@ def _load_cases() -> list[Case]:
 def _destination(*, source_directory: Path, relative_path: str) -> Path:
     """Resolve and validate a case file path."""
     path = PurePosixPath(relative_path)
+    # Unsafe checked-in fixture paths fail collection before tests can run.
     if path.is_absolute() or ".." in path.parts:  # pragma: no cover
         msg = (
             "Case file path must stay within its source directory: "
@@ -171,6 +180,7 @@ def _destination(*, source_directory: Path, relative_path: str) -> Path:
 def _write_build(*, source_directory: Path, build: Build) -> None:
     """Materialize one build's files."""
     overlap = build.files.keys() & build.binary_files.keys()
+    # Overlapping text and binary paths fail manifest collection.
     if len(overlap) > 0:  # pragma: no cover
         msg = f"Files cannot be both text and binary: {sorted(overlap)}"
         raise ValueError(msg)

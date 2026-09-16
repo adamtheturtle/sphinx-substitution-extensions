@@ -321,6 +321,9 @@ def test_include_without_sphinx_environment(tmp_path: Path) -> None:
         directive=sphinx_substitution_extensions.SubstitutionInclude,
     )
 
+    # The bundled stubs leave publish_doctree partially unknown; this
+    # annotation records the type exercised through the public parser
+    # interface.
     publish_doctree: Callable[..., nodes.document] = core.publish_doctree  # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
     document = publish_doctree(
         source=source_file.read_text(),
