@@ -321,7 +321,8 @@ def test_include_without_sphinx_environment(tmp_path: Path) -> None:
         directive=sphinx_substitution_extensions.SubstitutionInclude,
     )
 
-    # The return type is known, but other parameters remain partially unknown.
+    # Other parameters remain partially unknown until
+    # https://github.com/python/typeshed/pull/16416 is released.
     document = core.publish_doctree(  # pyright: ignore[reportUnknownMemberType]
         source=source_file.read_text(),
         source_path=source_file.as_posix(),
