@@ -362,17 +362,7 @@ enableTypeIgnoreComments = false
 reportUnnecessaryTypeIgnoreComment = true
 
 [tool.ty]
-rules.blanket-ignore-comment = "error"
-rules.division-by-zero = "warn"
-rules.dynamic-function-decorator-return = "error"
-rules.missing-type-argument = "error"
-rules.possibly-missing-attribute = "warn"
-rules.possibly-missing-import = "warn"
-rules.possibly-unresolved-reference = "warn"
-rules.unsound-assignment = "error"
-rules.unsound-return-statement = "error"
-rules.unsound-yield = "error"
-rules.unsupported-dynamic-base = "warn"
+rules.all = "error"
 terminal.error-on-warning = true
 analysis.respect-type-ignore-comments = false
 analysis.strict-equality-semantics = true
