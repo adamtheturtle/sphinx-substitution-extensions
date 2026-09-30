@@ -370,8 +370,9 @@ analysis.strict-equality-semantics = true
 analysis.strict-generic-narrowing = true
 
 [tool.pytest]
-# Source functions already use @beartype; the import hook fails on the
-# recursive SubstitutionValue annotation.
+# Source functions already use @beartype. Enable beartype_packages for
+# sphinx_substitution_extensions once Beartype handles the recursive
+# SubstitutionValue annotation: https://github.com/beartype/beartype/issues/705
 beartype_test_fixtures = true
 beartype_tests = true
 log_cli = true
