@@ -35,11 +35,11 @@ dynamic = [
     "version",
 ]
 dependencies = [
-    "beartype>=0.22.9",
+    "beartype>=0.23.0rc2",
     "docutils>=0.19",
     "myst-parser>=4.0.0",
     "sphinx>=8.1.0",
-    "typing-extensions>=4.4.0",
+    "typing-extensions>=4.6.0",
 ]
 urls.Source = "https://github.com/adamtheturtle/sphinx-substitution-extensions"
 
@@ -371,8 +371,8 @@ analysis.strict-generic-narrowing = true
 
 [tool.pytest]
 # Source functions already use @beartype. Enable beartype_packages for
-# sphinx_substitution_extensions once Beartype handles the recursive
-# SubstitutionValue annotation: https://github.com/beartype/beartype/issues/705
+# sphinx_substitution_extensions once package import checking preserves
+# branch coverage: https://github.com/beartype/beartype/issues/706
 beartype_test_fixtures = true
 beartype_tests = true
 log_cli = true

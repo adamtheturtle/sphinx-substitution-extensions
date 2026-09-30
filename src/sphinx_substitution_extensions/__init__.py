@@ -3,7 +3,7 @@
 from collections.abc import Callable, Collection
 from importlib.metadata import version
 from pathlib import Path
-from typing import ClassVar, TypeAlias
+from typing import TYPE_CHECKING, ClassVar, TypeAlias
 from unittest.mock import patch
 
 from beartype import beartype
@@ -35,7 +35,7 @@ from sphinx.environment import BuildEnvironment
 from sphinx.errors import SphinxError
 from sphinx.roles import XRefRole
 from sphinx.util.typing import ExtensionMetadata
-from typing_extensions import override
+from typing_extensions import TypeAliasType, override
 
 from sphinx_substitution_extensions.shared import (
     CONTENT_SUBSTITUTION_OPTION_NAME,
@@ -46,13 +46,24 @@ from sphinx_substitution_extensions.shared import (
     SUBSTITUTION_OPTION_NAME,
 )
 
-SubstitutionValue: TypeAlias = (
-    str
-    | int
-    | float
-    | list["SubstitutionValue"]
-    | dict[str, "SubstitutionValue"]
-)
+# Keep the legacy static alias to preserve complete type information.
+if TYPE_CHECKING:
+    SubstitutionValue: TypeAlias = (
+        str
+        | int
+        | float
+        | list["SubstitutionValue"]
+        | dict[str, "SubstitutionValue"]
+    )
+else:
+    SubstitutionValue = TypeAliasType(
+        "SubstitutionValue",
+        str
+        | int
+        | float
+        | list["SubstitutionValue"]
+        | dict[str, "SubstitutionValue"],
+    )
 Substitutions: TypeAlias = dict[str, SubstitutionValue]
 
 # Avoid Any-valued converter results until our minimum Sphinx includes
@@ -110,9 +121,7 @@ def _validate_substitution_key(*, key: str) -> None:
         raise SphinxError(message)
 
 
-# NOTE: beartype is not used here
-# because it throws `beartype.roar.BeartypeCallHintForwardRefException`
-# for recursive type `Substitutions`
+@beartype
 def _flatten_substitutions(
     *,
     substitutions: Substitutions,

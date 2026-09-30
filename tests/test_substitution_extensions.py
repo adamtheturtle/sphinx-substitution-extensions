@@ -6,6 +6,7 @@ from pathlib import Path
 from textwrap import dedent
 
 import pytest
+from beartype.roar import BeartypeCallHintParamViolation
 from docutils import core
 from docutils.parsers.rst import directives
 from sphinx.application import Sphinx
@@ -79,6 +80,48 @@ def test_substitution_literal_include_in_rest_example(
 
 class TestMyst:
     """Tests for MyST documents."""
+
+    @staticmethod
+    def test_myst_unsupported_substitution_value_raises_error(
+        *,
+        tmp_path: Path,
+        make_app: Callable[..., SphinxTestApp],
+    ) -> None:
+        """Reject unsupported substitution values."""
+        source_directory = tmp_path / "source"
+        source_directory.mkdir()
+        (source_directory / "conf.py").touch()
+        _ = (source_directory / "index.md").write_text(
+            data=dedent(
+                text="""\
+                # Title
+
+                ```{code-block}
+                :substitutions:
+
+                |unsupported|
+                ```
+                """,
+            ),
+        )
+        app = make_app(
+            srcdir=source_directory,
+            exception_on_warning=True,
+            confoverrides={
+                "extensions": [
+                    "myst_parser",
+                    "sphinx_substitution_extensions",
+                ],
+                "myst_enable_extensions": ["substitution"],
+                "myst_substitutions": {"unsupported": None},
+            },
+        )
+
+        with pytest.raises(
+            expected_exception=BeartypeCallHintParamViolation,
+            match="substitutions",
+        ):
+            app.build()
 
     @staticmethod
     def test_myst_invalid_substitution_access(
