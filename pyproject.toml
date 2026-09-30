@@ -46,6 +46,7 @@ urls.Source = "https://github.com/adamtheturtle/sphinx-substitution-extensions"
 [dependency-groups]
 dev = [
     "actionlint-py==1.7.12.25",
+    "beartype==0.23.0rc2",
     "check-manifest==0.51",
     "deptry==0.25.1",
     "doc8==2.0.0",
@@ -63,7 +64,7 @@ dev = [
     "pyright==1.1.414",
     "pyroma==5.0.1",
     "pytest==9.1.1",
-    "pytest-beartype-tests==2026.8.16",
+    "pytest-beartype==0.3.0",
     "pytest-cov==7.1.0",
     "ruff==0.16.9",
     # We add shellcheck-py not only for shell scripts and shell code blocks,
@@ -369,6 +370,11 @@ analysis.strict-equality-semantics = true
 analysis.strict-generic-narrowing = true
 
 [tool.pytest]
+# Source functions already use @beartype. Enable beartype_packages for
+# sphinx_substitution_extensions once Beartype handles the recursive
+# SubstitutionValue annotation: https://github.com/beartype/beartype/issues/705
+beartype_test_fixtures = true
+beartype_tests = true
 log_cli = true
 xfail_strict = true
 
