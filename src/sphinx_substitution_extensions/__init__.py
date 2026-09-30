@@ -110,9 +110,9 @@ def _validate_substitution_key(*, key: str) -> None:
         raise SphinxError(message)
 
 
-# NOTE: beartype is not used here
-# because it throws `beartype.roar.BeartypeCallHintForwardRefException`
-# for recursive type `Substitutions`
+# Beartype cannot check the recursive legacy alias at runtime. Once Python 3.11
+# support ends, replace the aliases with PEP 695 aliases and add @beartype:
+# https://github.com/beartype/beartype/issues/705
 def _flatten_substitutions(
     *,
     substitutions: Substitutions,

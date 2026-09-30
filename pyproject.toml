@@ -370,9 +370,11 @@ analysis.strict-equality-semantics = true
 analysis.strict-generic-narrowing = true
 
 [tool.pytest]
-# Source functions already use @beartype. Enable beartype_packages for
-# sphinx_substitution_extensions once Beartype handles the recursive
-# SubstitutionValue annotation: https://github.com/beartype/beartype/issues/705
+# Python 3.11 support keeps the recursive TypeAlias that Beartype cannot check:
+# https://github.com/beartype/beartype/issues/705
+# After dropping 3.11, use PEP 695 type aliases. Package import checking also
+# needs a fix for false uncovered branches before it can meet 100% coverage:
+# https://github.com/beartype/beartype/issues/706
 beartype_test_fixtures = true
 beartype_tests = true
 log_cli = true
