@@ -46,7 +46,7 @@ from sphinx_substitution_extensions.shared import (
     SUBSTITUTION_OPTION_NAME,
 )
 
-# Static checkers cannot fully inspect the recursive TypeAliasType backport.
+# Keep the legacy static alias to preserve complete type information.
 if TYPE_CHECKING:
     SubstitutionValue: TypeAlias = (
         str
