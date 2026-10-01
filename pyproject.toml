@@ -56,7 +56,7 @@ dev = [
     "mypy==2.3.1",
     "mypy-strict-kwargs==2026.8.25.1",
     "no-defaults==2026.9.1",
-    "prek==0.5.3",
+    "prek==0.5.4",
     "pydocstringformatter==1.0.0",
     "pylint[spelling]==4.0.9",
     "pyproject-fmt==2.29.4",
