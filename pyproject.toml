@@ -53,7 +53,7 @@ dev = [
     "doc8-custom-ignores==2026.7.29.1",
     "doccmd==2026.9.16.1",
     "interrogate==1.7.0",
-    "mypy==2.3.1",
+    "mypy==2.4.0",
     "mypy-strict-kwargs==2026.8.25.1",
     "no-defaults==2026.9.1",
     "prek==0.5.4",
