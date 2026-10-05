@@ -382,7 +382,9 @@ log_cli = true
 xfail_strict = true
 
 [tool.coverage]
+run.source = [ "src/", "tests" ]
 run.branch = true
+report.fail_under = 100
 report.exclude_also = [
     "if TYPE_CHECKING:",
 ]
