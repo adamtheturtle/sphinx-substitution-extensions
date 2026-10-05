@@ -54,7 +54,7 @@ jobs:
 
       - name: Run tests
         run: |
-          uv run --group=dev pytest -s -vvv --cov-fail-under 100 --cov=src/ --cov=tests .
+          uv run --group=dev pytest -s -vvv . --cov --cov-config=pyproject.toml
         env:
           UV_PYTHON: ${{ matrix.python-version }}
           UV_RESOLUTION: ${{ matrix.uv-resolution }}
