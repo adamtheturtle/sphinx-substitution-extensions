@@ -60,7 +60,7 @@ dev = [
     "prek==0.5.4",
     "pydocstringformatter==1.0.0",
     "pylint[spelling]==4.1.1",
-    "pyproject-fmt==2.29.4",
+    "pyproject-fmt==2.30.0",
     "pyrefly==1.3.2",
     "pyright==1.1.414",
     "pyroma==5.0.1",
