@@ -57,7 +57,7 @@ dev = [
     "mypy-pytest-parametrize==2026.10.5",
     "mypy-strict-kwargs==2026.8.25.1",
     "no-defaults==2026.9.1",
-    "prek==0.5.4",
+    "prek==0.5.5",
     "pydocstringformatter==1.0.0",
     "pylint[spelling]==4.1.2",
     "pyproject-fmt==2.30.0",
