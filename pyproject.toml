@@ -269,7 +269,9 @@ ignore = [
     ".vale.ini",
     ".vscode/*.json",
     ".yamlfmt",
-    "CHANGELOG.rst",
+    "changelog",
+    "CHANGELOG.md",
+    "changelog/**",
     "ci",
     "ci/**",
     "CODE_OF_CONDUCT.rst",
@@ -290,7 +292,6 @@ ignore = [
     "tests",
     "tests-pylintrc",
     "tests/**",
-    "towncrier_template.rst.jinja",
     "zizmor.yml",
 ]
 
@@ -391,33 +392,15 @@ report.exclude_also = [
 report.show_missing = true
 
 [tool.towncrier]
-# The changelog and the per-release GitHub release notes are both built
-# from news fragments under ``newsfragments/``.  The release workflow
-# runs ``towncrier build`` to assemble them; contributors add one
-# fragment file per user-facing change.
+# Write the same native Markdown file used by documentation and GitHub releases.
 directory = "newsfragments"
-filename = "CHANGELOG.rst"
-# Custom template so an assembled version reproduces the historical
-# style exactly: a bare ``<version>`` heading (no project name, no
-# date) followed by a flat bullet list with no per-type sub-headings.
-template = "towncrier_template.rst.jinja"
-title_format = "{version}"
-issue_format = "#{issue}"
-# ``title_format`` underline first, then any nested headings.  A bare
-# version such as ``2026.05.18`` underlined with ``-`` matches every
-# pre-towncrier entry in CHANGELOG.rst.
-underlines = [ "-", "~", "^" ]
-# Setting ``ignore`` makes ``towncrier build`` fail on any file in
-# the fragment directory whose suffix is not a declared fragment
-# type, instead of silently dropping it.  Only the listed
-# non-fragment files are allowed through.
+filename = "changelog/{version}.md"
+title_format = "# {version} ({project_date})"
+issue_format = "[#{issue}](https://github.com/adamtheturtle/sphinx-substitution-extensions/issues/{issue})"
+single_file = false
+# Reject invalid fragment names instead of silently losing release entries.
 ignore = [ ".gitkeep" ]
-type = [
-    # A single, unnamed fragment type keeps the assembled output as one
-    # flat bullet list, matching the historical changelog (which never
-    # grouped entries under "Features"/"Bugfixes"/... sub-headings).
-    { directory = "change", name = "", showcontent = true },
-]
+type = [ { directory = "change", name = "Changes", showcontent = true } ]
 
 [tool.mypy_strict_kwargs]
 # The runtime parameter is named ``role``, while types-docutils names it
