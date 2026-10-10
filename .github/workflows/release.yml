@@ -52,6 +52,7 @@ jobs:
           RELEASE: ${{ steps.calver.outputs.release }}
         run: |
           uv run --group=release towncrier build --yes --version "$RELEASE"
+          uv run --group=dev snapper --native --max-width 0 --in-place "changelog/$RELEASE.md"
           cp "changelog/$RELEASE.md" release-notes.md
 
       - uses: stefanzweifel/git-auto-commit-action@v7
