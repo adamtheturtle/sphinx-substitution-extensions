@@ -1,1 +1,1 @@
-Require Beartype 0.23.0 or later for runtime type checking.
+Require `beartype>=0.23.0` for runtime type checking.
