@@ -395,7 +395,9 @@ report.show_missing = true
 # Write the same native Markdown file used by documentation and GitHub releases.
 directory = "newsfragments"
 filename = "changelog/{version}.md"
-title_format = "# {version} ({project_date})"
+# The template renders the release heading and preserves semantic line breaks.
+template = ".github/towncrier_template.md.jinja"
+title_format = false
 issue_format = "[#{issue}](https://github.com/adamtheturtle/sphinx-substitution-extensions/issues/{issue})"
 single_file = false
 # Reject invalid fragment names instead of silently losing release entries.
