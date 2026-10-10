@@ -374,9 +374,7 @@ analysis.strict-equality-semantics = true
 analysis.strict-generic-narrowing = true
 
 [tool.pytest]
-# Source functions already use @beartype. Enable beartype_packages for
-# sphinx_substitution_extensions once package import checking preserves
-# branch coverage: https://github.com/beartype/beartype/issues/706
+beartype_packages = [ "sphinx_substitution_extensions" ]
 beartype_test_fixtures = true
 beartype_tests = true
 log_cli = true
