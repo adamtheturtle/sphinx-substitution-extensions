@@ -354,6 +354,7 @@ plugins = [
     "mypy_pytest_parametrize",
     "mypy_strict_kwargs",
 ]
+show_traceback = true
 num_workers = "auto"
 
 [tool.pyrefly]
