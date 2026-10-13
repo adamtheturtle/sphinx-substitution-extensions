@@ -358,7 +358,10 @@ def _substitute_hyperlink_targets(
 class SubstitutionCodeBlock(CodeBlock):
     """Similar to CodeBlock but replaces placeholders with variables."""
 
-    option_spec: ClassVar[OptionSpec] = OptionSpec(CodeBlock.option_spec)
+    # Match Sphinx's type; ``docutils`` permits None in its base class.
+    option_spec: ClassVar[OptionSpec] = OptionSpec(  # ty: ignore[invalid-mutable-override]
+        CodeBlock.option_spec
+    )
     option_spec[SUBSTITUTION_OPTION_NAME] = directives.flag
     option_spec[NO_SUBSTITUTION_OPTION_NAME] = directives.flag
 
@@ -481,7 +484,10 @@ class SubstitutionLiteralInclude(LiteralInclude):
     variables.
     """
 
-    option_spec: ClassVar[OptionSpec] = OptionSpec(LiteralInclude.option_spec)
+    # Match Sphinx's type; ``docutils`` permits None in its base class.
+    option_spec: ClassVar[OptionSpec] = OptionSpec(  # ty: ignore[invalid-mutable-override]
+        LiteralInclude.option_spec
+    )
     option_spec[CONTENT_SUBSTITUTION_OPTION_NAME] = directives.flag
     option_spec[PATH_SUBSTITUTION_OPTION_NAME] = directives.flag
     option_spec[NO_CONTENT_SUBSTITUTION_OPTION_NAME] = directives.flag
