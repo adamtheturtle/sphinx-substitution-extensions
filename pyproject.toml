@@ -56,7 +56,7 @@ dev = [
     "interrogate==1.7.0",
     "mypy==2.4.0",
     "mypy-pytest-parametrize==2026.10.5.1",
-    "mypy-strict-kwargs==2026.8.25.1",
+    "mypy-strict-kwargs==2026.10.9",
     "no-defaults==2026.9.1",
     "prek==0.5.5",
     "pydocstringformatter==1.0.0",
