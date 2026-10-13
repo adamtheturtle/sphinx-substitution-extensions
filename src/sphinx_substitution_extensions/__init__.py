@@ -358,13 +358,6 @@ def _substitute_hyperlink_targets(
 class SubstitutionCodeBlock(CodeBlock):
     """Similar to CodeBlock but replaces placeholders with variables."""
 
-    # Match Sphinx's type; ``docutils`` permits None in its base class.
-    option_spec: ClassVar[OptionSpec] = OptionSpec(  # ty: ignore[invalid-mutable-override]
-        CodeBlock.option_spec
-    )
-    option_spec[SUBSTITUTION_OPTION_NAME] = directives.flag
-    option_spec[NO_SUBSTITUTION_OPTION_NAME] = directives.flag
-
     @override
     def run(self) -> list[Node]:
         """Replace placeholders with given variables."""
@@ -404,6 +397,15 @@ class SubstitutionCodeBlock(CodeBlock):
 
         self.content = new_content
         return super().run()
+
+
+# Preserve the inherited attribute type while giving this directive its own
+# option dictionary.
+SubstitutionCodeBlock.option_spec = {
+    **OptionSpec(CodeBlock.option_spec),
+    SUBSTITUTION_OPTION_NAME: directives.flag,
+    NO_SUBSTITUTION_OPTION_NAME: directives.flag,
+}
 
 
 @beartype
@@ -484,15 +486,6 @@ class SubstitutionLiteralInclude(LiteralInclude):
     variables.
     """
 
-    # Match Sphinx's type; ``docutils`` permits None in its base class.
-    option_spec: ClassVar[OptionSpec] = OptionSpec(  # ty: ignore[invalid-mutable-override]
-        LiteralInclude.option_spec
-    )
-    option_spec[CONTENT_SUBSTITUTION_OPTION_NAME] = directives.flag
-    option_spec[PATH_SUBSTITUTION_OPTION_NAME] = directives.flag
-    option_spec[NO_CONTENT_SUBSTITUTION_OPTION_NAME] = directives.flag
-    option_spec[NO_PATH_SUBSTITUTION_OPTION_NAME] = directives.flag
-
     @override
     def run(self) -> list[Node]:
         """
@@ -562,6 +555,17 @@ class SubstitutionLiteralInclude(LiteralInclude):
                 )
 
         return nodes_list
+
+
+# Preserve the inherited attribute type while giving this directive its own
+# option dictionary.
+SubstitutionLiteralInclude.option_spec = {
+    **OptionSpec(LiteralInclude.option_spec),
+    CONTENT_SUBSTITUTION_OPTION_NAME: directives.flag,
+    PATH_SUBSTITUTION_OPTION_NAME: directives.flag,
+    NO_CONTENT_SUBSTITUTION_OPTION_NAME: directives.flag,
+    NO_PATH_SUBSTITUTION_OPTION_NAME: directives.flag,
+}
 
 
 @beartype
