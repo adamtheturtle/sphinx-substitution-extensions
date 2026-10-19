@@ -80,7 +80,7 @@ dev = [
     "sphinx-toolbox==4.3.1",
     "strict-kwargs==2026.10.9",
     "towncrier==26.9.0",
-    "ty==0.0.86",
+    "ty==0.0.89",
     "types-docutils==0.23.0.20260923",
     "vale==3.22.0.0",
     "vulture==2.16",
