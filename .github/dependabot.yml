@@ -3,6 +3,8 @@ version: 2
 
 updates:
   - package-ecosystem: pip
+    allow:
+      - dependency-type: all
     directory: /
     schedule:
       interval: daily
@@ -12,7 +14,5 @@ updates:
     schedule:
       interval: daily
 
-  - package-ecosystem: pre-commit
-    directory: /
-    schedule:
-      interval: daily
+  # Dependabot cannot read prek.toml yet:
+  # https://github.com/dependabot/dependabot-core/issues/14624
