@@ -57,8 +57,7 @@ The plugin is discovered automatically by doc8 and reads additional ignores from
    unknown option: "path-substitutions".""",
    ]
 
-This ignores diagnostics for ``include``'s ``:content-substitutions:`` and ``:path-substitutions:`` options.
-Plain docutils does not know about those options, but this extension adds them when Sphinx builds the documentation.
+This ignores diagnostics for ``include``'s ``:content-substitutions:`` and ``:path-substitutions:`` options, which this extension adds during Sphinx builds and plain docutils does not recognize.
 Keep these as exact-message ignores so other ``D000`` diagnostics remain visible.
 
 .. _Homebrew: https://brew.sh
