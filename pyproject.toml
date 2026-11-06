@@ -85,7 +85,7 @@ dev = [
     "vale==3.26.0.1",
     "vulture==2.16",
     "yamlfix==1.19.1",
-    "zizmor==1.31.1",
+    "zizmor==1.32.0",
 ]
 release = [ "check-wheel-contents==0.6.3", "towncrier==26.9.0" ]
 
