@@ -298,7 +298,7 @@ hooks = [
   {
     id = "pylint",
     name = "pylint",
-    entry = "uv run --group=dev -m pylint src/ tests/",
+    entry = "uv run --group=dev -m pylint src/ tests/ sample/",
     language = "python",
     stages = ["manual"],
     pass_filenames = false,

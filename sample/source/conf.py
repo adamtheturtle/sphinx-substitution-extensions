@@ -1,5 +1,8 @@
 """Sample ``conf.py``."""
 
+# Sphinx requires lowercase names for its configuration settings.
+# pylint: disable=invalid-name
+
 extensions = [
     "myst_parser",
     "sphinx_substitution_extensions",
