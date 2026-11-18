@@ -52,6 +52,7 @@ dev = [
     "deptry==0.25.1",
     "doc8==2.0.0",
     "doc8-custom-ignores==2026.7.29.1",
+    "doc8-inline-markup==2026.11.18.3; python_version>='3.12'",
     "doccmd==2026.9.16.1",
     "interrogate==1.7.0",
     "mypy==2.4.1",
