@@ -1,12 +1,21 @@
 """Custom Sphinx extensions."""
 
-from collections.abc import Callable, Collection
+from collections.abc import Callable, Collection, Mapping
 from importlib.metadata import version
 from pathlib import Path
-from typing import TYPE_CHECKING, ClassVar, TypeAlias
+from typing import (
+    TYPE_CHECKING,
+    ClassVar,
+    Literal,
+    Protocol,
+    TypeAlias,
+    TypeGuard,
+    runtime_checkable,
+)
 from unittest.mock import patch
 
 from beartype import beartype
+from beartype.door import TypeHint
 from docutils.nodes import (
     Element,
     Node,
@@ -71,14 +80,24 @@ Substitutions: TypeAlias = dict[str, SubstitutionValue]
 OptionSpec: TypeAlias = dict[str, Callable[[str], object]]
 
 
+def _is_list_or_tuple(
+    value: object, /
+) -> TypeGuard[list[object] | tuple[object, ...]]:
+    """Identify the containers that can hold MyST delimiters."""
+    return isinstance(value, (list, tuple))
+
+
 @beartype
 def _delimiter_pair(*, value: object) -> tuple[str, str]:
     """Return a validated pair of string delimiters."""
-    assert isinstance(value, (list, tuple))
-    assert isinstance(value[0], str)
-    assert isinstance(value[1], str)
-    assert value[2:] == value[:0]
-    return value[0], value[1]
+    assert _is_list_or_tuple(value)
+    delimiters = value
+    opening = delimiters[0]
+    assert isinstance(opening, str)
+    closing = delimiters[1]
+    assert isinstance(closing, str)
+    assert delimiters[2:] == delimiters[:0]
+    return opening, closing
 
 
 @beartype
@@ -94,7 +113,7 @@ def _get_myst_config(
         # substitutions inside directives, but its proposed PR registers them
         # only after directives have run:
         # https://github.com/executablebooks/MyST-Parser/pull/966
-        renderer = vars(context)["_renderer"]
+        renderer: object = vars(context)["_renderer"]
         assert isinstance(renderer, DocutilsRenderer)
         return renderer.md_config
 
@@ -166,6 +185,40 @@ def _flatten_substitutions(
     return result
 
 
+def _is_source_suffix_mapping(
+    value: object, /
+) -> TypeGuard[Mapping[str, str]]:
+    """Identify Sphinx's normalized mapping of suffixes to file types."""
+    return TypeHint(hint=Mapping[str, str]).is_bearable(obj=value)
+
+
+def _markdown_suffixes(*, config: Config) -> set[str]:
+    """Find the filename suffixes that Sphinx treats as Markdown."""
+    source_suffixes: object = config["source_suffix"]
+    assert _is_source_suffix_mapping(source_suffixes)
+    return {
+        key.lstrip(".")
+        for key, value in source_suffixes.items()
+        if value == "markdown"
+    }
+
+
+def _is_extension_collection(value: object, /) -> TypeGuard[Collection[str]]:
+    """Identify the configured MyST extension names."""
+    return TypeHint(hint=Collection[str]).is_bearable(obj=value)
+
+
+def _is_substitution_mapping(
+    value: object, /
+) -> TypeGuard[Mapping[str, SubstitutionValue]]:
+    """Identify a MyST mapping of substitution names to supported
+    values.
+    """
+    return TypeHint(hint=Mapping[str, SubstitutionValue]).is_bearable(
+        obj=value
+    )
+
+
 @beartype
 def _get_delimiter_pairs(
     *,
@@ -174,11 +227,7 @@ def _get_delimiter_pairs(
     myst_config: MdParserConfig | None,
 ) -> set[tuple[str, str]]:
     """Get the delimiter pairs for substitution."""
-    markdown_suffixes = {
-        key.lstrip(".")
-        for key, value in config.source_suffix.items()
-        if value == "markdown"
-    }
+    markdown_suffixes = _markdown_suffixes(config=config)
 
     # Use `| |` on reST as it is the default substitution syntax.
     # Use `| |` on MyST for backwards compatibility as this is what we
@@ -187,7 +236,7 @@ def _get_delimiter_pairs(
     parser_supported_formats = set(env.parser.supported)
     if len(parser_supported_formats.intersection(markdown_suffixes)) > 0:
         if myst_config is None:
-            configured_delimiters: object = config.myst_sub_delimiters
+            configured_delimiters: object = config["myst_sub_delimiters"]
         else:
             configured_delimiters = myst_config.sub_delimiters
         opening_delimiter, closing_delimiter = _delimiter_pair(
@@ -211,17 +260,17 @@ def _get_substitution_defs(
     myst_config: MdParserConfig | None,
 ) -> dict[str, str]:
     """Get the substitution definitions from the environment."""
-    markdown_suffixes = {
-        key.lstrip(".")
-        for key, value in config.source_suffix.items()
-        if value == "markdown"
-    }
+    markdown_suffixes = _markdown_suffixes(config=config)
 
     parser_supported_formats = set(env.parser.supported)
     if len(parser_supported_formats.intersection(markdown_suffixes)) > 0:
         if myst_config is None:
-            enable_extensions = config.myst_enable_extensions
-            substitutions = dict(config.myst_substitutions)
+            configured_extensions: object = config["myst_enable_extensions"]
+            configured_substitutions: object = config["myst_substitutions"]
+            assert _is_extension_collection(configured_extensions)
+            assert _is_substitution_mapping(configured_substitutions)
+            enable_extensions = configured_extensions
+            substitutions = dict(configured_substitutions)
         else:
             enable_extensions = myst_config.enable_extensions
             substitutions = dict(myst_config.substitutions)
@@ -273,7 +322,8 @@ def _should_apply_substitutions(
         return False
     if yes_flag in options:
         return True
-    return bool(config.substitutions_default_enabled)
+    enabled: object = config["substitutions_default_enabled"]
+    return bool(enabled)
 
 
 @beartype
@@ -326,7 +376,8 @@ def _substitute_hyperlink_targets(
     doctree: document,
 ) -> None:
     """Replace placeholders in hyperlink targets."""
-    if not app.config.substitutions_hyperlink_targets_enabled:
+    enabled: object = app.config["substitutions_hyperlink_targets_enabled"]
+    if not bool(enabled):
         return
 
     substitution_defs = _get_substitution_defs(
@@ -430,7 +481,7 @@ class SubstitutionCodeRole:
     ) -> tuple[list[Node], list[system_message]]:
         """Replace placeholders with given variables."""
         settings = inliner.document.settings
-        env: object = settings.env
+        env: object = vars(settings)["env"]
         assert isinstance(env, BuildEnvironment)
         myst_config = _get_myst_config(context=inliner)
         substitution_defs = _get_substitution_defs(
@@ -641,7 +692,7 @@ class SubstitutionInclude(Include):
     @override
     def run(self) -> list[Node]:
         """Replace placeholders in the path and/or included content."""
-        env: object = self.state.document.settings.env
+        env: object = vars(self.state.document.settings)["env"]
 
         if env is None:
             return list(DocutilsInclude.run(self=self))
@@ -756,7 +807,7 @@ class SubstitutionImage(Image):
     @override
     def run(self) -> list[Node]:
         """Replace placeholders with given variables in the image path."""
-        env: object = self.state.document.settings.env
+        env: object = vars(self.state.document.settings)["env"]
         assert isinstance(env, BuildEnvironment)
         config: Config = env.config
         myst_config = _get_myst_config(context=self.state)
@@ -860,9 +911,23 @@ class SubstitutionXRefRole(XRefRole):
         )
 
 
-@beartype
-def setup(app: Sphinx) -> ExtensionMetadata:
-    """Add the custom directives to Sphinx."""
+@runtime_checkable
+class _ConfigRegistrar(Protocol):
+    """Sphinx's configuration registration interface for this
+    extension.
+    """
+
+    def add_config_value(
+        self, *, name: str, default: object, rebuild: Literal["html"]
+    ) -> None:
+        """Register a configuration value that requires an HTML
+        rebuild.
+        """
+        raise NotImplementedError(name, default, rebuild)
+
+
+def _register_config(*, app: _ConfigRegistrar) -> None:
+    """Register the extension's configuration values."""
     app.add_config_value(name="substitutions", default=[], rebuild="html")
     app.add_config_value(
         name="substitutions_hyperlink_targets_enabled",
@@ -874,6 +939,12 @@ def setup(app: Sphinx) -> ExtensionMetadata:
         default=False,
         rebuild="html",
     )
+
+
+@beartype
+def setup(app: Sphinx) -> ExtensionMetadata:
+    """Add the custom directives to Sphinx."""
+    _register_config(app=app)
     directives.register_directive(
         name="code-block",
         directive=SubstitutionCodeBlock,
