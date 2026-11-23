@@ -169,7 +169,7 @@ def _destination(*, source_directory: Path, relative_path: str) -> Path:
 
 
 def _write_build(*, source_directory: Path, build: Build) -> None:
-    """Materialize one build's files."""
+    """Write the files for one build."""
     overlap = build.files.keys() & build.binary_files.keys()
     if len(overlap) > 0:
         msg = f"Files cannot be both text and binary: {sorted(overlap)}"
@@ -215,10 +215,12 @@ def _build_html(
 
 @pytest.mark.parametrize(
     argnames="case",
-    argvalues=_load_cases(
-        cases_path=Path(__file__).with_name(name="equivalence_cases.toml"),
-    ),
-    ids=lambda case: case.id,
+    argvalues=[
+        pytest.param(case, id=case.id)
+        for case in _load_cases(
+            cases_path=Path(__file__).with_name(name="equivalence_cases.toml"),
+        )
+    ],
 )
 def test_equivalent_builds(
     *,
