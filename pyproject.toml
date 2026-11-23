@@ -360,7 +360,9 @@ show_traceback = true
 num_workers = "auto"
 
 [tool.pyrefly]
+errors.explicit-any-use = "warn"
 errors.non-exhaustive-match = "error"
+errors.partially-unknown-type = "warn"
 enabled-ignores = [ "pyrefly" ]
 preset = "all"
 
